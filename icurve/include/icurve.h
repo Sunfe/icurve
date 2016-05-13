@@ -27,6 +27,8 @@ class icurve : public QMainWindow
 
 public:
 	icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
+	void initMainPlotter(QwtPlot *plot=0);
+	void initMainWinStyle(QMainWindow *self);
 	~icurve();
 
 private:
