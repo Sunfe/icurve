@@ -9,6 +9,7 @@ icurve::icurve(QWidget *parent, Qt::WFlags flags)
     initMainWinStyle(this);
     plot = new QwtPlot();
 	initMainPlotter(plot);
+
     setCentralWidget(plot);
 }
 
@@ -22,7 +23,7 @@ void icurve::initMainWinStyle(QMainWindow *self)
 {
 	self->setWindowTitle("iCurve");
 	self->setWindowIcon(QIcon(":/images/iCurve.ico"));
-	self->setContentsMargins(5,5,50,5);
+	self->setContentsMargins(0,0,0,0);
 		
 	QPalette mainWinPalette;
 	mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
@@ -33,10 +34,10 @@ void icurve::initMainWinStyle(QMainWindow *self)
 void icurve::initMainPlotter(QwtPlot *plot)
 {
 
-    plot->setTitle( "unamed" );
+   plot->setTitle( "unamed" );
     
-    plot->setAxisTitle(QwtPlot::xBottom, "X");
-    plot->setAxisTitle(QwtPlot::yLeft, "Y");
+   // plot->setAxisTitle(QwtPlot::xBottom, "X");
+   // plot->setAxisTitle(QwtPlot::yLeft, "Y");
     
     plot->setCanvasBackground( Qt::white );
     plot->setAxisScale( QwtPlot::yLeft, -200.0, 200.0 );
