@@ -2,6 +2,10 @@
 #define ICURVE_H
 
 #include <QtGui/QMainWindow>
+#include <QLabel>
+#include <QRectF>
+#include <QFileInfo>
+
 #include <qwt_plot.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_curve.h>
@@ -20,6 +24,8 @@
 #include <qwt_plot_grid.h>
 
 #include "ui_icurve.h"
+#include "icurve_common.h"
+
 
 class icurve : public QMainWindow
 {
@@ -27,16 +33,29 @@ class icurve : public QMainWindow
 
 public:
 	icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
-	void initMainPlotter(QwtPlot *plot=0);
+	void initMainPlotter(QWidget *plotWidget);
 	void initMainWinStyle(QMainWindow *self);
+
+	RET_STATUS icurve::loadData(const QString &filename);
 	~icurve();
 
 private:
 	Ui::icurveClass ui;
+    /*Qt objects*/
+	QRectF titleRect;
+	QLabel *label;
+	
+    /*Qwt objects*/	
 	QwtPlot *plot;
 	QwtPlotGrid *grid;
 	QwtSymbol *symbol;
+
+	QFileInfo fileInfo;
+	
 private:
+
+private slots:
+	void openFile();
 
 };
 

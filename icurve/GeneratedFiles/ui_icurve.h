@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Sat May 14 01:57:53 2016
+** Created: Sun May 15 02:09:23 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -18,6 +18,7 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
+#include <QtGui/QPushButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
 #include <QtGui/QWidget>
@@ -44,7 +45,13 @@ public:
     QAction *actionLegand;
     QAction *actionExit;
     QAction *actionExit_2;
+    QAction *actionColor;
+    QAction *actionStyle;
+    QAction *actionStyle_2;
+    QAction *actionType;
+    QAction *actionSize;
     QWidget *centralWidget;
+    QPushButton *pushButton;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -52,6 +59,8 @@ public:
     QMenu *menuTools;
     QMenu *menuWindows;
     QMenu *menuHelp_2;
+    QMenu *menuCurve;
+    QMenu *menuMarker;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -97,8 +106,21 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionExit_2 = new QAction(icurveClass);
         actionExit_2->setObjectName(QString::fromUtf8("actionExit_2"));
+        actionColor = new QAction(icurveClass);
+        actionColor->setObjectName(QString::fromUtf8("actionColor"));
+        actionStyle = new QAction(icurveClass);
+        actionStyle->setObjectName(QString::fromUtf8("actionStyle"));
+        actionStyle_2 = new QAction(icurveClass);
+        actionStyle_2->setObjectName(QString::fromUtf8("actionStyle_2"));
+        actionType = new QAction(icurveClass);
+        actionType->setObjectName(QString::fromUtf8("actionType"));
+        actionSize = new QAction(icurveClass);
+        actionSize->setObjectName(QString::fromUtf8("actionSize"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+        pushButton = new QPushButton(centralWidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(0, 10, 75, 23));
         icurveClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(icurveClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -115,22 +137,47 @@ public:
         menuWindows->setObjectName(QString::fromUtf8("menuWindows"));
         menuHelp_2 = new QMenu(menuBar);
         menuHelp_2->setObjectName(QString::fromUtf8("menuHelp_2"));
+        menuCurve = new QMenu(menuBar);
+        menuCurve->setObjectName(QString::fromUtf8("menuCurve"));
+        menuMarker = new QMenu(menuCurve);
+        menuMarker->setObjectName(QString::fromUtf8("menuMarker"));
         icurveClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(icurveClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
+        mainToolBar->setEnabled(true);
+        QPalette palette;
+        QBrush brush(QColor(0, 0, 0, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        QBrush brush1(QColor(255, 255, 255, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Base, brush1);
+        QBrush brush2(QColor(85, 170, 127, 255));
+        brush2.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush2);
+        palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Base, brush1);
+        palette.setBrush(QPalette::Inactive, QPalette::Window, brush2);
+        QBrush brush3(QColor(106, 104, 100, 255));
+        brush3.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush2);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush2);
+        mainToolBar->setPalette(palette);
+        mainToolBar->setCursor(QCursor(Qt::ArrowCursor));
         mainToolBar->setMovable(false);
         mainToolBar->setAllowedAreas(Qt::TopToolBarArea);
         mainToolBar->setIconSize(QSize(24, 24));
         mainToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
         mainToolBar->setFloatable(false);
         icurveClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        icurveClass->insertToolBarBreak(mainToolBar);
         statusBar = new QStatusBar(icurveClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         icurveClass->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
+        menuBar->addAction(menuCurve->menuAction());
         menuBar->addAction(menuHelp->menuAction());
         menuBar->addAction(menuTools->menuAction());
         menuBar->addAction(menuWindows->menuAction());
@@ -159,6 +206,12 @@ public:
         menuHelp->addAction(actionTitle);
         menuHelp->addSeparator();
         menuHelp->addAction(actionLegand);
+        menuCurve->addAction(actionColor);
+        menuCurve->addAction(actionStyle);
+        menuCurve->addAction(actionStyle_2);
+        menuCurve->addAction(menuMarker->menuAction());
+        menuMarker->addAction(actionType);
+        menuMarker->addAction(actionSize);
         mainToolBar->addAction(actionOpen);
 
         retranslateUi(icurveClass);
@@ -186,12 +239,20 @@ public:
         actionLegand->setText(QApplication::translate("icurveClass", "Legend", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("icurveClass", "Close", 0, QApplication::UnicodeUTF8));
         actionExit_2->setText(QApplication::translate("icurveClass", "Exit", 0, QApplication::UnicodeUTF8));
+        actionColor->setText(QApplication::translate("icurveClass", "Color", 0, QApplication::UnicodeUTF8));
+        actionStyle->setText(QApplication::translate("icurveClass", "Width", 0, QApplication::UnicodeUTF8));
+        actionStyle_2->setText(QApplication::translate("icurveClass", "Style", 0, QApplication::UnicodeUTF8));
+        actionType->setText(QApplication::translate("icurveClass", "Type", 0, QApplication::UnicodeUTF8));
+        actionSize->setText(QApplication::translate("icurveClass", "Size", 0, QApplication::UnicodeUTF8));
+        pushButton->setText(QApplication::translate("icurveClass", "PushButton", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));
         menuTools->setTitle(QApplication::translate("icurveClass", "Tools", 0, QApplication::UnicodeUTF8));
         menuWindows->setTitle(QApplication::translate("icurveClass", "Windows", 0, QApplication::UnicodeUTF8));
         menuHelp_2->setTitle(QApplication::translate("icurveClass", "Help", 0, QApplication::UnicodeUTF8));
+        menuCurve->setTitle(QApplication::translate("icurveClass", "Curve", 0, QApplication::UnicodeUTF8));
+        menuMarker->setTitle(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
