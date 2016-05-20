@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="icurve">
+    <file>../images/Logom.png</file>
+    <file>../images/add.png</file>
+    <file>../images/cash-add.png</file>
+    <file>../images/cash-change.png</file>
+    <file>../images/cash-delete.png</file>
+  </qresource>
+</RCC>
