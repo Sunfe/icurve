@@ -10,25 +10,25 @@
 class Command
 {
 
-public:
-	Command(QString cmd, qint16 line, qint16 dir);
-	~Command();
-	
-	void setName(QString cmd);	
-	QString getName();
+    public:
+        Command(QString cmd, qint16 line, qint16 dir);
+        ~Command();
 
-	void setData(QList<qreal>);
-	QList<qreal> getData();
+        void setName(QString cmd);	
+        QString getName();
 
-	void Command::setFamily()
-	QStringList getFamily();
+        void setData(QList<qreal>);
+        QList<qreal> getData();
 
-private:
-	QString name;
-	QList<qreal> data;
-	QStringList  family;
-	qint16 lineId;
-	qint16 direction;
+        void Command::setFamily()
+            QStringList getFamily();
+
+    private:
+        QString name;
+        QList<QPointF> data;
+        QStringList  family;
+        qint16 lineId;
+        qint16 direction;
 
 };
 

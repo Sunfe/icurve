@@ -29,33 +29,34 @@
 
 class icurve : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
-public:
-	icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
-	void initMainPlotter(QWidget *plotWidget);
-	void initMainWinStyle(QMainWindow *self);
+    public:
+        icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
+        void initMainPlotter(QWidget *plotWidget);
+        void initMainWinStyle(QMainWindow *self);
 
-	RET_STATUS icurve::loadData(const QString &filename);
-	~icurve();
+        RET_STATUS icurve::loadData(const QString &filename);
+        ~icurve();
 
-private:
-	Ui::icurveClass ui;
-    /*Qt objects*/
-	QRectF titleRect;
-	QLabel *label;
-	
-    /*Qwt objects*/	
-	QwtPlot *plot;
-	QwtPlotGrid *grid;
-	QwtSymbol *symbol;
+    private:
+        Ui::icurveClass ui;
+        /*Qt objects*/
+        QRectF titleRect;
+        QLabel *label;
 
-	QFileInfo fileInfo;
-	
-private:
+        /*Qwt objects*/	
+        QwtPlot *plot;
+        QwtPlotGrid *grid;
+        QwtSymbol *symbol;
 
-private slots:
-	void openFile();
+        QFileInfo fileInfo;
+
+    private:
+        QList <Command> plotData;
+
+    private slots:
+        void openFile();
 
 };
 

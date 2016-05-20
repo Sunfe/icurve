@@ -164,7 +164,8 @@ RET_STATUS icurve::loadData(const QString &filename)
     #endif
     
 }
-#if 0
+
+
 void icurve::analyzeData(const QString &filename)
 {
     qint32 cout = 0;
@@ -218,11 +219,14 @@ void icurve::analyzeData(const QString &filename)
         }
 #endif
         QString dataLine = dataTextStream.readLine();
+        qint16  line = 0;
         QRegExp regExp(); 
+        Command cmd;
 
         if(true = isCmdStart)
         {
-           assembleData();
+           if(ICU_PLOT_DATA_FORMAT_ERROR == assembleData(dataLine, cmd))
+               return ; 
         }
         else 
         {
@@ -237,30 +241,77 @@ void icurve::analyzeData(const QString &filename)
                     QString pattern(cmds.value(i) + "[0-9]+" + "[0-1]");		  
                     regExp.setPattern(pattern);
                     if(regExp.captureCount() > 0)
-                        isCmdStart = 1;
+                    {
+                        isCmdStart = true;
+                        cmd.setName(regExp.cap(0));  
+                        cmd.setLineId(reExp.cap(1))
+                        cmd.setDirection(reExp.cap(2))
+                    }
                     else 
-                        isCmdStart = 0;	
+                        isCmdStart = false;	
                 }
 
                 else
-                    isCmdStart = 0;	  	
+                    isCmdStart = true;	  	
             }
 
+            if(false == isCmdStart)
+                cmd.setName("NULL");
         }
-        else
 
+        line++;
     }
+
 }
 
-
-void assembleData(QString dataLine, Command cmd)
+#define MAX_NUM_DIGITS_PERLINE    11  /*including tone index at head of the line*/
+ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
 {
+    QRegExp regExp(); 
+    QString pattern("\\s:\\s]");		  
 
+    regExp.indexIn(dataLine);
+    regExp.setPattern(pattern);
 
+    if(regExp.captureCount() <= 0)
+        return ICU_PLOT_DATA_FORMAT_ERROR;
+
+    QStringList digList = dataStr.split(regExp, QString::SkipEmptyParts);
+    digCount = digList.count();
+
+    if(MAX_NUM_DIGITS_PERLINE != digCount)
+    {
+        return ICU_PLOT_DATA_FORMAT_ERROR;
+    }
+
+    if(!dataStrList.at(0).at(0).isDigit())
+    {
+        return ICU_PLOT_DATA_FORMAT_ERROR;
+    }
+
+    toneIndex = dataStrList.at(0).toFloat(&ok);
+
+    QStringList<QPointF> points; 
+    QPointF point;
+    for(count = 1; count < digCount; count++)
+    {
+       qreal dataItem = dataStrList.at(i).toFloat(&ok);
+        if(false == ok)
+            return PLOT_DATA_FORMAT_ERROR;
+
+        if(true == ok)
+        {
+            tone++;
+            pointF.setX(tone);
+            pointF.setY(dataItem);
+            points.append(pointF);
+        }
+    }
+
+    command.data.append(points);
+    return ICU_OK;
 }
 
-
-#endif
 
 
 
