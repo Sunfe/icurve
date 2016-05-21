@@ -182,7 +182,7 @@ ICU_RET_STATUS icurve::analyzeData(QFile file)
 
 ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
 {
-    QRegExp regExp(); 
+    QRegExp regExp; 
     QString pattern("\\s:\\s]");		  
 
     qint16 pos = regExp.indexIn(dataLine);
@@ -209,9 +209,9 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
     if(false == ok)
         return ICU_PLOT_DATA_FORMAT_ERROR;
 
-    QStringList<QPointF> points; 
-    QPointF              point;
-    qint16               tone = command.data.count();
+    QList<QPointF> points; 
+    QPointF        point;
+    qint16         tone = cmd->getData().count();
     for(qint16 i = PLOT_DATA_START_POS; i < digCount; i++)
     {
         qreal dataItem = digList.at(i).toFloat(&ok);
@@ -219,12 +219,12 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
             return ICU_PLOT_DATA_FORMAT_ERROR;
 
         tone++;
-        pointF.setX(tone);
-        pointF.setY(dataItem);
-        points.append(pointF);
+        point.setX(tone);
+        point.setY(dataItem);
+        points.append(point);
     }
 
-    command.data.append(points);
+	cmd->getData().append(points);
     return ICU_OK;
 }
 
