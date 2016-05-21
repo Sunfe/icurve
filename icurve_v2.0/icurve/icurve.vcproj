@@ -162,6 +162,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\source\command.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\icurve.cpp"
 				>
 			</File>
@@ -175,6 +179,10 @@
 			Filter="h"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\include\command.h"
+				>
+			</File>
 			<File
 				RelativePath=".\include\icurve.h"
 				>
@@ -200,6 +208,10 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\include\icurve_common.h"
+				>
 			</File>
 		</Filter>
 		<Filter

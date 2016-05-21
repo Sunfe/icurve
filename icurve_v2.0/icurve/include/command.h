@@ -5,23 +5,34 @@
 #include <QString>
 #include <QStringList>
 #include <QList>
-
+#include <QPointF>
 
 class Command
 {
 
     public:
+        Command();
+        Command(QString cmd);
         Command(QString cmd, qint16 line, qint16 dir);
         ~Command();
+
+        void initFamily();
 
         void setName(QString cmd);	
         QString getName();
 
-        void setData(QList<qreal>);
-        QList<qreal> getData();
+        void setLineId(qint16 id);	
+        qint16 getLineId();
 
-        void Command::setFamily()
-            QStringList getFamily();
+		 void setDirection(qint16 dir);	
+        qint16 getDirection();
+
+
+        void setData(QList<QPointF> number);
+        QList<QPointF> getData();
+
+        void setFamily(QStringList cmdFamily);
+        QStringList getFamily();
 
     private:
         QString name;

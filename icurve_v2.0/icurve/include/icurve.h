@@ -25,6 +25,7 @@
 
 #include "ui_icurve.h"
 #include "icurve_common.h"
+#include "command.h"
 
 
 class icurve : public QMainWindow
@@ -36,7 +37,10 @@ class icurve : public QMainWindow
         void initMainPlotter(QWidget *plotWidget);
         void initMainWinStyle(QMainWindow *self);
 
-        RET_STATUS icurve::loadData(const QString &filename);
+        ICU_RET_STATUS icurve::loadData(const QString &filename);
+ICU_RET_STATUS analyzeData(QFile file);
+        ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd);
+
         ~icurve();
 
     private:
