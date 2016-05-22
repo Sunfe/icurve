@@ -37,9 +37,9 @@ class icurve : public QMainWindow
         void initMainPlotter(QWidget *plotWidget);
         void initMainWinStyle(QMainWindow *self);
 
-        ICU_RET_STATUS icurve::loadData(const QString &filename);
-ICU_RET_STATUS analyzeData(QFile file);
-        ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd);
+        ICU_RET_STATUS loadData(const QString &filename);
+        ICU_RET_STATUS analyzeData(QFile &file);
+        ICU_RET_STATUS assembleData(QString dataLine, Command *cmd);
 
         ~icurve();
 
