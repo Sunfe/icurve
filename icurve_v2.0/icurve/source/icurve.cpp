@@ -92,7 +92,29 @@ void icurve::openFile()
     if(!fileName.isEmpty())
     {
         fileInfo = QFileInfo(fileName);
-        loadData(fileName);
+        if(ICU_OK == loadData(fileName))
+        {
+            for(qint16 pos = 0; pos < plotData.count(); pos++)
+            {
+
+                QwtPlotCurve *curve = new QwtPlotCurve();
+                curve->setPen( QPen( QColor::fromHsl(rand()%360,rand()%256,rand()%200)) );
+                curve->setSamples(plotData.value(pos).getData().toVector());
+
+                QwtSymbol *symbol = new QwtSymbol( QwtSymbol::NoSymbol,
+                        QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 8, 8 ) );
+                curve->setSymbol( symbol );
+
+                //QString curveName = fileInfo.baseName();		
+                //curve->setTitle(curveName);
+                curve->attach( plot );
+
+                plot->setAxisScale( QwtPlot::yLeft, -150.0, 150.0 );
+                plot->setAxisScale( QwtPlot::xBottom, 0.0, 4096.0 );
+                plot->replot();
+
+            }
+        }
     }   
 
     return ;
@@ -118,6 +140,8 @@ ICU_RET_STATUS icurve::loadData(const QString &filename)
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
+
+
 
     return ICU_OK;
 }
@@ -213,9 +237,6 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
     /*no more new command found when at file end, save the current data*/
     if(cmd.getData().count() > 0)      
         plotData.push_back(cmd);   
-
-    QString error = QString::number(plotData.count());
-    QMessageBox::critical(this,"ERROR",error);
 
     return ICU_OK; 
 }
