@@ -16,6 +16,8 @@ class Command
         Command(QString cmd, qint16 line, qint16 dir);
         ~Command();
 
+		void reset();
+
         void initFamily();
 
         void setName(QString cmd);	
@@ -28,7 +30,7 @@ class Command
         qint16 getDirection();
 
 
-        void setData(QList<QPointF> number);
+        void setData(QList<QPointF> points, bool isappend);
         QList<QPointF> getData();
 
         void setFamily(QStringList cmdFamily);

@@ -33,6 +33,15 @@ Command::~Command()
 {
 }
 
+void Command::reset()
+{
+	setName("NULL");
+	setLineId(0xff);
+	setDirection(0xff);
+	data.erase(data.begin(),data.end());
+
+	return ;
+}
 
 void Command::setName(QString cmd)
 {
@@ -74,11 +83,16 @@ qint16 Command::getDirection()
 }
 
 
-void Command::setData(QList<QPointF> number)
+void Command::setData(QList<QPointF> points,bool isappend)
 {
-    data = number;
-    return ;
+	if(true == isappend)
+		data += points;
+	else
+		data = points;
+	return ;
 }
+
+
 
 
 QList<QPointF> Command::getData()
