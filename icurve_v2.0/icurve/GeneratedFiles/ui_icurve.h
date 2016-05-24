@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Mon May 23 22:06:16 2016
+** Created: Wed May 25 00:18:36 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -70,7 +70,7 @@ public:
         actionOpen = new QAction(icurveClass);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/icurve/images/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/icurve/images/file_open.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionOpen->setIcon(icon);
         actionSave = new QAction(icurveClass);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));

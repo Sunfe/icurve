@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="icurve">
-    <file>../images/Logom.png</file>
+    <file>../images/file_open.png</file>
     <file>../images/add.png</file>
     <file>../images/cash-add.png</file>
     <file>../images/cash-change.png</file>

@@ -12,12 +12,14 @@ Command::Command(QString cmd)
     name = cmd;
 }
 
+
 Command::Command(QString cmd,qint16 line, qint16 dir)
 {
     initFamily();
     name      = cmd;
     lineId    = line;
     direction = dir;
+	state     = CMD_CLOSED;
 }
 
 void Command::initFamily()
@@ -38,6 +40,7 @@ void Command::reset()
 	setName("NULL");
 	setLineId(0xff);
 	setDirection(0xff);
+	setState(CMD_CLOSED);
 	data.erase(data.begin(),data.end());
 
 	return ;
@@ -112,4 +115,14 @@ void Command::setFamily(QStringList cmdFamily)
 }
 
 
+void Command::setState(qint16 cmdState)
+{
+    state = cmdState;
+    return ;
+}
 
+
+qint16 Command::getState()
+{
+    return state;
+}

@@ -229,7 +229,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="icurve.qrc">
-     <normaloff>:/icurve/images/add.png</normaloff>:/icurve/images/add.png</iconset>
+     <normaloff>:/icurve/images/file_open.png</normaloff>:/icurve/images/file_open.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>

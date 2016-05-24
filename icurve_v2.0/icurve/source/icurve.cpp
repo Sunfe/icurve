@@ -109,10 +109,9 @@ void icurve::openFile()
                 //curve->setTitle(curveName);
                 curve->attach( plot );
 
-                plot->setAxisScale( QwtPlot::yLeft, -150.0, 150.0 );
-                plot->setAxisScale( QwtPlot::xBottom, 0.0, 4096.0 );
+                plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
+                plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
                 plot->replot();
-
             }
         }
     }   
@@ -151,7 +150,6 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
 {
     qint32 cout     = 0;
     bool ok         = true;
-    bool isCmdStart = false;
     qint16  line    = 0;
     QRegExp regExp; 
     Command cmd;
@@ -166,7 +164,7 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
 
         qint16 i = 0;
         qint16 pos = 0;
-        QString curCmd("NULL");
+        QString curCmdName("NULL");
         for(i = 0; i< cmdFamily.count(); i++)
         {
             regExp.setPattern(cmdFamily.value(i));
@@ -174,16 +172,16 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
 
             if(-1 != pos)
             {
-                curCmd = cmdFamily.value(i);
+                curCmdName = cmdFamily.value(i);
                 break;
             }
 
         }
 
-        if("NULL" != curCmd) /*try to get parameters of command*/
+        if(curCmdName != "NULL") /*try to get parameters of command*/
         {
 
-            QString pattern(curCmd + "\\s+([0-9]|1[0-9])\\s+([0-1])");		
+            QString pattern(curCmdName + "\\s+([0-9]|1[0-9])\\s+([0-1])");		
             regExp.setPattern(pattern);
             pos = regExp.indexIn(dataLine);
             if(-1 != pos)
@@ -194,7 +192,7 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
                 prevCmd = cmd;
 
                 cmd.reset();
-                cmd.setName(regExp.capturedTexts().at(0));  
+                cmd.setName(curCmdName);  
 
                 QString port(regExp.capturedTexts().at(1));
                 cmd.setLineId(port.toInt(&ok));
@@ -202,13 +200,13 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
                 QString dir(regExp.capturedTexts().at(2));
                 cmd.setDirection(dir.toInt(&ok));
 
-                isCmdStart = true;
+                cmd.setState(CMD_STARTED);
             }
 
         }
 
 
-        if(true == isCmdStart)
+        if(CMD_STARTED == cmd.getState())
         {
             if(prevCmd.getData().count() > 0)      
             {
@@ -222,21 +220,25 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
                 continue;
             }
 
-            qint16 ret = assembleData(dataLine,&cmd);
-            if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
-            {
-                QString error = file.fileName() + " at line " + QString::number(line) \
-                                + ":data format incorrect.";
-                QMessageBox::critical(this,"ERROR",error);
+			qint16 ret = assembleData(dataLine,&cmd);
+			if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
+			{
+				QString error = file.fileName() + " at line " + QString::number(line) \
+					+ ":data format incorrect.";
+				QMessageBox::critical(this,"ERROR",error);
 
-                return ICU_PLOT_DATA_FORMAT_ERROR; 
-            }
+				return ICU_PLOT_DATA_FORMAT_ERROR; 
+			}
         }
     }
 
     /*no more new command found when at file end, save the current data*/
-    if(cmd.getData().count() > 0)      
-        plotData.push_back(cmd);   
+    if(cmd.getData().count() > 0)     
+	{
+		 cmd.setState(CMD_CLOSED);
+         plotData.push_back(cmd);   
+	}
+		 
 
     return ICU_OK; 
 }
@@ -247,16 +249,19 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
     QStringList splitList;
     QStringList digList;
 
-
     splitList = dataLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 
     if(!splitList.contains(":") )  /*only ":"*/
         return ICU_PLOT_DATA_FORMAT_ERROR;
 
-    digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$"));
+	if((cmd->getName() == "getTxPsd") && splitList.contains("---"))
+	{
+		splitList = splitList.replaceInStrings("---","-150.0");
+	}
 
+	digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
 
-    if(MAX_NUM_DIGITS_PERLINE != digList.count())
+    if(digList.count() > MAX_NUM_DIGITS_PERLINE ||(digList.count() <=0))
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
@@ -265,6 +270,7 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
+
 
     bool ok = false;
     qint16 toneIndex = digList.at(0).toInt(&ok);
@@ -286,7 +292,10 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
         points.append(point);
     }
 
-    cmd->setData(points,true);
+	cmd->setData(points,true);
+
+	if(digList.count() < MAX_NUM_DIGITS_PERLINE)
+		cmd->setState(CMD_CLOSED);
 
     return ICU_OK;
 }
