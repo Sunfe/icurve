@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icurve.h'
 **
-** Created: Wed May 25 22:48:51 2016
+** Created: Thu May 26 01:23:40 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_icurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,6 +36,7 @@ static const uint qt_meta_data_icurve[] = {
  // slots: signature, parameters, type, tag, flags
       43,    7,    7,    7, 0x08,
       54,    8,    7,    7, 0x08,
+      85,    7,    7,    7, 0x08,
 
        0        // eod
 };
@@ -43,6 +44,7 @@ static const uint qt_meta_data_icurve[] = {
 static const char qt_meta_stringdata_icurve[] = {
     "icurve\0\0progress\0analyDataProgress(qint16)\0"
     "openFile()\0updateAnalyProgressBar(qint16)\0"
+    "cancelAnalyProgressBar()\0"
 };
 
 const QMetaObject icurve::staticMetaObject = {
@@ -77,9 +79,10 @@ int icurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 0: analyDataProgress((*reinterpret_cast< qint16(*)>(_a[1]))); break;
         case 1: openFile(); break;
         case 2: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 3: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }

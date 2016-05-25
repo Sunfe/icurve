@@ -8,12 +8,13 @@
 #include <QFileInfo>
 
 #include <qwt_plot.h>
-#include <qwt_plot_marker.h>
+#include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
-#include <qwt_plot_grid.h>
+#include <qwt_plot_marker.h>
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
 #include <qwt_plot_panner.h>
+#include <qwt_plot_grid.h>
 #include <qwt_plot_magnifier.h>
 #include <qwt_scale_widget.h>
 #include <qwt_scale_engine.h>
@@ -27,6 +28,7 @@
 #include "ui_icurve.h"
 #include "icurve_common.h"
 #include "command.h"
+#include "icv_plot_canvas.h"
 
 
 class icurve : public QMainWindow
@@ -62,11 +64,15 @@ private:
     QwtPlotGrid *grid;
     QwtSymbol *symbol;
 
+    IcvPlotCanvas*plotCanvas;
     QList <Command> plotData;
+    bool isDataAnalyCanceled;
 
 private slots:
     void openFile();
     void updateAnalyProgressBar(qint16 progress);
+    void cancelAnalyProgressBar();
+
 
 signals:
     void analyDataProgress(qint16 progress);

@@ -27,9 +27,13 @@
 
     plot = new QwtPlot();
     initMainPlotter(plot);
+
     setCentralWidget(plot);
 
+    plotCanvas = static_cast<IcvPlotCanvas *>(new IcvPlotCanvas(plot)) ;
+
     analyProgressDialog  = NULL;
+    isDataAnalyCanceled  = false;
     /*signals and slots*/
     connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(this, SIGNAL(analyDataProgress(qint16)), this, SLOT(updateAnalyProgressBar(qint16)));
@@ -79,6 +83,7 @@ void icurve::initMainPlotter(QWidget *plotWidget)
 
     ( void ) new QwtPlotPanner( plot->canvas());
     ( void ) new QwtPlotMagnifier(plot->canvas());
+
 
     return ;
 }
@@ -143,9 +148,9 @@ ICU_RET_STATUS icurve::loadData(const QString &filename)
 
 ICU_RET_STATUS icurve::analyzeData(QFile &file)
 {
-    qint32 cout     = 0;
-    bool ok         = true;
-    qint16  line    = 0;
+    qint32  cout = 0;
+    bool    ok   = true;
+    qint16  line = 0;
     qint16  totalLineNum = 0;
     QRegExp regExp; 
     Command cmd;
@@ -161,18 +166,22 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
 
     if(totalLineNum > 2000)
     {
-        analyProgressDialog = new QProgressDialog(this);
+        analyProgressDialog = new QProgressDialog(plot);
+        analyProgressDialog->setModal(true);
         analyProgressDialog->setRange(0, totalLineNum);
-        analyProgressDialog->window()->setWindowTitle("File analyzing...");
-        analyProgressDialog->show();
+        analyProgressDialog->setWindowTitle("File analyzing...");
         /*display immediately*/
+        analyProgressDialog->show();
         analyProgressDialog->repaint();
+        
+        connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
     dataTextStream.seek(0);
+    isDataAnalyCanceled   = false;
     QStringList cmdFamily = cmd.getFamily();
     line = 0;
-    while(!dataTextStream.atEnd())
+    while(!dataTextStream.atEnd() && !isDataAnalyCanceled)
     {
         line++;
         QString dataLine = dataTextStream.readLine();
@@ -240,7 +249,8 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
             }
         }
 
-        emit analyDataProgress(line);
+        if(NULL != analyProgressDialog)
+            emit analyDataProgress(line);
     }
 
     /*no more new command found when at file end, save the current data*/
@@ -248,12 +258,14 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
     {
          cmd.setState(CMD_CLOSED);
          plotData.push_back(cmd);   
+
+         if(NULL != analyProgressDialog)
+         {
+             delete analyProgressDialog;
+         }
+
     }
-     
-    if(NULL != analyProgressDialog)
-    {
-        delete analyProgressDialog;
-    }
+    
 
     return ICU_OK; 
 }
@@ -325,6 +337,21 @@ void icurve::updateAnalyProgressBar(qint16 progress)
     return ;
 }
 
+
+void icurve::cancelAnalyProgressBar()
+{
+#if 0
+    if(NULL != analyProgressDialog)
+    {
+        delete analyProgressDialog;
+    }
+        analyProgressDialog = NULL;
+#endif
+    isDataAnalyCanceled = true;
+    plotData.clear();
+
+    return ;
+}
 
 void icurve:: paintEvent ( QPaintEvent * event )
 {
