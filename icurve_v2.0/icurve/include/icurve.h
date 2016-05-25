@@ -4,6 +4,7 @@
 #include <QtGui/QMainWindow>
 #include <QLabel>
 #include <QRectF>
+#include <QProgressDialog>
 #include <QFileInfo>
 
 #include <qwt_plot.h>
@@ -32,35 +33,43 @@ class icurve : public QMainWindow
 {
     Q_OBJECT
 
-    public:
-        icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
-        void initMainPlotter(QWidget *plotWidget);
-        void initMainWinStyle(QMainWindow *self);
+public:
+    icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
+    void initMainPlotter(QWidget *plotWidget);
+    void initMainWinStyle(QMainWindow *self);
 
-        ICU_RET_STATUS loadData(const QString &filename);
-        ICU_RET_STATUS analyzeData(QFile &file);
-        ICU_RET_STATUS assembleData(QString dataLine, Command *cmd);
+    ICU_RET_STATUS loadData(const QString &filename);
+    ICU_RET_STATUS analyzeData(QFile &file);
+    ICU_RET_STATUS assembleData(QString dataLine, Command *cmd);
 
-        ~icurve();
+    ~icurve();
 
-    private:
-        Ui::icurveClass ui;
-        /*Qt objects*/
-        QRectF titleRect;
-        QLabel *label;
+protected:
+    void paintEvent ( QPaintEvent * event );
+    virtual void mouseMoveEvent ( QMouseEvent * event );
 
-        /*Qwt objects*/	
-        QwtPlot *plot;
-        QwtPlotGrid *grid;
-        QwtSymbol *symbol;
+private:
+    Ui::icurveClass ui;
 
-        QFileInfo fileInfo;
+    /*Qt objects*/
+    QRectF titleRect;
+    QLabel *label;
+    QProgressDialog *analyProgressDialog;
+    QFileInfo fileInfo;
 
-    private:
-        QList <Command> plotData;
+    /*Qwt objects*/	
+    QwtPlot *plot;
+    QwtPlotGrid *grid;
+    QwtSymbol *symbol;
 
-    private slots:
-        void openFile();
+    QList <Command> plotData;
+
+private slots:
+    void openFile();
+    void updateAnalyProgressBar(qint16 progress);
+
+signals:
+    void analyDataProgress(qint16 progress);
 
 };
 

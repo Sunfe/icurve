@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icurve.h'
 **
-** Created: Tue May 24 23:40:00 2016
+** Created: Wed May 25 22:48:51 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,21 +23,26 @@ static const uint qt_meta_data_icurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: signature, parameters, type, tag, flags
+      17,    8,    7,    7, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-       8,    7,    7,    7, 0x08,
+      43,    7,    7,    7, 0x08,
+      54,    8,    7,    7, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_icurve[] = {
-    "icurve\0\0openFile()\0"
+    "icurve\0\0progress\0analyDataProgress(qint16)\0"
+    "openFile()\0updateAnalyProgressBar(qint16)\0"
 };
 
 const QMetaObject icurve::staticMetaObject = {
@@ -69,11 +74,20 @@ int icurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: openFile(); break;
+        case 0: analyDataProgress((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 1: openFile(); break;
+        case 2: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 1;
+        _id -= 3;
     }
     return _id;
+}
+
+// SIGNAL 0
+void icurve::analyDataProgress(qint16 _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE

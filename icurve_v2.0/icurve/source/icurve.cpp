@@ -24,13 +24,15 @@
     ui.setupUi(this);
 
     initMainWinStyle(this);
+
     plot = new QwtPlot();
     initMainPlotter(plot);
-
     setCentralWidget(plot);
 
+    analyProgressDialog  = NULL;
     /*signals and slots*/
     connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(this, SIGNAL(analyDataProgress(qint16)), this, SLOT(updateAnalyProgressBar(qint16)));
 
 }
 
@@ -89,14 +91,13 @@ void icurve::openFile()
             fileInfo.absolutePath(),
             tr("Text files (*.txt);;All Files (*)"));
 
+
     if(!fileName.isEmpty())
     {
-        fileInfo = QFileInfo(fileName);
         if(ICU_OK == loadData(fileName))
         {
             for(qint16 pos = 0; pos < plotData.count(); pos++)
             {
-
                 QwtPlotCurve *curve = new QwtPlotCurve();
                 curve->setPen( QPen( QColor::fromHsl(rand()%360,rand()%256,rand()%200)) );
                 curve->setSamples(plotData.value(pos).getData().toVector());
@@ -104,8 +105,7 @@ void icurve::openFile()
                 QwtSymbol *symbol = new QwtSymbol( QwtSymbol::NoSymbol,
                         QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 8, 8 ) );
                 curve->setSymbol( symbol );
-
-                //QString curveName = fileInfo.baseName();		
+                //QString curveName = fileInfo.baseName();
                 //curve->setTitle(curveName);
                 curve->attach( plot );
 
@@ -115,7 +115,6 @@ void icurve::openFile()
             }
         }
     }   
-
     return ;
 }
 
@@ -123,7 +122,6 @@ void icurve::openFile()
 ICU_RET_STATUS icurve::loadData(const QString &filename)
 {
     QFile file(filename);
-
     if(!file.exists())
     {
         return ICU_FILE_NOT_EXIST;
@@ -134,13 +132,10 @@ ICU_RET_STATUS icurve::loadData(const QString &filename)
         return ICU_FILE_READ_ERROR;
     }
 
-
     if(ICU_OK != analyzeData(file))
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
-
-
 
     return ICU_OK;
 }
@@ -151,44 +146,59 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
     qint32 cout     = 0;
     bool ok         = true;
     qint16  line    = 0;
+    qint16  totalLineNum = 0;
     QRegExp regExp; 
     Command cmd;
     Command prevCmd;
 
     QTextStream dataTextStream(&file);
+    totalLineNum = 0;
+    while (!dataTextStream.atEnd()) 
+    {
+        QString line = dataTextStream.readLine();
+        totalLineNum++; 
+    }
+
+    if(totalLineNum > 2000)
+    {
+        analyProgressDialog = new QProgressDialog(this);
+        analyProgressDialog->setRange(0, totalLineNum);
+        analyProgressDialog->window()->setWindowTitle("File analyzing...");
+        analyProgressDialog->show();
+        /*display immediately*/
+        analyProgressDialog->repaint();
+    }
+
+    dataTextStream.seek(0);
     QStringList cmdFamily = cmd.getFamily();
+    line = 0;
     while(!dataTextStream.atEnd())
     {
         line++;
         QString dataLine = dataTextStream.readLine();
-
-        qint16 i = 0;
-        qint16 pos = 0;
+        qint16 pos       = 0;
         QString curCmdName("NULL");
-        for(i = 0; i< cmdFamily.count(); i++)
+        for(qint16 i = 0; i< cmdFamily.count(); i++)
         {
             regExp.setPattern(cmdFamily.value(i));
             pos = regExp.indexIn(dataLine);
-
             if(-1 != pos)
             {
                 curCmdName = cmdFamily.value(i);
                 break;
             }
-
         }
 
         if(curCmdName != "NULL") /*try to get parameters of command*/
         {
-
             QString pattern(curCmdName + "\\s+([0-9]|1[0-9])\\s+([0-1])");		
             regExp.setPattern(pattern);
             pos = regExp.indexIn(dataLine);
             if(-1 != pos)
             {
-                /*if a new command found,and the last command is not empty,
-                  set the last command complete 
-                 */
+               /*if a new command found,and the last command is not empty,
+                  set the last command complete.
+                */
                 prevCmd = cmd;
 
                 cmd.reset();
@@ -205,7 +215,6 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
 
         }
 
-
         if(CMD_STARTED == cmd.getState())
         {
             if(prevCmd.getData().count() > 0)      
@@ -220,25 +229,31 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
                 continue;
             }
 
-			qint16 ret = assembleData(dataLine,&cmd);
-			if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
-			{
-				QString error = file.fileName() + " at line " + QString::number(line) \
-					+ ":data format incorrect.";
-				QMessageBox::critical(this,"ERROR",error);
+            qint16 ret = assembleData(dataLine,&cmd);
+            if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
+            {
+                QString error = file.fileName() + " at line " + QString::number(line) \
+                    + ":data format incorrect.";
+                QMessageBox::critical(this,"ERROR",error);
 
-				return ICU_PLOT_DATA_FORMAT_ERROR; 
-			}
+                return ICU_PLOT_DATA_FORMAT_ERROR; 
+            }
         }
+
+        emit analyDataProgress(line);
     }
 
     /*no more new command found when at file end, save the current data*/
     if(cmd.getData().count() > 0)     
-	{
-		 cmd.setState(CMD_CLOSED);
+    {
+         cmd.setState(CMD_CLOSED);
          plotData.push_back(cmd);   
-	}
-		 
+    }
+     
+    if(NULL != analyProgressDialog)
+    {
+        delete analyProgressDialog;
+    }
 
     return ICU_OK; 
 }
@@ -254,12 +269,12 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
     if(!splitList.contains(":") )  /*only ":"*/
         return ICU_PLOT_DATA_FORMAT_ERROR;
 
-	if((cmd->getName() == "getTxPsd") && splitList.contains("---"))
-	{
-		splitList = splitList.replaceInStrings("---","-150.0");
-	}
+    if((cmd->getName() == "getTxPsd") && splitList.contains("---"))
+    {
+        splitList = splitList.replaceInStrings("---","-150.0");
+    }
 
-	digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
+    digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
 
     if(digList.count() > MAX_NUM_DIGITS_PERLINE ||(digList.count() <=0))
     {
@@ -270,7 +285,6 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
-
 
     bool ok = false;
     qint16 toneIndex = digList.at(0).toInt(&ok);
@@ -292,14 +306,35 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
         points.append(point);
     }
 
-	cmd->setData(points,true);
+    cmd->setData(points,true);
 
-	if(digList.count() < MAX_NUM_DIGITS_PERLINE)
-		cmd->setState(CMD_CLOSED);
+    if(digList.count() < MAX_NUM_DIGITS_PERLINE)
+        cmd->setState(CMD_CLOSED);
 
     return ICU_OK;
 }
 
 
+void icurve::updateAnalyProgressBar(qint16 progress)
+{
+    if(analyProgressDialog != NULL)
+    {
+        analyProgressDialog->setValue(progress);
+        analyProgressDialog->repaint();
+    }
+    return ;
+}
+
+
+void icurve:: paintEvent ( QPaintEvent * event )
+{
+    return QWidget::paintEvent(event);
+}
+
+
+void icurve:: mouseMoveEvent ( QMouseEvent * event )
+{
+    return QWidget::mouseMoveEvent(event);
+}
 
 

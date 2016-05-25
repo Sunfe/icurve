@@ -12,7 +12,6 @@
 
 class Command
 {
-
 public:
 	Command();
 	Command(QString cmd);

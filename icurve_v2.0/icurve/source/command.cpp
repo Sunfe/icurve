@@ -6,6 +6,12 @@ Command::Command(void)
     initFamily();
 }
 
+
+Command::~Command()
+{
+}
+
+
 Command::Command(QString cmd)
 {
     initFamily();
@@ -19,8 +25,9 @@ Command::Command(QString cmd,qint16 line, qint16 dir)
     name      = cmd;
     lineId    = line;
     direction = dir;
-	state     = CMD_CLOSED;
+    state     = CMD_CLOSED;
 }
+
 
 void Command::initFamily()
 {
@@ -31,20 +38,18 @@ void Command::initFamily()
     family.push_back("getNoiseMargin");		
 }
 
-Command::~Command()
-{
-}
 
 void Command::reset()
 {
-	setName("NULL");
-	setLineId(0xff);
-	setDirection(0xff);
-	setState(CMD_CLOSED);
-	data.erase(data.begin(),data.end());
+    setName("NULL");
+    setLineId(0xff);
+    setDirection(0xff);
+    setState(CMD_CLOSED);
+    data.erase(data.begin(),data.end());
 
-	return ;
+    return ;
 }
+
 
 void Command::setName(QString cmd)
 {
@@ -72,7 +77,6 @@ qint16 Command::getLineId()
 }
 
 
-
 void Command::setDirection(qint16 dir)
 {
     direction = dir;
@@ -88,11 +92,11 @@ qint16 Command::getDirection()
 
 void Command::setData(QList<QPointF> points,bool isappend)
 {
-	if(true == isappend)
-		data += points;
-	else
-		data = points;
-	return ;
+    if(true == isappend)
+        data += points;
+    else
+        data = points;
+    return ;
 }
 
 
