@@ -162,19 +162,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\source\command.cpp"
+				RelativePath=".\source\icv_command.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\source\icurve.cpp"
+				RelativePath=".\source\icv_icurve.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\icv_main.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\source\icv_plot_canvas.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\source\main.cpp"
 				>
 			</File>
 		</Filter>
@@ -184,11 +184,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\include\command.h"
+				RelativePath=".\include\icurve_common.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\icurve.h"
+				RelativePath=".\include\icv_command.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\icv_icurve.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -212,10 +216,6 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\include\icurve_common.h"
-				>
 			</File>
 			<File
 				RelativePath=".\include\icv_plot_canvas.h"
@@ -345,7 +345,7 @@
 				SourceControlFiles="false"
 				>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_icurve.cpp"
+					RelativePath=".\GeneratedFiles\Release\moc_icv_icurve.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -375,7 +375,7 @@
 				SourceControlFiles="false"
 				>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_icurve.cpp"
+					RelativePath=".\GeneratedFiles\Debug\moc_icv_icurve.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
