@@ -258,14 +258,15 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
     {
          cmd.setState(CMD_CLOSED);
          plotData.push_back(cmd);   
-
-         if(NULL != analyProgressDialog)
-         {
-             delete analyProgressDialog;
-         }
-
     }
-    
+
+
+    if(isDataAnalyCanceled && (NULL != analyProgressDialog))
+    {
+        delete analyProgressDialog;
+        plotData.clear();
+    }
+
 
     return ICU_OK; 
 }
@@ -340,15 +341,7 @@ void icurve::updateAnalyProgressBar(qint16 progress)
 
 void icurve::cancelAnalyProgressBar()
 {
-#if 0
-    if(NULL != analyProgressDialog)
-    {
-        delete analyProgressDialog;
-    }
-        analyProgressDialog = NULL;
-#endif
     isDataAnalyCanceled = true;
-    plotData.clear();
 
     return ;
 }
