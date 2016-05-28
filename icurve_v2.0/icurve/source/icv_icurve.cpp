@@ -84,6 +84,7 @@ void icurve::initMainPlotter(QWidget *plotWidget)
     ( void ) new QwtPlotPanner( plot->canvas());
     ( void ) new QwtPlotMagnifier(plot->canvas());
 
+    plotCanvas = new IcvPlotCanvas(plot);
 
     return ;
 }
@@ -112,8 +113,10 @@ void icurve::openFile()
                 curve->setSymbol( symbol );
                 //QString curveName = fileInfo.baseName();
                 //curve->setTitle(curveName);
+                
                 curve->attach( plot );
 
+                plotCanvas->updateCurves();
                 plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
                 plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
                 plot->replot();

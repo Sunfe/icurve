@@ -14,7 +14,7 @@
 #include "icv_plot_canvas.h"
 
 
-#define ICV_TOLERENCE_DISTANCE 5
+#define ICV_TOLERENCE_DISTANCE              (5)
 
 
 IcvPlotCanvas::IcvPlotCanvas(QwtPlot *parent)
@@ -26,7 +26,10 @@ IcvPlotCanvas::IcvPlotCanvas(QwtPlot *parent)
     canvas->setCursor(Qt::ArrowCursor);
     canvas->setMouseTracking(true);
 
-    selectedPlotItem = NULL;
+    updateCurves();
+
+    curSelectedCurve  = NULL;
+    prevSelectedCurve = NULL;
 }
 
 
@@ -42,12 +45,10 @@ QwtPlot *IcvPlotCanvas::getPlot()
 }
 
 
-#if 0
-const QwtPlot *IcvPlotCanvas::getPlot() const
+void IcvPlotCanvas::setPlot(QwtPlot *plt)
 {
-    return qobject_cast<const QwtPlot *>(parent());
+    plot = plt;
 }
-#endif
 
 
 QwtPlotCanvas* IcvPlotCanvas::getPlotCanvas()
@@ -56,88 +57,123 @@ QwtPlotCanvas* IcvPlotCanvas::getPlotCanvas()
 }
 
 
-void IcvPlotCanvas::select(const QPoint &pos)
+void IcvPlotCanvas::setPlotCanvas()
 {
-    const QwtPlotItemList &itmList = plot->itemList();
+    if(plot != NULL)
+        canvas = static_cast<QwtPlotCanvas *>(plot->canvas());
+    else
+        canvas = NULL;
+}
 
-    /*pick the selected curve*/
-    for(QwtPlotItemIterator it = itmList.begin(); it != itmList.end(); it++)
+
+QList<IcvPlotCurve *> IcvPlotCanvas::getCurves()
+{
+    return curves;
+}
+
+
+void IcvPlotCanvas::setCurves(QList<IcvPlotCurve *> crvs)
+{
+    curves = crvs;
+}
+
+
+void IcvPlotCanvas::updateCurves()
+{
+    QwtPlotItemList items = plot->itemList();
+
+    for(qint16 i = 0; i < items.count(); i++)
     {
-        if(QwtPlotItem::Rtti_PlotCurve == (*it)->rtti())
+        if((items.value(i))->rtti() == QwtPlotItem::Rtti_PlotCurve)
         {
-            QwtPlotCurve *curve = static_cast<QwtPlotCurve*>(*it);
-            double dist = 0.0;
-            curve->closestPoint(pos, &dist);
-
-            if(dist <= ICV_TOLERENCE_DISTANCE )
-            {
-                selectedPlotItem = *it;
-                break;
-            }
-            else
-            {
-                selectedPlotItem = NULL;
-            }
+            IcvPlotCurve *curve = new IcvPlotCurve();
+            curve->setPlot(plot);
+            curve->setCanvas(canvas);
+            curve->setCurve(static_cast<QwtPlotCurve *>(items.value(i)));
+            curves.append(curve);
         }
     }
+}
 
-    if(NULL != canvas && plot != NULL)
+
+void IcvPlotCanvas::lookforCurves()
+{
+    return updateCurves();
+}
+
+
+void IcvPlotCanvas::clearCurves()
+{
+    curves.clear();
+}
+
+
+IcvPlotCurve* IcvPlotCanvas::getSelectedCurve()
+{
+    return curSelectedCurve;
+}
+
+
+void IcvPlotCanvas::onMouseClick(const QPoint &pos)
+{
+    /*pick the selected curve*/
+    for(qint16 i = 0; i < curves.count(); i++)
     {
+        QwtPlotCurve *curve = curves.value(i)->getCurve();
+        double dist         = 0.0;
+        curve->closestPoint(pos, &dist);
 
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+        if(dist < ICV_TOLERENCE_DISTANCE )
+        {
+            curSelectedCurve = curves.value(i);
+            break;
+        }
+        else
+        {
+            curSelectedCurve = NULL;
+        }
+    }
+    
+    /*Set markers*/
+    if(NULL != curSelectedCurve)
+    {
+        curSelectedCurve->showMarker();
+    }
+    else if(NULL != prevSelectedCurve)
+    {
+        prevSelectedCurve->hideMarker();
     }
 
+    prevSelectedCurve = curSelectedCurve;
     return ;
 }
 
 
-QwtPlotCurve* IcvPlotCanvas::getCurve()
+void IcvPlotCanvas::onMouseMove(const QPoint &pos)
 {
-    QwtPlotCurve *curveSel = NULL;
-    QwtPlotItem *item = selectedPlotItem;
-
-    if(NULL == item)
-        return NULL;
-
-    if( QwtPlotItem::Rtti_PlotCurve == item->rtti())
+   //lookforCurves();
+    /*pick the selected curve*/
+    for(qint16 i = 0; i < curves.count(); i++)
     {
-        curveSel = static_cast<QwtPlotCurve *>(item);
-    }
+        QwtPlotCurve *curve = curves.value(i)->getCurve();
+        double dist        = 0.0;
+        curve->closestPoint(pos, &dist);
 
-    return curveSel;
-}
-
-
-void IcvPlotCanvas::clearCurve()
-{
-    selectedPlotItem = NULL;
-}
-
-
-void IcvPlotCanvas::move(const QPoint &pos)
-{
-    const QwtPlotItemList &itmList = plot->itemList();
-
-    for(QwtPlotItemIterator it = itmList.begin(); it != itmList.end(); it++)
-    {
-        if( (*it)->rtti() == QwtPlotItem::Rtti_PlotCurve)
+        if(dist <= ICV_TOLERENCE_DISTANCE )
         {
-            QwtPlotCurve *curveSel = static_cast<QwtPlotCurve *>(*it);
-            double distance = 0.0;
-            curveSel->closestPoint(pos,&distance);
-            if(distance <= ICV_TOLERENCE_DISTANCE)
-            {
-                canvas->setCursor(Qt::PointingHandCursor);
-                break;
-            }
-            else
-            {
-                canvas->setCursor(Qt::ArrowCursor);
-            }
+            canvas->setCursor(Qt::PointingHandCursor);
+            curves.value(i)->setActivateState(ICV_CURVE_ACTIVATED);
+            curSelectedCurve = curves.value(i);
+            break;
+        }
+        else
+        {
+            canvas->setCursor(Qt::ArrowCursor);
+            curSelectedCurve  = NULL;
         }
     }
+
+    return ;
 }
 
 
@@ -152,14 +188,14 @@ bool IcvPlotCanvas::eventFilter(QObject *object, QEvent *event)
     case QEvent::MouseButtonPress:
         {
             const QMouseEvent *mouseEventtt = static_cast<QMouseEvent*>(event);
-            select(mouseEventtt->pos());
+            onMouseClick(mouseEventtt->pos());
             break;
         }
 
     case QEvent::MouseMove:
         {
             const QMouseEvent *mouseEventtt = static_cast<QMouseEvent*>(event);
-            move(mouseEventtt->pos());
+            onMouseMove(mouseEventtt->pos());
             break;
         }
     default:

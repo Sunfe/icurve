@@ -11,7 +11,7 @@
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
-
+#include "icv_plot_curve.h"
 class QPoint;
 class QPointF;
 class QCustomEvent;
@@ -29,27 +29,33 @@ public:
     ~IcvPlotCanvas();
 
     QwtPlot *getPlot();
-    const QwtPlot *getPlot() const;
+    void setPlot(QwtPlot *plt);
 
     QwtPlotCanvas *getPlotCanvas();
+    void setPlotCanvas();
 
+    QList<IcvPlotCurve *> getCurves();
+    void setCurves(QList<IcvPlotCurve *> crvs);
+    void updateCurves();
+    void lookforCurves();
+    void clearCurves();
 
-    QwtPlotCurve * getCurve();
-    void clearCurve();
+    IcvPlotCurve* getSelectedCurve();
 
     virtual bool eventFilter( QObject *, QEvent * );
     virtual bool event( QEvent * );
 
 
 private:
-    void select(const QPoint &);
-    void move(const QPoint &);
+    void onMouseClick(const QPoint &);
+    void onMouseMove(const QPoint &);
 
 private:
     QwtPlot *plot;
     QwtPlotCanvas *canvas;
-    QwtPlotItem *selectedPlotItem;
-
+    IcvPlotCurve *curSelectedCurve;
+    IcvPlotCurve *prevSelectedCurve;
+    QList<IcvPlotCurve *> curves;
 };
 
 #endif
