@@ -13,39 +13,39 @@
 class Command
 {
 public:
-	Command();
-	Command(QString cmd);
-	Command(QString cmd, qint16 line, qint16 dir);
-	~Command();
+    Command();
+    Command(QString cmd);
+    Command(QString cmd, qint16 line, qint16 dir);
+    ~Command();
 
-	void reset();
+    void reset();
 
-	void initFamily();
-	void setFamily(QStringList cmdFamily);
-	QStringList getFamily();
+    void initFamily();
+    void setFamily(QStringList cmdFamily);
+    QStringList getFamily();
 
-	void setName(QString cmd);	
-	QString getName();
+    void setName(QString cmd);	
+    QString getName();
 
-	void setLineId(qint16 id);	
-	qint16 getLineId();
+    void setLineId(qint16 id);	
+    qint16 getLineId();
 
-	void setDirection(qint16 dir);	
-	qint16 getDirection();
+    void setDirection(qint16 dir);	
+    qint16 getDirection();
 
-	void setData(QList<QPointF> points, bool isappend);
-	QList<QPointF> getData();
+    void setData(QList<QPointF> points, bool isappend);
+    QList<QPointF> getData();
 
-	void setState(qint16 cmdState);
-	qint16 getState();
+    void setState(qint16 cmdState);
+    qint16 getState();
 
 private:
-	QString name;
-	QList<QPointF> data;
-	QStringList  family;
-	qint16 lineId;
-	qint16 direction;
-	qint16 state;
+    QString name;
+    QList<QPointF> data;
+    QStringList  family;
+    qint16 lineId;
+    qint16 direction;
+    qint16 state;
 
 };
 

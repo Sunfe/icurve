@@ -182,3 +182,60 @@ void IcvPlotCurve::setShowMarkerState(qint16 state)
 {
     showMarkerState = state;
 }
+
+
+void IcvPlotCurve::setColor(QColor color)
+{
+    QPen pen = curve->pen();
+    pen.setColor(color);
+    curve->setPen(pen);
+    const QwtSymbol *symbol = curve->symbol();
+    QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), QBrush(color),pen,symbol->size());
+    curve->setSymbol(symbolNew);
+
+    return ;
+}
+
+
+void IcvPlotCurve::setWidth(qint16 width)
+{
+    QPen pen = curve->pen();
+    pen.setWidth(width);
+    curve->setPen(pen);
+
+    return ;
+}
+
+
+void IcvPlotCurve::setStyle(Qt::PenStyle style)
+{
+    QPen pen = curve->pen();
+    pen.setStyle(style);
+    curve->setPen(pen);
+
+    return ;
+}
+
+
+void IcvPlotCurve::setMarker(QwtSymbol::Style style)
+{
+    QColor curveColor = curve->pen().color();
+    const QwtSymbol *symbol = curve->symbol();
+    QwtSymbol *symbolNew = new QwtSymbol(style, QBrush(curveColor),QPen(curveColor, 2),symbol->size());
+    curve->setSymbol(symbolNew);
+
+    return ;
+}
+
+
+void IcvPlotCurve::setMarkerSize(qint16 size)
+{
+    const QwtSymbol *symbol = curve->symbol();
+    QwtSymbol::Style symStyle = symbol->style();
+    QColor curveColor = curve->pen().color();
+    QwtSymbol *symbolNew = new QwtSymbol(symStyle, QBrush(curveColor),
+        QPen( curveColor, 2),QSize(size,size));
+    curve->setSymbol(symbolNew);
+
+    return ;
+}

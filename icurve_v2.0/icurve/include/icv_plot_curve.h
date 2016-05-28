@@ -4,6 +4,8 @@
 #include <qobject.h>
 #include <QtGlobal>
 #include <QVector>
+#include <QColor>
+
 
 #include <qwhatsthis.h>
 #include <qpainter.h>
@@ -49,6 +51,12 @@ public:
     void hideMarker();
     qint16 getShowMarkerState();
     void setShowMarkerState(qint16 state);
+
+    void setColor(QColor color);
+    void setWidth(qint16 width);
+    void setStyle(Qt::PenStyle style);
+    void setMarker(QwtSymbol::Style style);
+    void setMarkerSize(qint16 size);
 
 private:
     QwtPlot       *plot;

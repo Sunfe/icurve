@@ -3,6 +3,7 @@
 
 #include <qobject.h>
 #include <QtGlobal>
+#include <QMenu>
 #include <qwhatsthis.h>
 #include <qpainter.h>
 #include <qwt_plot.h>
@@ -20,7 +21,7 @@ class QPolygonF;
 class QwtPlotCurve;
 
 
-class IcvPlotCanvas : public QObject
+class IcvPlotCanvas : public QWidget
 {
     Q_OBJECT
 
@@ -39,15 +40,18 @@ public:
     void updateCurves();
     void lookforCurves();
     void clearCurves();
-
     IcvPlotCurve* getSelectedCurve();
+
+    void createCurvePopMenus();
+    void createCurvePopMenuActions();
 
     virtual bool eventFilter( QObject *, QEvent * );
     virtual bool event( QEvent * );
 
 
 private:
-    void onMouseClick(const QPoint &);
+    void onMouseLeftButtonClick(const QPoint &);
+    void onMouseRightButtonClick(const QPoint &);
     void onMouseMove(const QPoint &);
 
 private:
@@ -56,6 +60,37 @@ private:
     IcvPlotCurve *curSelectedCurve;
     IcvPlotCurve *prevSelectedCurve;
     QList<IcvPlotCurve *> curves;
+
+
+    /*menus*/
+    QMenu *crvSelPopMenu;
+    QMenu *subCrvSelWidthMenu;
+    QMenu *subCrvSelStyleMenu;
+    QMenu *subCrvSelMarkeStyleMenu;
+    QMenu *subCrvSelMarkerSizeMenu;
+
+    /*actions*/
+    QAction *cutAction;
+    QAction *copyAction;
+    QAction *delAction;
+    QAction *colorSetAction;
+    QAction *propertySetAction;
+
+    /*action groups*/
+    QActionGroup *widthActGrp;
+    QActionGroup *styleActGrp;
+    QActionGroup *markerStyleActGrp;
+    QActionGroup *markerSizeActGrp;
+
+
+private slots:
+    void setCurveColor(IcvPlotCurve *curve);
+    void seCurvetWidth(IcvPlotCurve *curve, QAction *action);
+    void setCurveStyle(IcvPlotCurve *curve, QAction *action);
+    void setCurveMarker(IcvPlotCurve *curve, QAction *action);
+    void setCurveMarkerSize(IcvPlotCurve *curve, QAction *action);
+    void setCurveProperty(IcvPlotCurve *curve);
+
 };
 
 #endif
