@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_plot_canvas.h'
 **
-** Created: Sat May 28 13:56:34 2016
+** Created: Sat May 28 20:30:54 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvPlotCanvas[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,23 +31,23 @@ static const uint qt_meta_data_IcvPlotCanvas[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      21,   15,   14,   14, 0x08,
-      63,   50,   14,   14, 0x08,
-     101,   50,   14,   14, 0x08,
-     139,   50,   14,   14, 0x08,
-     178,   50,   14,   14, 0x08,
-     221,   15,   14,   14, 0x08,
+      15,   14,   14,   14, 0x08,
+      38,   31,   14,   14, 0x08,
+      62,   31,   14,   14, 0x08,
+      86,   31,   14,   14, 0x08,
+     111,   31,   14,   14, 0x08,
+     140,   14,   14,   14, 0x08,
+     159,   14,   14,   14, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_IcvPlotCanvas[] = {
-    "IcvPlotCanvas\0\0curve\0setCurveColor(IcvPlotCurve*)\0"
-    "curve,action\0seCurvetWidth(IcvPlotCurve*,QAction*)\0"
-    "setCurveStyle(IcvPlotCurve*,QAction*)\0"
-    "setCurveMarker(IcvPlotCurve*,QAction*)\0"
-    "setCurveMarkerSize(IcvPlotCurve*,QAction*)\0"
-    "setCurveProperty(IcvPlotCurve*)\0"
+    "IcvPlotCanvas\0\0setCurveColor()\0action\0"
+    "setCurveWidth(QAction*)\0setCurveStyle(QAction*)\0"
+    "setCurveMarker(QAction*)\0"
+    "setCurveMarkerSize(QAction*)\0"
+    "setCurveProperty()\0deleteCurve()\0"
 };
 
 const QMetaObject IcvPlotCanvas::staticMetaObject = {
@@ -79,15 +79,16 @@ int IcvPlotCanvas::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: setCurveColor((*reinterpret_cast< IcvPlotCurve*(*)>(_a[1]))); break;
-        case 1: seCurvetWidth((*reinterpret_cast< IcvPlotCurve*(*)>(_a[1])),(*reinterpret_cast< QAction*(*)>(_a[2]))); break;
-        case 2: setCurveStyle((*reinterpret_cast< IcvPlotCurve*(*)>(_a[1])),(*reinterpret_cast< QAction*(*)>(_a[2]))); break;
-        case 3: setCurveMarker((*reinterpret_cast< IcvPlotCurve*(*)>(_a[1])),(*reinterpret_cast< QAction*(*)>(_a[2]))); break;
-        case 4: setCurveMarkerSize((*reinterpret_cast< IcvPlotCurve*(*)>(_a[1])),(*reinterpret_cast< QAction*(*)>(_a[2]))); break;
-        case 5: setCurveProperty((*reinterpret_cast< IcvPlotCurve*(*)>(_a[1]))); break;
+        case 0: setCurveColor(); break;
+        case 1: setCurveWidth((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 2: setCurveStyle((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 3: setCurveMarker((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 4: setCurveMarkerSize((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 5: setCurveProperty(); break;
+        case 6: deleteCurve(); break;
         default: ;
         }
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

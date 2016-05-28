@@ -12,8 +12,6 @@
 #include "icv_plot_curve.h"
 
 
-
-
 IcvPlotCurve::IcvPlotCurve(QwtPlotCurve *crv)
 {
     curve  = crv;  
@@ -71,8 +69,8 @@ QwtPlotCurve * IcvPlotCurve::getCurve()
 
 void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
-   curve = crv;
-   setMarker();
+    curve = crv;
+    setMarker();
 }
 
 
@@ -119,13 +117,13 @@ void IcvPlotCurve::setMarker()
     {
         QwtPlotMarker *marker = new QwtPlotMarker();
         marker->setValue(curve->sample(samplePos).x(),
-                         curve->sample(samplePos).y());
+            curve->sample(samplePos).y());
         marker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom);
         marker->setLinePen(QPen( Qt::green, 0, Qt::DashDotLine));
         marker->setSymbol(new QwtSymbol( QwtSymbol::Ellipse ,
-                          QColor(curve->pen().color()), 
-                          QColor(curve->pen().color()), 
-                          QSize(4, 4)));
+            QColor(curve->pen().color()), 
+            QColor(curve->pen().color()), 
+            QSize(4, 4)));
         markers.append(marker);
         samplePos += step;
     }
@@ -186,12 +184,20 @@ void IcvPlotCurve::setShowMarkerState(qint16 state)
 
 void IcvPlotCurve::setColor(QColor color)
 {
-    QPen pen = curve->pen();
-    pen.setColor(color);
+    QPen pen(color);
+    QBrush brush(color);
+
     curve->setPen(pen);
-    const QwtSymbol *symbol = curve->symbol();
-    QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), QBrush(color),pen,symbol->size());
-    curve->setSymbol(symbolNew);
+
+    for(qint16 cnt= 0; cnt < markers.count(); cnt++)
+    {
+        const QwtSymbol *symbol = markers.value(cnt)->symbol();
+        if(symbol != NULL)
+        {
+            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), brush, pen, symbol->size());
+            markers.value(cnt)->setSymbol(symbolNew);
+        }
+    }
 
     return ;
 }
@@ -219,10 +225,16 @@ void IcvPlotCurve::setStyle(Qt::PenStyle style)
 
 void IcvPlotCurve::setMarker(QwtSymbol::Style style)
 {
-    QColor curveColor = curve->pen().color();
-    const QwtSymbol *symbol = curve->symbol();
-    QwtSymbol *symbolNew = new QwtSymbol(style, QBrush(curveColor),QPen(curveColor, 2),symbol->size());
-    curve->setSymbol(symbolNew);
+
+    for(qint16 cnt= 0; cnt < markers.count(); cnt++)
+    {
+        const QwtSymbol *symbol = markers.value(cnt)->symbol();
+        if(symbol != NULL)
+        {
+            QwtSymbol *symbolNew = new QwtSymbol(style, symbol->brush(),symbol->pen(),symbol->size());
+            markers.value(cnt)->setSymbol(symbolNew);
+        }
+    }
 
     return ;
 }
@@ -230,12 +242,17 @@ void IcvPlotCurve::setMarker(QwtSymbol::Style style)
 
 void IcvPlotCurve::setMarkerSize(qint16 size)
 {
-    const QwtSymbol *symbol = curve->symbol();
-    QwtSymbol::Style symStyle = symbol->style();
-    QColor curveColor = curve->pen().color();
-    QwtSymbol *symbolNew = new QwtSymbol(symStyle, QBrush(curveColor),
-        QPen( curveColor, 2),QSize(size,size));
-    curve->setSymbol(symbolNew);
+
+    for(qint16 cnt= 0; cnt < markers.count(); cnt++)
+    {
+        const QwtSymbol *symbol = markers.value(cnt)->symbol();
+        if(symbol != NULL)
+        {
+            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), symbol->brush(),symbol->pen(),QSize(size,size));
+            markers.value(cnt)->setSymbol(symbolNew);
+        }
+    }
+
 
     return ;
 }

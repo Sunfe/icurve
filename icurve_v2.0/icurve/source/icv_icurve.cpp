@@ -14,8 +14,8 @@
 
 #include "icv_icurve.h"
 
-#define MAX_NUM_DIGITS_PERLINE    11  /*including tone index at head of the line*/
-#define PLOT_DATA_START_POS       1
+#define ICV_MAX_NUM_DIGITS_PERLINE    (11)  /*including tone index at head of the line*/
+#define ICV_PLOT_DATA_START_POS       (1)
 
 
     icurve::icurve(QWidget *parent, Qt::WFlags flags)
@@ -292,7 +292,7 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
 
     digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
 
-    if(digList.count() > MAX_NUM_DIGITS_PERLINE ||(digList.count() <=0))
+    if(digList.count() > ICV_MAX_NUM_DIGITS_PERLINE ||(digList.count() <=0))
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
@@ -310,7 +310,7 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
     QList<QPointF> points; 
     QPointF        point;
     qint16         tone = cmd->getData().count();
-    for(qint16 i = PLOT_DATA_START_POS; i < digList.count(); i++)
+    for(qint16 i = ICV_PLOT_DATA_START_POS; i < digList.count(); i++)
     {
         qreal dataItem = digList.at(i).toFloat(&ok);
         if(false == ok)
@@ -324,7 +324,7 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
 
     cmd->setData(points,true);
 
-    if(digList.count() < MAX_NUM_DIGITS_PERLINE)
+    if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
         cmd->setState(CMD_CLOSED);
 
     return ICU_OK;

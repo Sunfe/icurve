@@ -42,17 +42,17 @@ public:
     void clearCurves();
     IcvPlotCurve* getSelectedCurve();
 
-    void createCurvePopMenus();
-    void createCurvePopMenuActions();
+    void createCurvePopMenus(QWidget * parent);
+    void createCurvePopMenuActions(QWidget * parent);
 
     virtual bool eventFilter( QObject *, QEvent * );
     virtual bool event( QEvent * );
 
 
 private:
-    void onMouseLeftButtonClick(const QPoint &);
-    void onMouseRightButtonClick(const QPoint &);
-    void onMouseMove(const QPoint &);
+    void onMouseLeftButtonClick(const QMouseEvent *event);
+    void onMouseRightButtonClick(const QMouseEvent *event);
+    void onMouseMove(const QMouseEvent *event);
 
 private:
     QwtPlot *plot;
@@ -84,12 +84,13 @@ private:
 
 
 private slots:
-    void setCurveColor(IcvPlotCurve *curve);
-    void seCurvetWidth(IcvPlotCurve *curve, QAction *action);
-    void setCurveStyle(IcvPlotCurve *curve, QAction *action);
-    void setCurveMarker(IcvPlotCurve *curve, QAction *action);
-    void setCurveMarkerSize(IcvPlotCurve *curve, QAction *action);
-    void setCurveProperty(IcvPlotCurve *curve);
+    void setCurveColor();
+    void setCurveWidth(QAction *action);
+    void setCurveStyle(QAction *action);
+    void setCurveMarker(QAction *action);
+    void setCurveMarkerSize(QAction *action);
+    void setCurveProperty();
+    void deleteCurve();
 
 };
 
