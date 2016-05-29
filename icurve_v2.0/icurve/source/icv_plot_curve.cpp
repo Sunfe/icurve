@@ -86,6 +86,49 @@ void IcvPlotCurve::setActivateState(qint16 state)
 }
 
 
+void IcvPlotCurve::showCurve()
+{
+    if(curve != NULL)
+    {
+        curve->attach(plot);
+        showMarker();
+    }
+
+    return ;
+}
+
+void IcvPlotCurve::deleteCurve()
+{
+    if(curve == NULL)
+        return ;
+
+    curve->detach();
+
+    for(qint16 pos= 0; pos < markers.count(); pos++)
+    {
+        markers.at(pos)->detach();
+        delete markers.value(pos);
+        markers.clear();
+    }
+
+    return ;
+}
+
+void IcvPlotCurve::hideCurve()
+{
+    if(curve == NULL)
+        return ;
+
+    curve->detach();
+    for(qint16 pos= 0; pos < markers.count(); pos++)
+    {
+        markers.at(pos)->detach();
+    }
+
+    return ;
+}
+
+
 QVector<QwtPlotMarker *> IcvPlotCurve::getMarkers()
 {
     return markers;
@@ -120,7 +163,7 @@ void IcvPlotCurve::setMarker()
             curve->sample(samplePos).y());
         marker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom);
         marker->setLinePen(QPen( Qt::green, 0, Qt::DashDotLine));
-        marker->setSymbol(new QwtSymbol( QwtSymbol::Ellipse ,
+        marker->setSymbol(new QwtSymbol( QwtSymbol::Ellipse,
             QColor(curve->pen().color()), 
             QColor(curve->pen().color()), 
             QSize(4, 4)));
@@ -139,13 +182,6 @@ void IcvPlotCurve::showMarker()
         markers.at(pos)->attach(plot);
     }
 
-    if(NULL != canvas && plot != NULL)
-    {
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-    }
-
     showMarkerState = ICV_CURVE_SHOW_MARKER;
     return;
 }
@@ -156,13 +192,6 @@ void IcvPlotCurve::hideMarker()
     for(qint16 pos = 0; pos < markers.count(); pos++)
     {
         markers.at(pos)->detach();
-    }
-
-    if(NULL != canvas && plot != NULL)
-    {
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
 
     showMarkerState = ICV_CURVE_HIDE_MARKER;
@@ -194,7 +223,8 @@ void IcvPlotCurve::setColor(QColor color)
         const QwtSymbol *symbol = markers.value(cnt)->symbol();
         if(symbol != NULL)
         {
-            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), brush, pen, symbol->size());
+            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(),
+                brush, pen, symbol->size());
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
@@ -231,7 +261,10 @@ void IcvPlotCurve::setMarker(QwtSymbol::Style style)
         const QwtSymbol *symbol = markers.value(cnt)->symbol();
         if(symbol != NULL)
         {
-            QwtSymbol *symbolNew = new QwtSymbol(style, symbol->brush(),symbol->pen(),symbol->size());
+            QwtSymbol *symbolNew = new QwtSymbol(style, 
+                symbol->brush(),
+                symbol->pen(),
+                symbol->size());
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
@@ -248,11 +281,15 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
         const QwtSymbol *symbol = markers.value(cnt)->symbol();
         if(symbol != NULL)
         {
-            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), symbol->brush(),symbol->pen(),QSize(size,size));
+            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), 
+                symbol->brush(),
+                symbol->pen(),
+                QSize(size,size));
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
 
-
     return ;
 }
+
+

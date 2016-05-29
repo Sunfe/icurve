@@ -100,8 +100,6 @@ void Command::setData(QList<QPointF> points,bool isappend)
 }
 
 
-
-
 QList<QPointF> Command::getData()
 {
     return data;
@@ -129,4 +127,13 @@ void Command::setState(qint16 cmdState)
 qint16 Command::getState()
 {
     return state;
+}
+
+
+QString Command::getCommandTitle()
+{
+    QString title;
+    title = name.remove("get") + "." + ((direction == 0)? "US": "DS") \
+        + ".line " + QString::number(lineId);
+    return title;
 }

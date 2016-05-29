@@ -12,38 +12,45 @@
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
+
+#include "icv_icurve.h"
 #include "icv_plot_curve.h"
+
 class QPoint;
 class QPointF;
 class QCustomEvent;
 class QwtPlot;
 class QPolygonF;
 class QwtPlotCurve;
-
+class IcvICurve;
 
 class IcvPlotCanvas : public QWidget
 {
     Q_OBJECT
 
 public:
-    IcvPlotCanvas(QwtPlot *plot);
+    IcvPlotCanvas(IcvICurve *parent);
     ~IcvPlotCanvas();
 
-    QwtPlot *getPlot();
-    void setPlot(QwtPlot *plt);
+    IcvICurve* retrieveParent();
+    void setMainWin(IcvICurve *icurve);
+
+    QwtPlot *getQwtPlot();
+    void setQwtPlot(QwtPlot *plt);
 
     QwtPlotCanvas *getPlotCanvas();
     void setPlotCanvas();
 
     QList<IcvPlotCurve *> getCurves();
     void setCurves(QList<IcvPlotCurve *> crvs);
+    void initCurves();
     void updateCurves();
     void lookforCurves();
     void clearCurves();
     IcvPlotCurve* getSelectedCurve();
 
-    void createCurvePopMenus(QWidget * parent);
-    void createCurvePopMenuActions(QWidget * parent);
+    void createCurvePopMenu();
+    void createCurvePopMenuAction();
 
     virtual bool eventFilter( QObject *, QEvent * );
     virtual bool event( QEvent * );
@@ -54,7 +61,9 @@ private:
     void onMouseRightButtonClick(const QMouseEvent *event);
     void onMouseMove(const QMouseEvent *event);
 
+
 private:
+    IcvICurve  *mainWin;
     QwtPlot *plot;
     QwtPlotCanvas *canvas;
     IcvPlotCurve *curSelectedCurve;
@@ -89,7 +98,6 @@ private slots:
     void setCurveStyle(QAction *action);
     void setCurveMarker(QAction *action);
     void setCurveMarkerSize(QAction *action);
-    void setCurveProperty();
     void deleteCurve();
 
 };

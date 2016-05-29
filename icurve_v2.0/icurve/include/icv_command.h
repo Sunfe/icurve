@@ -38,6 +38,8 @@ public:
 
     void setState(qint16 cmdState);
     qint16 getState();
+    
+    QString getCommandTitle();
 
 private:
     QString name;

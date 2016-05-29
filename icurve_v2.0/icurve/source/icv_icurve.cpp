@@ -18,7 +18,7 @@
 #define ICV_PLOT_DATA_START_POS       (1)
 
 
-    icurve::icurve(QWidget *parent, Qt::WFlags flags)
+    IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags)
 : QMainWindow(parent, flags)
 {
     ui.setupUi(this);
@@ -27,10 +27,12 @@
 
     plot = new QwtPlot();
     initMainPlotter(plot);
-
     setCentralWidget(plot);
 
-    plotCanvas = static_cast<IcvPlotCanvas *>(new IcvPlotCanvas(plot)) ;
+    plotCanvas = new IcvPlotCanvas(this) ;
+    plotCanvas->createCurvePopMenuAction();
+    plotCanvas->createCurvePopMenu();
+
 
     analyProgressDialog  = NULL;
     isDataAnalyCanceled  = false;
@@ -40,17 +42,18 @@
 
 }
 
-icurve::~icurve()
+IcvICurve::~IcvICurve()
 {
 
 }
 
 
-void icurve::initMainWinStyle(QMainWindow *self)
+void IcvICurve::initMainWinStyle(QMainWindow *self)
 {
     self->setWindowTitle("iCurve");
     self->setWindowIcon(QIcon(":/images/iCurve.ico"));
     self->setContentsMargins(0,0,0,0);
+    //self->setContentsMargins(5,5,50,5);
 
     QPalette mainWinPalette;
     mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
@@ -58,7 +61,7 @@ void icurve::initMainWinStyle(QMainWindow *self)
 }
 
 
-void icurve::initMainPlotter(QWidget *plotWidget)
+void IcvICurve::initMainPlotter(QWidget *plotWidget)
 {
     QwtPlot *plot = static_cast<QwtPlot*>(plotWidget);
     plot->setTitle( "unamed" );
@@ -69,6 +72,12 @@ void icurve::initMainPlotter(QWidget *plotWidget)
 
     plot->setAxisLabelAlignment(QwtPlot::xBottom,Qt::AlignLeft);
     plot->setAxisLabelAlignment(QwtPlot::yLeft,Qt::AlignTop);
+
+    plot->setTitle("plot title");
+    plot->setFooter("footer");
+
+    plot->setAxisTitle(QwtPlot::xBottom, "X");
+    plot->setAxisTitle(QwtPlot::yLeft, "Y");
 
     plot->plotLayout()->setAlignCanvasToScales( false );
     plot->plotLayout()->setCanvasMargin(0);
@@ -82,52 +91,57 @@ void icurve::initMainPlotter(QWidget *plotWidget)
     grid->attach( plot );
 
     ( void ) new QwtPlotPanner( plot->canvas());
-    ( void ) new QwtPlotMagnifier(plot->canvas());
+    magnifier = new QwtPlotMagnifier(plot->canvas());
 
-    plotCanvas = new IcvPlotCanvas(plot);
 
     return ;
 }
 
+QwtPlotMagnifier* IcvICurve::getMagnifier()
+{
+    return magnifier;
+}
 
-void icurve::openFile()
+void IcvICurve::openFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open file..."),
             fileInfo.absolutePath(),
             tr("Text files (*.txt);;All Files (*)"));
 
-
-    if(!fileName.isEmpty())
+    if(fileName.isEmpty())
     {
-        if(ICU_OK == loadData(fileName))
+        //QMessageBox::information(this,"info","no file retrieved!");
+        return ; 
+    }
+
+    if(ICU_OK == loadData(fileName))
+    {
+        for(qint16 pos = 0; pos < plotData.count(); pos++)
         {
-            for(qint16 pos = 0; pos < plotData.count(); pos++)
-            {
-                QwtPlotCurve *curve = new QwtPlotCurve();
-                curve->setPen( QPen( QColor::fromHsl(rand()%360,rand()%256,rand()%200)) );
-                curve->setSamples(plotData.value(pos).getData().toVector());
+            QwtPlotCurve *curve = new QwtPlotCurve();
+            curve->setPen( QPen( QColor::fromHsl(rand()%360,rand()%256,rand()%200)) );
+            curve->setSamples(plotData.value(pos).getData().toVector());
 
-                QwtSymbol *symbol = new QwtSymbol( QwtSymbol::NoSymbol,
-                        QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 8, 8 ) );
-                curve->setSymbol( symbol );
-                //QString curveName = fileInfo.baseName();
-                //curve->setTitle(curveName);
-                
-                curve->attach( plot );
+            QwtSymbol *symbol = new QwtSymbol( QwtSymbol::NoSymbol,
+                QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 8, 8 ) );
+            curve->setSymbol( symbol );
+            curve->setTitle(plotData.value(pos).getCommandTitle());
+            curve->attach(plot);
 
-                plotCanvas->updateCurves();
-                plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
-                plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
-                plot->replot();
-            }
+            plotCanvas->updateCurves();
+            plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
+            plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
+            plot->replot();
         }
-    }   
+    }
+
     return ;
 }
 
 
-ICU_RET_STATUS icurve::loadData(const QString &filename)
+
+ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
 {
     QFile file(filename);
     if(!file.exists())
@@ -149,7 +163,7 @@ ICU_RET_STATUS icurve::loadData(const QString &filename)
 }
 
 
-ICU_RET_STATUS icurve::analyzeData(QFile &file)
+ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 {
     qint32  cout = 0;
     bool    ok   = true;
@@ -275,7 +289,7 @@ ICU_RET_STATUS icurve::analyzeData(QFile &file)
 }
 
 
-ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
+ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, Command *cmd)
 {
     QStringList splitList;
     QStringList digList;
@@ -331,31 +345,39 @@ ICU_RET_STATUS icurve::assembleData(QString dataLine, Command *cmd)
 }
 
 
-void icurve::updateAnalyProgressBar(qint16 progress)
+void IcvICurve::updateAnalyProgressBar(qint16 progress)
 {
     if(analyProgressDialog != NULL)
     {
         analyProgressDialog->setValue(progress);
         analyProgressDialog->repaint();
     }
+
     return ;
 }
 
 
-void icurve::cancelAnalyProgressBar()
+void IcvICurve::cancelAnalyProgressBar()
 {
     isDataAnalyCanceled = true;
 
     return ;
 }
 
-void icurve:: paintEvent ( QPaintEvent * event )
+
+QwtPlot* IcvICurve::getQwtPlot()
+{
+    return plot;
+}
+
+
+void IcvICurve::paintEvent ( QPaintEvent * event )
 {
     return QWidget::paintEvent(event);
 }
 
 
-void icurve:: mouseMoveEvent ( QMouseEvent * event )
+void IcvICurve::mouseMoveEvent ( QMouseEvent * event )
 {
     return QWidget::mouseMoveEvent(event);
 }

@@ -44,6 +44,9 @@ public:
 
     qint16 getActivateState();
     void setActivateState(qint16 state);
+    void deleteCurve();
+    void showCurve();
+    void hideCurve();
 
     void setMarker();
     QVector<QwtPlotMarker *> getMarkers();

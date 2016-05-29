@@ -30,21 +30,24 @@
 #include "icv_command.h"
 #include "icv_plot_canvas.h"
 
+class IcvPlotCanvas;
 
-class icurve : public QMainWindow
+class IcvICurve : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    icurve(QWidget *parent = 0, Qt::WFlags flags = 0);
+    IcvICurve(QWidget *parent = 0, Qt::WFlags flags = 0);
     void initMainPlotter(QWidget *plotWidget);
     void initMainWinStyle(QMainWindow *self);
 
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, Command *cmd);
+    QwtPlot* getQwtPlot();
+    QwtPlotMagnifier* getMagnifier();
 
-    ~icurve();
+    ~IcvICurve();
 
 protected:
     void paintEvent ( QPaintEvent * event );
@@ -62,9 +65,10 @@ private:
     /*Qwt objects*/	
     QwtPlot *plot;
     QwtPlotGrid *grid;
+    QwtPlotMagnifier *magnifier;
     QwtSymbol *symbol;
-
-    IcvPlotCanvas*plotCanvas;
+    
+    IcvPlotCanvas *plotCanvas;
     QList <Command> plotData;
     bool isDataAnalyCanceled;
 
