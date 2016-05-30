@@ -35,17 +35,15 @@ public:
     IcvICurve* retrieveParent();
     void setMainWin(IcvICurve *icurve);
 
-    QwtPlot *getQwtPlot();
-    void setQwtPlot(QwtPlot *plt);
-
-    QwtPlotCanvas *getPlotCanvas();
-    void setPlotCanvas();
+    QwtPlotCanvas *getCanvas();
+    void setCanvas(QwtPlotCanvas *cvs);
 
     QList<IcvPlotCurve *> getCurves();
     void setCurves(QList<IcvPlotCurve *> crvs);
     void initCurves();
     void updateCurves();
     void lookforCurves();
+    void appendCurves(IcvPlotCurve *curve);
     void clearCurves();
     IcvPlotCurve* getSelectedCurve();
 
@@ -63,13 +61,11 @@ private:
 
 
 private:
-    IcvICurve  *mainWin;
-    QwtPlot *plot;
     QwtPlotCanvas *canvas;
+    IcvICurve  *mainWin;
+    QList<IcvPlotCurve *> curves;
     IcvPlotCurve *curSelectedCurve;
     IcvPlotCurve *prevSelectedCurve;
-    QList<IcvPlotCurve *> curves;
-
 
     /*menus*/
     QMenu *crvSelPopMenu;

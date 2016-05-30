@@ -24,8 +24,7 @@ IcvPlotCanvas::IcvPlotCanvas(IcvICurve *parent)
     if(NULL == parent )
         return ;
 
-    plot = parent->getQwtPlot();
-    canvas = static_cast<QwtPlotCanvas *>(plot->canvas());
+    canvas = static_cast<QwtPlotCanvas *>(parent->getPlot()->canvas());
     canvas->installEventFilter(this);
     canvas->setFocus();
     canvas->setCursor(Qt::ArrowCursor);
@@ -51,30 +50,15 @@ IcvICurve* IcvPlotCanvas::retrieveParent()
 }
 
 
-QwtPlot *IcvPlotCanvas::getQwtPlot()
-{
-    return plot;
-}
-
-
-void IcvPlotCanvas::setQwtPlot(QwtPlot *plt)
-{
-    plot = plt;
-}
-
-
-QwtPlotCanvas* IcvPlotCanvas::getPlotCanvas()
+QwtPlotCanvas* IcvPlotCanvas::getCanvas()
 {
     return canvas;
 }
 
 
-void IcvPlotCanvas::setPlotCanvas()
+void IcvPlotCanvas::setCanvas(QwtPlotCanvas * cvs)
 {
-    if(plot != NULL)
-        canvas = static_cast<QwtPlotCanvas *>(plot->canvas());
-    else
-        canvas = NULL;
+    canvas = cvs;
 }
 
 
@@ -98,6 +82,7 @@ void IcvPlotCanvas::initCurves()
 
 void IcvPlotCanvas::updateCurves()
 {
+    QwtPlot *plot = canvas->plot();
     QwtPlotItemList items = plot->itemList();
 
     curves.clear();
@@ -106,9 +91,8 @@ void IcvPlotCanvas::updateCurves()
         if((items.value(i))->rtti() == QwtPlotItem::Rtti_PlotCurve)
         {
             IcvPlotCurve *curve = new IcvPlotCurve();
-            curve->setPlot(plot);
-            curve->setCanvas(canvas);
             curve->setCurve(static_cast<QwtPlotCurve *>(items.value(i)));
+            curve->setCanvas(this);
             curves.append(curve);
         }
     }
@@ -118,6 +102,13 @@ void IcvPlotCanvas::updateCurves()
 void IcvPlotCanvas::lookforCurves()
 {
     return updateCurves();
+}
+
+
+void IcvPlotCanvas::appendCurves(IcvPlotCurve *curve)
+{
+    curves.append(curve);
+    return;
 }
 
 
@@ -139,13 +130,13 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
     /*pick the selected curve*/
     for(qint16 i = 0; i < curves.count(); i++)
     {
-        QwtPlotCurve *curve = curves.value(i)->getCurve();
+        QwtPlotCurve *curve = curves[i]->getCurve();
         double dist         = 0.0;
         curve->closestPoint(pos, &dist);
 
         if(dist < ICV_TOLERENCE_DISTANCE )
         {
-            curSelectedCurve = curves.value(i);
+            curSelectedCurve = curves[i];
             break;
         }
         else
@@ -158,9 +149,9 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
     if(NULL != curSelectedCurve)
     {
         curSelectedCurve->showMarkers();
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
-        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+        canvas->setPaintAttribute(QwtPlotCanvas::ImmediatePaint,true);
+        canvas->plot()->replot();
+        canvas->setPaintAttribute(QwtPlotCanvas::ImmediatePaint,false);
 
     }
 
@@ -168,7 +159,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
     {
         prevSelectedCurve->hideMarkers();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
 
     }
@@ -188,13 +179,13 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     /*pick the selected curve*/
     for(qint16 i = 0; i < curves.count(); i++)
     {
-        QwtPlotCurve *curve = curves.value(i)->getCurve();
+        QwtPlotCurve *curve = curves[i]->getCurve();
         double dist         = 0.0;
         curve->closestPoint(pos, &dist);
 
         if(dist < ICV_TOLERENCE_DISTANCE )
         {
-            curSelectedCurve = curves.value(i);
+            curSelectedCurve = curves[i];
             break;
         }
         else
@@ -208,7 +199,7 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     {
         prevSelectedCurve->hideMarkers();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
 
     }
@@ -217,7 +208,7 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     {
         curSelectedCurve->showMarkers();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
 
         crvSelPopMenu->exec(event->globalPos());
@@ -235,7 +226,6 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
     const QPoint pos = event->pos();
 
     /*pick the selected curve*/
-    updateCurves();
     if(curves.isEmpty())
     {
         canvas->setCursor(Qt::ArrowCursor);
@@ -244,15 +234,15 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 
     for(qint16 i = 0; i < curves.count(); i++)
     {
-        QwtPlotCurve *curve = curves.value(i)->getCurve();
+        QwtPlotCurve *curve = curves[i]->getCurve();
         double dist        = 0.0;
         curve->closestPoint(pos, &dist);
 
         if(dist <= ICV_TOLERENCE_DISTANCE )
         {
             canvas->setCursor(Qt::PointingHandCursor);
-            curves.value(i)->setActivateState(ICV_CURVE_ACTIVATED);
-            curSelectedCurve = curves.value(i);
+            curves[i]->setActivateState(ICV_CURVE_ACTIVATED);
+            curSelectedCurve = curves[i];
             break;
         }
         else
@@ -268,8 +258,7 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 
 bool IcvPlotCanvas::eventFilter(QObject *object, QEvent *event)
 {
-
-    if((NULL == plot)||(object != plot->canvas()))
+    if((NULL == object) || (NULL == event) || (object != canvas))
         return false;
 
     switch(event->type())
@@ -318,10 +307,10 @@ void IcvPlotCanvas::deleteCurve()
     curves.removeAll(curSelectedCurve); /*remove from the queue*/
     curSelectedCurve = NULL;            /*memset,important!*/
 
-    if(NULL != canvas && plot != NULL)
+    if(canvas !=NULL && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
         if(NULL != mainWin)
             mainWin->getMagnifier()->setEnabled(false);
@@ -336,10 +325,10 @@ void IcvPlotCanvas::setCurveColor()
         return;
 
     curSelectedCurve->setColor(color);
-    if(NULL != canvas && plot != NULL)
+    if(NULL != canvas && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
         if(NULL != mainWin)
             mainWin->getMagnifier()->setEnabled(false);
@@ -360,10 +349,10 @@ void IcvPlotCanvas::setCurveWidth(QAction *action)
         return ;
 
     curSelectedCurve->setWidth(width);
-    if(NULL != canvas && plot != NULL)
+    if(NULL != canvas && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
         if(NULL != mainWin)
             mainWin->getMagnifier()->setEnabled(false);
@@ -387,10 +376,10 @@ void IcvPlotCanvas::setCurveStyle(QAction *action)
         return ;
 
     curSelectedCurve->setStyle(style);
-    if(NULL != canvas && plot != NULL)
+    if(NULL != canvas && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
         if(NULL != mainWin)
             mainWin->getMagnifier()->setEnabled(false);
@@ -414,10 +403,10 @@ void IcvPlotCanvas::setCurveMarker(QAction *action)
         return ;
 
     curSelectedCurve->setMarker(symStyle);
-    if(NULL != canvas && plot != NULL)
+    if(NULL != canvas && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
         if(NULL != mainWin)
             mainWin->getMagnifier()->setEnabled(false);
@@ -441,10 +430,10 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
         return ;
 
     curSelectedCurve->setMarkerSize(size);
-    if(NULL != canvas && plot != NULL)
+    if(NULL != canvas && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-        plot->replot();
+        canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
         if(NULL != mainWin)
             mainWin->getMagnifier()->setEnabled(false);

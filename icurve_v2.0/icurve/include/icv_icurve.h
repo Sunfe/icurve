@@ -44,7 +44,7 @@ public:
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, Command *cmd);
-    QwtPlot* getQwtPlot();
+    QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
 
     ~IcvICurve();

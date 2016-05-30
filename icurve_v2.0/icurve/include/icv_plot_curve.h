@@ -6,7 +6,6 @@
 #include <QVector>
 #include <QColor>
 
-
 #include <qwhatsthis.h>
 #include <qpainter.h>
 #include <qwt_plot.h>
@@ -16,8 +15,11 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
 
+#include "icv_plot_canvas.h"
+
 class QwtPlot;
 class QwtPlotCurve;
+class IcvPlotCanvas;
 
 #define ICV_CURVE_ACTIVATED         (1)
 #define ICV_CURVE_UNACTIVATED       (2)
@@ -33,14 +35,14 @@ public:
     IcvPlotCurve();
     ~IcvPlotCurve();
 
-    QwtPlot *getPlot();
-    void setPlot(QwtPlot *plt);
-
-    QwtPlotCanvas *getCanvas();
-    void setCanvas(QwtPlotCanvas *cvs);
+    IcvPlotCanvas *getCanvas();
+    void setCanvas(IcvPlotCanvas *cvs);
 
     QwtPlotCurve *getCurve();
     void setCurve(QwtPlotCurve *crv);
+
+    qint16 getDataPos();
+    void setDataPos(qint16 pos);
 
     qint16 getActivateState();
     void setActivateState(qint16 state);
@@ -63,10 +65,11 @@ public:
     void setMarkerSize(qint16 size);
 
 private:
-    QwtPlot       *plot;
-    QwtPlotCanvas *canvas;
     QwtPlotCurve  *curve;
+
+    IcvPlotCanvas *canvas;
     QList<QwtPlotMarker *> markers;
+    qint16         dataPosition;        /* the postion in QList data repository */
     qint16         activateState ;
     qint16         showMarkerState;
 

@@ -17,7 +17,6 @@ IcvPlotCurve::IcvPlotCurve(QwtPlotCurve *crv)
 {
     curve  = crv;  
     canvas = NULL;
-    plot   = NULL;
     setMarker();
     activateState = ICV_CURVE_UNACTIVATED;
 }
@@ -26,7 +25,6 @@ IcvPlotCurve::IcvPlotCurve(QwtPlotCurve *crv)
 IcvPlotCurve::IcvPlotCurve()
 {
     curve  = NULL;
-    plot   = NULL;
     canvas = NULL;
     activateState = ICV_CURVE_UNACTIVATED;
 }
@@ -48,32 +46,19 @@ IcvPlotCurve::~IcvPlotCurve()
 
     markers.clear();
     curve  = NULL;
-    plot   = NULL;
     canvas = NULL;
     activateState   = 0;
     showMarkerState = 0;
 }
 
 
-QwtPlot *IcvPlotCurve::getPlot()
-{
-    return plot;
-}
-
-
-void IcvPlotCurve::setPlot(QwtPlot *plt)
-{
-    plot = plt;
-}
-
-
-QwtPlotCanvas* IcvPlotCurve::getCanvas()
+IcvPlotCanvas* IcvPlotCurve::getCanvas()
 {
     return canvas;
 }
 
 
-void IcvPlotCurve::setCanvas(QwtPlotCanvas *cvs)
+void IcvPlotCurve::setCanvas(IcvPlotCanvas *cvs)
 {
     canvas = cvs;
 }
@@ -89,6 +74,18 @@ void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
     curve = crv;
     setMarker();
+}
+
+
+qint16 IcvPlotCurve::getDataPos()
+{
+    return dataPosition;
+}
+
+
+void IcvPlotCurve::setDataPos(qint16 pos)
+{
+    dataPosition = pos;
 }
 
 
@@ -108,7 +105,7 @@ void IcvPlotCurve::showCurve()
 {
     if(curve != NULL)
     {
-        curve->attach(plot);
+        curve->attach(canvas->getCanvas()->plot());
         showMarkers();
     }
 
@@ -124,7 +121,7 @@ void IcvPlotCurve::hideCurve()
     curve->detach();
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
-        markers.at(pos)->detach();
+        markers[pos]->detach();
     }
 
     return ;
@@ -200,7 +197,7 @@ void IcvPlotCurve::showMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
     {
-        markers.at(pos)->attach(plot);
+        markers.at(pos)->attach(canvas->getCanvas()->plot());
     }
 
     showMarkerState = ICV_CURVE_SHOW_MARKER;
@@ -212,7 +209,7 @@ void IcvPlotCurve::hideMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
     {
-        markers.at(pos)->detach();
+        markers[pos]->detach();
     }
 
     showMarkerState = ICV_CURVE_HIDE_MARKER;

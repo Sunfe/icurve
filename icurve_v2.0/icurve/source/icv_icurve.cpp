@@ -113,17 +113,24 @@ void IcvICurve::openFile()
     {
         for(qint16 pos = 0; pos < plotData.count(); pos++)
         {
-            QwtPlotCurve *curve = new QwtPlotCurve();
-            curve->setPen( QPen( QColor::fromHsl(rand()%360,rand()%256,rand()%200)) );
-            curve->setSamples(plotData.value(pos).getData().toVector());
+            
+            QwtPlotCurve *qwtCurve = new QwtPlotCurve();
+            qwtCurve->setPen( QPen( QColor::fromHsl(rand()%360,rand()%256,rand()%200)) );
+            qwtCurve->setSamples(plotData[pos].getData().toVector());
 
             QwtSymbol *symbol = new QwtSymbol( QwtSymbol::NoSymbol,
-                QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 8, 8 ) );
-            curve->setSymbol( symbol );
-            curve->setTitle(plotData.value(pos).getCommandTitle());
-            curve->attach(plot);
+                QBrush(Qt::yellow), QPen(Qt::red, 2), QSize(8, 8) );
+            qwtCurve->setSymbol( symbol );
+            qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
+            qwtCurve->attach(plot);
 
-            plotCanvas->updateCurves();
+            IcvPlotCurve *plotCurve = new IcvPlotCurve;
+            plotCurve->setCurve(qwtCurve);
+            plotCurve->setCanvas(plotCanvas);
+            plotCurve->setDataPos(pos);
+
+            plotCanvas->appendCurves(plotCurve);
+
             plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
             plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
             plot->replot();
@@ -358,7 +365,7 @@ void IcvICurve::cancelAnalyProgressBar()
 }
 
 
-QwtPlot* IcvICurve::getQwtPlot()
+QwtPlot* IcvICurve::getPlot()
 {
     return plot;
 }
