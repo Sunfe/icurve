@@ -345,6 +345,12 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, Command *cmd)
 }
 
 
+QList <Command> * IcvICurve::getPlotData()
+{
+    return &plotData;
+}
+
+
 void IcvICurve::updateAnalyProgressBar(qint16 progress)
 {
     if(analyProgressDialog != NULL)

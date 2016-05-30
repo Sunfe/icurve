@@ -303,9 +303,20 @@ void IcvPlotCanvas::deleteCurve()
     if(NULL == curSelectedCurve)
         return ;
 
-    curSelectedCurve->deleteCurve();    /*deconstruct IcvPlotCurve object */
-    curves.removeAll(curSelectedCurve); /*remove from the queue*/
-    curSelectedCurve = NULL;            /*memset,important!*/
+    /*remove from the curves' queue*/
+    curves.removeAll(curSelectedCurve); 
+
+    /*remove relative data from QList data repository*/
+    QList <Command> *plotData = retrieveParent()->getPlotData();
+    qint16 dataPos = curSelectedCurve->getDataPos();
+    if(dataPos < plotData->count())
+        plotData->removeAt(dataPos);
+
+    /*deconstruct IcvPlotCurve object */
+    delete curSelectedCurve;       
+    /*memset,important!*/
+    curSelectedCurve = NULL;           
+
 
     if(canvas !=NULL && canvas->plot() != NULL)
     {
