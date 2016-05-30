@@ -303,6 +303,32 @@ void IcvPlotCanvas::deleteCurve()
     if(NULL == curSelectedCurve)
         return ;
 
+    if(NULL != mainWin)
+        mainWin->getMagnifier()->setEnabled(false);
+
+    QMessageBox msgBox(mainWin);
+    msgBox.setText("Warning:curve will be deleted permanently!");
+    msgBox.setInformativeText("Are you sure to delete?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+    if (ret == QMessageBox::Cancel)
+    {
+        return;
+    }
+
+#if 0
+    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
+        "Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
+    //msgBox.setDetailedText(MESSAGE_DETAILS);
+    msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("No"), QMessageBox::RejectRole);
+    if (msgBox.exec() != QMessageBox::AcceptRole)
+    {
+        return;
+    }
+#endif
+
     /*remove from the curves' queue*/
     curves.removeAll(curSelectedCurve); 
 
@@ -316,15 +342,11 @@ void IcvPlotCanvas::deleteCurve()
     delete curSelectedCurve;       
     /*memset,important!*/
     curSelectedCurve = NULL;           
-
-
     if(canvas !=NULL && canvas->plot() != NULL)
     {
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-        if(NULL != mainWin)
-            mainWin->getMagnifier()->setEnabled(false);
     }
 }
 
