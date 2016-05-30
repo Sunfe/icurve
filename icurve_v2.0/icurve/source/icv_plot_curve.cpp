@@ -4,6 +4,7 @@
 #include <QtGlobal>
 #include <QLine>
 #include <QPolygonF>
+#include <QMessageBox>
 #include <math.h>
 /* qwt header */
 #include <qwt_plot_directpainter.h>
@@ -33,7 +34,24 @@ IcvPlotCurve::IcvPlotCurve()
 
 IcvPlotCurve::~IcvPlotCurve()
 {
+    if(curve !=NULL )
+    {
+        curve->detach();
+        delete curve;
+    }
 
+    for(qint16 pos= 0; pos < markers.count(); pos++)
+    {
+        markers.at(pos)->detach();
+        delete markers.value(pos);
+    }
+
+    markers.clear();
+    curve  = NULL;
+    plot   = NULL;
+    canvas = NULL;
+    activateState   = 0;
+    showMarkerState = 0;
 }
 
 
@@ -91,28 +109,12 @@ void IcvPlotCurve::showCurve()
     if(curve != NULL)
     {
         curve->attach(plot);
-        showMarker();
+        showMarkers();
     }
 
     return ;
 }
 
-void IcvPlotCurve::deleteCurve()
-{
-    if(curve == NULL)
-        return ;
-
-    curve->detach();
-
-    for(qint16 pos= 0; pos < markers.count(); pos++)
-    {
-        markers.at(pos)->detach();
-        delete markers.value(pos);
-        markers.clear();
-    }
-
-    return ;
-}
 
 void IcvPlotCurve::hideCurve()
 {
@@ -129,7 +131,26 @@ void IcvPlotCurve::hideCurve()
 }
 
 
-QVector<QwtPlotMarker *> IcvPlotCurve::getMarkers()
+void IcvPlotCurve::deleteCurve()
+{
+    if(curve == NULL)
+        return ;
+
+    curve->detach();
+    delete curve;
+
+    for(qint16 pos= 0; pos < markers.count(); pos++)
+    {
+        markers[pos]->detach();
+        delete markers[pos];
+    }
+    markers.clear();
+ 
+    return ;
+}
+
+
+QList<QwtPlotMarker *> IcvPlotCurve::getMarkers()
 {
     return markers;
 }
@@ -175,7 +196,7 @@ void IcvPlotCurve::setMarker()
 }
 
 
-void IcvPlotCurve::showMarker()
+void IcvPlotCurve::showMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
     {
@@ -187,7 +208,7 @@ void IcvPlotCurve::showMarker()
 }
 
 
-void IcvPlotCurve::hideMarker()
+void IcvPlotCurve::hideMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
     {
@@ -195,6 +216,20 @@ void IcvPlotCurve::hideMarker()
     }
 
     showMarkerState = ICV_CURVE_HIDE_MARKER;
+    return ;
+}
+
+
+void IcvPlotCurve::deleteMakers()
+{
+   
+    for(qint16 pos= 0; pos < markers.count(); pos++)
+    {
+        markers[pos]->detach();
+        delete markers[pos];
+    }
+    markers.clear();
+
     return ;
 }
 

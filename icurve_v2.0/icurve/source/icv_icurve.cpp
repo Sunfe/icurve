@@ -18,8 +18,7 @@
 #define ICV_PLOT_DATA_START_POS       (1)
 
 
-    IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags)
-: QMainWindow(parent, flags)
+IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
     ui.setupUi(this);
 
@@ -93,14 +92,9 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     ( void ) new QwtPlotPanner( plot->canvas());
     magnifier = new QwtPlotMagnifier(plot->canvas());
 
-
     return ;
 }
 
-QwtPlotMagnifier* IcvICurve::getMagnifier()
-{
-    return magnifier;
-}
 
 void IcvICurve::openFile()
 {
@@ -138,7 +132,6 @@ void IcvICurve::openFile()
 
     return ;
 }
-
 
 
 ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
@@ -368,6 +361,12 @@ void IcvICurve::cancelAnalyProgressBar()
 QwtPlot* IcvICurve::getQwtPlot()
 {
     return plot;
+}
+
+
+QwtPlotMagnifier* IcvICurve::getMagnifier()
+{
+    return magnifier;
 }
 
 

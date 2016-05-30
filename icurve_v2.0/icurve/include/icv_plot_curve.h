@@ -49,9 +49,10 @@ public:
     void hideCurve();
 
     void setMarker();
-    QVector<QwtPlotMarker *> getMarkers();
-    void showMarker();
-    void hideMarker();
+    QList<QwtPlotMarker *> getMarkers();
+    void showMarkers();
+    void hideMarkers();
+    void deleteMakers();
     qint16 getShowMarkerState();
     void setShowMarkerState(qint16 state);
 
@@ -65,7 +66,7 @@ private:
     QwtPlot       *plot;
     QwtPlotCanvas *canvas;
     QwtPlotCurve  *curve;
-    QVector<QwtPlotMarker *> markers;
+    QList<QwtPlotMarker *> markers;
     qint16         activateState ;
     qint16         showMarkerState;
 
