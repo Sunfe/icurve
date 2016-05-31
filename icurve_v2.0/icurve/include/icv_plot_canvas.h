@@ -47,6 +47,9 @@ public:
     void clearCurves();
     IcvPlotCurve* getSelectedCurve();
 
+    void lockMagnifier();
+    void unlockMagnifier();
+
     void createCurvePopMenu();
     void createCurvePopMenuAction();
 

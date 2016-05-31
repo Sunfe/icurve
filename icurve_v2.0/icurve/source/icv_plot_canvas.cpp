@@ -126,6 +126,8 @@ IcvPlotCurve* IcvPlotCanvas::getSelectedCurve()
 
 void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 {
+    unlockMagnifier();
+
     const QPoint pos = event->pos();
     /*pick the selected curve*/
     for(qint16 i = 0; i < curves.count(); i++)
@@ -166,15 +168,14 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 
     prevSelectedCurve = curSelectedCurve;
 
-    /* enable magnifer */
-    mainWin->getMagnifier()->setEnabled(true);
-
     return ;
 }
 
 
 void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 {
+    unlockMagnifier();
+
     const QPoint pos = event->pos();
     /*pick the selected curve*/
     for(qint16 i = 0; i < curves.count(); i++)
@@ -217,14 +218,11 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     prevSelectedCurve = curSelectedCurve;
 
     return;
-
 }
 
 
 void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 {
-    const QPoint pos = event->pos();
-
     /*pick the selected curve*/
     if(curves.isEmpty())
     {
@@ -232,6 +230,7 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
         return ;
     }
 
+    const QPoint pos = event->pos();
     for(qint16 i = 0; i < curves.count(); i++)
     {
         QwtPlotCurve *curve = curves[i]->getCurve();
@@ -300,11 +299,10 @@ bool IcvPlotCanvas::event(QEvent *eve)
 
 void IcvPlotCanvas::deleteCurve()
 {
+    lockMagnifier();
+
     if(NULL == curSelectedCurve)
         return ;
-
-    if(NULL != mainWin)
-        mainWin->getMagnifier()->setEnabled(false);
 
     QMessageBox msgBox(mainWin);
     msgBox.setText("Warning:curve will be deleted permanently!");
@@ -341,6 +339,7 @@ void IcvPlotCanvas::deleteCurve()
     /*deconstruct IcvPlotCurve object */
     delete curSelectedCurve;       
     /*memset,important!*/
+
     curSelectedCurve = NULL;           
     if(canvas !=NULL && canvas->plot() != NULL)
     {
@@ -353,6 +352,8 @@ void IcvPlotCanvas::deleteCurve()
 
 void IcvPlotCanvas::setCurveColor()
 {
+    lockMagnifier();
+
     QColor color = QColorDialog::getColor(Qt::white,this);
     if(!color.isValid())
         return;
@@ -363,8 +364,6 @@ void IcvPlotCanvas::setCurveColor()
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-        if(NULL != mainWin)
-            mainWin->getMagnifier()->setEnabled(false);
     }
 
     return  ;
@@ -373,6 +372,8 @@ void IcvPlotCanvas::setCurveColor()
 
 void IcvPlotCanvas::setCurveWidth(QAction *action)
 {
+    lockMagnifier();
+
     if(NULL == action)
         return;
 
@@ -387,8 +388,6 @@ void IcvPlotCanvas::setCurveWidth(QAction *action)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-        if(NULL != mainWin)
-            mainWin->getMagnifier()->setEnabled(false);
     }
 
     action->setCheckable(true);
@@ -400,6 +399,8 @@ void IcvPlotCanvas::setCurveWidth(QAction *action)
 
 void IcvPlotCanvas::setCurveStyle(QAction *action)
 {
+    lockMagnifier();
+
     if(NULL == action)
         return;
 
@@ -414,8 +415,6 @@ void IcvPlotCanvas::setCurveStyle(QAction *action)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-        if(NULL != mainWin)
-            mainWin->getMagnifier()->setEnabled(false);
     }
 
     action->setCheckable(true);
@@ -427,6 +426,8 @@ void IcvPlotCanvas::setCurveStyle(QAction *action)
 
 void IcvPlotCanvas::setCurveMarker(QAction *action)
 {
+    lockMagnifier();
+
     if(NULL == action)
         return;
 
@@ -441,8 +442,6 @@ void IcvPlotCanvas::setCurveMarker(QAction *action)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-        if(NULL != mainWin)
-            mainWin->getMagnifier()->setEnabled(false);
     }
 
     action->setCheckable(true);
@@ -454,6 +453,8 @@ void IcvPlotCanvas::setCurveMarker(QAction *action)
 
 void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
 {
+    lockMagnifier();
+
     if(NULL == action)
         return;
 
@@ -468,12 +469,28 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-        if(NULL != mainWin)
-            mainWin->getMagnifier()->setEnabled(false);
     }
 
     action->setCheckable(true);
     action->setChecked(true);
+
+    return ;
+}
+
+
+void IcvPlotCanvas::lockMagnifier()
+{
+    if(NULL != mainWin)
+        mainWin->getMagnifier()->setEnabled(false);
+
+    return ;
+}
+
+
+void IcvPlotCanvas::unlockMagnifier()
+{
+    if(NULL != mainWin)
+        mainWin->getMagnifier()->setEnabled(true);
 
     return ;
 }
