@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Fri Jun 3 01:47:13 2016
+** Created: Tue Jun 7 23:26:08 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvICurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -39,8 +39,9 @@ static const uint qt_meta_data_IcvICurve[] = {
       71,   10,   10,   10, 0x08,
       86,   10,   10,   10, 0x08,
      101,   10,   10,   10, 0x08,
-     116,   11,   10,   10, 0x08,
-     147,   10,   10,   10, 0x08,
+     116,   10,   10,   10, 0x08,
+     131,   11,   10,   10, 0x08,
+     162,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -49,7 +50,7 @@ static const char qt_meta_stringdata_IcvICurve[] = {
     "IcvICurve\0\0progress\0analyDataProgress(qint16)\0"
     "openFile()\0insertTitle()\0insertXLabel()\0"
     "insertYLabel()\0insertFooter()\0"
-    "updateAnalyProgressBar(qint16)\0"
+    "insertLegend()\0updateAnalyProgressBar(qint16)\0"
     "cancelAnalyProgressBar()\0"
 };
 
@@ -88,11 +89,12 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 3: insertXLabel(); break;
         case 4: insertYLabel(); break;
         case 5: insertFooter(); break;
-        case 6: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
-        case 7: cancelAnalyProgressBar(); break;
+        case 6: insertLegend(); break;
+        case 7: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 8: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

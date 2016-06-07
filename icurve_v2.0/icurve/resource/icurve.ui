@@ -326,6 +326,9 @@
    </property>
   </action>
   <action name="actionLegend">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Legend</string>
    </property>

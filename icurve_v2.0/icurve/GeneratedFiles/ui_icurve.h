@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Fri Jun 3 01:30:03 2016
+** Created: Tue Jun 7 23:27:40 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -113,6 +113,7 @@ public:
         actionSize->setObjectName(QString::fromUtf8("actionSize"));
         actionLegend = new QAction(icurveClass);
         actionLegend->setObjectName(QString::fromUtf8("actionLegend"));
+        actionLegend->setCheckable(true);
         actionFooter = new QAction(icurveClass);
         actionFooter->setObjectName(QString::fromUtf8("actionFooter"));
         actionCalc = new QAction(icurveClass);

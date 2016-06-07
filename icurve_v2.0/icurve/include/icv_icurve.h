@@ -81,6 +81,7 @@ private slots:
     void insertXLabel();
     void insertYLabel();
     void insertFooter();
+    void insertLegend();
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();
 
