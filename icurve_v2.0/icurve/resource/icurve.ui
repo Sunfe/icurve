@@ -55,17 +55,20 @@
     <property name="title">
      <string>Insert</string>
     </property>
-    <addaction name="actionX_lable"/>
-    <addaction name="actionY_lable"/>
+    <addaction name="actionX_label"/>
+    <addaction name="actionY_label"/>
     <addaction name="separator"/>
     <addaction name="actionTitle"/>
     <addaction name="separator"/>
-    <addaction name="actionLegand"/>
+    <addaction name="actionLegend"/>
+    <addaction name="separator"/>
+    <addaction name="actionFooter"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="actionCalc"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
@@ -81,17 +84,9 @@
     <property name="title">
      <string>Curve</string>
     </property>
-    <widget class="QMenu" name="menuMarker">
-     <property name="title">
-      <string>Marker</string>
-     </property>
-     <addaction name="actionType"/>
-     <addaction name="actionSize"/>
-    </widget>
     <addaction name="actionColor"/>
     <addaction name="actionStyle"/>
-    <addaction name="actionStyle_2"/>
-    <addaction name="menuMarker"/>
+    <addaction name="actionMarker"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -285,12 +280,12 @@
     <string>Axse Properties</string>
    </property>
   </action>
-  <action name="actionX_lable">
+  <action name="actionX_label">
    <property name="text">
     <string>X lable</string>
    </property>
   </action>
-  <action name="actionY_lable">
+  <action name="actionY_label">
    <property name="text">
     <string>Y lable</string>
    </property>
@@ -298,11 +293,6 @@
   <action name="actionTitle">
    <property name="text">
     <string>Title</string>
-   </property>
-  </action>
-  <action name="actionLegand">
-   <property name="text">
-    <string>Legend</string>
    </property>
   </action>
   <action name="actionExit">
@@ -325,11 +315,6 @@
     <string>Width</string>
    </property>
   </action>
-  <action name="actionStyle_2">
-   <property name="text">
-    <string>Style</string>
-   </property>
-  </action>
   <action name="actionType">
    <property name="text">
     <string>Type</string>
@@ -338,6 +323,26 @@
   <action name="actionSize">
    <property name="text">
     <string>Size</string>
+   </property>
+  </action>
+  <action name="actionLegend">
+   <property name="text">
+    <string>Legend</string>
+   </property>
+  </action>
+  <action name="actionFooter">
+   <property name="text">
+    <string>Footer</string>
+   </property>
+  </action>
+  <action name="actionCalc">
+   <property name="text">
+    <string>calc</string>
+   </property>
+  </action>
+  <action name="actionMarker">
+   <property name="text">
+    <string>Marker</string>
    </property>
   </action>
  </widget>

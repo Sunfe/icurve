@@ -66,7 +66,6 @@ public:
 
 private:
     QwtPlotCurve  *curve;
-
     IcvPlotCanvas *canvas;
     QList<QwtPlotMarker *> markers;
     qint16         dataPosition;        /* the postion in QList data repository */

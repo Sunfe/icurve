@@ -6,6 +6,8 @@
 #include <QRectF>
 #include <QProgressDialog>
 #include <QFileInfo>
+#include <QAbstractItemDelegate>  
+#include <QPainter>  
 
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
@@ -75,6 +77,10 @@ private:
 
 private slots:
     void openFile();
+    void insertTitle();
+    void insertXLabel();
+    void insertYLabel();
+    void insertFooter();
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();
 
@@ -83,5 +89,6 @@ signals:
     void analyDataProgress(qint16 progress);
 
 };
+
 
 #endif // ICURVE_H

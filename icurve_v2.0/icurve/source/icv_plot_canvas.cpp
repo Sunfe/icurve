@@ -14,7 +14,7 @@
 #include <qwt_plot_directpainter.h>
 /* app header */
 #include "icv_plot_canvas.h"
-
+#include "icv_curve_property.h"
 
 #define ICV_TOLERENCE_DISTANCE              (5)
 
@@ -35,8 +35,9 @@ IcvPlotCanvas::IcvPlotCanvas(IcvICurve *parent)
     prevSelectedCurve = NULL;
 
     mainWin = parent;
-}
 
+    isEnableCursorMoveAction = true;
+}
 
 IcvPlotCanvas::~IcvPlotCanvas()
 {
@@ -126,7 +127,10 @@ IcvPlotCurve* IcvPlotCanvas::getSelectedCurve()
 
 void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 {
+    /*release magnifier*/
     unlockMagnifier();
+    /*enable cursor moving action*/
+    isEnableCursorMoveAction = true;
 
     const QPoint pos = event->pos();
     /*pick the selected curve*/
@@ -154,7 +158,6 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
         canvas->setPaintAttribute(QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute(QwtPlotCanvas::ImmediatePaint,false);
-
     }
 
     if(NULL != prevSelectedCurve)
@@ -163,7 +166,6 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-
     }
 
     prevSelectedCurve = curSelectedCurve;
@@ -174,7 +176,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 
 void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 {
-    unlockMagnifier();
+   lockMagnifier();
 
     const QPoint pos = event->pos();
     /*pick the selected curve*/
@@ -212,6 +214,7 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
 
+        isEnableCursorMoveAction = false;
         crvSelPopMenu->exec(event->globalPos());
     }
 
@@ -223,12 +226,16 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 
 void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 {
+    if(!isEnableCursorMoveAction)
+        return ;
+
     /*pick the selected curve*/
     if(curves.isEmpty())
     {
         canvas->setCursor(Qt::ArrowCursor);
         return ;
     }
+
 
     const QPoint pos = event->pos();
     for(qint16 i = 0; i < curves.count(); i++)
@@ -304,6 +311,7 @@ void IcvPlotCanvas::deleteCurve()
     if(NULL == curSelectedCurve)
         return ;
 
+#if 0
     QMessageBox msgBox(mainWin);
     msgBox.setText("Warning:curve will be deleted permanently!");
     msgBox.setInformativeText("Are you sure to delete?");
@@ -314,8 +322,9 @@ void IcvPlotCanvas::deleteCurve()
     {
         return;
     }
+#endif
 
-#if 0
+#if 1
     QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
         "Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
     //msgBox.setDetailedText(MESSAGE_DETAILS);
@@ -478,6 +487,21 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
 }
 
 
+void IcvPlotCanvas::setCurveProperty()
+{
+    lockMagnifier();
+
+    if(NULL == propertySetAction)
+        return ;
+
+    IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curSelectedCurve,mainWin,Qt::Dialog);
+    propDiag->resize(400,150);
+    propDiag->show();
+
+    return;
+}
+
+
 void IcvPlotCanvas::lockMagnifier()
 {
     if(NULL != mainWin)
@@ -519,6 +543,9 @@ void IcvPlotCanvas::createCurvePopMenu()
     subCrvSelMarkerSizeMenu = new QMenu("Marker size",parent);
     subCrvSelMarkerSizeMenu->addActions(markerSizeActGrp->actions());
     crvSelPopMenu->addMenu(subCrvSelMarkerSizeMenu);
+
+    crvSelPopMenu->addAction(propertySetAction);
+
 
     return ;
 }
@@ -628,6 +655,10 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     }
     connect(markerSizeActGrp,SIGNAL(triggered(QAction *)),this,SLOT(setCurveMarkerSize(QAction *)));
     /*}}}*/
+
+    propertySetAction = new QAction(tr("Properties..."),this);
+    propertySetAction->setStatusTip("set curve properties");
+    connect(propertySetAction,SIGNAL(triggered()),this,SLOT(setCurveProperty()));
 
     return ;
 }

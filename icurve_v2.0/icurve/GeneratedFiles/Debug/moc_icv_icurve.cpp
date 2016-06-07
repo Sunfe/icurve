@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Tue May 31 00:56:23 2016
+** Created: Fri Jun 3 01:47:13 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvICurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,15 +35,21 @@ static const uint qt_meta_data_IcvICurve[] = {
 
  // slots: signature, parameters, type, tag, flags
       46,   10,   10,   10, 0x08,
-      57,   11,   10,   10, 0x08,
-      88,   10,   10,   10, 0x08,
+      57,   10,   10,   10, 0x08,
+      71,   10,   10,   10, 0x08,
+      86,   10,   10,   10, 0x08,
+     101,   10,   10,   10, 0x08,
+     116,   11,   10,   10, 0x08,
+     147,   10,   10,   10, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_IcvICurve[] = {
     "IcvICurve\0\0progress\0analyDataProgress(qint16)\0"
-    "openFile()\0updateAnalyProgressBar(qint16)\0"
+    "openFile()\0insertTitle()\0insertXLabel()\0"
+    "insertYLabel()\0insertFooter()\0"
+    "updateAnalyProgressBar(qint16)\0"
     "cancelAnalyProgressBar()\0"
 };
 
@@ -78,11 +84,15 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: analyDataProgress((*reinterpret_cast< qint16(*)>(_a[1]))); break;
         case 1: openFile(); break;
-        case 2: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
-        case 3: cancelAnalyProgressBar(); break;
+        case 2: insertTitle(); break;
+        case 3: insertXLabel(); break;
+        case 4: insertYLabel(); break;
+        case 5: insertFooter(); break;
+        case 6: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 7: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 4;
+        _id -= 8;
     }
     return _id;
 }

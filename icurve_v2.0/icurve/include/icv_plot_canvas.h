@@ -34,6 +34,7 @@ public:
 
     IcvICurve* retrieveParent();
     void setMainWin(IcvICurve *icurve);
+    //IcvICurve* getMainWin();
 
     QwtPlotCanvas *getCanvas();
     void setCanvas(QwtPlotCanvas *cvs);
@@ -65,7 +66,7 @@ private:
 
 private:
     QwtPlotCanvas *canvas;
-    IcvICurve  *mainWin;
+    IcvICurve     *mainWin;
     QList<IcvPlotCurve *> curves;
     IcvPlotCurve *curSelectedCurve;
     IcvPlotCurve *prevSelectedCurve;
@@ -90,6 +91,7 @@ private:
     QActionGroup *markerStyleActGrp;
     QActionGroup *markerSizeActGrp;
 
+    bool isEnableCursorMoveAction;
 
 private slots:
     void setCurveColor();
@@ -97,6 +99,7 @@ private slots:
     void setCurveStyle(QAction *action);
     void setCurveMarker(QAction *action);
     void setCurveMarkerSize(QAction *action);
+    void setCurveProperty();
     void deleteCurve();
 
 };

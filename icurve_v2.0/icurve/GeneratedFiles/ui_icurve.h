@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Tue May 31 00:42:09 2016
+** Created: Fri Jun 3 01:30:03 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -38,17 +38,19 @@ public:
     QAction *actionClear;
     QAction *actionSelect_all;
     QAction *actionAxsi;
-    QAction *actionX_lable;
-    QAction *actionY_lable;
+    QAction *actionX_label;
+    QAction *actionY_label;
     QAction *actionTitle;
-    QAction *actionLegand;
     QAction *actionExit;
     QAction *actionExit_2;
     QAction *actionColor;
     QAction *actionStyle;
-    QAction *actionStyle_2;
     QAction *actionType;
     QAction *actionSize;
+    QAction *actionLegend;
+    QAction *actionFooter;
+    QAction *actionCalc;
+    QAction *actionMarker;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -58,7 +60,6 @@ public:
     QMenu *menuWindows;
     QMenu *menuHelp_2;
     QMenu *menuCurve;
-    QMenu *menuMarker;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -92,14 +93,12 @@ public:
         actionSelect_all->setObjectName(QString::fromUtf8("actionSelect_all"));
         actionAxsi = new QAction(icurveClass);
         actionAxsi->setObjectName(QString::fromUtf8("actionAxsi"));
-        actionX_lable = new QAction(icurveClass);
-        actionX_lable->setObjectName(QString::fromUtf8("actionX_lable"));
-        actionY_lable = new QAction(icurveClass);
-        actionY_lable->setObjectName(QString::fromUtf8("actionY_lable"));
+        actionX_label = new QAction(icurveClass);
+        actionX_label->setObjectName(QString::fromUtf8("actionX_label"));
+        actionY_label = new QAction(icurveClass);
+        actionY_label->setObjectName(QString::fromUtf8("actionY_label"));
         actionTitle = new QAction(icurveClass);
         actionTitle->setObjectName(QString::fromUtf8("actionTitle"));
-        actionLegand = new QAction(icurveClass);
-        actionLegand->setObjectName(QString::fromUtf8("actionLegand"));
         actionExit = new QAction(icurveClass);
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionExit_2 = new QAction(icurveClass);
@@ -108,12 +107,18 @@ public:
         actionColor->setObjectName(QString::fromUtf8("actionColor"));
         actionStyle = new QAction(icurveClass);
         actionStyle->setObjectName(QString::fromUtf8("actionStyle"));
-        actionStyle_2 = new QAction(icurveClass);
-        actionStyle_2->setObjectName(QString::fromUtf8("actionStyle_2"));
         actionType = new QAction(icurveClass);
         actionType->setObjectName(QString::fromUtf8("actionType"));
         actionSize = new QAction(icurveClass);
         actionSize->setObjectName(QString::fromUtf8("actionSize"));
+        actionLegend = new QAction(icurveClass);
+        actionLegend->setObjectName(QString::fromUtf8("actionLegend"));
+        actionFooter = new QAction(icurveClass);
+        actionFooter->setObjectName(QString::fromUtf8("actionFooter"));
+        actionCalc = new QAction(icurveClass);
+        actionCalc->setObjectName(QString::fromUtf8("actionCalc"));
+        actionMarker = new QAction(icurveClass);
+        actionMarker->setObjectName(QString::fromUtf8("actionMarker"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -134,8 +139,6 @@ public:
         menuHelp_2->setObjectName(QString::fromUtf8("menuHelp_2"));
         menuCurve = new QMenu(menuBar);
         menuCurve->setObjectName(QString::fromUtf8("menuCurve"));
-        menuMarker = new QMenu(menuCurve);
-        menuMarker->setObjectName(QString::fromUtf8("menuMarker"));
         icurveClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(icurveClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -195,18 +198,18 @@ public:
         menuEdit->addAction(actionSelect_all);
         menuEdit->addSeparator();
         menuEdit->addAction(actionAxsi);
-        menuHelp->addAction(actionX_lable);
-        menuHelp->addAction(actionY_lable);
+        menuHelp->addAction(actionX_label);
+        menuHelp->addAction(actionY_label);
         menuHelp->addSeparator();
         menuHelp->addAction(actionTitle);
         menuHelp->addSeparator();
-        menuHelp->addAction(actionLegand);
+        menuHelp->addAction(actionLegend);
+        menuHelp->addSeparator();
+        menuHelp->addAction(actionFooter);
+        menuTools->addAction(actionCalc);
         menuCurve->addAction(actionColor);
         menuCurve->addAction(actionStyle);
-        menuCurve->addAction(actionStyle_2);
-        menuCurve->addAction(menuMarker->menuAction());
-        menuMarker->addAction(actionType);
-        menuMarker->addAction(actionSize);
+        menuCurve->addAction(actionMarker);
         mainToolBar->addAction(actionOpen);
 
         retranslateUi(icurveClass);
@@ -228,17 +231,19 @@ public:
         actionClear->setText(QApplication::translate("icurveClass", "Clear", 0, QApplication::UnicodeUTF8));
         actionSelect_all->setText(QApplication::translate("icurveClass", "Select All", 0, QApplication::UnicodeUTF8));
         actionAxsi->setText(QApplication::translate("icurveClass", "Axse Properties", 0, QApplication::UnicodeUTF8));
-        actionX_lable->setText(QApplication::translate("icurveClass", "X lable", 0, QApplication::UnicodeUTF8));
-        actionY_lable->setText(QApplication::translate("icurveClass", "Y lable", 0, QApplication::UnicodeUTF8));
+        actionX_label->setText(QApplication::translate("icurveClass", "X lable", 0, QApplication::UnicodeUTF8));
+        actionY_label->setText(QApplication::translate("icurveClass", "Y lable", 0, QApplication::UnicodeUTF8));
         actionTitle->setText(QApplication::translate("icurveClass", "Title", 0, QApplication::UnicodeUTF8));
-        actionLegand->setText(QApplication::translate("icurveClass", "Legend", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("icurveClass", "Close", 0, QApplication::UnicodeUTF8));
         actionExit_2->setText(QApplication::translate("icurveClass", "Exit", 0, QApplication::UnicodeUTF8));
         actionColor->setText(QApplication::translate("icurveClass", "Color", 0, QApplication::UnicodeUTF8));
         actionStyle->setText(QApplication::translate("icurveClass", "Width", 0, QApplication::UnicodeUTF8));
-        actionStyle_2->setText(QApplication::translate("icurveClass", "Style", 0, QApplication::UnicodeUTF8));
         actionType->setText(QApplication::translate("icurveClass", "Type", 0, QApplication::UnicodeUTF8));
         actionSize->setText(QApplication::translate("icurveClass", "Size", 0, QApplication::UnicodeUTF8));
+        actionLegend->setText(QApplication::translate("icurveClass", "Legend", 0, QApplication::UnicodeUTF8));
+        actionFooter->setText(QApplication::translate("icurveClass", "Footer", 0, QApplication::UnicodeUTF8));
+        actionCalc->setText(QApplication::translate("icurveClass", "calc", 0, QApplication::UnicodeUTF8));
+        actionMarker->setText(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));
@@ -246,7 +251,6 @@ public:
         menuWindows->setTitle(QApplication::translate("icurveClass", "Windows", 0, QApplication::UnicodeUTF8));
         menuHelp_2->setTitle(QApplication::translate("icurveClass", "Help", 0, QApplication::UnicodeUTF8));
         menuCurve->setTitle(QApplication::translate("icurveClass", "Curve", 0, QApplication::UnicodeUTF8));
-        menuMarker->setTitle(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'plot.ui'
 **
-** Created: Tue May 31 22:22:38 2016
+** Created: Thu Jun 2 01:52:22 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -94,7 +94,7 @@ public:
     {
         Form->setWindowTitle(QApplication::translate("Form", "Form", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("Form", "Plot title:", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("Form", "Title:", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("Form", "Label:", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("Form", "Rang:", 0, QApplication::UnicodeUTF8));
         label_5->setText(QApplication::translate("Form", "-", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Form", "X", 0, QApplication::UnicodeUTF8));

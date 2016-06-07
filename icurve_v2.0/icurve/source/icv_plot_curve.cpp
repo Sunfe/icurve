@@ -64,7 +64,7 @@ void IcvPlotCurve::setCanvas(IcvPlotCanvas *cvs)
 }
 
 
-QwtPlotCurve * IcvPlotCurve::getCurve()
+QwtPlotCurve* IcvPlotCurve::getCurve()
 {
     return curve;
 }
@@ -74,6 +74,8 @@ void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
     curve = crv;
     setMarker();
+
+    return ;
 }
 
 
@@ -86,6 +88,8 @@ qint16 IcvPlotCurve::getDataPos()
 void IcvPlotCurve::setDataPos(qint16 pos)
 {
     dataPosition = pos;
+
+    return ;
 }
 
 
@@ -98,6 +102,8 @@ qint16 IcvPlotCurve::getActivateState()
 void IcvPlotCurve::setActivateState(qint16 state)
 {
     activateState = state;
+
+    return ;
 }
 
 
@@ -201,6 +207,7 @@ void IcvPlotCurve::showMarkers()
     }
 
     showMarkerState = ICV_CURVE_SHOW_MARKER;
+
     return;
 }
 
@@ -213,6 +220,7 @@ void IcvPlotCurve::hideMarkers()
     }
 
     showMarkerState = ICV_CURVE_HIDE_MARKER;
+
     return ;
 }
 
@@ -240,6 +248,8 @@ qint16 IcvPlotCurve::getShowMarkerState()
 void IcvPlotCurve::setShowMarkerState(qint16 state)
 {
     showMarkerState = state;
+
+    return ;
 }
 
 
