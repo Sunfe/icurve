@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Thu Jun 9 01:34:11 2016
+** Created: Thu Jun 9 17:05:19 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -56,6 +56,7 @@ public:
     QAction *actionAxse_Properties;
     QAction *actionFind;
     QAction *actionShow_All;
+    QAction *actionExpand;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -136,6 +137,8 @@ public:
         actionFind->setObjectName(QString::fromUtf8("actionFind"));
         actionShow_All = new QAction(icurveClass);
         actionShow_All->setObjectName(QString::fromUtf8("actionShow_All"));
+        actionExpand = new QAction(icurveClass);
+        actionExpand->setObjectName(QString::fromUtf8("actionExpand"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -228,6 +231,7 @@ public:
         menuCurve->addAction(actionStyle);
         menuCurve->addAction(actionMarker);
         menuCurve->addAction(actionMarker_2);
+        menuCurve->addAction(actionExpand);
         menuCurve->addAction(actionFilter);
         menuCurve->addAction(actionFind);
         menuCurve->addAction(actionShow_All);
@@ -270,6 +274,7 @@ public:
         actionAxse_Properties->setText(QApplication::translate("icurveClass", "Axse Properties", 0, QApplication::UnicodeUTF8));
         actionFind->setText(QApplication::translate("icurveClass", "Find", 0, QApplication::UnicodeUTF8));
         actionShow_All->setText(QApplication::translate("icurveClass", "Show All", 0, QApplication::UnicodeUTF8));
+        actionExpand->setText(QApplication::translate("icurveClass", "Expand", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));

@@ -85,8 +85,9 @@ private slots:
     void insertYLabel();
     void insertFooter();
     void insertLegend();
+    void expandCurve();
     void filterCurve();
-    void ShowAllCurve();
+    void showAllCurve();
     void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();

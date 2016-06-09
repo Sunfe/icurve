@@ -50,11 +50,12 @@ public:
     void showCurve();
     void hideCurve();
 
-    void setMarker();
+    void setMarkers();
     QList<QwtPlotMarker *> getMarkers();
     void showMarkers();
     void hideMarkers();
     void deleteMakers();
+    void updateMakers();
     qint16 getShowMarkerState();
     void setShowMarkerState(qint16 state);
 
@@ -63,6 +64,7 @@ public:
     void setStyle(Qt::PenStyle style);
     void setMarker(QwtSymbol::Style style);
     void setMarkerSize(qint16 size);
+    void setGroupSize(qint16 size);
 
 private:
     QwtPlotCurve  *curve;

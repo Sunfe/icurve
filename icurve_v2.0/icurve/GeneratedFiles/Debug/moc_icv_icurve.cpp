@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Thu Jun 9 01:34:11 2016
+** Created: Thu Jun 9 17:07:51 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvICurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -42,9 +42,10 @@ static const uint qt_meta_data_IcvICurve[] = {
      116,   10,   10,   10, 0x08,
      131,   10,   10,   10, 0x08,
      145,   10,   10,   10, 0x08,
-     172,  160,   10,   10, 0x08,
-     201,   11,   10,   10, 0x08,
-     232,   10,   10,   10, 0x08,
+     159,   10,   10,   10, 0x08,
+     186,  174,   10,   10, 0x08,
+     215,   11,   10,   10, 0x08,
+     246,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -53,8 +54,8 @@ static const char qt_meta_stringdata_IcvICurve[] = {
     "IcvICurve\0\0progress\0analyDataProgress(qint16)\0"
     "openFile()\0insertTitle()\0insertXLabel()\0"
     "insertYLabel()\0insertFooter()\0"
-    "insertLegend()\0filterCurve()\0"
-    "ShowAllCurve()\0itemInfo,on\0"
+    "insertLegend()\0expandCurve()\0filterCurve()\0"
+    "showAllCurve()\0itemInfo,on\0"
     "legendChecked(QVariant,bool)\0"
     "updateAnalyProgressBar(qint16)\0"
     "cancelAnalyProgressBar()\0"
@@ -96,14 +97,15 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 4: insertYLabel(); break;
         case 5: insertFooter(); break;
         case 6: insertLegend(); break;
-        case 7: filterCurve(); break;
-        case 8: ShowAllCurve(); break;
-        case 9: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 10: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
-        case 11: cancelAnalyProgressBar(); break;
+        case 7: expandCurve(); break;
+        case 8: filterCurve(); break;
+        case 9: showAllCurve(); break;
+        case 10: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 11: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 12: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }

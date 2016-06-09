@@ -78,6 +78,7 @@ private:
     QMenu *subCrvSelStyleMenu;
     QMenu *subCrvSelMarkeStyleMenu;
     QMenu *subCrvSelMarkerSizeMenu;
+    QMenu *subCrvSelGroupSizeMenu;
 
     /*actions*/
     QAction *cutAction;
@@ -91,6 +92,7 @@ private:
     QActionGroup *styleActGrp;
     QActionGroup *markerStyleActGrp;
     QActionGroup *markerSizeActGrp;
+    QActionGroup *groupSizeActGrp;
 
     bool isEnableCursorMoveAction;
 
@@ -100,6 +102,7 @@ private slots:
     void setCurveStyle(QAction *action);
     void setCurveMarker(QAction *action);
     void setCurveMarkerSize(QAction *action);
+    void setCurveGroupSize(QAction *action);
     void setCurveProperty();
     void deleteSelectCurve();
 

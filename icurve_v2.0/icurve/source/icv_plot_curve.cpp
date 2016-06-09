@@ -17,7 +17,7 @@ IcvPlotCurve::IcvPlotCurve(QwtPlotCurve *crv)
 {
     curve  = crv;  
     canvas = NULL;
-    setMarker();
+    setMarkers();
     activateState   = ICV_CURVE_UNACTIVATED;
     showMarkerState = ICV_CURVE_HIDE_MARKER;
 }
@@ -74,7 +74,7 @@ QwtPlotCurve* IcvPlotCurve::getCurve()
 void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
     curve = crv;
-    setMarker();
+    setMarkers();
 
     return ;
 }
@@ -160,7 +160,7 @@ QList<QwtPlotMarker *> IcvPlotCurve::getMarkers()
 }
 
 
-void IcvPlotCurve::setMarker()
+void IcvPlotCurve::setMarkers()
 {
     if(NULL == curve)
         return ;
@@ -236,6 +236,15 @@ void IcvPlotCurve::deleteMakers()
     }
     markers.clear();
 
+    return ;
+}
+
+
+void IcvPlotCurve::updateMakers()
+{
+    deleteMakers();  /* delete previous markers */
+    setMarkers();    /* set new markers */
+    
     return ;
 }
 
@@ -336,3 +345,27 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
 }
 
 
+void IcvPlotCurve::setGroupSize(qint16 size)
+{
+    if(NULL == canvas)
+        return;
+
+    Command cmd = canvas->retrieveParent()->getPlotData()->at(dataPosition);
+    QList<QPointF> dataExpand;
+
+    for(qint16 cnt = 0; cnt < cmd.getData().count(); cnt++)
+    {
+        for(qint16 si = 0; si < size; si++)
+        {
+            QPointF sample ;
+            sample.setX(cnt * size + si );
+            sample.setY(cmd.getData().at(cnt).y());
+            dataExpand.append(sample);
+        }
+    }
+
+    curve->setSamples(dataExpand.toVector());
+    updateMakers();
+
+    return;
+}

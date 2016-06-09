@@ -490,6 +490,34 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
 }
 
 
+void IcvPlotCanvas::setCurveGroupSize(QAction *action)
+{
+    lockMagnifier();
+
+    if(NULL == action)
+        return;
+   
+    bool isConvertSuccess;
+    qint16 size = action->data().toInt(&isConvertSuccess);
+    if(!isConvertSuccess)
+        return;
+
+    curSelectedCurve->setGroupSize(size);
+
+    if(NULL != canvas && canvas->plot() != NULL)
+    {
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+        canvas->plot()->replot();
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+    }
+
+    action->setCheckable(true);
+    action->setChecked(true);
+
+    return;
+}
+
+
 void IcvPlotCanvas::setCurveProperty()
 {
     lockMagnifier();
@@ -546,6 +574,10 @@ void IcvPlotCanvas::createCurvePopMenu()
     subCrvSelMarkerSizeMenu = new QMenu("Marker size",parent);
     subCrvSelMarkerSizeMenu->addActions(markerSizeActGrp->actions());
     crvSelPopMenu->addMenu(subCrvSelMarkerSizeMenu);
+
+    subCrvSelGroupSizeMenu = new QMenu("Group size",parent);
+    subCrvSelGroupSizeMenu->addActions(groupSizeActGrp->actions());
+    crvSelPopMenu->addMenu(subCrvSelGroupSizeMenu);
 
     crvSelPopMenu->addAction(propertySetAction);
 
@@ -658,6 +690,25 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     }
     connect(markerSizeActGrp,SIGNAL(triggered(QAction *)),this,SLOT(setCurveMarkerSize(QAction *)));
     /*}}}*/
+
+
+    /*{{{set curve group size, to expand curve*/
+    QList< QPair<QString,int> > groupSize;
+    groupSize.append(qMakePair(tr("2"), 2));
+    groupSize.append(qMakePair(tr("4"), 4));
+    groupSize.append(qMakePair(tr("6"), 6));
+    groupSize.append(qMakePair(tr("8"), 8));
+    groupSize.append(qMakePair(tr("10"),10));
+
+    groupSizeActGrp = new QActionGroup(parent);
+    QList <QPair<QString,int> >::iterator gsize;
+    for(gsize = groupSize.begin(); gsize < groupSize.end(); gsize++)
+    {
+        action = new QAction(groupSizeActGrp);
+        action->setText((gsize->first));
+        action->setData((gsize->second));
+    }
+    connect(groupSizeActGrp, SIGNAL(triggered(QAction *)),this,SLOT(setCurveGroupSize(QAction *)));
 
     propertySetAction = new QAction(tr("Properties..."),this);
     propertySetAction->setStatusTip("set curve properties");

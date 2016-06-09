@@ -88,6 +88,7 @@
     <addaction name="actionStyle"/>
     <addaction name="actionMarker"/>
     <addaction name="actionMarker_2"/>
+    <addaction name="actionExpand"/>
     <addaction name="actionFilter"/>
     <addaction name="actionFind"/>
     <addaction name="actionShow_All"/>
@@ -378,6 +379,11 @@
   <action name="actionShow_All">
    <property name="text">
     <string>Show All</string>
+   </property>
+  </action>
+  <action name="actionExpand">
+   <property name="text">
+    <string>Expand</string>
    </property>
   </action>
  </widget>
