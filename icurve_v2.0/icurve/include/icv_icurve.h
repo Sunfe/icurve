@@ -47,8 +47,8 @@ public:
 
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
-    ICU_RET_STATUS assembleData(QString dataLine, Command *cmd);
-    QList <Command> *getPlotData();
+    ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
+    QList <IcvCommand> *getPlotData();
     QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
 
@@ -75,7 +75,7 @@ private:
     QwtSymbol *symbol;
     
     IcvPlotCanvas *plotCanvas;
-    QList <Command> plotData;
+    QList <IcvCommand> plotData;
     bool isDataAnalyCanceled;
 
 private slots:

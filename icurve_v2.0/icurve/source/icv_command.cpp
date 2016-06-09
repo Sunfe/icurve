@@ -1,25 +1,25 @@
 
 #include "icv_command.h"
 
-Command::Command(void)
+IcvCommand::IcvCommand(void)
 {
     initFamily();
 }
 
 
-Command::~Command()
+IcvCommand::~IcvCommand()
 {
 }
 
 
-Command::Command(QString cmd)
+IcvCommand::IcvCommand(QString cmd)
 {
     initFamily();
     name = cmd;
 }
 
 
-Command::Command(QString cmd,qint16 line, qint16 dir)
+IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
 {
     initFamily();
     name      = cmd;
@@ -29,7 +29,7 @@ Command::Command(QString cmd,qint16 line, qint16 dir)
 }
 
 
-void Command::initFamily()
+void IcvCommand::initFamily()
 {
     family.push_back("getTxPsd");
     family.push_back("getSnr");
@@ -39,7 +39,7 @@ void Command::initFamily()
 }
 
 
-void Command::reset()
+void IcvCommand::reset()
 {
     setName("NULL");
     setLineId(0xff);
@@ -51,46 +51,46 @@ void Command::reset()
 }
 
 
-void Command::setName(QString cmd)
+void IcvCommand::setName(QString cmd)
 {
     name = cmd;
     return ;
 }
 
 
-QString Command::getName()
+QString IcvCommand::getName()
 {
     return name;
 }
 
 
-void Command::setLineId(qint16 id)
+void IcvCommand::setLineId(qint16 id)
 {
     lineId = id;
     return ;
 }
 
 
-qint16 Command::getLineId()
+qint16 IcvCommand::getLineId()
 {
     return lineId;
 }
 
 
-void Command::setDirection(qint16 dir)
+void IcvCommand::setDirection(qint16 dir)
 {
     direction = dir;
     return ;
 }
 
 
-qint16 Command::getDirection()
+qint16 IcvCommand::getDirection()
 {
     return direction;
 }
 
 
-void Command::setData(QList<QPointF> points,bool isappend)
+void IcvCommand::setData(QList<QPointF> points,bool isappend)
 {
     if(true == isappend)
         data += points;
@@ -100,37 +100,37 @@ void Command::setData(QList<QPointF> points,bool isappend)
 }
 
 
-QList<QPointF> Command::getData()
+QList<QPointF> IcvCommand::getData()
 {
     return data;
 }
 
-QStringList Command::getFamily()
+QStringList IcvCommand::getFamily()
 {
     return family;
 }
 
-void Command::setFamily(QStringList cmdFamily)
+void IcvCommand::setFamily(QStringList cmdFamily)
 {
     family = cmdFamily;
     return ;
 }
 
 
-void Command::setState(qint16 cmdState)
+void IcvCommand::setState(qint16 cmdState)
 {
     state = cmdState;
     return ;
 }
 
 
-qint16 Command::getState()
+qint16 IcvCommand::getState()
 {
     return state;
 }
 
 
-QString Command::getCommandTitle()
+QString IcvCommand::getCommandTitle()
 {
     QString title;
     title = name.remove("get") +".line" + QString::number(lineId) \

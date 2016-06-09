@@ -350,7 +350,7 @@ void IcvPlotCurve::setGroupSize(qint16 size)
     if(NULL == canvas)
         return;
 
-    Command cmd = canvas->retrieveParent()->getPlotData()->at(dataPosition);
+    IcvCommand cmd = canvas->retrieveParent()->getPlotData()->at(dataPosition);
     QList<QPointF> dataExpand;
 
     for(qint16 cnt = 0; cnt < cmd.getData().count(); cnt++)

@@ -1,5 +1,5 @@
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef ICV_COMMAND_H
+#define ICV_COMMAND_H
 
 #include <QtGlobal>
 #include <QString>
@@ -10,13 +10,13 @@
 #define CMD_STARTED   1
 #define CMD_CLOSED    2
 
-class Command
+class IcvCommand
 {
 public:
-    Command();
-    Command(QString cmd);
-    Command(QString cmd, qint16 line, qint16 dir);
-    ~Command();
+    IcvCommand();
+    IcvCommand(QString cmd);
+    IcvCommand(QString cmd, qint16 line, qint16 dir);
+    ~IcvCommand();
 
     void reset();
 
@@ -51,5 +51,5 @@ private:
 
 };
 
-#endif // ICURVE_H
+#endif 
 

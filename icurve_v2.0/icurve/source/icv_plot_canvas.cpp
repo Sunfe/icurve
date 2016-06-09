@@ -329,7 +329,7 @@ void IcvPlotCanvas::deleteSelectCurve()
     curves.removeAll(curSelectedCurve); 
 
     /*remove relative data from QList data repository*/
-    QList <Command> *plotData = retrieveParent()->getPlotData();
+    QList <IcvCommand> *plotData = retrieveParent()->getPlotData();
     qint16 dataPos = curSelectedCurve->getDataPos();
     if(dataPos < plotData->count())
         plotData->removeAt(dataPos);
