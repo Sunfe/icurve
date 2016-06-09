@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Tue Jun 7 23:27:40 2016
+** Created: Thu Jun 9 01:34:11 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -51,6 +51,11 @@ public:
     QAction *actionFooter;
     QAction *actionCalc;
     QAction *actionMarker;
+    QAction *actionMarker_2;
+    QAction *actionFilter;
+    QAction *actionAxse_Properties;
+    QAction *actionFind;
+    QAction *actionShow_All;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -67,11 +72,11 @@ public:
     {
         if (icurveClass->objectName().isEmpty())
             icurveClass->setObjectName(QString::fromUtf8("icurveClass"));
-        icurveClass->resize(538, 456);
+        icurveClass->resize(759, 475);
         actionOpen = new QAction(icurveClass);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/icurve/images/file_open.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/icurve/images/file_open.ico"), QSize(), QIcon::Normal, QIcon::Off);
         actionOpen->setIcon(icon);
         actionSave = new QAction(icurveClass);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
@@ -120,12 +125,23 @@ public:
         actionCalc->setObjectName(QString::fromUtf8("actionCalc"));
         actionMarker = new QAction(icurveClass);
         actionMarker->setObjectName(QString::fromUtf8("actionMarker"));
+        actionMarker_2 = new QAction(icurveClass);
+        actionMarker_2->setObjectName(QString::fromUtf8("actionMarker_2"));
+        actionFilter = new QAction(icurveClass);
+        actionFilter->setObjectName(QString::fromUtf8("actionFilter"));
+        actionFilter->setCheckable(false);
+        actionAxse_Properties = new QAction(icurveClass);
+        actionAxse_Properties->setObjectName(QString::fromUtf8("actionAxse_Properties"));
+        actionFind = new QAction(icurveClass);
+        actionFind->setObjectName(QString::fromUtf8("actionFind"));
+        actionShow_All = new QAction(icurveClass);
+        actionShow_All->setObjectName(QString::fromUtf8("actionShow_All"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(icurveClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 538, 17));
+        menuBar->setGeometry(QRect(0, 0, 759, 17));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -198,7 +214,7 @@ public:
         menuEdit->addAction(actionClear);
         menuEdit->addAction(actionSelect_all);
         menuEdit->addSeparator();
-        menuEdit->addAction(actionAxsi);
+        menuEdit->addAction(actionAxse_Properties);
         menuHelp->addAction(actionX_label);
         menuHelp->addAction(actionY_label);
         menuHelp->addSeparator();
@@ -211,6 +227,10 @@ public:
         menuCurve->addAction(actionColor);
         menuCurve->addAction(actionStyle);
         menuCurve->addAction(actionMarker);
+        menuCurve->addAction(actionMarker_2);
+        menuCurve->addAction(actionFilter);
+        menuCurve->addAction(actionFind);
+        menuCurve->addAction(actionShow_All);
         mainToolBar->addAction(actionOpen);
 
         retranslateUi(icurveClass);
@@ -231,7 +251,7 @@ public:
         actionPaste->setText(QApplication::translate("icurveClass", "Paste", 0, QApplication::UnicodeUTF8));
         actionClear->setText(QApplication::translate("icurveClass", "Clear", 0, QApplication::UnicodeUTF8));
         actionSelect_all->setText(QApplication::translate("icurveClass", "Select All", 0, QApplication::UnicodeUTF8));
-        actionAxsi->setText(QApplication::translate("icurveClass", "Axse Properties", 0, QApplication::UnicodeUTF8));
+        actionAxsi->setText(QApplication::translate("icurveClass", "Find", 0, QApplication::UnicodeUTF8));
         actionX_label->setText(QApplication::translate("icurveClass", "X lable", 0, QApplication::UnicodeUTF8));
         actionY_label->setText(QApplication::translate("icurveClass", "Y lable", 0, QApplication::UnicodeUTF8));
         actionTitle->setText(QApplication::translate("icurveClass", "Title", 0, QApplication::UnicodeUTF8));
@@ -244,7 +264,12 @@ public:
         actionLegend->setText(QApplication::translate("icurveClass", "Legend", 0, QApplication::UnicodeUTF8));
         actionFooter->setText(QApplication::translate("icurveClass", "Footer", 0, QApplication::UnicodeUTF8));
         actionCalc->setText(QApplication::translate("icurveClass", "calc", 0, QApplication::UnicodeUTF8));
-        actionMarker->setText(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
+        actionMarker->setText(QApplication::translate("icurveClass", "Style", 0, QApplication::UnicodeUTF8));
+        actionMarker_2->setText(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
+        actionFilter->setText(QApplication::translate("icurveClass", "Filter", 0, QApplication::UnicodeUTF8));
+        actionAxse_Properties->setText(QApplication::translate("icurveClass", "Axse Properties", 0, QApplication::UnicodeUTF8));
+        actionFind->setText(QApplication::translate("icurveClass", "Find", 0, QApplication::UnicodeUTF8));
+        actionShow_All->setText(QApplication::translate("icurveClass", "Show All", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));

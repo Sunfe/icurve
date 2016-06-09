@@ -18,7 +18,8 @@ IcvPlotCurve::IcvPlotCurve(QwtPlotCurve *crv)
     curve  = crv;  
     canvas = NULL;
     setMarker();
-    activateState = ICV_CURVE_UNACTIVATED;
+    activateState   = ICV_CURVE_UNACTIVATED;
+    showMarkerState = ICV_CURVE_HIDE_MARKER;
 }
 
 

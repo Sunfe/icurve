@@ -28,6 +28,8 @@
 #include <qwt_plot_grid.h>
 
 #include "ui_icurve.h"
+#include "ui_icv_curve_filter.h"
+
 #include "icurve_common.h"
 #include "icv_command.h"
 #include "icv_plot_canvas.h"
@@ -58,6 +60,7 @@ protected:
 
 private:
     Ui::icurveClass ui;
+    Ui::IcvCurveFilterDialog *curveFilterDialog;
 
     /*Qt objects*/
     QRectF titleRect;
@@ -82,6 +85,9 @@ private slots:
     void insertYLabel();
     void insertFooter();
     void insertLegend();
+    void filterCurve();
+    void ShowAllCurve();
+    void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();
 

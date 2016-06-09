@@ -133,7 +133,7 @@ qint16 Command::getState()
 QString Command::getCommandTitle()
 {
     QString title;
-    title = name.remove("get") + "." + ((direction == 0)? "US": "DS") \
-        + ".line " + QString::number(lineId);
+    title = name.remove("get") +".line" + QString::number(lineId) \
+        + ((direction == 0)? ".US": ".DS");
     return title;
 }

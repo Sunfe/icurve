@@ -86,7 +86,7 @@ void IcvPlotCanvas::updateCurves()
     QwtPlot *plot = canvas->plot();
     QwtPlotItemList items = plot->itemList();
 
-    curves.clear();
+    //curves.clear();
     for(qint16 i = 0; i < items.count(); i++)
     {
         if((items.value(i))->rtti() == QwtPlotItem::Rtti_PlotCurve)
@@ -113,8 +113,13 @@ void IcvPlotCanvas::appendCurves(IcvPlotCurve *curve)
 }
 
 
-void IcvPlotCanvas::clearCurves()
+void IcvPlotCanvas::clearAllCurves()
 {
+    for(qint16 pos = 0; pos < curves.count(); pos++)
+    {
+        delete curves[pos];
+    }
+
     curves.clear();
 }
 
@@ -304,37 +309,21 @@ bool IcvPlotCanvas::event(QEvent *eve)
 }
 
 
-void IcvPlotCanvas::deleteCurve()
+void IcvPlotCanvas::deleteSelectCurve()
 {
     lockMagnifier();
 
     if(NULL == curSelectedCurve)
         return ;
 
-#if 0
-    QMessageBox msgBox(mainWin);
-    msgBox.setText("Warning:curve will be deleted permanently!");
-    msgBox.setInformativeText("Are you sure to delete?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
-    int ret = msgBox.exec();
-    if (ret == QMessageBox::Cancel)
-    {
-        return;
-    }
-#endif
-
-#if 1
     QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
         "Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
-    //msgBox.setDetailedText(MESSAGE_DETAILS);
     msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
-    msgBox.addButton(tr("No"), QMessageBox::RejectRole);
+    msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
     if (msgBox.exec() != QMessageBox::AcceptRole)
     {
         return;
     }
-#endif
 
     /*remove from the curves' queue*/
     curves.removeAll(curSelectedCurve); 
@@ -356,6 +345,20 @@ void IcvPlotCanvas::deleteCurve()
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
+
+    return ;
+}
+
+
+void IcvPlotCanvas::deleteCurve(IcvPlotCurve *crv)
+{
+    if(NULL == crv)
+        return ;
+   
+    delete crv;             /*remove from qwtcavas*/
+    curves.removeAll(crv);  /*remove from list of curves in the IcvCanvas  */
+
+    return ;
 }
 
 
@@ -560,7 +563,7 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     delAction = new QAction(QIcon(":/images/delete.png"),tr("Delete"),parent);
     delAction->setShortcut(QKeySequence::Delete);
     delAction->setStatusTip("curve delete");
-    connect(delAction,SIGNAL(triggered()),this,SLOT(deleteCurve()));
+    connect(delAction,SIGNAL(triggered()),this,SLOT(deleteSelectCurve()));
 
     /*color the curve*/
     colorSetAction = new QAction(tr("Color..."),parent);

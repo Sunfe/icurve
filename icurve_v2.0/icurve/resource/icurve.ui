@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>456</height>
+    <width>759</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>538</width>
+     <width>759</width>
      <height>17</height>
     </rect>
    </property>
@@ -49,7 +49,7 @@
     <addaction name="actionClear"/>
     <addaction name="actionSelect_all"/>
     <addaction name="separator"/>
-    <addaction name="actionAxsi"/>
+    <addaction name="actionAxse_Properties"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -87,6 +87,10 @@
     <addaction name="actionColor"/>
     <addaction name="actionStyle"/>
     <addaction name="actionMarker"/>
+    <addaction name="actionMarker_2"/>
+    <addaction name="actionFilter"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionShow_All"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -224,7 +228,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="icurve.qrc">
-     <normaloff>:/icurve/images/file_open.png</normaloff>:/icurve/images/file_open.png</iconset>
+     <normaloff>:/icurve/images/file_open.ico</normaloff>:/icurve/images/file_open.ico</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -277,7 +281,7 @@
   </action>
   <action name="actionAxsi">
    <property name="text">
-    <string>Axse Properties</string>
+    <string>Find</string>
    </property>
   </action>
   <action name="actionX_label">
@@ -345,7 +349,35 @@
   </action>
   <action name="actionMarker">
    <property name="text">
+    <string>Style</string>
+   </property>
+  </action>
+  <action name="actionMarker_2">
+   <property name="text">
     <string>Marker</string>
+   </property>
+  </action>
+  <action name="actionFilter">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Filter</string>
+   </property>
+  </action>
+  <action name="actionAxse_Properties">
+   <property name="text">
+    <string>Axse Properties</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find</string>
+   </property>
+  </action>
+  <action name="actionShow_All">
+   <property name="text">
+    <string>Show All</string>
    </property>
   </action>
  </widget>

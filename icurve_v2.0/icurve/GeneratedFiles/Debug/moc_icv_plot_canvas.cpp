@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_plot_canvas.h'
 **
-** Created: Tue Jun 7 22:12:59 2016
+** Created: Thu Jun 9 14:04:53 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -47,7 +47,7 @@ static const char qt_meta_stringdata_IcvPlotCanvas[] = {
     "setCurveWidth(QAction*)\0setCurveStyle(QAction*)\0"
     "setCurveMarker(QAction*)\0"
     "setCurveMarkerSize(QAction*)\0"
-    "setCurveProperty()\0deleteCurve()\0"
+    "setCurveProperty()\0deleteSelectCurve()\0"
 };
 
 const QMetaObject IcvPlotCanvas::staticMetaObject = {
@@ -85,7 +85,7 @@ int IcvPlotCanvas::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 3: setCurveMarker((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
         case 4: setCurveMarkerSize((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
         case 5: setCurveProperty(); break;
-        case 6: deleteCurve(); break;
+        case 6: deleteSelectCurve(); break;
         default: ;
         }
         _id -= 7;

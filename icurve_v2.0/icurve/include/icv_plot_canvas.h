@@ -45,9 +45,10 @@ public:
     void updateCurves();
     void lookforCurves();
     void appendCurves(IcvPlotCurve *curve);
-    void clearCurves();
+    void clearAllCurves();
     IcvPlotCurve* getSelectedCurve();
-
+    void deleteCurve(IcvPlotCurve *crv);
+    
     void lockMagnifier();
     void unlockMagnifier();
 
@@ -100,7 +101,8 @@ private slots:
     void setCurveMarker(QAction *action);
     void setCurveMarkerSize(QAction *action);
     void setCurveProperty();
-    void deleteCurve();
+    void deleteSelectCurve();
+
 
 };
 
