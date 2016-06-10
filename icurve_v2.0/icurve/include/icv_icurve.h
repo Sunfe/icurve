@@ -80,14 +80,22 @@ private:
 
 private slots:
     void openFile();
+
+    void setCurveColor(); 
+    void setCurveWidth();
+    void setCurveStyle();
+    void setCurveMarker();
+    void expandCurve();
+    void filterCurve();
+    void findCurve();
+    void showAllCurve();
+
     void insertTitle();
     void insertXLabel();
     void insertYLabel();
     void insertFooter();
     void insertLegend();
-    void expandCurve();
-    void filterCurve();
-    void showAllCurve();
+   
     void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();

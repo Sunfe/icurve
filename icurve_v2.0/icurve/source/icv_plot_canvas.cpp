@@ -1,4 +1,3 @@
-/* qt header */
 #include <qapplication.h>
 #include <qevent.h>
 #include <QtGlobal>
@@ -7,12 +6,10 @@
 #include <QMessageBox>
 #include <QColorDialog>
 #include <math.h>
-/* qwt header */
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_directpainter.h>
-/* app header */
 #include "icv_plot_canvas.h"
 #include "icv_curve_property.h"
 
@@ -238,9 +235,8 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
     if(curves.isEmpty())
     {
         canvas->setCursor(Qt::ArrowCursor);
-        return ;
+        return;
     }
-
 
     const QPoint pos = event->pos();
     for(qint16 i = 0; i < curves.count(); i++)
@@ -253,13 +249,11 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
         {
             canvas->setCursor(Qt::PointingHandCursor);
             curves[i]->setActivateState(ICV_CURVE_ACTIVATED);
-            curSelectedCurve = curves[i];
             break;
         }
         else
         {
             canvas->setCursor(Qt::ArrowCursor);
-            curSelectedCurve  = NULL;
         }
     }
 
@@ -357,6 +351,27 @@ void IcvPlotCanvas::deleteCurve(IcvPlotCurve *crv)
    
     delete crv;             /*remove from qwtcavas*/
     curves.removeAll(crv);  /*remove from list of curves in the IcvCanvas  */
+
+    return ;
+}
+
+
+void IcvPlotCanvas::highlightCurve(IcvPlotCurve *crv)
+{
+
+    if(NULL == crv)
+        return ;
+
+    crv->showMarkers();
+
+    if(NULL != canvas && canvas->plot() != NULL)
+    {
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+        canvas->plot()->replot();
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+    }
+
+    crv->setActivateState(ICV_CURVE_ACTIVATED);
 
     return ;
 }

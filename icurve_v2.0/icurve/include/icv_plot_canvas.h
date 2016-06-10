@@ -48,7 +48,7 @@ public:
     void clearAllCurves();
     IcvPlotCurve* getSelectedCurve();
     void deleteCurve(IcvPlotCurve *crv);
-    
+    void highlightCurve(IcvPlotCurve *crv);
     void lockMagnifier();
     void unlockMagnifier();
 

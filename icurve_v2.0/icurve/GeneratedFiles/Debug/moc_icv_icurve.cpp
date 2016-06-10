@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Thu Jun 9 22:47:53 2016
+** Created: Fri Jun 10 13:28:17 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvICurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,26 +36,33 @@ static const uint qt_meta_data_IcvICurve[] = {
  // slots: signature, parameters, type, tag, flags
       46,   10,   10,   10, 0x08,
       57,   10,   10,   10, 0x08,
-      71,   10,   10,   10, 0x08,
-      86,   10,   10,   10, 0x08,
-     101,   10,   10,   10, 0x08,
-     116,   10,   10,   10, 0x08,
-     131,   10,   10,   10, 0x08,
-     145,   10,   10,   10, 0x08,
-     159,   10,   10,   10, 0x08,
-     186,  174,   10,   10, 0x08,
-     215,   11,   10,   10, 0x08,
-     246,   10,   10,   10, 0x08,
+      73,   10,   10,   10, 0x08,
+      89,   10,   10,   10, 0x08,
+     105,   10,   10,   10, 0x08,
+     122,   10,   10,   10, 0x08,
+     136,   10,   10,   10, 0x08,
+     150,   10,   10,   10, 0x08,
+     162,   10,   10,   10, 0x08,
+     177,   10,   10,   10, 0x08,
+     191,   10,   10,   10, 0x08,
+     206,   10,   10,   10, 0x08,
+     221,   10,   10,   10, 0x08,
+     236,   10,   10,   10, 0x08,
+     263,  251,   10,   10, 0x08,
+     292,   11,   10,   10, 0x08,
+     323,   10,   10,   10, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_IcvICurve[] = {
     "IcvICurve\0\0progress\0analyDataProgress(qint16)\0"
-    "openFile()\0insertTitle()\0insertXLabel()\0"
-    "insertYLabel()\0insertFooter()\0"
-    "insertLegend()\0expandCurve()\0filterCurve()\0"
-    "showAllCurve()\0itemInfo,on\0"
+    "openFile()\0setCurveColor()\0setCurveWidth()\0"
+    "setCurveStyle()\0setCurveMarker()\0"
+    "expandCurve()\0filterCurve()\0findCurve()\0"
+    "showAllCurve()\0insertTitle()\0"
+    "insertXLabel()\0insertYLabel()\0"
+    "insertFooter()\0insertLegend()\0itemInfo,on\0"
     "legendChecked(QVariant,bool)\0"
     "updateAnalyProgressBar(qint16)\0"
     "cancelAnalyProgressBar()\0"
@@ -92,20 +99,25 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: analyDataProgress((*reinterpret_cast< qint16(*)>(_a[1]))); break;
         case 1: openFile(); break;
-        case 2: insertTitle(); break;
-        case 3: insertXLabel(); break;
-        case 4: insertYLabel(); break;
-        case 5: insertFooter(); break;
-        case 6: insertLegend(); break;
-        case 7: expandCurve(); break;
-        case 8: filterCurve(); break;
+        case 2: setCurveColor(); break;
+        case 3: setCurveWidth(); break;
+        case 4: setCurveStyle(); break;
+        case 5: setCurveMarker(); break;
+        case 6: expandCurve(); break;
+        case 7: filterCurve(); break;
+        case 8: findCurve(); break;
         case 9: showAllCurve(); break;
-        case 10: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 11: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
-        case 12: cancelAnalyProgressBar(); break;
+        case 10: insertTitle(); break;
+        case 11: insertXLabel(); break;
+        case 12: insertYLabel(); break;
+        case 13: insertFooter(); break;
+        case 14: insertLegend(); break;
+        case 15: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 16: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 17: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 13;
+        _id -= 18;
     }
     return _id;
 }

@@ -345,6 +345,24 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
 }
 
 
+void IcvPlotCurve::setMarkerColor(QBrush brush, QPen pen)
+{
+
+    for(qint16 cnt= 0; cnt < markers.count(); cnt++)
+    {
+        const QwtSymbol *symbol = markers.value(cnt)->symbol();
+        if(symbol != NULL)
+        {
+            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(), 
+                brush, pen, symbol->size());
+            markers.value(cnt)->setSymbol(symbolNew);
+        }
+    }
+
+    return ;
+}
+
+
 void IcvPlotCurve::setGroupSize(qint16 size)
 {
     if(NULL == canvas)
@@ -369,3 +387,9 @@ void IcvPlotCurve::setGroupSize(qint16 size)
 
     return;
 }
+
+
+
+
+
+

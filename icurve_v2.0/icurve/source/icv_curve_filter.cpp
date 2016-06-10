@@ -11,12 +11,13 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     lineEdit->setFocus();
     ByComandNameRadio->setCheckable(true);
     ByComandNameRadio->setChecked(true);
-    filterType = ICV_BY_COMANDNAME;
 
     connect(ByCompleteComandRadio, SIGNAL(clicked()), this, SLOT(setFilterType())); 
     connect(ByComandNameRadio,     SIGNAL(clicked()), this, SLOT(setFilterType())); 
     connect(ByLineIdRadio,         SIGNAL(clicked()), this, SLOT(setFilterType())); 
     connect(ByDirectionRadio,      SIGNAL(clicked()), this, SLOT(setFilterType())); 
+
+    filterType = ICV_BY_COMANDNAME;
 
 }
 

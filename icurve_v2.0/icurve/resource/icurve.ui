@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>icurve</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icurve.qrc">
+    <normaloff>:/icurve/images/iCurve.ico</normaloff>:/icurve/images/iCurve.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -85,13 +89,14 @@
      <string>Curve</string>
     </property>
     <addaction name="actionColor"/>
+    <addaction name="actionWidth"/>
     <addaction name="actionStyle"/>
     <addaction name="actionMarker"/>
-    <addaction name="actionMarker_2"/>
     <addaction name="actionExpand"/>
     <addaction name="actionFilter"/>
     <addaction name="actionFind"/>
-    <addaction name="actionShow_All"/>
+    <addaction name="actionShowAll"/>
+    <addaction name="actionReset"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -315,7 +320,7 @@
     <string>Color</string>
    </property>
   </action>
-  <action name="actionStyle">
+  <action name="actionWidth">
    <property name="text">
     <string>Width</string>
    </property>
@@ -348,12 +353,12 @@
     <string>calc</string>
    </property>
   </action>
-  <action name="actionMarker">
+  <action name="actionStyle">
    <property name="text">
     <string>Style</string>
    </property>
   </action>
-  <action name="actionMarker_2">
+  <action name="actionMarker">
    <property name="text">
     <string>Marker</string>
    </property>
@@ -376,7 +381,7 @@
     <string>Find</string>
    </property>
   </action>
-  <action name="actionShow_All">
+  <action name="actionShowAll">
    <property name="text">
     <string>Show All</string>
    </property>
@@ -384,6 +389,11 @@
   <action name="actionExpand">
    <property name="text">
     <string>Expand</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
    </property>
   </action>
  </widget>

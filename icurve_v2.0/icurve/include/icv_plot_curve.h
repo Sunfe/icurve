@@ -64,6 +64,7 @@ public:
     void setStyle(Qt::PenStyle style);
     void setMarker(QwtSymbol::Style style);
     void setMarkerSize(qint16 size);
+    void setMarkerColor(QBrush brush, QPen pen);
     void setGroupSize(qint16 size);
 
 private:

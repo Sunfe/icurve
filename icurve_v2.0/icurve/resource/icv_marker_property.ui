@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>IcvMarkerProperty</class>
+ <widget class="QDialog" name="IcvMarkerProperty">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>340</width>
+    <height>183</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLineEdit" name="sizeLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>79</x>
+     <y>65</y>
+     <width>241</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="colorLabel">
+   <property name="geometry">
+    <rect>
+     <x>29</x>
+     <y>105</y>
+     <width>36</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Color:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMarkerPen">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>100</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>50</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>Pen</string>
+   </property>
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/linecolor.png</normaloff>:/icurve/images/linecolor.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMarkerBrush">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>100</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>50</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Brush</string>
+   </property>
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/floodfill.png</normaloff>:/icurve/images/floodfill.png</iconset>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>150</y>
+     <width>160</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="typeComboBox">
+   <property name="geometry">
+    <rect>
+     <x>79</x>
+     <y>25</y>
+     <width>241</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <item>
+    <property name="text">
+     <string>Ellipse</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Rect</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Diamond</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Triangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>DTriangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>UTriangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>LTriangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>RTriangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Cross(+)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>XCross(x)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>HLine</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>VLine</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Star1</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Star2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Hexagon</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="sizeLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>65</y>
+     <width>30</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Size:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="typeLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>25</y>
+     <width>30</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>40</width>
+     <height>50</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>Type:</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="icurve.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>IcvMarkerProperty</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>IcvMarkerProperty</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

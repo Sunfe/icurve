@@ -52,11 +52,11 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(IcvPlotCurve *crv, QWidget * pare
     lineLabel = new QLabel("Line:");
     lineTypeCombox = new QComboBox(this);
     lineTypeCombox->setItemDelegate(new IcvPenStyleDelegate((QObject *)lineTypeCombox));
-    lineTypeCombox->addItem(tr("Solid")   , Qt::SolidLine);
-    lineTypeCombox->addItem(tr("Dash") , Qt::DashDotLine);
-    lineTypeCombox->addItem(tr("Dot")     , Qt::DotLine);
-    lineTypeCombox->addItem(tr("DashDot") , Qt::DashDotLine);
-    lineTypeCombox->addItem(tr("DashDotDot"),Qt::DashDotDotLine);
+    lineTypeCombox->addItem(tr("Solid"),      Qt::SolidLine);
+    lineTypeCombox->addItem(tr("Dash"),       Qt::DashDotLine);
+    lineTypeCombox->addItem(tr("Dot"),        Qt::DotLine);
+    lineTypeCombox->addItem(tr("DashDot") ,   Qt::DashDotLine);
+    lineTypeCombox->addItem(tr("DashDotDot"), Qt::DashDotDotLine);
     currentIndex = static_cast<int>(curveStyle - 1);  /*combox index stared with 0*/
     lineTypeCombox->setCurrentIndex((currentIndex));
     connect(lineTypeCombox,SIGNAL(activated(int)), this, SLOT(setCurveStyle(int)));
@@ -91,8 +91,8 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(IcvPlotCurve *crv, QWidget * pare
     markerTypeCombox->addItem("Diamond");
     markerTypeCombox->addItem("Triangle");
     markerTypeCombox->addItem("DTriangle");
-    markerTypeCombox->addItem("LTriangle");
-    markerTypeCombox->addItem("Ellipse");
+    markerTypeCombox->addItem("UTriangle");
+    markerTypeCombox->addItem("LTriangle");;
     markerTypeCombox->addItem("RTriangle");
     markerTypeCombox->addItem("Cross(+)");
     markerTypeCombox->addItem("XCross(x)");

@@ -3,9 +3,11 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication application(argc, argv);
     IcvICurve mainWin;
     mainWin.resize(800,600);
     mainWin.show();
-    return a.exec();
+
+    //application.setWindowIcon(QIcon("../images/cash-add.png"));
+    return application.exec();
 }
