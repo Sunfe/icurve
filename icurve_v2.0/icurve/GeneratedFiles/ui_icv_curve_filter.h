@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_curve_filter.ui'
 **
-** Created: Fri Jun 10 13:28:16 2016
+** Created: Fri Jun 10 18:44:05 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

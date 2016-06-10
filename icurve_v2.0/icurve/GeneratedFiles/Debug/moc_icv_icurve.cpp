@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Fri Jun 10 13:28:17 2016
+** Created: Fri Jun 10 18:44:06 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvICurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      21,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,33 +36,38 @@ static const uint qt_meta_data_IcvICurve[] = {
  // slots: signature, parameters, type, tag, flags
       46,   10,   10,   10, 0x08,
       57,   10,   10,   10, 0x08,
-      73,   10,   10,   10, 0x08,
-      89,   10,   10,   10, 0x08,
-     105,   10,   10,   10, 0x08,
-     122,   10,   10,   10, 0x08,
-     136,   10,   10,   10, 0x08,
-     150,   10,   10,   10, 0x08,
-     162,   10,   10,   10, 0x08,
-     177,   10,   10,   10, 0x08,
-     191,   10,   10,   10, 0x08,
-     206,   10,   10,   10, 0x08,
-     221,   10,   10,   10, 0x08,
-     236,   10,   10,   10, 0x08,
-     263,  251,   10,   10, 0x08,
-     292,   11,   10,   10, 0x08,
-     323,   10,   10,   10, 0x08,
+      66,   10,   10,   10, 0x08,
+      78,   10,   10,   10, 0x08,
+      94,   10,   10,   10, 0x08,
+     110,   10,   10,   10, 0x08,
+     126,   10,   10,   10, 0x08,
+     143,   10,   10,   10, 0x08,
+     157,   10,   10,   10, 0x08,
+     171,   10,   10,   10, 0x08,
+     183,   10,   10,   10, 0x08,
+     198,   10,   10,   10, 0x08,
+     212,   10,   10,   10, 0x08,
+     227,   10,   10,   10, 0x08,
+     242,   10,   10,   10, 0x08,
+     257,   10,   10,   10, 0x08,
+     275,   10,   10,   10, 0x08,
+     302,  290,   10,   10, 0x08,
+     331,   11,   10,   10, 0x08,
+     362,   10,   10,   10, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_IcvICurve[] = {
     "IcvICurve\0\0progress\0analyDataProgress(qint16)\0"
-    "openFile()\0setCurveColor()\0setCurveWidth()\0"
+    "openFile()\0saveAs()\0closePlot()\0"
+    "setCurveColor()\0setCurveWidth()\0"
     "setCurveStyle()\0setCurveMarker()\0"
     "expandCurve()\0filterCurve()\0findCurve()\0"
     "showAllCurve()\0insertTitle()\0"
     "insertXLabel()\0insertYLabel()\0"
-    "insertFooter()\0insertLegend()\0itemInfo,on\0"
+    "insertLegend()\0insertCurveName()\0"
+    "insertFooter()\0itemInfo,on\0"
     "legendChecked(QVariant,bool)\0"
     "updateAnalyProgressBar(qint16)\0"
     "cancelAnalyProgressBar()\0"
@@ -99,25 +104,28 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: analyDataProgress((*reinterpret_cast< qint16(*)>(_a[1]))); break;
         case 1: openFile(); break;
-        case 2: setCurveColor(); break;
-        case 3: setCurveWidth(); break;
-        case 4: setCurveStyle(); break;
-        case 5: setCurveMarker(); break;
-        case 6: expandCurve(); break;
-        case 7: filterCurve(); break;
-        case 8: findCurve(); break;
-        case 9: showAllCurve(); break;
-        case 10: insertTitle(); break;
-        case 11: insertXLabel(); break;
-        case 12: insertYLabel(); break;
-        case 13: insertFooter(); break;
-        case 14: insertLegend(); break;
-        case 15: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 16: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
-        case 17: cancelAnalyProgressBar(); break;
+        case 2: saveAs(); break;
+        case 3: closePlot(); break;
+        case 4: setCurveColor(); break;
+        case 5: setCurveWidth(); break;
+        case 6: setCurveStyle(); break;
+        case 7: setCurveMarker(); break;
+        case 8: expandCurve(); break;
+        case 9: filterCurve(); break;
+        case 10: findCurve(); break;
+        case 11: showAllCurve(); break;
+        case 12: insertTitle(); break;
+        case 13: insertXLabel(); break;
+        case 14: insertYLabel(); break;
+        case 15: insertLegend(); break;
+        case 16: insertCurveName(); break;
+        case 17: insertFooter(); break;
+        case 18: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 19: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 20: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 18;
+        _id -= 21;
     }
     return _id;
 }

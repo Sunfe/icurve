@@ -70,6 +70,8 @@ private:
 
     /*Qwt objects*/	
     QwtPlot *plot;
+    QwtLegend *legend;
+    QwtPlotLegendItem *legendItem;
     QwtPlotGrid *grid;
     QwtPlotMagnifier *magnifier;
     QwtSymbol *symbol;
@@ -80,6 +82,8 @@ private:
 
 private slots:
     void openFile();
+    void saveAs();
+    void closePlot();
 
     void setCurveColor(); 
     void setCurveWidth();
@@ -93,9 +97,10 @@ private slots:
     void insertTitle();
     void insertXLabel();
     void insertYLabel();
-    void insertFooter();
     void insertLegend();
-   
+    void insertCurveName();
+    void insertFooter();
+
     void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();
