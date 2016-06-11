@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Sat Jun 11 20:43:28 2016
+** Created: Sat Jun 11 11:59:55 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -44,16 +44,16 @@ static const uint qt_meta_data_IcvICurve[] = {
      143,   10,   10,   10, 0x08,
      157,   10,   10,   10, 0x08,
      171,   10,   10,   10, 0x08,
-     185,   10,   10,   10, 0x08,
-     200,   10,   10,   10, 0x08,
-     214,   10,   10,   10, 0x08,
-     229,   10,   10,   10, 0x08,
-     244,   10,   10,   10, 0x08,
-     259,   10,   10,   10, 0x08,
-     277,   10,   10,   10, 0x08,
-     304,  292,   10,   10, 0x08,
-     333,   11,   10,   10, 0x08,
-     364,   10,   10,   10, 0x08,
+     183,   10,   10,   10, 0x08,
+     198,   10,   10,   10, 0x08,
+     212,   10,   10,   10, 0x08,
+     227,   10,   10,   10, 0x08,
+     242,   10,   10,   10, 0x08,
+     257,   10,   10,   10, 0x08,
+     275,   10,   10,   10, 0x08,
+     302,  290,   10,   10, 0x08,
+     331,   11,   10,   10, 0x08,
+     362,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -63,7 +63,7 @@ static const char qt_meta_stringdata_IcvICurve[] = {
     "openFile()\0saveAs()\0closePlot()\0"
     "setCurveColor()\0setCurveWidth()\0"
     "setCurveStyle()\0setCurveMarker()\0"
-    "expandCurve()\0filterCurve()\0searchCurve()\0"
+    "expandCurve()\0filterCurve()\0findCurve()\0"
     "showAllCurve()\0insertTitle()\0"
     "insertXLabel()\0insertYLabel()\0"
     "insertLegend()\0insertCurveName()\0"
@@ -112,7 +112,7 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 7: setCurveMarker(); break;
         case 8: expandCurve(); break;
         case 9: filterCurve(); break;
-        case 10: searchCurve(); break;
+        case 10: findCurve(); break;
         case 11: showAllCurve(); break;
         case 12: insertTitle(); break;
         case 13: insertXLabel(); break;

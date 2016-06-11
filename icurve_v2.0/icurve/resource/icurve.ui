@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="icurve.qrc">
-    <normaloff>:/icurve/images/iCurve.ico</normaloff>:/icurve/images/iCurve.ico</iconset>
+    <normaloff>:/icurve/images/main.ico</normaloff>:/icurve/images/main.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
@@ -95,7 +95,7 @@
     <addaction name="actionMarker"/>
     <addaction name="actionExpand"/>
     <addaction name="actionFilter"/>
-    <addaction name="actionFind"/>
+    <addaction name="actionSearch"/>
     <addaction name="actionShowAll"/>
     <addaction name="actionReset"/>
     <addaction name="actionView_data"/>
@@ -387,7 +387,7 @@
     <string>Axse Properties</string>
    </property>
   </action>
-  <action name="actionFind">
+  <action name="actionSearch">
    <property name="text">
     <string>Search</string>
    </property>

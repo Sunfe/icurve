@@ -1,11 +1,7 @@
 <RCC>
   <qresource prefix="icurve">
     <file>../images/file_open.ico</file>
-    <file>../images/add.png</file>
-    <file>../images/cash-add.png</file>
-    <file>../images/cash-change.png</file>
-    <file>../images/cash-delete.png</file>
-    <file>../images/iCurve.ico</file>
+    <file>../images/main.ico</file>
     <file>../images/floodfill.png</file>
     <file>../images/linecolor.png</file>
   </qresource>

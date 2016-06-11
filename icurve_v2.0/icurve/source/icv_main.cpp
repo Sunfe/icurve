@@ -8,6 +8,10 @@ int main(int argc, char *argv[])
     mainWin.resize(800,600);
     mainWin.show();
 
-    //application.setWindowIcon(QIcon("../images/cash-add.png"));
+    //QString dir = QApplication::applicationDirPath();  
+    //application.setWindowIcon(QIcon(":/icurve/../images/iCurve.ico"));
+    
+    QApplication::addLibraryPath("./plugins");
     return application.exec();
 }
+

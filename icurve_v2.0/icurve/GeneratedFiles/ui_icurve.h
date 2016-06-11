@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Fri Jun 10 18:44:05 2016
+** Created: Sat Jun 11 20:42:54 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -54,7 +54,7 @@ public:
     QAction *actionMarker;
     QAction *actionFilter;
     QAction *actionAxse_Properties;
-    QAction *actionFind;
+    QAction *actionSearch;
     QAction *actionShowAll;
     QAction *actionExpand;
     QAction *actionReset;
@@ -82,7 +82,7 @@ public:
             icurveClass->setObjectName(QString::fromUtf8("icurveClass"));
         icurveClass->resize(759, 475);
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/icurve/images/iCurve.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/icurve/images/main.ico"), QSize(), QIcon::Normal, QIcon::Off);
         icurveClass->setWindowIcon(icon);
         actionOpen = new QAction(icurveClass);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
@@ -143,8 +143,8 @@ public:
         actionFilter->setCheckable(false);
         actionAxse_Properties = new QAction(icurveClass);
         actionAxse_Properties->setObjectName(QString::fromUtf8("actionAxse_Properties"));
-        actionFind = new QAction(icurveClass);
-        actionFind->setObjectName(QString::fromUtf8("actionFind"));
+        actionSearch = new QAction(icurveClass);
+        actionSearch->setObjectName(QString::fromUtf8("actionSearch"));
         actionShowAll = new QAction(icurveClass);
         actionShowAll->setObjectName(QString::fromUtf8("actionShowAll"));
         actionExpand = new QAction(icurveClass);
@@ -261,7 +261,7 @@ public:
         menuCurve->addAction(actionMarker);
         menuCurve->addAction(actionExpand);
         menuCurve->addAction(actionFilter);
-        menuCurve->addAction(actionFind);
+        menuCurve->addAction(actionSearch);
         menuCurve->addAction(actionShowAll);
         menuCurve->addAction(actionReset);
         menuCurve->addAction(actionView_data);
@@ -305,7 +305,7 @@ public:
         actionMarker->setText(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
         actionFilter->setText(QApplication::translate("icurveClass", "Filter", 0, QApplication::UnicodeUTF8));
         actionAxse_Properties->setText(QApplication::translate("icurveClass", "Axse Properties", 0, QApplication::UnicodeUTF8));
-        actionFind->setText(QApplication::translate("icurveClass", "Search", 0, QApplication::UnicodeUTF8));
+        actionSearch->setText(QApplication::translate("icurveClass", "Search", 0, QApplication::UnicodeUTF8));
         actionShowAll->setText(QApplication::translate("icurveClass", "Show All", 0, QApplication::UnicodeUTF8));
         actionExpand->setText(QApplication::translate("icurveClass", "Expand", 0, QApplication::UnicodeUTF8));
         actionReset->setText(QApplication::translate("icurveClass", "Reset", 0, QApplication::UnicodeUTF8));

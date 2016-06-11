@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="icurve"
 	ProjectGUID="{813EE3BF-3D44-43A0-8E6F-08AFF916BDB3}"
+	RootNamespace="icurve"
 	Keyword="Qt4VSv1.0"
 	TargetFrameworkVersion="0"
 	>
@@ -55,7 +56,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib qwtd.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="false"
@@ -422,6 +423,10 @@
 						Outputs=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\resource.h"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -790,6 +795,22 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\icon1.ico"
+			>
+		</File>
+		<File
+			RelativePath=".\images\icurve.ico"
+			>
+		</File>
+		<File
+			RelativePath=".\icurve.rc"
+			>
+		</File>
+		<File
+			RelativePath=".\images\main.ico"
+			>
+		</File>
 	</Files>
 	<Globals>
 		<Global

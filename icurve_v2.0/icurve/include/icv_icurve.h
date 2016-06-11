@@ -91,7 +91,7 @@ private slots:
     void setCurveMarker();
     void expandCurve();
     void filterCurve();
-    void findCurve();
+    void searchCurve();
     void showAllCurve();
 
     void insertTitle();
