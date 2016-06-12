@@ -67,7 +67,6 @@ void IcvCurveFilterDialog::accept()
         return ;
     }
 
-
     return QDialog::accept ();
 }
 

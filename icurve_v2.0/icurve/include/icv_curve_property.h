@@ -33,7 +33,7 @@ class IcvCurvePropertyDialog : public QDialog
     Q_OBJECT
 
 public:
-    IcvCurvePropertyDialog(IcvPlotCurve *crv, QWidget *parent, Qt::WindowFlags flag);
+    IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget *parent, Qt::WindowFlags flag);
     ~IcvCurvePropertyDialog();
 
 protected:
@@ -53,12 +53,14 @@ protected:
 
 private:
     QIcon createColorToolButtonIcon(const QString imageFile, QColor color);
-    QwtPlotCurve* getCurve();
-    const QwtSymbol* getSymbol();
+    QList<QwtPlotCurve*> getCurve();
+    QList<const QwtSymbol*> getSymbol();
 
     /*data member*/
 private:
-    IcvPlotCurve *curve;
+    QList<IcvPlotCurve *> curve;
+    QList<QwtPlotCurve*>  qwtCurve;
+    QList<const QwtSymbol*>  qwtSymbol;
 
     QLabel          *nameLabel;
     QLabel          *lineLabel;

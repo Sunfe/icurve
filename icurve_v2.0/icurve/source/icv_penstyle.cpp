@@ -1,16 +1,15 @@
 
-
 #include "icv_penstyle.h"
 
-IcvPenStyleDelegate::IcvPenStyleDelegate(QObject *parent) :
+IcvPenStyleDelegate::IcvPenStyleDelegate(QObject *parent):
 QAbstractItemDelegate(parent)
 {
 
 }
 
 void IcvPenStyleDelegate::paint(QPainter *painter,
-                              const QStyleOptionViewItem &option,
-                              const QModelIndex &index) const
+                                const QStyleOptionViewItem &option,
+                                const QModelIndex &index) const
 {
     QString test = index.data(Qt::DisplayRole).toString();
     Qt::PenStyle penStyle = (Qt::PenStyle)index.data(Qt::UserRole).toInt();
@@ -41,3 +40,4 @@ QSize IcvPenStyleDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     return QSize(100,30);
 }
+

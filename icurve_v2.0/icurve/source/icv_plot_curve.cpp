@@ -227,8 +227,7 @@ void IcvPlotCurve::hideMarkers()
 
 
 void IcvPlotCurve::deleteMakers()
-{
-   
+{  
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
         markers[pos]->detach();
@@ -307,7 +306,6 @@ void IcvPlotCurve::setStyle(Qt::PenStyle style)
 
 void IcvPlotCurve::setMarker(QwtSymbol::Style style)
 {
-
     for(qint16 cnt= 0; cnt < markers.count(); cnt++)
     {
         const QwtSymbol *symbol = markers.value(cnt)->symbol();
@@ -327,7 +325,6 @@ void IcvPlotCurve::setMarker(QwtSymbol::Style style)
 
 void IcvPlotCurve::setMarkerSize(qint16 size)
 {
-
     for(qint16 cnt= 0; cnt < markers.count(); cnt++)
     {
         const QwtSymbol *symbol = markers.value(cnt)->symbol();
@@ -347,7 +344,6 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
 
 void IcvPlotCurve::setMarkerColor(QBrush brush, QPen pen)
 {
-
     for(qint16 cnt= 0; cnt < markers.count(); cnt++)
     {
         const QwtSymbol *symbol = markers.value(cnt)->symbol();
@@ -387,6 +383,8 @@ void IcvPlotCurve::setGroupSize(qint16 size)
 
     return;
 }
+
+
 
 
 

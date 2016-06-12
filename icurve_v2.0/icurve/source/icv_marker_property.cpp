@@ -22,7 +22,6 @@ IcvMarkerPropertyDialog::IcvMarkerPropertyDialog(QWidget* parent)
     btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),markerPen.color()));
     connect(btnMarkerPen,SIGNAL(clicked()), this, SLOT(setMarkerPen()));
 
-
 }
 
 
@@ -81,9 +80,6 @@ QPen IcvMarkerPropertyDialog::getMarkerPen()
 {
     return markerPen;
 }
-
-
-
 
 
 void IcvMarkerPropertyDialog::accept()
