@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_curve_filter.ui'
 **
-** Created: Mon Jun 13 00:34:30 2016
+** Created: Tue Jun 14 01:04:48 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -40,33 +40,33 @@ public:
     {
         if (IcvCurveFilterDialog->objectName().isEmpty())
             IcvCurveFilterDialog->setObjectName(QString::fromUtf8("IcvCurveFilterDialog"));
-        IcvCurveFilterDialog->resize(442, 150);
+        IcvCurveFilterDialog->resize(422, 130);
         buttonBox = new QDialogButtonBox(IcvCurveFilterDialog);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(50, 110, 341, 32));
+        buttonBox->setGeometry(QRect(50, 95, 360, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         lineEdit = new QLineEdit(IcvCurveFilterDialog);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
-        lineEdit->setGeometry(QRect(80, 80, 341, 20));
+        lineEdit->setGeometry(QRect(70, 70, 341, 20));
         groupBox = new QGroupBox(IcvCurveFilterDialog);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(20, 20, 401, 51));
+        groupBox->setGeometry(QRect(10, 10, 401, 51));
         ByComandNameRadio = new QRadioButton(groupBox);
         ByComandNameRadio->setObjectName(QString::fromUtf8("ByComandNameRadio"));
-        ByComandNameRadio->setGeometry(QRect(20, 20, 89, 20));
+        ByComandNameRadio->setGeometry(QRect(14, 17, 89, 20));
         ByLineIdRadio = new QRadioButton(groupBox);
         ByLineIdRadio->setObjectName(QString::fromUtf8("ByLineIdRadio"));
-        ByLineIdRadio->setGeometry(QRect(90, 20, 80, 20));
+        ByLineIdRadio->setGeometry(QRect(84, 17, 80, 20));
         ByDirectionRadio = new QRadioButton(groupBox);
         ByDirectionRadio->setObjectName(QString::fromUtf8("ByDirectionRadio"));
-        ByDirectionRadio->setGeometry(QRect(170, 20, 89, 20));
+        ByDirectionRadio->setGeometry(QRect(166, 17, 89, 20));
         ByCompleteComandRadio = new QRadioButton(groupBox);
         ByCompleteComandRadio->setObjectName(QString::fromUtf8("ByCompleteComandRadio"));
-        ByCompleteComandRadio->setGeometry(QRect(270, 20, 121, 20));
+        ByCompleteComandRadio->setGeometry(QRect(268, 17, 121, 20));
         label = new QLabel(IcvCurveFilterDialog);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(20, 80, 54, 12));
+        label->setGeometry(QRect(10, 70, 54, 12));
 
         retranslateUi(IcvCurveFilterDialog);
         QObject::connect(buttonBox, SIGNAL(accepted()), IcvCurveFilterDialog, SLOT(accept()));

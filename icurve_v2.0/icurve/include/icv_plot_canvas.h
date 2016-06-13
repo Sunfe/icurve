@@ -41,10 +41,13 @@ public:
 
     QList<IcvPlotCurve *> getCurves();
     void setCurves(QList<IcvPlotCurve *> crvs);
+    void setCurSelectCurves(QList<IcvPlotCurve *> crvs);
     void initCurves();
     void updateCurves();
     void lookforCurves();
     void appendCurves(IcvPlotCurve *curve);
+    void clearCurves(QList<IcvPlotCurve *> crvs);
+    void clearSelectCurves();
     void clearAllCurves();
     QList<IcvPlotCurve*> getSelectedCurve();
     void deleteCurve(QList<IcvPlotCurve*> crv);

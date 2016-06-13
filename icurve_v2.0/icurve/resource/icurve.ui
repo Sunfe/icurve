@@ -50,9 +50,15 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
-    <addaction name="actionClear"/>
-    <addaction name="actionSelect_all"/>
+    <addaction name="actionReset"/>
     <addaction name="separator"/>
+    <addaction name="actionRemove"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionShowAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelectAll"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -73,6 +79,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionCalc"/>
+    <addaction name="actionDiffer"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
@@ -95,9 +102,6 @@
     <addaction name="actionMarker"/>
     <addaction name="actionExpand"/>
     <addaction name="actionFilter"/>
-    <addaction name="actionSearch"/>
-    <addaction name="actionShowAll"/>
-    <addaction name="actionReset"/>
     <addaction name="actionView_data"/>
     <addaction name="actionLocate_to_file"/>
    </widget>
@@ -252,6 +256,9 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -262,43 +269,59 @@
    </property>
   </action>
   <action name="actionDo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Undo</string>
    </property>
   </action>
   <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Redo</string>
    </property>
   </action>
   <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Cut</string>
    </property>
   </action>
   <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
   </action>
   <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Paste</string>
    </property>
   </action>
-  <action name="actionClear">
+  <action name="actionRemove">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Clear</string>
+    <string>Remove</string>
    </property>
   </action>
-  <action name="actionSelect_all">
+  <action name="actionSelectAll">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Select All</string>
-   </property>
-  </action>
-  <action name="actionAxsi">
-   <property name="text">
-    <string>Find</string>
    </property>
   </action>
   <action name="actionX_label">
@@ -317,6 +340,9 @@
    </property>
   </action>
   <action name="actionClose">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Close</string>
    </property>
@@ -334,16 +360,6 @@
   <action name="actionWidth">
    <property name="text">
     <string>Width</string>
-   </property>
-  </action>
-  <action name="actionType">
-   <property name="text">
-    <string>Type</string>
-   </property>
-  </action>
-  <action name="actionSize">
-   <property name="text">
-    <string>Size</string>
    </property>
   </action>
   <action name="actionLegend">
@@ -384,12 +400,12 @@
   </action>
   <action name="actionAxse_Properties">
    <property name="text">
-    <string>Axse Properties</string>
+    <string>Axse</string>
    </property>
   </action>
-  <action name="actionSearch">
+  <action name="actionFind">
    <property name="text">
-    <string>Search</string>
+    <string>Find</string>
    </property>
   </action>
   <action name="actionShowAll">
@@ -402,17 +418,18 @@
     <string>Expand</string>
    </property>
   </action>
-  <action name="actionReset">
-   <property name="text">
-    <string>Reset</string>
-   </property>
-  </action>
   <action name="actionView_data">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>View data</string>
    </property>
   </action>
   <action name="actionLocate_to_file">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Jump to file</string>
    </property>
@@ -432,10 +449,28 @@
     <bool>true</bool>
    </property>
    <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="text">
     <string>Curve Name</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionDiffer">
+   <property name="text">
+    <string>Differ</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
    </property>
   </action>
  </widget>

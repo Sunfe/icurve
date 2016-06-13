@@ -81,19 +81,27 @@ private:
     bool isDataAnalyCanceled;
 
 private slots:
+    /*file menu slots*/
     void openFile();
     void saveAs();
     void closePlot();
 
+    /*edit menu slots*/
+    void removeCurve();
+    void deleteCurve();
+    void findCurve();
+    void showAllCurve();
+    void selectAllCurve();
+
+    /*curve menu slots*/
     void setCurveColor(); 
     void setCurveWidth();
     void setCurveStyle();
     void setCurveMarker();
     void expandCurve();
     void filterCurve();
-    void searchCurve();
-    void showAllCurve();
 
+    /*insert menu slots*/
     void insertTitle();
     void insertXLabel();
     void insertYLabel();
@@ -104,7 +112,6 @@ private slots:
     void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();
-
 
 signals:
     void analyDataProgress(qint16 progress);
