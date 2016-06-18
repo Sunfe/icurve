@@ -16,7 +16,9 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     connect(ByComandNameRadio,     SIGNAL(clicked()), this, SLOT(setFilterType())); 
     connect(ByLineIdRadio,         SIGNAL(clicked()), this, SLOT(setFilterType())); 
     connect(ByDirectionRadio,      SIGNAL(clicked()), this, SLOT(setFilterType())); 
-
+    connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
+    connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
+    
     filterType = ICV_BY_COMANDNAME;
 
 }
@@ -67,11 +69,22 @@ void IcvCurveFilterDialog::accept()
         return ;
     }
 
+    if(previewCheckBox->checkState() == Qt::Checked )
+    {
+        emit previewSignal(filterType, lineEdit->text());
+        return ;
+    }
+
     return QDialog::accept ();
 }
 
 
 void IcvCurveFilterDialog::reject()
 {
+    if(previewCheckBox->checkState() == Qt::Checked )
+    {
+        emit recoverPreviewSignal();
+    }
+
   return QDialog::reject ();
 }

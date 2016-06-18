@@ -30,6 +30,9 @@ private slots:
 private:
     qint16 filterType;
 
+signals:
+    void previewSignal(qint16 filterType, QString keyword);
+    void recoverPreviewSignal();
 };
 
 #endif

@@ -15,11 +15,13 @@ IcvMarkerPropertyDialog::IcvMarkerPropertyDialog(QWidget* parent)
     sizeLineEdit->setFocus();
     
     /*marker bush*/
-    btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),markerBrush.color()));
+    btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),
+                            markerBrush.color()));
     connect(btnMarkerBrush,SIGNAL(clicked()), this, SLOT(setMarkerBush()));
 
     /*marker pen*/
-    btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),markerPen.color()));
+    btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),
+                          markerPen.color()));
     connect(btnMarkerPen,SIGNAL(clicked()), this, SLOT(setMarkerPen()));
 
 }
@@ -34,18 +36,18 @@ IcvMarkerPropertyDialog::~IcvMarkerPropertyDialog()
 void IcvMarkerPropertyDialog::setMarkerBush()
 {
     QColor colorUsing = markerBrush.color();
-    QColor color = QColorDialog::getColor(colorUsing,this,tr("Select color"));
+    QColor      color = QColorDialog::getColor(colorUsing,this,tr("Select color"));
     markerBrush = QBrush(color);
     btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),color));
 
-    return ;
+    return;
 }
 
 
 void IcvMarkerPropertyDialog::setMarkerPen()
 {
     QColor colorUsing = markerPen.color();
-    QColor color = QColorDialog::getColor(colorUsing,this,tr("Select color"));
+    QColor      color = QColorDialog::getColor(colorUsing,this,tr("Select color"));
     markerPen = QPen(color);
     btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),color));
 
@@ -111,3 +113,5 @@ void IcvMarkerPropertyDialog::reject()
 {
   return QDialog::reject ();
 }
+
+

@@ -1,4 +1,4 @@
-/* qt header */
+﻿/* qt header */
 #include <qapplication.h>
 #include <qevent.h>
 #include <QtGlobal>
@@ -89,7 +89,6 @@ qint16 IcvPlotCurve::getDataPos()
 void IcvPlotCurve::setDataPos(qint16 pos)
 {
     dataPosition = pos;
-
     return ;
 }
 
@@ -103,7 +102,6 @@ qint16 IcvPlotCurve::getActivateState()
 void IcvPlotCurve::setActivateState(qint16 state)
 {
     activateState = state;
-
     return ;
 }
 
@@ -116,7 +114,7 @@ void IcvPlotCurve::showCurve()
         showMarkers();
     }
 
-    return ;
+    return;
 }
 
 
@@ -131,14 +129,14 @@ void IcvPlotCurve::hideCurve()
         markers[pos]->detach();
     }
 
-    return ;
+    return;
 }
 
 
 void IcvPlotCurve::deleteCurve()
 {
     if(curve == NULL)
-        return ;
+        return;
 
     curve->detach();
     delete curve;
@@ -150,7 +148,7 @@ void IcvPlotCurve::deleteCurve()
     }
     markers.clear();
  
-    return ;
+    return;
 }
 
 
@@ -222,7 +220,7 @@ void IcvPlotCurve::hideMarkers()
 
     showMarkerState = ICV_CURVE_HIDE_MARKER;
 
-    return ;
+    return;
 }
 
 
@@ -235,7 +233,7 @@ void IcvPlotCurve::deleteMakers()
     }
     markers.clear();
 
-    return ;
+    return;
 }
 
 
@@ -244,7 +242,7 @@ void IcvPlotCurve::updateMakers()
     deleteMakers();  /* delete previous markers */
     setMarkers();    /* set new markers */
     
-    return ;
+    return;
 }
 
 
@@ -258,7 +256,7 @@ void IcvPlotCurve::setShowMarkerState(qint16 state)
 {
     showMarkerState = state;
 
-    return ;
+    return;
 }
 
 
@@ -280,7 +278,7 @@ void IcvPlotCurve::setColor(QColor color)
         }
     }
 
-    return ;
+    return;
 }
 
 
@@ -290,7 +288,7 @@ void IcvPlotCurve::setWidth(qint16 width)
     pen.setWidth(width);
     curve->setPen(pen);
 
-    return ;
+    return;
 }
 
 
@@ -300,7 +298,7 @@ void IcvPlotCurve::setStyle(Qt::PenStyle style)
     pen.setStyle(style);
     curve->setPen(pen);
 
-    return ;
+    return;
 }
 
 
@@ -319,7 +317,7 @@ void IcvPlotCurve::setMarker(QwtSymbol::Style style)
         }
     }
 
-    return ;
+    return;
 }
 
 
@@ -338,7 +336,7 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
         }
     }
 
-    return ;
+    return;
 }
 
 
@@ -355,7 +353,7 @@ void IcvPlotCurve::setMarkerColor(QBrush brush, QPen pen)
         }
     }
 
-    return ;
+    return;
 }
 
 
@@ -386,8 +384,39 @@ void IcvPlotCurve::setGroupSize(qint16 size)
 
 
 
+void IcvPlotCurve::boldTitle(bool enable)
+{
+    if(curve == NULL)
+        return;
+
+    QwtText titleCur = curve->title();
+    QFont font = titleCur.font();
+    if(enable)
+    {
+        font.setWeight(QFont::Bold);
+        font.setStyle(QFont::StyleItalic);
+        titleCur.setFont(font);
+    }
+    else
+    {
+        font.setWeight(QFont::Normal);
+        font.setStyle(QFont::StyleNormal);
+        titleCur.setFont(font);
+    }
+
+    curve->setTitle(titleCur);
+    return;
+}
 
 
+void IcvPlotCurve::setCommand(IcvCommand cmd)
+{
+    command = cmd;
+    return;
+}
 
-
+IcvCommand IcvPlotCurve::getCommand()
+{
+    return command;
+}
 

@@ -1,5 +1,5 @@
 icurve
-=
+==
 
 1. 版本   
    > qt4.7.3 + qwt6.1.3
@@ -11,13 +11,20 @@ icurve
    - curve filter [done]
    - legend checkable [done]
    - 支持多曲线操作 [done]
-   - curve finder 
+   - curve finder  [done]
    - axse  range
    - 点击curve的时候curve title,legend也要做相应的变化
    - 鼠标放到curve上的做曲线信息提示。
    - 鼠标拖放文件打开功能
    - 支持多tab
    - filter支持关键字
+   - 增加曲线取点[done]
+   - 信息提示，包括在文件中的位置，显示该命令在文件中对应的一行
+   - 查找支持均值、峰值最大最小，平均波动最大，最小
+   - 支持部分xdsl参数的估算
+   - 查找、filter的时候增加预览
+   - 曲线增加树形分组
+   - 加入recent file
 
 
 1. bugs

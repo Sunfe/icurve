@@ -23,6 +23,7 @@ class QwtPlot;
 class QPolygonF;
 class QwtPlotCurve;
 class IcvICurve;
+class IcvPlotCurve;
 
 class IcvPlotCanvas : public QWidget
 {

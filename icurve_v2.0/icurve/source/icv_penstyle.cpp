@@ -1,4 +1,3 @@
-
 #include "icv_penstyle.h"
 
 IcvPenStyleDelegate::IcvPenStyleDelegate(QObject *parent):
@@ -32,11 +31,13 @@ void IcvPenStyleDelegate::paint(QPainter *painter,
 
     if(option.state & QStyle::State_Selected)
         painter->restore();
+
+    return;
 }
 
 
 QSize IcvPenStyleDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                  const QModelIndex &index) const
+                                    const QModelIndex &index) const
 {
     return QSize(100,30);
 }

@@ -49,6 +49,7 @@ public:
     void deleteCurve();
     void showCurve();
     void hideCurve();
+    void boldTitle(bool enable);
 
     void setMarkers();
     QList<QwtPlotMarker *> getMarkers();
@@ -67,13 +68,18 @@ public:
     void setMarkerColor(QBrush brush, QPen pen);
     void setGroupSize(qint16 size);
 
+    void setCommand(IcvCommand cmd);
+    IcvCommand getCommand();
+
 private:
     QwtPlotCurve  *curve;
     IcvPlotCanvas *canvas;
     QList<QwtPlotMarker *> markers;
     qint16         dataPosition;        /* the postion in QList data repository */
+
     qint16         activateState ;
     qint16         showMarkerState;
+    IcvCommand     command;
 
 };
 

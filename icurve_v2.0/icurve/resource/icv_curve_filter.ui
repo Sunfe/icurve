@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>130</height>
+    <width>371</width>
+    <height>139</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,11 +16,14 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>95</y>
-     <width>360</width>
+     <x>190</x>
+     <y>103</y>
+     <width>171</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="locale">
+    <locale language="English" country="UnitedStates"/>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -34,7 +37,7 @@
     <rect>
      <x>70</x>
      <y>70</y>
-     <width>341</width>
+     <width>291</width>
      <height>20</height>
     </rect>
    </property>
@@ -44,7 +47,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>401</width>
+     <width>351</width>
      <height>51</height>
     </rect>
    </property>
@@ -61,46 +64,46 @@
      </rect>
     </property>
     <property name="text">
-     <string>by name</string>
+     <string>Name</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="ByLineIdRadio">
     <property name="geometry">
      <rect>
-      <x>84</x>
+      <x>70</x>
       <y>17</y>
       <width>80</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>by lineId</string>
+     <string>Line id</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="ByDirectionRadio">
     <property name="geometry">
      <rect>
-      <x>166</x>
+      <x>140</x>
       <y>17</y>
       <width>89</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>by direction</string>
+     <string>Direction</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="ByCompleteComandRadio">
     <property name="geometry">
      <rect>
-      <x>268</x>
+      <x>220</x>
       <y>17</y>
       <width>121</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>complete command</string>
+     <string>Complete command</string>
     </property>
    </widget>
   </widget>
@@ -115,6 +118,32 @@
    </property>
    <property name="text">
     <string>Keywords:</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="previewCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>110</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Preview</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>112</y>
+     <width>72</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>In All</string>
    </property>
   </widget>
  </widget>

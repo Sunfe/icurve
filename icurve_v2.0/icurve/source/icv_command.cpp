@@ -105,10 +105,12 @@ QList<QPointF> IcvCommand::getData()
     return data;
 }
 
+
 QStringList IcvCommand::getFamily()
 {
     return family;
 }
+
 
 void IcvCommand::setFamily(QStringList cmdFamily)
 {
@@ -117,10 +119,47 @@ void IcvCommand::setFamily(QStringList cmdFamily)
 }
 
 
+void IcvCommand::setDataPosInFile(qint16 pos)
+{
+    dataPosInFile = pos;
+    return;
+}
+
+
+qint16 IcvCommand::getDataPosInFile()
+{
+   return dataPosInFile;
+}
+
+
+void IcvCommand::setBriefInfo(QString info)
+{
+    briefInfo = info;
+    return ;
+}
+
+
+QString IcvCommand::getBriefInfo()
+{
+     return briefInfo;
+}
+
+
 void IcvCommand::setState(qint16 cmdState)
 {
     state = cmdState;
-    return ;
+    return;
+}
+
+
+void IcvCommand::setFileName(QString name)
+{
+    fileName = name;
+}
+
+QString IcvCommand::getFileName()
+{
+    return fileName;
 }
 
 
@@ -132,8 +171,11 @@ qint16 IcvCommand::getState()
 
 QString IcvCommand::getCommandTitle()
 {
-    QString title;
-    title = name.remove("get") +".line" + QString::number(lineId) \
-        + ((direction == 0)? ".US": ".DS");
+    QString lineIdStr = QString::number(lineId);
+    QString    title  = name.remove("get") +".line " +  lineIdStr +\
+        ((direction == 0)? ".US": ".DS");
+
     return title;
 }
+
+

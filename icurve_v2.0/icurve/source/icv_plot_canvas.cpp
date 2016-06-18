@@ -1,4 +1,4 @@
-#include <qapplication.h>
+﻿#include <qapplication.h>
 #include <qevent.h>
 #include <QtGlobal>
 #include <QLine>
@@ -171,6 +171,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
             continue;
 
         prevSelectedCurve[cnt]->hideMarkers();
+        prevSelectedCurve[cnt]->boldTitle(false);
     }
 
     /*try to retrieve the closest curves*/
@@ -197,6 +198,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
             continue;
 
         curSelectedCurve[cnt]->showMarkers();
+        curSelectedCurve[cnt]->boldTitle(true);
     }
 
     prevSelectedCurve = curSelectedCurve;
@@ -259,6 +261,7 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
             continue;
 
         curSelectedCurve[cnt]->showMarkers();
+        curSelectedCurve[cnt]->boldTitle(true);
     }
     prevSelectedCurve = curSelectedCurve;
 
@@ -305,7 +308,7 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
         }
     }
 
-    return ;
+    return;
 }
 
 
@@ -442,14 +445,14 @@ void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
         prevSelectedCurve.removeAll(crv[cnt]);
     }
 
-    return ;
+    return;
 }
 
 
 void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
 {
     if(0 == crv.count())
-        return ;
+        return;
 
     for(qint16 cnt = 0; cnt < crv.count(); cnt++)
     {
@@ -464,7 +467,7 @@ void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
 
-    return ;
+    return;
 }
 
 
@@ -487,7 +490,7 @@ void IcvPlotCanvas::setCurveColor()
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
 
-    return  ;
+    return;
 }
 
 
@@ -518,7 +521,7 @@ void IcvPlotCanvas::setCurveWidth(QAction *action)
     action->setCheckable(true);
     action->setChecked(true);
 
-    return ;
+    return;
 }
 
 
@@ -532,7 +535,7 @@ void IcvPlotCanvas::setCurveStyle(QAction *action)
     bool ok;
     Qt::PenStyle style = static_cast<Qt::PenStyle>(action->data().toInt(&ok));
     if(!ok)
-        return ;
+        return;
 
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
@@ -550,7 +553,7 @@ void IcvPlotCanvas::setCurveStyle(QAction *action)
     action->setCheckable(true);
     action->setChecked(true);
 
-    return ;
+    return;
 }
 
 
@@ -564,7 +567,7 @@ void IcvPlotCanvas::setCurveMarker(QAction *action)
     bool ok;
     QwtSymbol::Style symStyle = static_cast<QwtSymbol::Style>(action->data().toInt(&ok));
     if(!ok)
-        return ;
+        return;
 
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
@@ -581,7 +584,7 @@ void IcvPlotCanvas::setCurveMarker(QAction *action)
     action->setCheckable(true);
     action->setChecked(true);
 
-    return ;
+    return;
 }
 
 
@@ -595,7 +598,7 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
     bool ok;
     qint16 size = action->data().toInt(&ok);
     if(!ok)
-        return ;
+        return;
 
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
@@ -612,7 +615,7 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
     action->setCheckable(true);
     action->setChecked(true);
 
-    return ;
+    return;
 }
 
 
@@ -667,7 +670,7 @@ void IcvPlotCanvas::lockMagnifier()
     if(NULL != mainWin)
         mainWin->getMagnifier()->setEnabled(false);
 
-    return ;
+    return;
 }
 
 
@@ -676,7 +679,7 @@ void IcvPlotCanvas::unlockMagnifier()
     if(NULL != mainWin)
         mainWin->getMagnifier()->setEnabled(true);
 
-    return ;
+    return;
 }
 
 
@@ -710,8 +713,7 @@ void IcvPlotCanvas::createCurvePopMenu()
 
     crvSelPopMenu->addAction(propertySetAction);
 
-
-    return ;
+    return;
 }
 
 
@@ -844,7 +846,7 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     propertySetAction->setStatusTip("set curve properties");
     connect(propertySetAction,SIGNAL(triggered()),this,SLOT(setCurveProperty()));
 
-    return ;
+    return;
 }
 
 

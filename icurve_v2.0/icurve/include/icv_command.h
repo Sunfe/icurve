@@ -39,6 +39,16 @@ public:
     void setState(qint16 cmdState);
     qint16 getState();
     
+    void setDataPosInFile(qint16 pos);
+    qint16  getDataPosInFile();
+
+    void setBriefInfo(QString info);
+    QString getBriefInfo();
+
+    void setFileName(QString name);
+    QString getFileName();
+
+
     QString getCommandTitle();
 
 private:
@@ -48,7 +58,9 @@ private:
     qint16 lineId;
     qint16 direction;
     qint16 state;
-
+    QString fileName;
+    qint16 dataPosInFile;
+    QString briefInfo;
 };
 
 #endif 

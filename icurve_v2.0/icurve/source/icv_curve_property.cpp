@@ -8,8 +8,6 @@
 IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget * parent,
     Qt::WindowFlags flag) : QDialog(parent,flag)
 {
-    int currentIndex = 0;
-
     if(crv.count() == 0)
         return;
 
@@ -69,8 +67,8 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     lineTypeCombox->addItem(tr("Dot"),        Qt::DotLine);
     lineTypeCombox->addItem(tr("DashDot") ,   Qt::DashDotLine);
     lineTypeCombox->addItem(tr("DashDotDot"), Qt::DashDotDotLine);
-    currentIndex = static_cast<int>(curveStyle - 1);  /*combox index stared with 0*/
-    lineTypeCombox->setCurrentIndex((currentIndex));
+    /*combox index stared with 0 while pen style start from 1*/
+    lineTypeCombox->setCurrentIndex((static_cast<int>(curveStyle - 1)));
     connect(lineTypeCombox,SIGNAL(activated(int)), this, SLOT(setCurveStyle(int)));
 
     curveWidthCombox = new QComboBox(this);
@@ -111,8 +109,8 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     markerTypeCombox->addItem("Star1");
     markerTypeCombox->addItem("Star2");
     markerTypeCombox->addItem("Hexagon");
-    currentIndex = static_cast<int>( markerStyle + 1 );
-    markerTypeCombox->setCurrentIndex((currentIndex));
+    /*combox index stared with 0 compliant with marker style, but there is 'none' */
+    markerTypeCombox->setCurrentIndex((static_cast<int>(markerStyle + 1)));
     connect(markerTypeCombox,SIGNAL(activated(int)), this, SLOT(setMarkerStyle(int)));
 
     /*marker size*/
@@ -257,7 +255,7 @@ void IcvCurvePropertyDialog::accept()
         for(qint16 pos= 0; pos < markers.count(); pos++)
         {    
             markers[pos]->setSymbol(new QwtSymbol(markerStyle, markerBrush,
-                markerPen, markerSize));
+                                    markerPen, markerSize));
         }
     }
 
@@ -325,7 +323,7 @@ void IcvCurvePropertyDialog::setCurveColor()
         return;
 
     QColor curColor = getCurve().at(0)->pen().color();
-    QColor color = QColorDialog::getColor(curColor,this,tr("Select color"));
+    QColor color    = QColorDialog::getColor(curColor,this,tr("Select color"));
     btnLineColor->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),color));
     curveColor = color;
 
@@ -343,8 +341,8 @@ void IcvCurvePropertyDialog::setMarkerStyle(int indexSel)
 void IcvCurvePropertyDialog::setMarkerBush()
 {
     QColor curColor = markerBrush.color();
-    QColor color = QColorDialog::getColor(curColor,this,tr("Select color"));
-    markerBrush = QBrush(color);
+    QColor    color = QColorDialog::getColor(curColor,this,tr("Select color"));
+    markerBrush     = QBrush(color);
     btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),color));
 
     return ;
@@ -354,8 +352,8 @@ void IcvCurvePropertyDialog::setMarkerBush()
 void IcvCurvePropertyDialog::setMarkerPen()
 {
     QColor curColor = markerPen.color();
-    QColor color = QColorDialog::getColor(curColor,this,tr("Select color"));
-    markerPen = QPen(color);
+    QColor    color = QColorDialog::getColor(curColor,this,tr("Select color"));
+    markerPen       = QPen(color);
     btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),color));
 
     return ;

@@ -26,6 +26,10 @@
 #include <qwt_plot_layout.h>
 #include <qwt_plot_legenditem.h>
 #include <qwt_plot_grid.h>
+#include <qwt_plot_picker.h>
+#include <qwt_plot_panner.h>
+#include <qwt_picker_machine.h>
+#include <qwt_plot_zoomer.h>
 
 #include "ui_icurve.h"
 #include "ui_icv_curve_filter.h"
@@ -74,6 +78,9 @@ private:
     QwtPlotLegendItem *legendItem;
     QwtPlotGrid *grid;
     QwtPlotMagnifier *magnifier;
+    QwtPlotPicker *picker;
+    QwtPlotPanner *panner;
+    QwtPlotZoomer *zoomer;
     QwtSymbol *symbol;
     
     IcvPlotCanvas *plotCanvas;
@@ -87,6 +94,9 @@ private slots:
     void closePlot();
 
     /*edit menu slots*/
+    void cutCurve();
+    void copyCurve();
+    void pasteCurve();
     void removeCurve();
     void deleteCurve();
     void findCurve();
@@ -100,6 +110,9 @@ private slots:
     void setCurveMarker();
     void expandCurve();
     void filterCurve();
+    void filterCurvePreview(qint16 type, QString keyword);
+    void recoverCurveVisible();
+    void showCurveInfo();
 
     /*insert menu slots*/
     void insertTitle();
@@ -108,6 +121,7 @@ private slots:
     void insertLegend();
     void insertCurveName();
     void insertFooter();
+    void insertIndicator();
 
     void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
@@ -115,6 +129,7 @@ private slots:
 
 signals:
     void analyDataProgress(qint16 progress);
+    void displayCurveInfoSignal(QString name, QString position, QString lineInfo);
 
 };
 

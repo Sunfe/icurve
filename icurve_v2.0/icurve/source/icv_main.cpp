@@ -1,5 +1,6 @@
 #include "icv_icurve.h"
 #include <QtGui/QApplication>
+#include <QClipboard>
 
 int main(int argc, char *argv[])
 {

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Tue Jun 14 01:04:48 2016
+** Created: Sun Jun 19 02:35:42 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -62,6 +62,12 @@ public:
     QAction *actionDelete;
     QAction *actionDiffer;
     QAction *actionReset;
+    QAction *actionZoom;
+    QAction *actionIndicator;
+    QAction *actionCopy_plot;
+    QAction *actionTree;
+    QAction *actionInfo;
+    QAction *actionSelect_Reverse;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -72,6 +78,8 @@ public:
     QMenu *menuHelp_2;
     QMenu *menuCurve;
     QMenu *menuOptions;
+    QMenu *menuAxse;
+    QMenu *menuView;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -101,13 +109,13 @@ public:
         actionRedo->setEnabled(false);
         actionCut = new QAction(icurveClass);
         actionCut->setObjectName(QString::fromUtf8("actionCut"));
-        actionCut->setEnabled(false);
+        actionCut->setEnabled(true);
         actionCopy = new QAction(icurveClass);
         actionCopy->setObjectName(QString::fromUtf8("actionCopy"));
-        actionCopy->setEnabled(false);
+        actionCopy->setEnabled(true);
         actionPaste = new QAction(icurveClass);
         actionPaste->setObjectName(QString::fromUtf8("actionPaste"));
-        actionPaste->setEnabled(false);
+        actionPaste->setEnabled(true);
         actionRemove = new QAction(icurveClass);
         actionRemove->setObjectName(QString::fromUtf8("actionRemove"));
         actionRemove->setEnabled(true);
@@ -172,6 +180,19 @@ public:
         actionDiffer->setObjectName(QString::fromUtf8("actionDiffer"));
         actionReset = new QAction(icurveClass);
         actionReset->setObjectName(QString::fromUtf8("actionReset"));
+        actionZoom = new QAction(icurveClass);
+        actionZoom->setObjectName(QString::fromUtf8("actionZoom"));
+        actionIndicator = new QAction(icurveClass);
+        actionIndicator->setObjectName(QString::fromUtf8("actionIndicator"));
+        actionCopy_plot = new QAction(icurveClass);
+        actionCopy_plot->setObjectName(QString::fromUtf8("actionCopy_plot"));
+        actionTree = new QAction(icurveClass);
+        actionTree->setObjectName(QString::fromUtf8("actionTree"));
+        actionInfo = new QAction(icurveClass);
+        actionInfo->setObjectName(QString::fromUtf8("actionInfo"));
+        actionInfo->setEnabled(true);
+        actionSelect_Reverse = new QAction(icurveClass);
+        actionSelect_Reverse->setObjectName(QString::fromUtf8("actionSelect_Reverse"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -194,6 +215,10 @@ public:
         menuCurve->setObjectName(QString::fromUtf8("menuCurve"));
         menuOptions = new QMenu(menuBar);
         menuOptions->setObjectName(QString::fromUtf8("menuOptions"));
+        menuAxse = new QMenu(menuBar);
+        menuAxse->setObjectName(QString::fromUtf8("menuAxse"));
+        menuView = new QMenu(menuBar);
+        menuView->setObjectName(QString::fromUtf8("menuView"));
         icurveClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(icurveClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -231,7 +256,9 @@ public:
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
         menuBar->addAction(menuCurve->menuAction());
+        menuBar->addAction(menuAxse->menuAction());
         menuBar->addAction(menuHelp->menuAction());
+        menuBar->addAction(menuView->menuAction());
         menuBar->addAction(menuTools->menuAction());
         menuBar->addAction(menuOptions->menuAction());
         menuBar->addAction(menuWindows->menuAction());
@@ -243,11 +270,13 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionClose);
         menuFile->addAction(actionExit);
+        menuFile->addAction(actionPreference);
         menuEdit->addAction(actionDo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
         menuEdit->addAction(actionCut);
         menuEdit->addAction(actionCopy);
+        menuEdit->addAction(actionCopy_plot);
         menuEdit->addAction(actionPaste);
         menuEdit->addSeparator();
         menuEdit->addAction(actionReset);
@@ -259,6 +288,7 @@ public:
         menuEdit->addAction(actionShowAll);
         menuEdit->addSeparator();
         menuEdit->addAction(actionSelectAll);
+        menuEdit->addAction(actionSelect_Reverse);
         menuHelp->addAction(actionTitle);
         menuHelp->addAction(actionX_label);
         menuHelp->addAction(actionY_label);
@@ -268,6 +298,7 @@ public:
         menuHelp->addAction(actionCurveName);
         menuHelp->addSeparator();
         menuHelp->addAction(actionFooter);
+        menuHelp->addAction(actionIndicator);
         menuTools->addAction(actionCalc);
         menuTools->addAction(actionDiffer);
         menuHelp_2->addAction(actionAbout);
@@ -279,8 +310,9 @@ public:
         menuCurve->addAction(actionFilter);
         menuCurve->addAction(actionView_data);
         menuCurve->addAction(actionLocate_to_file);
-        menuOptions->addAction(actionPreference);
-        menuOptions->addAction(actionAxse_Properties);
+        menuCurve->addAction(actionInfo);
+        menuView->addAction(actionZoom);
+        menuView->addAction(actionTree);
         mainToolBar->addAction(actionOpen);
 
         retranslateUi(icurveClass);
@@ -326,6 +358,12 @@ public:
         actionDelete->setText(QApplication::translate("icurveClass", "Delete", 0, QApplication::UnicodeUTF8));
         actionDiffer->setText(QApplication::translate("icurveClass", "Differ", 0, QApplication::UnicodeUTF8));
         actionReset->setText(QApplication::translate("icurveClass", "Reset", 0, QApplication::UnicodeUTF8));
+        actionZoom->setText(QApplication::translate("icurveClass", "Zoom", 0, QApplication::UnicodeUTF8));
+        actionIndicator->setText(QApplication::translate("icurveClass", "Indicator", 0, QApplication::UnicodeUTF8));
+        actionCopy_plot->setText(QApplication::translate("icurveClass", "Copy Plot", 0, QApplication::UnicodeUTF8));
+        actionTree->setText(QApplication::translate("icurveClass", "Tree", 0, QApplication::UnicodeUTF8));
+        actionInfo->setText(QApplication::translate("icurveClass", "Information", 0, QApplication::UnicodeUTF8));
+        actionSelect_Reverse->setText(QApplication::translate("icurveClass", "Select Reverse", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));
@@ -334,6 +372,8 @@ public:
         menuHelp_2->setTitle(QApplication::translate("icurveClass", "Help", 0, QApplication::UnicodeUTF8));
         menuCurve->setTitle(QApplication::translate("icurveClass", "Curve", 0, QApplication::UnicodeUTF8));
         menuOptions->setTitle(QApplication::translate("icurveClass", "Options", 0, QApplication::UnicodeUTF8));
+        menuAxse->setTitle(QApplication::translate("icurveClass", "Axse", 0, QApplication::UnicodeUTF8));
+        menuView->setTitle(QApplication::translate("icurveClass", "View", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
