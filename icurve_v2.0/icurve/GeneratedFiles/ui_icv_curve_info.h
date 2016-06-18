@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_curve_info.ui'
 **
-** Created: Sun Jun 19 02:35:42 2016
+** Created: Sun Jun 19 02:46:03 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -58,7 +58,7 @@ public:
         label_2->setGeometry(QRect(20, 53, 91, 21));
         label_3 = new QLabel(IcvCurveInfo);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(20, 150, 71, 31));
+        label_3->setGeometry(QRect(20, 150, 81, 31));
         line = new QFrame(IcvCurveInfo);
         line->setObjectName(QString::fromUtf8("line"));
         line->setGeometry(QRect(20, 40, 431, 16));

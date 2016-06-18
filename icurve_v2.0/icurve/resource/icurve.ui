@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="icurve.qrc">
-    <normaloff>:/icurve/images/main.ico</normaloff>:/icurve/images/main.ico</iconset>
+    <normaloff>:/icurve/images/icurve.ico</normaloff>:/icurve/images/icurve.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">

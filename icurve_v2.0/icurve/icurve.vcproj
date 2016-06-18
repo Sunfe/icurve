@@ -896,10 +896,6 @@
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\icon1.ico"
-			>
-		</File>
-		<File
 			RelativePath=".\images\icurve.ico"
 			>
 		</File>
