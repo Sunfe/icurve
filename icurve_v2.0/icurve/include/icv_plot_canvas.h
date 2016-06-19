@@ -55,7 +55,7 @@ public:
     void highlightCurve(QList<IcvPlotCurve*> crv);
     void lockMagnifier();
     void unlockMagnifier();
-
+    void setZoomState(bool state);
     void createCurvePopMenu();
     void createCurvePopMenuAction();
 
@@ -99,6 +99,7 @@ private:
     QActionGroup *groupSizeActGrp;
 
     bool lockCursorMoveAction;
+    bool zoomStateEnabled;
 
 private slots:
     void setCurveColor();
@@ -109,6 +110,7 @@ private slots:
     void setCurveGroupSize(QAction *action);
     void setCurveProperty();
     void deleteSelectCurve();
+
 
 
 };

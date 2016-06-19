@@ -1,15 +1,15 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'icv_marker_property.h'
+** Meta object code from reading C++ file 'icv_axse_scale.h'
 **
-** Created: Mon Jun 20 01:20:07 2016
+** Created: Mon Jun 20 01:20:06 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../include/icv_marker_property.h"
+#include "../../include/icv_axse_scale.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'icv_marker_property.h' doesn't include <QObject>."
+#error "The header file 'icv_axse_scale.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
 #error "This file was generated using the moc from 4.7.3. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -17,7 +17,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_IcvMarkerPropertyDialog[] = {
+static const uint qt_meta_data_IcvAxseSCaleDialog[] = {
 
  // content:
        5,       // revision
@@ -31,50 +31,49 @@ static const uint qt_meta_data_IcvMarkerPropertyDialog[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      25,   24,   24,   24, 0x08,
-      41,   24,   24,   24, 0x08,
+      20,   19,   19,   19, 0x08,
+      29,   19,   19,   19, 0x08,
 
        0        // eod
 };
 
-static const char qt_meta_stringdata_IcvMarkerPropertyDialog[] = {
-    "IcvMarkerPropertyDialog\0\0setMarkerBush()\0"
-    "setMarkerPen()\0"
+static const char qt_meta_stringdata_IcvAxseSCaleDialog[] = {
+    "IcvAxseSCaleDialog\0\0accept()\0reject()\0"
 };
 
-const QMetaObject IcvMarkerPropertyDialog::staticMetaObject = {
-    { &QDialog::staticMetaObject, qt_meta_stringdata_IcvMarkerPropertyDialog,
-      qt_meta_data_IcvMarkerPropertyDialog, 0 }
+const QMetaObject IcvAxseSCaleDialog::staticMetaObject = {
+    { &QDialog::staticMetaObject, qt_meta_stringdata_IcvAxseSCaleDialog,
+      qt_meta_data_IcvAxseSCaleDialog, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &IcvMarkerPropertyDialog::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &IcvAxseSCaleDialog::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *IcvMarkerPropertyDialog::metaObject() const
+const QMetaObject *IcvAxseSCaleDialog::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *IcvMarkerPropertyDialog::qt_metacast(const char *_clname)
+void *IcvAxseSCaleDialog::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_IcvMarkerPropertyDialog))
-        return static_cast<void*>(const_cast< IcvMarkerPropertyDialog*>(this));
-    if (!strcmp(_clname, "Ui::IcvMarkerProperty"))
-        return static_cast< Ui::IcvMarkerProperty*>(const_cast< IcvMarkerPropertyDialog*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_IcvAxseSCaleDialog))
+        return static_cast<void*>(const_cast< IcvAxseSCaleDialog*>(this));
+    if (!strcmp(_clname, "Ui::AxseScaleDialog"))
+        return static_cast< Ui::AxseScaleDialog*>(const_cast< IcvAxseSCaleDialog*>(this));
     return QDialog::qt_metacast(_clname);
 }
 
-int IcvMarkerPropertyDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int IcvAxseSCaleDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: setMarkerBush(); break;
-        case 1: setMarkerPen(); break;
+        case 0: accept(); break;
+        case 1: reject(); break;
         default: ;
         }
         _id -= 2;

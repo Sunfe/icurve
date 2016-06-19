@@ -189,7 +189,7 @@ void IcvPlotCurve::setMarkers()
         marker->setSymbol(new QwtSymbol( QwtSymbol::Ellipse,
             QColor(curve->pen().color()), 
             QColor(curve->pen().color()), 
-            QSize(8, 8)));
+            QSize(4, 4)));
         markers.append(marker);
         samplePos += step;
     }
@@ -381,7 +381,6 @@ void IcvPlotCurve::setGroupSize(qint16 size)
 
     return;
 }
-
 
 
 void IcvPlotCurve::boldTitle(bool enable)

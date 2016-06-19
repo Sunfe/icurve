@@ -36,4 +36,5 @@ IcvSymbol::IcvSymbol(IcvSymbol::Style  styleType)
 
 IcvSymbol::~IcvSymbol(void)
 {
+
 }

@@ -31,6 +31,7 @@
 #include "icv_clipboard.h"
 #include "icv_symbol.h"
 #include "icv_curve_info.h"
+#include "icv_axse_scale.h"
 
 
 /*including tone index at head of the line*/
@@ -89,6 +90,12 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionFilter,     SIGNAL(triggered()), this, SLOT(filterCurve()));
     connect(ui.actionInfo,       SIGNAL(triggered()), this, SLOT(showCurveInfo()));
     
+    /*axse menu*/
+    connect(ui.actionAxseScale,      SIGNAL(triggered()), this, SLOT(setAxseScale()));
+    connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
+    connect(ui.actionAxseAlignment,  SIGNAL(triggered()), this, SLOT(setAxseAlignment()));
+    connect(ui.actionAxseRotation,   SIGNAL(triggered()), this, SLOT(setAxseRotation()));
+    connect(ui.actionAxseProperties, SIGNAL(triggered()), this, SLOT(setAxseProperties()));
 
     /*insert menu*/
     connect(ui.actionTitle,      SIGNAL(triggered()), this, SLOT(insertTitle()));
@@ -98,6 +105,13 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionCurveName,  SIGNAL(triggered()), this, SLOT(insertCurveName()));
     connect(ui.actionFooter,     SIGNAL(triggered()), this, SLOT(insertFooter()));
     connect(ui.actionIndicator,  SIGNAL(triggered()), this, SLOT(insertIndicator()));
+
+    /* view menu */
+    connect(ui.actionZoom,       SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
+    
+    /* tool menu */
+    connect(ui.actionHandMove,   SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
+
 
     connect(this, SIGNAL(analyDataProgress(qint16)), this, SLOT(updateAnalyProgressBar(qint16)));
     /*}}}*/
@@ -120,6 +134,8 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
     self->setPalette(mainWinPalette);
 
+    //ui.actionZoom->setEnabled(false);
+
     return ;
 }
 
@@ -138,27 +154,32 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     plot->plotLayout()->setAlignCanvasToScales( false );
     plot->plotLayout()->setCanvasMargin(0);
 
-    /*default curve title is displayed, */
+    /* legendItem, default curve title is displayed */
     legendItem = new QwtPlotLegendItem();  
     legendItem->attach(plot);
 
+    /* legend */
     legend = new QwtLegend;
     legend->setDefaultItemMode( QwtLegendData::Checkable );
     connect(legend, SIGNAL(checked(const QVariant &, bool, int)), this,
         SLOT(legendChecked( const QVariant &, bool)));
 
+    /* grid */
     grid = new QwtPlotGrid();
     grid->setMajorPen(QPen(Qt::DashLine));
     grid->setMinorPen(QPen(Qt::DashLine));  
     grid->attach( plot );
 
-    (void) new QwtPlotPanner( plot->canvas());
+    /* magnifier */
     magnifier = new QwtPlotMagnifier(plot->canvas());
+    magnifier->setEnabled(true);
 
+    /* panner */
+    panner = new QwtPlotPanner(plot->canvas());
+    //panner->setMouseButton( Qt::MidButton );
+    panner->setEnabled(true);
 
-    panner = new QwtPlotPanner( plot->canvas() );
-    panner->setMouseButton( Qt::MidButton );
-
+    /* picker */
     picker = new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
                                QwtPlotPicker::CrossRubberBand, 
                                QwtPicker::AlwaysOn,
@@ -168,15 +189,12 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     picker->setRubberBand( QwtPicker::CrossRubberBand );
     picker->setTrackerPen( QColor( Qt::black ) );
 
-
-    zoomer = new QwtPlotZoomer( QwtPlot::xBottom, QwtPlot::yLeft,
-        plot->canvas() );
-
-    zoomer->setTrackerMode( QwtPicker::AlwaysOff );
-    zoomer->setRubberBand( QwtPicker::NoRubberBand );
-
-    /* RightButton: zoom out by 1
-       Ctrl+RightButton: zoom out to full size */
+    /* zoomer */
+    zoomer = new QwtPlotZoomer(plot->canvas());
+    zoomer->setRubberBandPen( QColor( Qt::darkGreen ) );
+    zoomer->setTrackerMode( QwtPlotPicker::AlwaysOn );
+    /* RightButton: zoom out by 1,Ctrl+RightButton:zoom 
+       out to full size */
     zoomer->setMousePattern( QwtEventPattern::MouseSelect2,
         Qt::RightButton, Qt::ControlModifier );
     zoomer->setMousePattern( QwtEventPattern::MouseSelect3,
@@ -186,10 +204,12 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     zoomer->setRubberBandPen( QColor( Qt::green ) );
     zoomer->setTrackerMode( QwtPicker::ActiveOnly );
     zoomer->setTrackerPen( QColor( Qt::white ) );
-    zoomer->setEnabled( false );
-    zoomer->zoom( 0 );
+    zoomer->setEnabled(false);
+    zoomer->zoom(0);
+    connect(zoomer, SIGNAL(zoomed(const QRectF&)), this, SLOT(zoomPlot(QRectF&)));
 
-    return ;
+
+    return;
 }
 
 
@@ -202,7 +222,7 @@ void IcvICurve::openFile()
 
     if(fileName.isEmpty())
     {
-        return ; 
+        return; 
     }
 
     qint16 posCurRepository = plotData.count();
@@ -219,7 +239,7 @@ void IcvICurve::openFile()
         QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol,
                                           QBrush(Qt::yellow),
                                           QPen(Qt::red, 2),
-                                          QSize(8, 8));
+                                          QSize(2, 2));
         qwtCurve->setSymbol(symbol);
         qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
         qwtCurve->setStyle(QwtPlotCurve::Lines);
@@ -326,7 +346,7 @@ void IcvICurve::insertLegend()
         ui.actionLegend->setChecked(false);
     }
 
-    return ;
+    return;
 }
 
 
@@ -934,6 +954,7 @@ void IcvICurve::legendChecked( const QVariant &itemInfo, bool on)
     return ;
 }
 
+
 void IcvICurve::showCurveInfo()
 {
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
@@ -947,7 +968,317 @@ void IcvICurve::showCurveInfo()
     IcvCurveInfoDialog *infoDlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
 
     infoDlg->exec();
+
+    return;
 }
+
+QwtPlotZoomer* IcvICurve::getZoomer()
+{
+    return zoomer;
+}
+
+
+void IcvICurve::enableZoomer( bool checked)
+{
+    bool enable = checked;
+
+    zoomer->setEnabled(enable);
+    plotCanvas->setZoomState(enable);
+
+    /*disable magnifier and panner*/
+    magnifier->setEnabled(!enable);
+    panner->setEnabled(!enable);
+
+    ui.actionZoom->setCheckable(true);
+    ui.actionZoom->setChecked(checked);
+
+    return;
+}
+
+
+void IcvICurve::enableHandMove( bool checked)
+{
+    bool enable = checked;
+
+    /* toggle magnifier and panner */
+    magnifier->setEnabled(enable);
+    panner->setEnabled(enable);
+    /* toggle zoomer*/
+    zoomer->setEnabled(!enable);
+
+    if(enable)
+    {
+        plotCanvas->getCanvas()->setCursor(Qt::OpenHandCursor);
+        plotCanvas->getCanvas()->setMouseTracking(false);
+    }
+    else
+    {
+        plotCanvas->getCanvas()->setCursor(Qt::ArrowCursor);
+        plotCanvas->getCanvas()->setMouseTracking(true);
+
+    }
+
+    ui.actionHandMove->setCheckable(true);
+    ui.actionHandMove->setChecked(checked);
+
+
+    return;
+}
+
+
+bool IcvICurve::isHandMoveChecked()
+{
+
+    return ui.actionHandMove->isChecked();
+}
+
+
+void IcvICurve::zoomPlot(const QRectF &rect)
+{
+ //   plotCanvas->setZoomState(true);
+    return;
+}
+
+
+void IcvICurve::setAxseScale()
+{
+    IcvAxseSCaleDialog *axseScaleDlg = new IcvAxseSCaleDialog(this);
+
+    axseScaleDlg->setWindowTitle("Axse scale dialog");
+    if(axseScaleDlg->exec() != QDialog::Accepted)
+        return ;
+
+    bool ok = false;
+    double minX  = axseScaleDlg->lineEditMinX->text().toDouble(&ok);
+    double maxX  = axseScaleDlg->lineEditMaxX->text().toDouble(&ok);
+    double minY  = axseScaleDlg->lineEditMinY->text().toDouble(&ok);
+    double maxY  = axseScaleDlg->lineEditMaxY->text().toDouble(&ok);
+
+
+    plot->setAxisScale(QwtPlot::xBottom, minX, maxX, 0);
+    plot->setAxisScale(QwtPlot::yLeft, minY, maxY, 0);
+    plot->replot();
+
+    return;
+}
+
+
+void IcvICurve::setAxseTitle()
+{
+   /* the same as insert x/y label */
+    QDialog *axseTitleDlg = new QDialog(this);
+
+    QLabel *labelX = new QLabel("Axse X:");
+    QLineEdit *textEditX = new QLineEdit(axseTitleDlg);
+    textEditX->setObjectName(QString(tr("textEditX")));
+    textEditX->resize(40,20); 
+
+    QLabel *labelY = new QLabel("Axse Y:");
+    QLineEdit *textEditY = new QLineEdit(axseTitleDlg);
+    textEditY->setObjectName(tr("textEditY"));
+    textEditY->resize(40,20);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(axseTitleDlg);
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+    connect(buttonBox, SIGNAL(accepted()), axseTitleDlg, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), axseTitleDlg, SLOT(reject()));
+
+    QGridLayout *layout = new QGridLayout(axseTitleDlg);
+    layout->addWidget(labelX,0,0,1,1);
+    layout->addWidget(textEditX,0,1,1,1);
+    layout->addWidget(labelY,1,0,1,1);
+    layout->addWidget(textEditY,1,1,1,1);
+    layout->addWidget(buttonBox,2,1);
+    layout->setColumnStretch(0,1);
+    layout->setColumnStretch(1,3);
+    layout->setRowStretch(0,1);
+    layout->setRowStretch(1,1);
+    layout->setRowMinimumHeight(1,20);
+
+    /*alignment*/
+    layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
+    axseTitleDlg->setLayout(layout);
+    axseTitleDlg->resize(250,40);
+
+    qint16 retcode = (qint16)axseTitleDlg->exec();
+    if(QDialog::Accepted == retcode)
+    {
+        QLineEdit *child = NULL;
+
+        child = axseTitleDlg->findChild<QLineEdit *>("textEditX");
+        QString titleX = child->text();
+        plot->setAxisTitle(QwtPlot::xBottom,titleX);
+
+        child = axseTitleDlg->findChild<QLineEdit *>("textEditY");
+        QString titleY = child->text();
+        plot->setAxisTitle(QwtPlot::yLeft,titleY);
+
+    }
+
+    delete axseTitleDlg;
+   
+    return;
+}
+
+
+void IcvICurve::setAxseAlignment()
+{
+    QDialog *axseAlignDlg = new QDialog(this);
+    axseAlignDlg->setWindowTitle("Axse aliagment");
+
+    QLabel *labelHor = new QLabel("Horizontal");
+    QLabel *labelVer = new QLabel("Vertical");
+
+    QLabel *labelX = new QLabel("X:");
+    QComboBox *alignComboHX = new QComboBox(axseAlignDlg);
+    alignComboHX->setObjectName("alignComboHX");
+    alignComboHX->addItem(tr("Left"));
+    alignComboHX->addItem(tr("Right"));
+    alignComboHX->addItem(tr("Center"));
+
+    QComboBox *alignComboVX = new QComboBox(axseAlignDlg);
+    alignComboVX->setObjectName("alignComboVX");
+    alignComboVX->addItem(tr("Left"));
+    alignComboVX->addItem(tr("Right"));
+    alignComboVX->addItem(tr("Center"));
+
+
+    QLabel *labelY = new QLabel("Y:");
+    QComboBox *alignComboHY = new QComboBox(axseAlignDlg);
+    alignComboHY->setObjectName("alignComboHY");
+    alignComboHY->addItem(tr("Top"));
+    alignComboHY->addItem(tr("Bottom"));
+    alignComboHY->addItem(tr("Center"));
+
+    QComboBox *alignComboVY = new QComboBox(axseAlignDlg);
+    alignComboVY->setObjectName("alignComboVY");
+    alignComboVY->addItem(tr("Top"));
+    alignComboVY->addItem(tr("Bottom"));
+    alignComboVY->addItem(tr("Center"));
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(axseAlignDlg);
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+    connect(buttonBox, SIGNAL(accepted()), axseAlignDlg, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), axseAlignDlg, SLOT(reject()));
+
+    QGridLayout *layout = new QGridLayout(axseAlignDlg);
+
+    layout->addWidget(labelHor,     0, 1);
+    layout->addWidget(labelVer,     0, 2);
+
+    layout->addWidget(labelX,       1, 0);
+    layout->addWidget(alignComboHX, 1, 1);
+    layout->addWidget(alignComboVX, 1, 2);
+
+    layout->addWidget(labelY,       2, 0);
+    layout->addWidget(alignComboHY, 2, 1);
+    layout->addWidget(alignComboVY, 2, 2);
+
+    layout->addWidget(buttonBox,    3, 2);
+
+    layout->setColumnStretch(0,1);
+    layout->setColumnStretch(1,1);
+    layout->setColumnStretch(2,1);
+
+    layout->setRowMinimumHeight(1,20);
+
+    /*alignment*/
+    layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
+    axseAlignDlg->setLayout(layout);
+    //axseAlignDlg->resize(250,40);
+
+    qint16 retcode = (qint16)axseAlignDlg->exec();
+    if(QDialog::Accepted == retcode)
+    {
+        QComboBox *childH = NULL;
+        QComboBox *childV = NULL;
+        bool ok;
+
+        childH = axseAlignDlg->findChild<QComboBox *>("alignComboHX");
+        childV = axseAlignDlg->findChild<QComboBox *>("alignComboVX");
+        Qt::Alignment alignX = childH->currentText().toInt(&ok) |
+                               childV->currentText().toInt(&ok) ;
+        plot->setAxisLabelAlignment(QwtPlot::xBottom,alignX);
+
+        childH = axseAlignDlg->findChild<QComboBox *>("alignComboHY");
+        childV = axseAlignDlg->findChild<QComboBox *>("alignComboVY");
+        Qt::Alignment alignY = childH->currentText().toInt(&ok) |
+                               childV->currentText().toInt(&ok) ;
+
+        plot->setAxisLabelAlignment(QwtPlot::yLeft,alignY);
+
+    }
+
+    delete axseAlignDlg;
+
+    return;
+}
+
+
+void IcvICurve::setAxseRotation()
+{
+    QDialog *axseRotationDlg = new QDialog(this);
+
+    QLabel *labelX = new QLabel("Angle for X:");
+    QLineEdit *textEditX = new QLineEdit(axseRotationDlg);
+    textEditX->setObjectName(QString(tr("textEditX"))); 
+
+    QLabel *labelY = new QLabel("Angle for Y:");
+    QLineEdit *textEditY = new QLineEdit(axseRotationDlg);
+    textEditY->setObjectName(tr("textEditY"));
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(axseRotationDlg);
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+    connect(buttonBox, SIGNAL(accepted()), axseRotationDlg, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), axseRotationDlg, SLOT(reject()));
+
+    QGridLayout *layout = new QGridLayout(axseRotationDlg);
+    layout->addWidget(labelX,0,0,1,1);
+    layout->addWidget(textEditX,0,1,1,1);
+    layout->addWidget(labelY,1,0,1,1);
+    layout->addWidget(textEditY,1,1,1,1);
+    layout->addWidget(buttonBox,2,1);
+    layout->setColumnStretch(0,1);
+    layout->setColumnStretch(1,3);
+    layout->setRowStretch(0,1);
+    layout->setRowStretch(1,2);
+    layout->setRowMinimumHeight(1,20);
+
+    /*alignment*/
+    layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
+    axseRotationDlg->setLayout(layout);
+    //axseTitleDlg->resize(250,60);
+
+    qint16 retcode = (qint16)axseRotationDlg->exec();
+    if(QDialog::Accepted == retcode)
+    {
+        QLineEdit *child = NULL;
+        bool ok;
+
+        child = axseRotationDlg->findChild<QLineEdit *>("textEditX");
+        double angleX = child->text().toDouble(&ok);
+        plot->setAxisLabelRotation(QwtPlot::xBottom,angleX);
+
+        child = axseRotationDlg->findChild<QLineEdit *>("textEditY");
+        double angleY = child->text().toDouble(&ok);
+        plot->setAxisLabelRotation(QwtPlot::yLeft,angleY);
+
+    }
+
+    delete axseRotationDlg;
+    return;
+}
+
+
+void IcvICurve::setAxseProperties()
+{
+
+    return;
+}
+
 
 
 ICU_RET_STATUS IcvICurve::loadData(const QString &filename)

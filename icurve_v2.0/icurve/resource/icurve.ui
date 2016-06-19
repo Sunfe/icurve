@@ -38,7 +38,6 @@
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="actionExit"/>
-    <addaction name="actionPreference"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -52,7 +51,6 @@
     <addaction name="actionCopy_plot"/>
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
-    <addaction name="actionReset"/>
     <addaction name="separator"/>
     <addaction name="actionRemove"/>
     <addaction name="actionDelete"/>
@@ -84,8 +82,14 @@
     </property>
     <addaction name="actionCalc"/>
     <addaction name="actionDiffer"/>
+    <addaction name="actionData_picker"/>
+    <addaction name="actionData_tracker"/>
+    <addaction name="actionHandMove"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Windows</string>
     </property>
@@ -109,16 +113,24 @@
     <addaction name="actionView_data"/>
     <addaction name="actionLocate_to_file"/>
     <addaction name="actionInfo"/>
+    <addaction name="actionCurveProperties"/>
+    <addaction name="actionReset"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionPreference"/>
    </widget>
    <widget class="QMenu" name="menuAxse">
     <property name="title">
      <string>Axse</string>
     </property>
+    <addaction name="actionAxseScale"/>
+    <addaction name="actionAxseTitle"/>
+    <addaction name="actionAxseAlignment"/>
+    <addaction name="actionAxseRotation"/>
+    <addaction name="actionAxseProperties"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -126,6 +138,7 @@
     </property>
     <addaction name="actionZoom"/>
     <addaction name="actionTree"/>
+    <addaction name="actionReset_2"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -415,11 +428,6 @@
     <string>Filter</string>
    </property>
   </action>
-  <action name="actionAxse_Properties">
-   <property name="text">
-    <string>Axse</string>
-   </property>
-  </action>
   <action name="actionFind">
    <property name="text">
     <string>Find</string>
@@ -491,8 +499,11 @@
    </property>
   </action>
   <action name="actionZoom">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>Zoom</string>
+    <string>Zoomer</string>
    </property>
   </action>
   <action name="actionIndicator">
@@ -515,12 +526,65 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Information</string>
+    <string>Command Info</string>
    </property>
   </action>
   <action name="actionSelect_Reverse">
    <property name="text">
     <string>Select Reverse</string>
+   </property>
+  </action>
+  <action name="actionData_picker">
+   <property name="text">
+    <string>Data Picker</string>
+   </property>
+  </action>
+  <action name="actionData_tracker">
+   <property name="text">
+    <string>Curve Tracker</string>
+   </property>
+  </action>
+  <action name="actionAxseScale">
+   <property name="text">
+    <string>Scale</string>
+   </property>
+  </action>
+  <action name="actionAxseTitle">
+   <property name="text">
+    <string>Title</string>
+   </property>
+  </action>
+  <action name="actionAxseAlignment">
+   <property name="text">
+    <string>Alignment</string>
+   </property>
+  </action>
+  <action name="actionAxseRotation">
+   <property name="text">
+    <string>Rotation</string>
+   </property>
+  </action>
+  <action name="actionAxseProperties">
+   <property name="text">
+    <string>More...</string>
+   </property>
+  </action>
+  <action name="actionCurveProperties">
+   <property name="text">
+    <string>Properties...</string>
+   </property>
+  </action>
+  <action name="actionHandMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hand Tool</string>
+   </property>
+  </action>
+  <action name="actionReset_2">
+   <property name="text">
+    <string>Reset</string>
    </property>
   </action>
  </widget>

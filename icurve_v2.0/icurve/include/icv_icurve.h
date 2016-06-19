@@ -55,6 +55,8 @@ public:
     QList <IcvCommand> *getPlotData();
     QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
+    QwtPlotZoomer *getZoomer();
+    bool isHandMoveChecked();
 
     ~IcvICurve();
 
@@ -114,6 +116,13 @@ private slots:
     void recoverCurveVisible();
     void showCurveInfo();
 
+    /*curve Axse slots*/
+    void setAxseScale();
+    void setAxseTitle();
+    void setAxseAlignment();
+    void setAxseRotation();
+    void setAxseProperties();
+
     /*insert menu slots*/
     void insertTitle();
     void insertXLabel();
@@ -123,9 +132,17 @@ private slots:
     void insertFooter();
     void insertIndicator();
 
+    /*view menu slots*/
+    void enableZoomer(bool checked);
+    void zoomPlot(const QRectF &rect);
+
+    /* tool menu slots*/
+    void enableHandMove(bool checked);
+
     void legendChecked( const QVariant &itemInfo, bool on );
     void updateAnalyProgressBar(qint16 progress);
     void cancelAnalyProgressBar();
+
 
 signals:
     void analyDataProgress(qint16 progress);

@@ -10,6 +10,7 @@
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_marker.h>
 #include <qwt_plot_directpainter.h>
+#include <qwt_plot_zoomer.h>
 #include "icv_plot_canvas.h"
 #include "icv_curve_property.h"
 
@@ -161,6 +162,9 @@ QList<IcvPlotCurve*> IcvPlotCanvas::getSelectedCurve()
 
 void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 {
+    if(true == mainWin->isHandMoveChecked())
+        return;
+
     /*release magnifier*/
     unlockMagnifier();
 
@@ -176,7 +180,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 
     /*try to retrieve the closest curves*/
     curSelectedCurve.clear();
-    const QPoint pos = event->pos();
+    const QPoint        pos = event->pos();
     qint16 cntCurveSelected = 0;
     for(qint16 i = 0; i < curves.count(); i++)
     {
@@ -224,6 +228,11 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 
 void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 {
+
+    QwtPlotZoomer *zoomer = mainWin->getZoomer();
+    if(zoomer->isEnabled())
+        return ;
+
     lockMagnifier();
 
     lockCursorMoveAction = false;
@@ -279,16 +288,19 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 
 void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 {
+    if(mainWin->isHandMoveChecked())
+        return;
+
     if(true == lockCursorMoveAction)
         return ;
 
-    /*pick the selected curve*/
     if(curves.isEmpty())
     {
         canvas->setCursor(Qt::ArrowCursor);
         return;
     }
 
+    /* pick the selected curve */
     const QPoint pos = event->pos();
     for(qint16 i = 0; i < curves.count(); i++)
     {
@@ -679,6 +691,13 @@ void IcvPlotCanvas::unlockMagnifier()
     if(NULL != mainWin)
         mainWin->getMagnifier()->setEnabled(true);
 
+    return;
+}
+
+
+void IcvPlotCanvas::setZoomState(bool state)
+{
+    zoomStateEnabled = state;
     return;
 }
 
