@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_curve_filter.ui'
 **
-** Created: Mon Jun 20 01:20:06 2016
+** Created: Tue Jun 21 00:56:02 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -32,10 +32,10 @@ public:
     QDialogButtonBox *buttonBox;
     QLineEdit *lineEdit;
     QGroupBox *groupBox;
-    QRadioButton *ByComandNameRadio;
-    QRadioButton *ByLineIdRadio;
-    QRadioButton *ByDirectionRadio;
-    QRadioButton *ByCompleteComandRadio;
+    QRadioButton *radioComandName;
+    QRadioButton *radioLineId;
+    QRadioButton *radioDirection;
+    QRadioButton *radioCompleteComand;
     QLabel *label;
     QCheckBox *previewCheckBox;
     QCheckBox *checkBox;
@@ -57,21 +57,21 @@ public:
         groupBox = new QGroupBox(IcvCurveFilterDialog);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(10, 10, 351, 51));
-        ByComandNameRadio = new QRadioButton(groupBox);
-        ByComandNameRadio->setObjectName(QString::fromUtf8("ByComandNameRadio"));
-        ByComandNameRadio->setGeometry(QRect(14, 17, 89, 20));
-        ByLineIdRadio = new QRadioButton(groupBox);
-        ByLineIdRadio->setObjectName(QString::fromUtf8("ByLineIdRadio"));
-        ByLineIdRadio->setGeometry(QRect(70, 17, 80, 20));
-        ByDirectionRadio = new QRadioButton(groupBox);
-        ByDirectionRadio->setObjectName(QString::fromUtf8("ByDirectionRadio"));
-        ByDirectionRadio->setGeometry(QRect(140, 17, 89, 20));
-        ByCompleteComandRadio = new QRadioButton(groupBox);
-        ByCompleteComandRadio->setObjectName(QString::fromUtf8("ByCompleteComandRadio"));
-        ByCompleteComandRadio->setGeometry(QRect(220, 17, 121, 20));
+        radioComandName = new QRadioButton(groupBox);
+        radioComandName->setObjectName(QString::fromUtf8("radioComandName"));
+        radioComandName->setGeometry(QRect(14, 17, 51, 20));
+        radioLineId = new QRadioButton(groupBox);
+        radioLineId->setObjectName(QString::fromUtf8("radioLineId"));
+        radioLineId->setGeometry(QRect(70, 17, 61, 20));
+        radioDirection = new QRadioButton(groupBox);
+        radioDirection->setObjectName(QString::fromUtf8("radioDirection"));
+        radioDirection->setGeometry(QRect(140, 17, 89, 20));
+        radioCompleteComand = new QRadioButton(groupBox);
+        radioCompleteComand->setObjectName(QString::fromUtf8("radioCompleteComand"));
+        radioCompleteComand->setGeometry(QRect(220, 17, 121, 20));
         label = new QLabel(IcvCurveFilterDialog);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(10, 70, 54, 12));
+        label->setGeometry(QRect(10, 73, 54, 12));
         previewCheckBox = new QCheckBox(IcvCurveFilterDialog);
         previewCheckBox->setObjectName(QString::fromUtf8("previewCheckBox"));
         previewCheckBox->setGeometry(QRect(120, 110, 71, 20));
@@ -90,10 +90,10 @@ public:
     {
         IcvCurveFilterDialog->setWindowTitle(QApplication::translate("IcvCurveFilterDialog", "Dialog", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("IcvCurveFilterDialog", "Select:", 0, QApplication::UnicodeUTF8));
-        ByComandNameRadio->setText(QApplication::translate("IcvCurveFilterDialog", "Name", 0, QApplication::UnicodeUTF8));
-        ByLineIdRadio->setText(QApplication::translate("IcvCurveFilterDialog", "Line id", 0, QApplication::UnicodeUTF8));
-        ByDirectionRadio->setText(QApplication::translate("IcvCurveFilterDialog", "Direction", 0, QApplication::UnicodeUTF8));
-        ByCompleteComandRadio->setText(QApplication::translate("IcvCurveFilterDialog", "Complete command", 0, QApplication::UnicodeUTF8));
+        radioComandName->setText(QApplication::translate("IcvCurveFilterDialog", "Name", 0, QApplication::UnicodeUTF8));
+        radioLineId->setText(QApplication::translate("IcvCurveFilterDialog", "Line id", 0, QApplication::UnicodeUTF8));
+        radioDirection->setText(QApplication::translate("IcvCurveFilterDialog", "Direction", 0, QApplication::UnicodeUTF8));
+        radioCompleteComand->setText(QApplication::translate("IcvCurveFilterDialog", "Complete command", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("IcvCurveFilterDialog", "Keywords:", 0, QApplication::UnicodeUTF8));
         previewCheckBox->setText(QApplication::translate("IcvCurveFilterDialog", "Preview", 0, QApplication::UnicodeUTF8));
         checkBox->setText(QApplication::translate("IcvCurveFilterDialog", "In All", 0, QApplication::UnicodeUTF8));

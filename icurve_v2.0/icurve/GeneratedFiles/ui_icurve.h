@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Mon Jun 20 19:23:30 2016
+** Created: Tue Jun 21 00:56:02 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -386,7 +386,7 @@ public:
         actionWidth->setText(QApplication::translate("icurveClass", "Width", 0, QApplication::UnicodeUTF8));
         actionLegend->setText(QApplication::translate("icurveClass", "Legend", 0, QApplication::UnicodeUTF8));
         actionFooter->setText(QApplication::translate("icurveClass", "Footer", 0, QApplication::UnicodeUTF8));
-        actionCalc->setText(QApplication::translate("icurveClass", "Calculator", 0, QApplication::UnicodeUTF8));
+        actionCalc->setText(QApplication::translate("icurveClass", "Estimator", 0, QApplication::UnicodeUTF8));
         actionStyle->setText(QApplication::translate("icurveClass", "Style", 0, QApplication::UnicodeUTF8));
         actionMarker->setText(QApplication::translate("icurveClass", "Marker", 0, QApplication::UnicodeUTF8));
         actionFilter->setText(QApplication::translate("icurveClass", "Filter", 0, QApplication::UnicodeUTF8));

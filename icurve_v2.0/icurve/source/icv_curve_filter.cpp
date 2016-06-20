@@ -2,6 +2,7 @@
 #include <QtGui>
 #include <QLineEdit>
 #include <QWidget>
+#include <QCompleter>
 #include "icv_curve_filter.h"
 
 IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
@@ -9,19 +10,26 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 {
     setupUi(this);
 
-    lineEdit->setFocus();
-    ByComandNameRadio->setCheckable(true);
-    ByComandNameRadio->setChecked(true);
+    radioComandName->setCheckable(true);
+    radioComandName->setChecked(true);
 
-       
-    connect(ByCompleteComandRadio, SIGNAL(clicked()), this, SLOT(setFilterType())); 
-    connect(ByComandNameRadio,     SIGNAL(clicked()), this, SLOT(setFilterType())); 
-    connect(ByLineIdRadio,         SIGNAL(clicked()), this, SLOT(setFilterType())); 
-    connect(ByDirectionRadio,      SIGNAL(clicked()), this, SLOT(setFilterType())); 
+    QStringList wordList;
+    wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc";
+    completer = new QCompleter(wordList);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::PopupCompletion);
+    lineEdit->setCompleter(completer);
+
+    lineEdit->setFocus();
+
+    connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+    connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+    connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+    connect(radioDirection,      SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
     
-    filterType = ICV_BY_COMANDNAME;
+    lookupType = ICV_BY_COMANDNAME;
 
 }
 
@@ -32,39 +40,67 @@ IcvCurveFilterDialog::~IcvCurveFilterDialog()
 }
 
 
-void IcvCurveFilterDialog::setFilterType()
+void IcvCurveFilterDialog::prepareCommitAction()
 {
-
-    if(sender() == ByCompleteComandRadio)
-        filterType = ICV_BY_COMPLETECOMAND;
-    else if(sender() == ByComandNameRadio)
-        filterType = ICV_BY_COMANDNAME;
-    else if(sender() == ByLineIdRadio)
-        filterType = ICV_BY_LINEID;
-    else if(sender() == ByDirectionRadio)
-        filterType = ICV_BY_DIRECTION;
+    if(sender() == radioCompleteComand)
+        lookupType = ICV_BY_COMPLETECOMAND;
+    else if(sender() == radioComandName)
+        lookupType = ICV_BY_COMANDNAME;
+    else if(sender() == radioLineId)
+        lookupType = ICV_BY_LINEID;
+    else if(sender() == radioDirection)
+        lookupType = ICV_BY_DIRECTION;
 
     /*validation constraints*/
-   if(ByLineIdRadio->isChecked())
+   if(radioLineId->isChecked())
     {
         QRegExp constraint("[0-9]|[1-9]([0-9]{,2})");   
         lineEdit->setValidator(new QRegExpValidator(constraint, lineEdit)); 
     }
+   else
+       lineEdit->setValidator(NULL);
+
+   /* keywords completion */
+   QStringList wordList;
+   if (radioComandName->isChecked())
+   {
+       wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc";
+   }
+   else if(radioDirection->isChecked())
+   {
+       wordList << "us" << "ds" << "0" << "1";
+   }
+   else if(radioCompleteComand->isChecked())
+   {
+       wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc";
+   }
+  
+   completer = new QCompleter(wordList);
+   completer->setCaseSensitivity(Qt::CaseInsensitive);
+   completer->setCompletionMode(QCompleter::PopupCompletion);
+   lineEdit->setCompleter(completer);
+
+   /*preview action */
+   if(previewCheckBox->checkState() == Qt::Checked )
+   {
+       emit previewSignal(lookupType, lineEdit->text());
+       return;
+   }
 
     return;
 }
 
 
-qint16 IcvCurveFilterDialog::getFilterType()
+qint16 IcvCurveFilterDialog::getLookupType()
 {
-    return filterType;
+    return lookupType;
 }
 
 
 void IcvCurveFilterDialog::accept()
 {
     QString keywords = lineEdit->text();
-    if (ByComandNameRadio->isChecked())
+    if (radioComandName->isChecked())
     {
         QRegExp  expr;
         expr.setPattern("psd|snr|margin|qln|hlog|bit");
@@ -73,9 +109,9 @@ void IcvCurveFilterDialog::accept()
             QMessageBox::warning(this,tr("Warning"),tr("coomand name invalid!"));
         lineEdit->setFocus();
 
-        return ;
+        return;
     }
-    else if(ByDirectionRadio->isChecked())
+    else if(radioDirection->isChecked())
     {
         if(!keywords.contains(QRegExp("us|ds|0|1",Qt::CaseInsensitive)))
             QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
@@ -83,7 +119,7 @@ void IcvCurveFilterDialog::accept()
         
         return;
     }
-    else if(ByCompleteComandRadio->isChecked())
+    else if(radioCompleteComand->isChecked())
     {
         QRegExp  expr;
         expr.setPattern("(gettxpsd|getsnr|getnoisemargin|gethlog|getqln|getbitalloc)[ ]+[0-9]+[ ]+[0|1]");
@@ -94,7 +130,7 @@ void IcvCurveFilterDialog::accept()
 
         return;
     }
-    else if(!ByLineIdRadio->isChecked())
+    else if(!radioLineId->isChecked())
     {
         if(!keywords.contains(QRegExp("[0-9]|([1-9]([0-9]{,2})",Qt::CaseInsensitive)))
             QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
@@ -105,8 +141,8 @@ void IcvCurveFilterDialog::accept()
 
     if(previewCheckBox->checkState() == Qt::Checked )
     {
-        emit previewSignal(filterType, lineEdit->text());
-        return ;
+        emit previewSignal(lookupType, lineEdit->text());
+        return;
     }
 
     return QDialog::accept();
@@ -122,3 +158,5 @@ void IcvCurveFilterDialog::reject()
 
   return QDialog::reject ();
 }
+
+

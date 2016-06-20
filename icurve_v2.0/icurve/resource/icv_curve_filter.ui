@@ -54,12 +54,12 @@
    <property name="title">
     <string>Select:</string>
    </property>
-   <widget class="QRadioButton" name="ByComandNameRadio">
+   <widget class="QRadioButton" name="radioComandName">
     <property name="geometry">
      <rect>
       <x>14</x>
       <y>17</y>
-      <width>89</width>
+      <width>51</width>
       <height>20</height>
      </rect>
     </property>
@@ -67,12 +67,12 @@
      <string>Name</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="ByLineIdRadio">
+   <widget class="QRadioButton" name="radioLineId">
     <property name="geometry">
      <rect>
       <x>70</x>
       <y>17</y>
-      <width>80</width>
+      <width>61</width>
       <height>20</height>
      </rect>
     </property>
@@ -80,7 +80,7 @@
      <string>Line id</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="ByDirectionRadio">
+   <widget class="QRadioButton" name="radioDirection">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -93,7 +93,7 @@
      <string>Direction</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="ByCompleteComandRadio">
+   <widget class="QRadioButton" name="radioCompleteComand">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -111,7 +111,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>70</y>
+     <y>73</y>
      <width>54</width>
      <height>12</height>
     </rect>

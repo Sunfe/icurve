@@ -18,17 +18,18 @@ public:
     IcvCurveFilterDialog(QWidget* parent=0);
     ~IcvCurveFilterDialog();
 
-    qint16 getFilterType();
+    qint16 getLookupType();
     void accept();
     void reject();
 
 private slots:
-    void setFilterType();
+    void prepareCommitAction();
 
 
 /*data*/
 private:
-    qint16 filterType;
+    qint16 lookupType;
+    QCompleter *completer;
 
 signals:
     void previewSignal(qint16 filterType, QString keyword);

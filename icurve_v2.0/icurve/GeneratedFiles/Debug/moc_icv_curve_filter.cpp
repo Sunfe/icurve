@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_curve_filter.h'
 **
-** Created: Mon Jun 20 01:20:08 2016
+** Created: Tue Jun 21 00:56:04 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -43,7 +43,7 @@ static const uint qt_meta_data_IcvCurveFilterDialog[] = {
 static const char qt_meta_stringdata_IcvCurveFilterDialog[] = {
     "IcvCurveFilterDialog\0\0filterType,keyword\0"
     "previewSignal(qint16,QString)\0"
-    "recoverPreviewSignal()\0setFilterType()\0"
+    "recoverPreviewSignal()\0prepareCommitAction()\0"
 };
 
 const QMetaObject IcvCurveFilterDialog::staticMetaObject = {
@@ -79,7 +79,7 @@ int IcvCurveFilterDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: previewSignal((*reinterpret_cast< qint16(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
         case 1: recoverPreviewSignal(); break;
-        case 2: setFilterType(); break;
+        case 2: prepareCommitAction(); break;
         default: ;
         }
         _id -= 3;

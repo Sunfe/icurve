@@ -408,7 +408,7 @@
   </action>
   <action name="actionCalc">
    <property name="text">
-    <string>Calculator</string>
+    <string>Estimator</string>
    </property>
   </action>
   <action name="actionStyle">

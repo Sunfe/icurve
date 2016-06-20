@@ -638,7 +638,7 @@ void IcvICurve::filterCurve()
         return ;
 
     QString    keyword = filterDlg->lineEdit->text();
-    qint16  filterType = filterDlg->getFilterType();
+    qint16  filterType = filterDlg->getLookupType();
    
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
     QList<IcvPlotCurve *> curvesToFilter;
@@ -776,7 +776,7 @@ void IcvICurve::findCurve()
         return;
 
     QString    keyword = filterDlg->lineEdit->text();
-    qint16  filterType = filterDlg->getFilterType();
+    qint16  filterType = filterDlg->getLookupType();
 
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
     QList<IcvPlotCurve *> curvesFound;
