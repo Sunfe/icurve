@@ -19,17 +19,19 @@ public:
     ~IcvCurveFilterDialog();
 
     qint16 getLookupType();
-    void accept();
-    void reject();
+    QString getKeyword();
 
 private slots:
+    void accept();
+    void reject();
     void prepareCommitAction();
-
 
 /*data*/
 private:
     qint16 lookupType;
     QCompleter *completer;
+    QStringList keywords;
+    QString keyword;
 
 signals:
     void previewSignal(qint16 filterType, QString keyword);

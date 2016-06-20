@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_curve_filter.h'
 **
-** Created: Tue Jun 21 00:56:04 2016
+** Created: Tue Jun 21 02:12:15 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvCurveFilterDialog[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,6 +36,8 @@ static const uint qt_meta_data_IcvCurveFilterDialog[] = {
 
  // slots: signature, parameters, type, tag, flags
       94,   21,   21,   21, 0x08,
+     103,   21,   21,   21, 0x08,
+     112,   21,   21,   21, 0x08,
 
        0        // eod
 };
@@ -43,7 +45,8 @@ static const uint qt_meta_data_IcvCurveFilterDialog[] = {
 static const char qt_meta_stringdata_IcvCurveFilterDialog[] = {
     "IcvCurveFilterDialog\0\0filterType,keyword\0"
     "previewSignal(qint16,QString)\0"
-    "recoverPreviewSignal()\0prepareCommitAction()\0"
+    "recoverPreviewSignal()\0accept()\0"
+    "reject()\0prepareCommitAction()\0"
 };
 
 const QMetaObject IcvCurveFilterDialog::staticMetaObject = {
@@ -79,10 +82,12 @@ int IcvCurveFilterDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: previewSignal((*reinterpret_cast< qint16(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
         case 1: recoverPreviewSignal(); break;
-        case 2: prepareCommitAction(); break;
+        case 2: accept(); break;
+        case 3: reject(); break;
+        case 4: prepareCommitAction(); break;
         default: ;
         }
-        _id -= 3;
+        _id -= 5;
     }
     return _id;
 }

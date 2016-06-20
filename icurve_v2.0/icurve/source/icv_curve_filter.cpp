@@ -19,17 +19,22 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     lineEdit->setCompleter(completer);
-
     lineEdit->setFocus();
+    
+    lookupType = ICV_BY_COMANDNAME;
+    keywords<<"getTxPsd"<<"getSnr"<<"getQln"<<"getHlog"<<"getNoiseMargin"<<"DS"<<"US";
 
     connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioDirection,      SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
     connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
-    
-    lookupType = ICV_BY_COMANDNAME;
+
 
 }
 
@@ -83,7 +88,7 @@ void IcvCurveFilterDialog::prepareCommitAction()
    /*preview action */
    if(previewCheckBox->checkState() == Qt::Checked )
    {
-       emit previewSignal(lookupType, lineEdit->text());
+       emit previewSignal(lookupType, keyword);
        return;
    }
 
@@ -97,47 +102,82 @@ qint16 IcvCurveFilterDialog::getLookupType()
 }
 
 
+QString IcvCurveFilterDialog::getKeyword()
+{
+    return keyword;
+}
+
+
 void IcvCurveFilterDialog::accept()
 {
-    QString keywords = lineEdit->text();
+    QString userInput = lineEdit->text();
     if (radioComandName->isChecked())
     {
         QRegExp  expr;
         expr.setPattern("psd|snr|margin|qln|hlog|bit");
         expr.setCaseSensitivity(Qt::CaseInsensitive);
-        if(!keywords.contains(expr))
+        if(!userInput.contains(expr))
+        {
             QMessageBox::warning(this,tr("Warning"),tr("coomand name invalid!"));
-        lineEdit->setFocus();
+            lineEdit->setFocus();
 
-        return;
+            return;
+        }
     }
     else if(radioDirection->isChecked())
     {
-        if(!keywords.contains(QRegExp("us|ds|0|1",Qt::CaseInsensitive)))
+        if(!userInput.contains(QRegExp("us|ds|0|1",Qt::CaseInsensitive)))
+        {
             QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
-        lineEdit->setFocus();
-        
-        return;
+            lineEdit->setFocus();
+
+            return;
+        }
     }
     else if(radioCompleteComand->isChecked())
     {
         QRegExp  expr;
         expr.setPattern("(gettxpsd|getsnr|getnoisemargin|gethlog|getqln|getbitalloc)[ ]+[0-9]+[ ]+[0|1]");
         expr.setCaseSensitivity(Qt::CaseInsensitive);
-        if(!keywords.contains(expr))
+        if(!userInput.contains(expr))
+        {
             QMessageBox::warning(this,tr("Warning"),tr("coomand name invalid!"));
-        lineEdit->setFocus();
+            lineEdit->setFocus();
 
-        return;
+            return;
+        }
     }
     else if(!radioLineId->isChecked())
     {
-        if(!keywords.contains(QRegExp("[0-9]|([1-9]([0-9]{,2})",Qt::CaseInsensitive)))
+        if(!userInput.contains(QRegExp("[0-9]|([1-9]([0-9]{,2})",Qt::CaseInsensitive)))
+        {
             QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
-        lineEdit->setFocus();
+            lineEdit->setFocus();
 
-        return;   
+            return;   
+        }
     }
+
+    if(!radioCompleteComand->isChecked())
+    {
+        for(qint16 cnt = 0; cnt < keywords.count(); cnt++)
+        {
+            if(lineEdit->text().contains(keywords.at(cnt), Qt::CaseInsensitive))
+            {
+                keyword = keywords.at(cnt);
+                if(keyword == "1")
+                    keyword = "DS";
+
+                if(keyword == "0")
+                    keyword = "US";
+            }
+        }
+    }
+    else
+    {
+        keyword = lineEdit->text();
+    }
+
 
     if(previewCheckBox->checkState() == Qt::Checked )
     {

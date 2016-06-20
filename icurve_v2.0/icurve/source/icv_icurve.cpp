@@ -637,11 +637,11 @@ void IcvICurve::filterCurve()
     if(filterDlg->exec() != QDialog::Accepted)
         return ;
 
-    QString    keyword = filterDlg->lineEdit->text();
+    QString    keyword = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
    
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QList<IcvPlotCurve *> curvesToFilter;
+    QList<IcvPlotCurve *> curvesFound;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -673,11 +673,28 @@ void IcvICurve::filterCurve()
                 true : false;
         }
 
-        if(false == isMatch)   
+        if(true == isMatch)   
         {
-            curvesToFilter.push_back(curves.at(cnt));
+            curvesFound.push_back(curves.at(cnt));
         }
     } 
+
+    /*retrieve the bak of all curve list*/
+    QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
+    for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
+    {
+        for(qint16 cntF = 0; cntF < curvesFound.count(); cntF++)
+        {
+            targetCurves.removeAll(curvesFound.at(cntF));
+        }
+    }
+
+    /* process the left curves */
+    for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
+    {
+        targetCurves.at(cnt)->deleteCurve();
+    }
+
 
     plot->updateLegend();
     plot->replot();
@@ -731,6 +748,7 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
 
     } 
 
+    /*retrieve the bak of all curve list*/
     QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
     for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
     {
@@ -740,6 +758,7 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
         }
     }
 
+    /* process the left curves */
     for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
     {
         QwtPlotCurve *curve = targetCurves.at(cnt)->getCurve();
