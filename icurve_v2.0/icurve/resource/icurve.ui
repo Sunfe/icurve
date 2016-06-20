@@ -52,10 +52,12 @@
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
+    <addaction name="actionReset"/>
     <addaction name="actionRemove"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
     <addaction name="actionFind"/>
+    <addaction name="actionHide"/>
     <addaction name="actionShowAll"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
@@ -114,7 +116,6 @@
     <addaction name="actionLocate_to_file"/>
     <addaction name="actionInfo"/>
     <addaction name="actionCurveProperties"/>
-    <addaction name="actionReset"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="title">
@@ -585,6 +586,11 @@
   <action name="actionReset_2">
    <property name="text">
     <string>Reset</string>
+   </property>
+  </action>
+  <action name="actionHide">
+   <property name="text">
+    <string>Hide</string>
    </property>
   </action>
  </widget>

@@ -984,6 +984,7 @@ void IcvICurve::enableZoomer( bool checked)
 
     zoomer->setEnabled(enable);
     plotCanvas->setZoomState(enable);
+    plotCanvas->getCanvas()->setCursor(Qt::CrossCursor);
 
     /*disable magnifier and panner*/
     magnifier->setEnabled(!enable);
@@ -991,6 +992,8 @@ void IcvICurve::enableZoomer( bool checked)
 
     ui.actionZoom->setCheckable(true);
     ui.actionZoom->setChecked(checked);
+
+    plot->replot();
 
     return;
 }
@@ -1165,16 +1168,16 @@ void IcvICurve::setAxseAlignment()
 
     QGridLayout *layout = new QGridLayout(axseAlignDlg);
 
-    layout->addWidget(labelHor,     0, 1);
-    layout->addWidget(labelVer,     0, 2);
+    layout->addWidget(labelHor,     0, 1, 1, 1);
+    layout->addWidget(labelVer,     0, 2, 1, 1);
 
-    layout->addWidget(labelX,       1, 0);
-    layout->addWidget(alignComboHX, 1, 1);
-    layout->addWidget(alignComboVX, 1, 2);
+    layout->addWidget(labelX,       1, 0, 1, 1);
+    layout->addWidget(alignComboHX, 1, 1, 1, 1);
+    layout->addWidget(alignComboVX, 1, 2, 1, 1);
 
-    layout->addWidget(labelY,       2, 0);
-    layout->addWidget(alignComboHY, 2, 1);
-    layout->addWidget(alignComboVY, 2, 2);
+    layout->addWidget(labelY,       2, 0, 1, 1);
+    layout->addWidget(alignComboHY, 2, 1, 1, 1);
+    layout->addWidget(alignComboVY, 2, 2, 1, 1);
 
     layout->addWidget(buttonBox,    3, 2);
 

@@ -288,8 +288,14 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 
 void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 {
+    return ;
     if(mainWin->isHandMoveChecked())
         return;
+
+    QwtPlotZoomer *zoomer = mainWin->getZoomer();
+    if(zoomer->isEnabled())
+        return ;
+
 
     if(true == lockCursorMoveAction)
         return ;

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Mon Jun 20 01:20:06 2016
+** Created: Mon Jun 20 19:23:30 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -77,6 +77,7 @@ public:
     QAction *actionCurveProperties;
     QAction *actionHandMove;
     QAction *actionReset_2;
+    QAction *actionHide;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -222,6 +223,8 @@ public:
         actionHandMove->setCheckable(true);
         actionReset_2 = new QAction(icurveClass);
         actionReset_2->setObjectName(QString::fromUtf8("actionReset_2"));
+        actionHide = new QAction(icurveClass);
+        actionHide->setObjectName(QString::fromUtf8("actionHide"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -309,10 +312,12 @@ public:
         menuEdit->addAction(actionPaste);
         menuEdit->addSeparator();
         menuEdit->addSeparator();
+        menuEdit->addAction(actionReset);
         menuEdit->addAction(actionRemove);
         menuEdit->addAction(actionDelete);
         menuEdit->addSeparator();
         menuEdit->addAction(actionFind);
+        menuEdit->addAction(actionHide);
         menuEdit->addAction(actionShowAll);
         menuEdit->addSeparator();
         menuEdit->addAction(actionSelectAll);
@@ -343,7 +348,6 @@ public:
         menuCurve->addAction(actionLocate_to_file);
         menuCurve->addAction(actionInfo);
         menuCurve->addAction(actionCurveProperties);
-        menuCurve->addAction(actionReset);
         menuOptions->addAction(actionPreference);
         menuAxse->addAction(actionAxseScale);
         menuAxse->addAction(actionAxseTitle);
@@ -413,6 +417,7 @@ public:
         actionCurveProperties->setText(QApplication::translate("icurveClass", "Properties...", 0, QApplication::UnicodeUTF8));
         actionHandMove->setText(QApplication::translate("icurveClass", "Hand Tool", 0, QApplication::UnicodeUTF8));
         actionReset_2->setText(QApplication::translate("icurveClass", "Reset", 0, QApplication::UnicodeUTF8));
+        actionHide->setText(QApplication::translate("icurveClass", "Hide", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));
