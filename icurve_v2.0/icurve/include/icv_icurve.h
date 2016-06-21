@@ -52,6 +52,7 @@ public:
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
+	ICU_RET_STATUS appendCommandData(IcvCommand *cmd, QStringList data);
     QList <IcvCommand> *getPlotData();
     QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
@@ -140,12 +141,12 @@ private slots:
     void enableHandMove(bool checked);
 
     void legendChecked( const QVariant &itemInfo, bool on );
-    void updateAnalyProgressBar(qint16 progress);
+    void updateAnalyProgressBar(qint32 progress);
     void cancelAnalyProgressBar();
 
 
 signals:
-    void analyDataProgress(qint16 progress);
+    void analyDataProgress(qint32 progress);
     void displayCurveInfoSignal(QString name, QString position, QString lineInfo);
 
 };

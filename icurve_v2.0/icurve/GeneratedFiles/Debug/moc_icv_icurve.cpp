@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Tue Jun 21 00:56:03 2016
+** Created: Tue Jun 21 22:53:34 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -78,7 +78,7 @@ static const uint qt_meta_data_IcvICurve[] = {
 };
 
 static const char qt_meta_stringdata_IcvICurve[] = {
-    "IcvICurve\0\0progress\0analyDataProgress(qint16)\0"
+    "IcvICurve\0\0progress\0analyDataProgress(qint32)\0"
     "name,position,lineInfo\0"
     "displayCurveInfoSignal(QString,QString,QString)\0"
     "openFile()\0saveAs()\0closePlot()\0"
@@ -99,7 +99,7 @@ static const char qt_meta_stringdata_IcvICurve[] = {
     "checked\0enableZoomer(bool)\0rect\0"
     "zoomPlot(QRectF)\0enableHandMove(bool)\0"
     "itemInfo,on\0legendChecked(QVariant,bool)\0"
-    "updateAnalyProgressBar(qint16)\0"
+    "updateAnalyProgressBar(qint32)\0"
     "cancelAnalyProgressBar()\0"
 };
 
@@ -132,7 +132,7 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: analyDataProgress((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 0: analyDataProgress((*reinterpret_cast< qint32(*)>(_a[1]))); break;
         case 1: displayCurveInfoSignal((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3]))); break;
         case 2: openFile(); break;
         case 3: saveAs(); break;
@@ -170,7 +170,7 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 35: zoomPlot((*reinterpret_cast< const QRectF(*)>(_a[1]))); break;
         case 36: enableHandMove((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 37: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 38: updateAnalyProgressBar((*reinterpret_cast< qint16(*)>(_a[1]))); break;
+        case 38: updateAnalyProgressBar((*reinterpret_cast< qint32(*)>(_a[1]))); break;
         case 39: cancelAnalyProgressBar(); break;
         default: ;
         }
@@ -180,7 +180,7 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void IcvICurve::analyDataProgress(qint16 _t1)
+void IcvICurve::analyDataProgress(qint32 _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

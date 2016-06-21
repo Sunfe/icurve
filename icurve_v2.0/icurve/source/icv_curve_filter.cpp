@@ -35,7 +35,6 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
 
-
 }
 
 
@@ -91,8 +90,7 @@ void IcvCurveFilterDialog::prepareCommitAction()
        emit previewSignal(lookupType, keyword);
        return;
    }
-
-    return;
+   return;
 }
 
 
@@ -118,9 +116,8 @@ void IcvCurveFilterDialog::accept()
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {
-            QMessageBox::warning(this,tr("Warning"),tr("coomand name invalid!"));
+            QMessageBox::warning(this,tr("Warning"),tr("command name invalid!"),QMessageBox::Close);
             lineEdit->setFocus();
-
             return;
         }
     }
@@ -130,7 +127,6 @@ void IcvCurveFilterDialog::accept()
         {
             QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
             lineEdit->setFocus();
-
             return;
         }
     }
@@ -141,9 +137,8 @@ void IcvCurveFilterDialog::accept()
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {
-            QMessageBox::warning(this,tr("Warning"),tr("coomand name invalid!"));
+            QMessageBox::warning(this,tr("Warning"),tr("complete command name invalid!"));
             lineEdit->setFocus();
-
             return;
         }
     }
@@ -153,7 +148,6 @@ void IcvCurveFilterDialog::accept()
         {
             QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
             lineEdit->setFocus();
-
             return;   
         }
     }
@@ -178,25 +172,22 @@ void IcvCurveFilterDialog::accept()
         keyword = lineEdit->text();
     }
 
-
     if(previewCheckBox->checkState() == Qt::Checked )
     {
         emit previewSignal(lookupType, lineEdit->text());
         return;
     }
-
     return QDialog::accept();
 }
 
 
 void IcvCurveFilterDialog::reject()
 {
-    if(previewCheckBox->checkState() == Qt::Checked )
-    {
-        emit recoverPreviewSignal();
-    }
-
-  return QDialog::reject ();
+	if(previewCheckBox->checkState() == Qt::Checked )
+	{
+		emit recoverPreviewSignal();
+	}
+	return QDialog::reject ();
 }
 
 

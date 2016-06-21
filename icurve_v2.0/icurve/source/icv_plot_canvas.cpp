@@ -442,7 +442,6 @@ void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
 
         /*delete from qwtcavas*/
         qwtCurve->detach();
-
         /*delete from heap*/
         delete qwtCurve;  
 
@@ -454,16 +453,41 @@ void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
 
         /*remove from list of curves in the IcvCanvas  */
         curves.removeAll(crv[cnt]);  
-
         /*detete corresponding markers*/
         crv[cnt]->deleteMakers();
-
         /*update selected curve state*/
         curSelectedCurve.removeAll(crv[cnt]);
         prevSelectedCurve.removeAll(crv[cnt]);
     }
-
     return;
+}
+
+
+void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
+{
+	if(0 == crv.count())
+		return ;
+
+	for(qint16 cnt = 0; cnt < crv.count(); cnt++)
+	{
+		QwtPlotCurve *qwtCurve = crv[cnt]->getCurve();
+		if(NULL == qwtCurve)
+			continue;
+
+		/*detach from qwtcavas*/
+		qwtCurve->detach();
+		/*delete from heap*/
+		delete qwtCurve;  
+		qwtCurve = NULL;
+		/*remove from list of curves in the IcvCanvas  */
+		curves.removeAll(crv[cnt]);  
+		/*detete corresponding markers*/
+		crv[cnt]->deleteMakers();
+		/*update selected curve state*/
+		curSelectedCurve.removeAll(crv[cnt]);
+		prevSelectedCurve.removeAll(crv[cnt]);
+	}
+	return;
 }
 
 

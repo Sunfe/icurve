@@ -79,8 +79,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionDelete,     SIGNAL(triggered()), this, SLOT(deleteCurve()));
     connect(ui.actionFind,       SIGNAL(triggered()), this, SLOT(findCurve()));
     connect(ui.actionShowAll,    SIGNAL(triggered()), this, SLOT(showAllCurve()));
-    connect(ui.actionSelectAll,  SIGNAL(triggered()), this, SLOT(selectAllCurve()));
-    
+    connect(ui.actionSelectAll,  SIGNAL(triggered()), this, SLOT(selectAllCurve()));  
     /*curve menu*/
     connect(ui.actionColor,      SIGNAL(triggered()), this, SLOT(setCurveColor()));
     connect(ui.actionWidth,      SIGNAL(triggered()), this, SLOT(setCurveWidth()));
@@ -89,14 +88,12 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionExpand,     SIGNAL(triggered()), this, SLOT(expandCurve()));
     connect(ui.actionFilter,     SIGNAL(triggered()), this, SLOT(filterCurve()));
     connect(ui.actionInfo,       SIGNAL(triggered()), this, SLOT(showCurveInfo()));
-    
     /*axse menu*/
     connect(ui.actionAxseScale,      SIGNAL(triggered()), this, SLOT(setAxseScale()));
     connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
     connect(ui.actionAxseAlignment,  SIGNAL(triggered()), this, SLOT(setAxseAlignment()));
     connect(ui.actionAxseRotation,   SIGNAL(triggered()), this, SLOT(setAxseRotation()));
     connect(ui.actionAxseProperties, SIGNAL(triggered()), this, SLOT(setAxseProperties()));
-
     /*insert menu*/
     connect(ui.actionTitle,      SIGNAL(triggered()), this, SLOT(insertTitle()));
     connect(ui.actionX_label,    SIGNAL(triggered()), this, SLOT(insertXLabel()));
@@ -105,15 +102,12 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionCurveName,  SIGNAL(triggered()), this, SLOT(insertCurveName()));
     connect(ui.actionFooter,     SIGNAL(triggered()), this, SLOT(insertFooter()));
     connect(ui.actionIndicator,  SIGNAL(triggered()), this, SLOT(insertIndicator()));
-
     /* view menu */
     connect(ui.actionZoom,       SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
-    
     /* tool menu */
     connect(ui.actionHandMove,   SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
 
-
-    connect(this, SIGNAL(analyDataProgress(qint16)), this, SLOT(updateAnalyProgressBar(qint16)));
+    connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
 
 }
@@ -625,8 +619,7 @@ void IcvICurve::pasteCurve()
 {
     QClipboard *board = QApplication::clipboard();  
     QString       str = board->text();  
-
-    return ;
+    return;
 }
 
 
@@ -679,7 +672,7 @@ void IcvICurve::filterCurve()
         }
     } 
 
-    /*retrieve the bak of all curve list*/
+    /* remove the curves from list of deletion*/
     QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
     for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
     {
@@ -688,20 +681,12 @@ void IcvICurve::filterCurve()
             targetCurves.removeAll(curvesFound.at(cntF));
         }
     }
-
-    /* process the left curves */
-    for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
-    {
-        targetCurves.at(cnt)->deleteCurve();
-    }
-
+	plotCanvas->removeCurves(targetCurves);
 
     plot->updateLegend();
     plot->replot();
-
     /*clear memory*/
     delete filterDlg;
-    
     return;
 }
 
@@ -766,7 +751,6 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
     }
 
     plot->replot();
-
     return;
 }
 
@@ -781,7 +765,6 @@ void IcvICurve::recoverCurveVisible()
     }
 
     plot->replot();
-
     return;
 }
 
@@ -1329,8 +1312,8 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 {
     qint32     cout = 0;
     bool       ok   = true;
-    qint16     line = 0;
-    qint16     totalLineNum = 0;
+    qint32     line = 0;
+    qint32     totalLineNum = 0;
     QRegExp    regExp; 
     IcvCommand cmd;
     IcvCommand prevCmd;
@@ -1378,29 +1361,35 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
             }
         }
 
-        if(curCmdName != "NULL") /*try to get parameters of command*/
-        {
-            QString pattern(curCmdName + "\\s+([0-9]|1[0-9])\\s+([0-1])");		
-            regExp.setPattern(pattern);
-            pos = regExp.indexIn(dataLine);
-            if(-1 != pos)
-            {
-               /*if a new command found,and the last command is not empty,
-                  set the last command complete.
-                */
-                prevCmd = cmd;
+        /* if no command contained in this line, and no pattern 
+        like: "280 : -133.0 ", skip the line */
+        regExp.setPattern("\\s+\\d{,5}\\s+:\\s+-{,1}\\d{1,}.\\d\\s+");
+        regExp.setCaseSensitivity(Qt::CaseInsensitive);
+        pos = regExp.indexIn(dataLine);
+        if((-1 == pos) && (curCmdName == "NULL"))
+            continue;
 
-                cmd.reset();
-                cmd.setName(curCmdName);  
-                QString port(regExp.capturedTexts().at(1));
-                cmd.setLineId(port.toInt(&ok));
-                QString dir(regExp.capturedTexts().at(2));
-                cmd.setDirection(dir.toInt(&ok));
-                cmd.setState(CMD_STARTED);
-                cmd.setDataPosInFile(line);
-                cmd.setBriefInfo(dataLine);
-                cmd.setFileName(file.fileName());
-            }
+        /* continue to handle data of the line, try to get parameters of 
+        command */
+        QString pattern(curCmdName + "\\s+([0-9]|1[0-9])\\s+([0-1])");		
+        regExp.setPattern(pattern);
+        pos = regExp.indexIn(dataLine);
+        if(-1 != pos)
+        {
+            /* if a new command found,and the last command is not empty,
+            set the last command complete. */
+            prevCmd = cmd;
+
+            cmd.reset();
+            cmd.setName(curCmdName);  
+            QString port(regExp.capturedTexts().at(1));
+            cmd.setLineId(port.toInt(&ok));
+            QString dir(regExp.capturedTexts().at(2));
+            cmd.setDirection(dir.toInt(&ok));
+            cmd.setState(CMD_STARTED);
+            cmd.setDataPosInFile(line);
+            cmd.setBriefInfo(dataLine);
+            cmd.setFileName(file.fileName());
         }
 
         if(CMD_STARTED == cmd.getState())
@@ -1452,56 +1441,60 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 
 ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 {
-    QStringList splitList;
-    QStringList digList;
+	QStringList splitList;
+	QStringList digList;
+
+    if((cmd->getName() == "getTxPsd") && dataLine.contains("---"))
+    {
+        dataLine = dataLine.replace("---","-150.0");
+    }
+
+    QRegExp regExpNonBitAlloc;
+    QRegExp regExpBitAlloc;
+	regExpNonBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
+	regExpNonBitAlloc.setPattern("\\s+\\d{,5}\\s+:([ ]+-{,1}\\d{1,}.\\d){1,10}$");
+	regExpBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
+	regExpBitAlloc.setPattern("\\s+\\d{,5}\\s+:(\\s+\\d+){,20}$");
 
     splitList = dataLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-
-    if(!splitList.contains(":") )  /*only ":"*/
-        return ICU_PLOT_DATA_FORMAT_ERROR;
-
-    if((cmd->getName() == "getTxPsd") && splitList.contains("---"))
-    {
-        splitList = splitList.replaceInStrings("---","-150.0");
-    }
-
     digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
+	if(-1 != regExpNonBitAlloc.indexIn(dataLine))
+	{
+		appendCommandData(cmd, digList);
+        if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
+            cmd->setState(CMD_CLOSED);
+		return ICU_OK;
+	}
+	else if(-1 != regExpBitAlloc.indexIn(dataLine))
+	{
+		appendCommandData(cmd, digList);
+        if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
+            cmd->setState(CMD_CLOSED);
+		return ICU_OK;
+	}
 
-    if(digList.count() > ICV_MAX_NUM_DIGITS_PERLINE ||(digList.count() <=0))
-    {
-        return ICU_PLOT_DATA_FORMAT_ERROR;
-    }
+    return ICU_ERROR;
+}
 
-    if(!digList.at(0).at(0).isDigit())
-    {
-        return ICU_PLOT_DATA_FORMAT_ERROR;
-    }
 
-    bool ok = false;
-    qint16 toneIndex = digList.at(0).toInt(&ok);
-    if(false == ok)
-        return ICU_PLOT_DATA_FORMAT_ERROR;
+ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
+{
+	QList<QPointF> points; 
+	QPointF        point;
+	qint16         tone = cmd->getData().count();
+	for(qint16 i = ICV_PLOT_DATA_START_POS; i < data.count(); i++)
+	{
+        bool ok = false;
+		qreal dataItem = data.at(i).toFloat(&ok);
+		if(false == ok)
+			return ICU_PLOT_DATA_FORMAT_ERROR;
+		tone++;
+		point.setX(tone);
+		point.setY(dataItem);
+		points.append(point);
+	}
 
-    QList<QPointF> points; 
-    QPointF        point;
-    qint16         tone = cmd->getData().count();
-    for(qint16 i = ICV_PLOT_DATA_START_POS; i < digList.count(); i++)
-    {
-        qreal dataItem = digList.at(i).toFloat(&ok);
-        if(false == ok)
-            return ICU_PLOT_DATA_FORMAT_ERROR;
-
-        tone++;
-        point.setX(tone);
-        point.setY(dataItem);
-        points.append(point);
-    }
-
-    cmd->setData(points,true);
-
-    if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
-        cmd->setState(CMD_CLOSED);
-
+	cmd->setData(points,true);
     return ICU_OK;
 }
 
@@ -1512,11 +1505,12 @@ QList <IcvCommand>* IcvICurve::getPlotData()
 }
 
 
-void IcvICurve::updateAnalyProgressBar(qint16 progress)
+void IcvICurve::updateAnalyProgressBar(qint32 progress)
 {
     if(analyProgressDialog != NULL)
     {
         analyProgressDialog->setValue(progress);
+        analyProgressDialog->setLabelText(QString("%1/%2").arg(progress).arg(analyProgressDialog->maximum()));
         analyProgressDialog->repaint();
     }
 

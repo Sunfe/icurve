@@ -52,6 +52,7 @@ public:
     void clearAllCurves();
     QList<IcvPlotCurve*> getSelectedCurve();
     void deleteCurve(QList<IcvPlotCurve*> crv);
+	void removeCurves(QList<IcvPlotCurve *> crv);
     void highlightCurve(QList<IcvPlotCurve*> crv);
     void lockMagnifier();
     void unlockMagnifier();
