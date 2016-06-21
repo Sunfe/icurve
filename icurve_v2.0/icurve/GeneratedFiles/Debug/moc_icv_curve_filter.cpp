@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_curve_filter.h'
 **
-** Created: Tue Jun 21 23:18:33 2016
+** Created: Wed Jun 22 00:39:24 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,21 +23,23 @@ static const uint qt_meta_data_IcvCurveFilterDialog[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
       41,   22,   21,   21, 0x05,
       71,   21,   21,   21, 0x05,
+      99,   94,   21,   21, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      94,   21,   21,   21, 0x08,
-     103,   21,   21,   21, 0x08,
-     112,   21,   21,   21, 0x08,
+     122,   21,   21,   21, 0x08,
+     131,   21,   21,   21, 0x08,
+     140,   21,   21,   21, 0x08,
+     162,   94,   21,   21, 0x08,
 
        0        // eod
 };
@@ -45,8 +47,10 @@ static const uint qt_meta_data_IcvCurveFilterDialog[] = {
 static const char qt_meta_stringdata_IcvCurveFilterDialog[] = {
     "IcvCurveFilterDialog\0\0filterType,keyword\0"
     "previewSignal(qint16,QString)\0"
-    "recoverPreviewSignal()\0accept()\0"
+    "recoverPreviewSignal()\0info\0"
+    "warningSignal(QString)\0accept()\0"
     "reject()\0prepareCommitAction()\0"
+    "displayWarning(QString)\0"
 };
 
 const QMetaObject IcvCurveFilterDialog::staticMetaObject = {
@@ -82,12 +86,14 @@ int IcvCurveFilterDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         switch (_id) {
         case 0: previewSignal((*reinterpret_cast< qint16(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
         case 1: recoverPreviewSignal(); break;
-        case 2: accept(); break;
-        case 3: reject(); break;
-        case 4: prepareCommitAction(); break;
+        case 2: warningSignal((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 3: accept(); break;
+        case 4: reject(); break;
+        case 5: prepareCommitAction(); break;
+        case 6: displayWarning((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 5;
+        _id -= 7;
     }
     return _id;
 }
@@ -103,5 +109,12 @@ void IcvCurveFilterDialog::previewSignal(qint16 _t1, QString _t2)
 void IcvCurveFilterDialog::recoverPreviewSignal()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, 0);
+}
+
+// SIGNAL 2
+void IcvCurveFilterDialog::warningSignal(QString _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_END_MOC_NAMESPACE

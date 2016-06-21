@@ -25,6 +25,7 @@ private slots:
     void accept();
     void reject();
     void prepareCommitAction();
+	void displayWarning(QString info);
 
 /*data*/
 private:
@@ -36,6 +37,7 @@ private:
 signals:
     void previewSignal(qint16 filterType, QString keyword);
     void recoverPreviewSignal();
+	void warningSignal(QString info);
 };
 
 #endif

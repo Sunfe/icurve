@@ -29,12 +29,13 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioDirection,      SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	/* code below will cause SLOT(accept) executed twice*/
+    //connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    //connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
-
+	connect(this, SIGNAL(warningSignal(QString)), this, SLOT(displayWarning(QString)));
 }
 
 
@@ -116,7 +117,7 @@ void IcvCurveFilterDialog::accept()
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {
-            QMessageBox::warning(this,tr("Warning"),tr("command name invalid!"),QMessageBox::Close);
+			emit warningSignal("command name invalid!");
             lineEdit->setFocus();
             return;
         }
@@ -124,9 +125,9 @@ void IcvCurveFilterDialog::accept()
     else if(radioDirection->isChecked())
     {
         if(!userInput.contains(QRegExp("us|ds|0|1",Qt::CaseInsensitive)))
-        {
-            QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
-            lineEdit->setFocus();
+		{
+			emit warningSignal("direction invalid!");
+			lineEdit->setFocus();
             return;
         }
     }
@@ -137,16 +138,16 @@ void IcvCurveFilterDialog::accept()
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {
-            QMessageBox::warning(this,tr("Warning"),tr("complete command name invalid!"));
-            lineEdit->setFocus();
-            return;
+			emit warningSignal("complete command name invalid!");
+			lineEdit->setFocus();
+			return;
         }
     }
     else if(!radioLineId->isChecked())
     {
         if(!userInput.contains(QRegExp("[0-9]|([1-9]([0-9]{,2})",Qt::CaseInsensitive)))
         {
-            QMessageBox::warning(this,tr("Warning"),tr("direction invalid!"));
+			emit warningSignal("direction invalid!");
             lineEdit->setFocus();
             return;   
         }
@@ -177,6 +178,7 @@ void IcvCurveFilterDialog::accept()
         emit previewSignal(lookupType, lineEdit->text());
         return;
     }
+
     return QDialog::accept();
 }
 
@@ -191,3 +193,8 @@ void IcvCurveFilterDialog::reject()
 }
 
 
+void IcvCurveFilterDialog::displayWarning(QString info)
+{
+	QMessageBox::warning(this,tr("Warning"),info);
+	return ;
+}
