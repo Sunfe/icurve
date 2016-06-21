@@ -171,7 +171,7 @@ qint16 IcvCommand::getState()
 
 QString IcvCommand::getCommandTitle()
 {
-    QString lineIdStr = QString::number(lineId);
+    QString lineIdStr = QString::number((int)lineId);
     QString    title  = name.remove("get") +".line " +  lineIdStr +\
         ((direction == 0)? ".US": ".DS");
 
