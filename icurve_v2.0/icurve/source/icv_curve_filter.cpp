@@ -153,6 +153,7 @@ void IcvCurveFilterDialog::accept()
         }
     }
 
+	keyword = lineEdit->text();
     if(!radioCompleteComand->isChecked())
     {
         for(qint16 cnt = 0; cnt < keywords.count(); cnt++)
@@ -168,18 +169,16 @@ void IcvCurveFilterDialog::accept()
             }
         }
     }
-    else
-    {
-        keyword = lineEdit->text();
-    }
 
     if(previewCheckBox->checkState() == Qt::Checked )
     {
         emit previewSignal(lookupType, lineEdit->text());
         return;
     }
-
-    return QDialog::accept();
+	else
+	{
+		return QDialog::accept();
+	}
 }
 
 
