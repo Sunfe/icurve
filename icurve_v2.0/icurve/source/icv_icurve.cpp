@@ -1148,7 +1148,6 @@ void IcvICurve::setAxseAlignment()
     alignComboVX->addItem(tr("Right"));
     alignComboVX->addItem(tr("Center"));
 
-
     QLabel *labelY = new QLabel("Y:");
     QComboBox *alignComboHY = new QComboBox(axseAlignDlg);
     alignComboHY->setObjectName("alignComboHY");
@@ -1169,7 +1168,6 @@ void IcvICurve::setAxseAlignment()
     connect(buttonBox, SIGNAL(rejected()), axseAlignDlg, SLOT(reject()));
 
     QGridLayout *layout = new QGridLayout(axseAlignDlg);
-
     layout->addWidget(labelHor,     0, 1, 1, 1);
     layout->addWidget(labelVer,     0, 2, 1, 1);
 
@@ -1192,7 +1190,6 @@ void IcvICurve::setAxseAlignment()
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
     axseAlignDlg->setLayout(layout);
-    //axseAlignDlg->resize(250,40);
 
     qint16 retcode = (qint16)axseAlignDlg->exec();
     if(QDialog::Accepted == retcode)
@@ -1217,7 +1214,6 @@ void IcvICurve::setAxseAlignment()
     }
 
     delete axseAlignDlg;
-
     return;
 }
 
@@ -1255,7 +1251,6 @@ void IcvICurve::setAxseRotation()
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
     axseRotationDlg->setLayout(layout);
-    //axseTitleDlg->resize(250,60);
 
     qint16 retcode = (qint16)axseRotationDlg->exec();
     if(QDialog::Accepted == retcode)
@@ -1270,7 +1265,6 @@ void IcvICurve::setAxseRotation()
         child = axseRotationDlg->findChild<QLineEdit *>("textEditY");
         double angleY = child->text().toDouble(&ok);
         plot->setAxisLabelRotation(QwtPlot::yLeft,angleY);
-
     }
 
     delete axseRotationDlg;
@@ -1280,7 +1274,6 @@ void IcvICurve::setAxseRotation()
 
 void IcvICurve::setAxseProperties()
 {
-
     return;
 }
 
@@ -1303,7 +1296,6 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
-
     return ICU_OK;
 }
 
@@ -1335,7 +1327,6 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         /*display immediately*/
         analyProgressDialog->show();
         analyProgressDialog->repaint();
-        
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
@@ -1420,7 +1411,6 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         if(NULL != analyProgressDialog)
             emit analyDataProgress(line);
     }
-
     /*no more new command found when at file end, save the current data*/
     if(cmd.getData().count() > 0)     
     {
@@ -1428,12 +1418,15 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
          plotData.push_back(cmd);   
     }
 
-    if(isDataAnalyCanceled && (NULL != analyProgressDialog))
-    {
-        delete analyProgressDialog;
-        analyProgressDialog = NULL;
+	/* import data action was halt, data should also be cleared*/
+    if(isDataAnalyCanceled)
         plotData.clear();
-    }
+
+	if((NULL != analyProgressDialog))
+	{
+		delete analyProgressDialog;
+		analyProgressDialog = NULL;
+	}
 
     return ICU_OK; 
 }
@@ -1521,7 +1514,7 @@ void IcvICurve::updateAnalyProgressBar(qint32 progress)
 void IcvICurve::cancelAnalyProgressBar()
 {
     isDataAnalyCanceled = true;
-    return ;
+    return;
 }
 
 
