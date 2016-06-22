@@ -319,6 +319,14 @@ void IcvICurve::insertYLabel()
 
 void IcvICurve::insertLegend()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(0 == allCurves.count())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		ui.actionLegend->setChecked(false);
+		return ;
+	}
+
     if(true == ui.actionLegend->isChecked())
     {
         legend = new QwtLegend(plot);
@@ -343,6 +351,14 @@ void IcvICurve::insertLegend()
 
 void IcvICurve::insertCurveName()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(0 == allCurves.count())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		ui.actionCurveName->setChecked(false);
+		return ;
+	}
+
     if(true == ui.actionCurveName->isChecked())
     {
         legendItem->attach(plot);
