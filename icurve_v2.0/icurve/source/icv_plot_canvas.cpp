@@ -74,7 +74,6 @@ void IcvPlotCanvas::setCurves(QList<IcvPlotCurve *> crvs)
 void IcvPlotCanvas::setCurSelectCurves(QList<IcvPlotCurve *> crvs)
 {
     curSelectedCurve = crvs ;
-
     return;
 }
 
@@ -715,7 +714,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 		if(NULL == curSelectedCurve[cnt])
 			continue;
 
-		if(curSelectedCurve[cnt]->isAttached() ==true)
+		if(curSelectedCurve[cnt]->isAttached() == true)
 		{
 			curSelectedCurve[cnt]->showMarkers();
 			curSelectedCurve[cnt]->boldTitle(true);
@@ -785,15 +784,15 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 	{
 		if(NULL == curSelectedCurve[cnt])
 			continue;
-
-		curSelectedCurve[cnt]->showMarkers();
-		curSelectedCurve[cnt]->boldTitle(true);
+		if(curSelectedCurve[cnt]->isAttached() == true)
+		{
+			curSelectedCurve[cnt]->showMarkers();
+			curSelectedCurve[cnt]->boldTitle(true);
+		}
 	}
 	prevSelectedCurve = curSelectedCurve;
-
 	/*popup menu*/
 	crvSelPopMenu->exec(event->globalPos());
-
 	/*update replot*/
 	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
 	canvas->plot()->replot();

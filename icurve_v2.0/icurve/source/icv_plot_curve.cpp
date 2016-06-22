@@ -59,6 +59,7 @@ IcvPlotCurve::~IcvPlotCurve()
     canvas = NULL;
     activateState   = 0;
     showMarkerState = 0;
+	attached = false;
 }
 
 
@@ -150,20 +151,6 @@ void IcvPlotCurve::showCurve()
 	return;
 }
 
-void IcvPlotCurve::hideCurve()
-{
-    if(curve == NULL)
-        return ;
-
-    curve->detach();
-    for(qint16 pos= 0; pos < markers.count(); pos++)
-    {
-        markers[pos]->detach();
-    }
-
-    return;
-}
-
 
 void IcvPlotCurve::removeCurve()
 {
@@ -195,6 +182,7 @@ void IcvPlotCurve::deleteCurve()
         delete markers[pos];
     }
     markers.clear();
+	attached = false;
  
     return;
 }
@@ -268,7 +256,6 @@ void IcvPlotCurve::hideMarkers()
     }
 
     showMarkerState = ICV_CURVE_HIDE_MARKER;
-
     return;
 }
 

@@ -67,27 +67,30 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     isDataAnalyCanceled  = false;
 
     /*{{{signals and slots*/
-    connect(ui.actionOpen,       SIGNAL(triggered()), this, SLOT(openFile()));
-    connect(ui.actionSaveAs,     SIGNAL(triggered()), this, SLOT(saveAs()));
-    connect(ui.actionClose,      SIGNAL(triggered()), this, SLOT(closePlot()));
-    connect(ui.actionExit,       SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui.actionOpen,           SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(ui.actionSaveAs,         SIGNAL(triggered()), this, SLOT(saveAs()));
+    connect(ui.actionClose,          SIGNAL(triggered()), this, SLOT(closePlot()));
+    connect(ui.actionExit,           SIGNAL(triggered()), this, SLOT(close()));
     /*edit menu*/
-    connect(ui.actionCut,        SIGNAL(triggered()), this, SLOT(cutCurve()));
-    connect(ui.actionCopy,       SIGNAL(triggered()), this, SLOT(copyCurve()));
-    connect(ui.actionPaste,      SIGNAL(triggered()), this, SLOT(pasteCurve()));
-    connect(ui.actionRemove,     SIGNAL(triggered()), this, SLOT(removeCurve()));
-    connect(ui.actionDelete,     SIGNAL(triggered()), this, SLOT(deleteCurve()));
-    connect(ui.actionFind,       SIGNAL(triggered()), this, SLOT(findCurve()));
-    connect(ui.actionShowAll,    SIGNAL(triggered()), this, SLOT(showAllCurve()));
-    connect(ui.actionSelectAll,  SIGNAL(triggered()), this, SLOT(selectAllCurve()));  
+    connect(ui.actionCut,            SIGNAL(triggered()), this, SLOT(cutCurve()));
+    connect(ui.actionCopy,           SIGNAL(triggered()), this, SLOT(copyCurve()));
+    connect(ui.actionPaste,          SIGNAL(triggered()), this, SLOT(pasteCurve()));
+    connect(ui.actionRemove,         SIGNAL(triggered()), this, SLOT(removeCurve()));
+    connect(ui.actionHide,           SIGNAL(triggered()), this, SLOT(removeCurve()));
+    connect(ui.actionDelete,         SIGNAL(triggered()), this, SLOT(deleteCurve()));
+    connect(ui.actionFind,           SIGNAL(triggered()), this, SLOT(findCurve()));
+    connect(ui.actionShowAll,        SIGNAL(triggered()), this, SLOT(showAllCurve()));
+    connect(ui.actionSelectAll,      SIGNAL(triggered()), this, SLOT(selectAllCurves()));  
+    connect(ui.actionSelectReverse,  SIGNAL(triggered()), this, SLOT(selectReverseCurves()));  
+	
     /*curve menu*/
-    connect(ui.actionColor,      SIGNAL(triggered()), this, SLOT(setCurveColor()));
-    connect(ui.actionWidth,      SIGNAL(triggered()), this, SLOT(setCurveWidth()));
-    connect(ui.actionStyle,      SIGNAL(triggered()), this, SLOT(setCurveStyle()));
-    connect(ui.actionMarker,     SIGNAL(triggered()), this, SLOT(setCurveMarker()));
-    connect(ui.actionExpand,     SIGNAL(triggered()), this, SLOT(expandCurve()));
-    connect(ui.actionFilter,     SIGNAL(triggered()), this, SLOT(filterCurve()));
-    connect(ui.actionInfo,       SIGNAL(triggered()), this, SLOT(showCurveInfo()));
+    connect(ui.actionColor,          SIGNAL(triggered()), this, SLOT(setCurveColor()));
+    connect(ui.actionWidth,          SIGNAL(triggered()), this, SLOT(setCurveWidth()));
+    connect(ui.actionStyle,          SIGNAL(triggered()), this, SLOT(setCurveStyle()));
+    connect(ui.actionMarker,         SIGNAL(triggered()), this, SLOT(setCurveMarker()));
+    connect(ui.actionExpand,         SIGNAL(triggered()), this, SLOT(expandCurve()));
+    connect(ui.actionFilter,         SIGNAL(triggered()), this, SLOT(filterCurve()));
+    connect(ui.actionInfo,           SIGNAL(triggered()), this, SLOT(showCurveInfo()));
     /*axse menu*/
     connect(ui.actionAxseScale,      SIGNAL(triggered()), this, SLOT(setAxseScale()));
     connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
@@ -95,17 +98,17 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionAxseRotation,   SIGNAL(triggered()), this, SLOT(setAxseRotation()));
     connect(ui.actionAxseProperties, SIGNAL(triggered()), this, SLOT(setAxseProperties()));
     /*insert menu*/
-    connect(ui.actionTitle,      SIGNAL(triggered()), this, SLOT(insertTitle()));
-    connect(ui.actionX_label,    SIGNAL(triggered()), this, SLOT(insertXLabel()));
-    connect(ui.actionY_label,    SIGNAL(triggered()), this, SLOT(insertYLabel()));
-    connect(ui.actionLegend,     SIGNAL(triggered()), this, SLOT(insertLegend()));
-    connect(ui.actionCurveName,  SIGNAL(triggered()), this, SLOT(insertCurveName()));
-    connect(ui.actionFooter,     SIGNAL(triggered()), this, SLOT(insertFooter()));
-    connect(ui.actionIndicator,  SIGNAL(triggered()), this, SLOT(insertIndicator()));
+    connect(ui.actionTitle,          SIGNAL(triggered()), this, SLOT(insertTitle()));
+    connect(ui.actionX_label,        SIGNAL(triggered()), this, SLOT(insertXLabel()));
+    connect(ui.actionY_label,        SIGNAL(triggered()), this, SLOT(insertYLabel()));
+    connect(ui.actionLegend,         SIGNAL(triggered()), this, SLOT(insertLegend()));
+    connect(ui.actionCurveName,      SIGNAL(triggered()), this, SLOT(insertCurveName()));
+    connect(ui.actionFooter,         SIGNAL(triggered()), this, SLOT(insertFooter()));
+    connect(ui.actionIndicator,      SIGNAL(triggered()), this, SLOT(insertIndicator()));
     /* view menu */
-    connect(ui.actionZoom,       SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
+    connect(ui.actionZoom,           SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
     /* tool menu */
-    connect(ui.actionHandMove,   SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
+    connect(ui.actionHandMove,       SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
 
     connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
@@ -913,7 +916,6 @@ void IcvICurve::findCurve()
 
     plotCanvas->highlightCurve(curvesFound);
     plotCanvas->setCurSelectCurves(curvesFound);
-
     plot->replot();
 
     /*clear memory*/
@@ -929,9 +931,15 @@ void IcvICurve::deleteCurve()
     if(NULL == plotCanvas)
         return ;
 
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve*> curves = plotCanvas->getSelectedCurve();
     plotCanvas->deleteCurve(curves);
-
     plot->replot();
     return;
 }
@@ -970,46 +978,46 @@ void IcvICurve::showAllCurve()
 		allCurves.at(pos)->showCurve();
 
 	plot->replot();
-#if 0
-    plotCanvas->clearAllCurves();
-    for(qint16 pos = 0; pos < plotData.count(); pos++)
-    {
-        QwtPlotCurve *qwtCurve = new QwtPlotCurve();
-        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
-        qwtCurve->setSamples(plotData[pos].getData().toVector());
-
-        QwtSymbol *symbol = new QwtSymbol( QwtSymbol::NoSymbol,
-            QBrush(Qt::yellow), QPen(Qt::red, 2), QSize(8, 8));
-        qwtCurve->setSymbol( symbol );
-        qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
-        qwtCurve->attach(plot);
-
-        IcvPlotCurve *plotCurve = new IcvPlotCurve;
-        plotCurve->setCurve(qwtCurve);
-        plotCurve->setCanvas(plotCanvas);
-        plotCurve->setDataPos(pos);
-
-        plotCanvas->appendCurves(plotCurve);
-
-        plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
-        plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
-        plot->replot();
-    }
-#endif
     return;
 }
 
 
-void IcvICurve::selectAllCurve()
+void IcvICurve::selectAllCurves()
 {
-    QList<IcvPlotCurve *> allCurves = plotCanvas->getCurves();
-    for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
-    {
-        plotCanvas->highlightCurve(allCurves);
-        plotCanvas->setCurSelectCurves(allCurves);
-    }
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
 
+	plotCanvas->highlightCurve(allCurves);
+	plotCanvas->setCurSelectCurves(allCurves);
     return;
+}
+
+
+void IcvICurve::selectReverseCurves()
+{
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
+    QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
+	for(qint16 cnt = 0; cnt < curve.count(); cnt++)
+	{
+		curve.at(cnt)->hideMarkers();
+		allCurves.removeAll(curve.at(cnt));
+	}
+
+	QList<IcvPlotCurve *> reversedCurves = allCurves;
+	plotCanvas->highlightCurve(reversedCurves);
+	plotCanvas->setCurSelectCurves(reversedCurves);
+
+	return;
 }
 
 
@@ -1023,7 +1031,7 @@ void IcvICurve::expandCurve()
 	}
 
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
-    if(0 == curve.count())
+    if(curve.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;

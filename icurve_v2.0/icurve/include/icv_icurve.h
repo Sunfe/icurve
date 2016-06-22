@@ -104,7 +104,8 @@ private slots:
     void deleteCurve();
     void findCurve();
     void showAllCurve();
-    void selectAllCurve();
+    void selectAllCurves();
+	void selectReverseCurves();
 
     /*curve menu slots*/
     void setCurveColor(); 

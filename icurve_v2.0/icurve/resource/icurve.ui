@@ -61,7 +61,7 @@
     <addaction name="actionShowAll"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
-    <addaction name="actionSelect_Reverse"/>
+    <addaction name="actionSelectReverse"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -533,7 +533,7 @@
     <string>Command Info</string>
    </property>
   </action>
-  <action name="actionSelect_Reverse">
+  <action name="actionSelectReverse">
    <property name="text">
     <string>Select Reverse</string>
    </property>

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Wed Jun 22 22:31:55 2016
+** Created: Thu Jun 23 01:31:04 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -66,7 +66,7 @@ public:
     QAction *actionCopy_plot;
     QAction *actionTree;
     QAction *actionInfo;
-    QAction *actionSelect_Reverse;
+    QAction *actionSelectReverse;
     QAction *actionData_picker;
     QAction *actionData_tracker;
     QAction *actionAxseScale;
@@ -201,8 +201,8 @@ public:
         actionInfo = new QAction(icurveClass);
         actionInfo->setObjectName(QString::fromUtf8("actionInfo"));
         actionInfo->setEnabled(true);
-        actionSelect_Reverse = new QAction(icurveClass);
-        actionSelect_Reverse->setObjectName(QString::fromUtf8("actionSelect_Reverse"));
+        actionSelectReverse = new QAction(icurveClass);
+        actionSelectReverse->setObjectName(QString::fromUtf8("actionSelectReverse"));
         actionData_picker = new QAction(icurveClass);
         actionData_picker->setObjectName(QString::fromUtf8("actionData_picker"));
         actionData_tracker = new QAction(icurveClass);
@@ -322,7 +322,7 @@ public:
         menuEdit->addAction(actionShowAll);
         menuEdit->addSeparator();
         menuEdit->addAction(actionSelectAll);
-        menuEdit->addAction(actionSelect_Reverse);
+        menuEdit->addAction(actionSelectReverse);
         menuHelp->addAction(actionTitle);
         menuHelp->addAction(actionX_label);
         menuHelp->addAction(actionY_label);
@@ -407,7 +407,7 @@ public:
         actionCopy_plot->setText(QApplication::translate("icurveClass", "Copy Plot", 0, QApplication::UnicodeUTF8));
         actionTree->setText(QApplication::translate("icurveClass", "Tree", 0, QApplication::UnicodeUTF8));
         actionInfo->setText(QApplication::translate("icurveClass", "Command Info", 0, QApplication::UnicodeUTF8));
-        actionSelect_Reverse->setText(QApplication::translate("icurveClass", "Select Reverse", 0, QApplication::UnicodeUTF8));
+        actionSelectReverse->setText(QApplication::translate("icurveClass", "Select Reverse", 0, QApplication::UnicodeUTF8));
         actionData_picker->setText(QApplication::translate("icurveClass", "Data Picker", 0, QApplication::UnicodeUTF8));
         actionData_tracker->setText(QApplication::translate("icurveClass", "Curve Tracker", 0, QApplication::UnicodeUTF8));
         actionAxseScale->setText(QApplication::translate("icurveClass", "Scale", 0, QApplication::UnicodeUTF8));
