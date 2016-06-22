@@ -57,6 +57,10 @@ public:
     void hideMarkers();
     void deleteMakers();
     void updateMakers();
+	void setIndicator(QList<QwtPlotMarker *>markers);
+	QList<QwtPlotMarker *>getIndicators();
+	void removeIndicator();
+	void deleteIndicator();
     qint16 getShowMarkerState();
     void setShowMarkerState(qint16 state);
 
@@ -75,11 +79,11 @@ private:
     QwtPlotCurve  *curve;
     IcvPlotCanvas *canvas;
     QList<QwtPlotMarker *> markers;
-    qint16         dataPosition;        /* the postion in QList data repository */
-
-    qint16         activateState ;
-    qint16         showMarkerState;
-    IcvCommand     command;
+	QList<QwtPlotMarker *> indicator;
+    qint16     dataPosition;        /* the postion in QList data repository */
+    qint16     activateState;
+    qint16     showMarkerState;
+    IcvCommand command;
 
 };
 

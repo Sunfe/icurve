@@ -24,7 +24,7 @@
      <x>0</x>
      <y>0</y>
      <width>759</width>
-     <height>17</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -508,6 +508,9 @@
    </property>
   </action>
   <action name="actionIndicator">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Indicator</string>
    </property>

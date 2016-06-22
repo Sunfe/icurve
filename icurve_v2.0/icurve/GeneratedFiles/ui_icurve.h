@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Wed Jun 22 20:26:45 2016
+** Created: Wed Jun 22 22:31:55 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -193,6 +193,7 @@ public:
         actionZoom->setCheckable(true);
         actionIndicator = new QAction(icurveClass);
         actionIndicator->setObjectName(QString::fromUtf8("actionIndicator"));
+        actionIndicator->setCheckable(true);
         actionCopy_plot = new QAction(icurveClass);
         actionCopy_plot->setObjectName(QString::fromUtf8("actionCopy_plot"));
         actionTree = new QAction(icurveClass);
@@ -230,7 +231,7 @@ public:
         icurveClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(icurveClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 759, 17));
+        menuBar->setGeometry(QRect(0, 0, 759, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);

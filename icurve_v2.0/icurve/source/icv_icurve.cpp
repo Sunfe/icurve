@@ -373,55 +373,86 @@ void IcvICurve::insertFooter()
 
 void IcvICurve::insertIndicator()
 {
-    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-    for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
-    {
-        QPointF maxSample;
-        QPointF minSample;
-        QPointF sample;
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(0 == allCurves.count())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		ui.actionIndicator->setChecked(false);
+		return ;
+	}
 
-        maxSample.setX(0);
-        maxSample.setY(0);
+	if(true == ui.actionIndicator->isChecked())
+	{
+		for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+		{
+			QList<QwtPlotMarker *>indicators = allCurves.at(cnt)->getIndicators();
+			if(!indicators.isEmpty())
+				continue;
 
-        minSample.setX(0xff);
-        minSample.setY(0xff);
-        for(qint16 posX = 0; posX < allCurves.at(cnt)->getCurve()->dataSize(); posX++)
-        {
-            sample = allCurves.at(cnt)->getCurve()->sample(posX);
-            if(sample.ry() >  maxSample.ry())
-            {
-                maxSample.setX(posX);
-                maxSample.setY(sample.ry());
-            }
+			/* if not indicator attached to the curve, create and attach*/
+			QPointF maxSample;
+			QPointF minSample;
+			QPointF sample;
 
-            if(sample.ry()!= 0 && sample.ry() < minSample.ry())
-            {
-                minSample.setX(posX);
-                minSample.setY(sample.ry());
-            }
-        }
+			maxSample.setX(0);
+			maxSample.setY(0);
 
-        QwtPlotMarker *maxPosMarker = new QwtPlotMarker();
-        maxPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
-        maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-        maxPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
-        maxPosMarker->setValue(maxSample);
-        maxPosMarker->setLabel( QString("max(%1,%2)").arg(maxSample.rx()).arg(maxSample.ry()));
-        maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-        maxPosMarker->attach( plot );
+			minSample.setX(0xff);
+			minSample.setY(0xff);
+			for(qint16 posX = 0; posX < allCurves.at(cnt)->getCurve()->dataSize(); posX++)
+			{
+				sample = allCurves.at(cnt)->getCurve()->sample(posX);
+				if(sample.ry() >  maxSample.ry())
+				{
+					maxSample.setX(posX);
+					maxSample.setY(sample.ry());
+				}
 
-        QwtPlotMarker *minPosMarker = new QwtPlotMarker();
-        minPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
-        minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-        minPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
-        minPosMarker->setValue(minSample);
-        minPosMarker->setLabel( QString("min(%1,%2)").arg(minSample.rx()).arg(minSample.ry()));
-        minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-        minPosMarker->attach( plot );
+				if(sample.ry()!= 0 && sample.ry() < minSample.ry())
+				{
+					minSample.setX(posX);
+					minSample.setY(sample.ry());
+				}
+			}
 
-        plot->replot();
-    }
+			QString name = allCurves.at(cnt)->getCommand().getCommandTitle();
+			QwtPlotMarker *maxPosMarker = new QwtPlotMarker();
+			maxPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
+			maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
+			maxPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
+			maxPosMarker->setValue(maxSample);
+			maxPosMarker->setLabel(QString("max(%1,%2)@%3").arg(maxSample.rx()).arg(maxSample.ry()).arg(name));
+			maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
+			maxPosMarker->attach(plot);
 
+			QwtPlotMarker *minPosMarker = new QwtPlotMarker();
+			minPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
+			minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
+			minPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
+			minPosMarker->setValue(minSample);
+			minPosMarker->setLabel( QString("min(%1,%2)@%3").arg(minSample.rx()).arg(minSample.ry()).arg(name));
+			minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
+			minPosMarker->attach(plot);
+
+			QList<QwtPlotMarker *>markers;
+			markers.append(maxPosMarker);
+			markers.append(minPosMarker);
+			allCurves.at(cnt)->setIndicator(markers);
+
+			ui.actionIndicator->setChecked(true);
+		}
+	}
+	else
+	{
+		for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+		{
+			allCurves.at(cnt)->deleteIndicator();
+		}
+
+		ui.actionIndicator->setChecked(false);
+	}
+
+	plot->replot();
     return;
 }
 
@@ -529,7 +560,6 @@ void IcvICurve::setCurveStyle()
 
 void IcvICurve::setCurveMarker()
 {
-
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {

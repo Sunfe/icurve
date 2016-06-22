@@ -39,13 +39,22 @@ IcvPlotCurve::~IcvPlotCurve()
         delete curve;
     }
 
+	/* delete markers */
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
         markers.at(pos)->detach();
-        delete markers.value(pos);
+		delete markers.value(pos);
     }
-
     markers.clear();
+
+	/* delete indicators */
+	for(qint16 pos= 0; pos < indicator.count(); pos++)
+	{
+		indicator.at(pos)->detach();
+		delete indicator.value(pos);
+	}
+	indicator.clear();
+
     curve  = NULL;
     canvas = NULL;
     activateState   = 0;
@@ -198,6 +207,7 @@ void IcvPlotCurve::setMarkers()
 }
 
 
+
 void IcvPlotCurve::showMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
@@ -232,7 +242,6 @@ void IcvPlotCurve::deleteMakers()
         delete markers[pos];
     }
     markers.clear();
-
     return;
 }
 
@@ -243,6 +252,40 @@ void IcvPlotCurve::updateMakers()
     setMarkers();    /* set new markers */
     
     return;
+}
+
+
+void IcvPlotCurve::setIndicator(QList<QwtPlotMarker *>markers)
+{
+  indicator = markers;
+}
+
+
+QList<QwtPlotMarker *> IcvPlotCurve::getIndicators()
+{
+	return indicator;
+}
+
+
+void IcvPlotCurve::removeIndicator()
+{
+	for(qint16 pos= 0; pos < indicator.count(); pos++)
+	{
+		indicator[pos]->detach();
+	}
+	return;
+}
+
+
+void IcvPlotCurve::deleteIndicator()
+{
+	for(qint16 pos= 0; pos < indicator.count(); pos++)
+	{
+		indicator[pos]->detach();
+		delete indicator[pos];
+	}
+	indicator.clear();
+	return;
 }
 
 
