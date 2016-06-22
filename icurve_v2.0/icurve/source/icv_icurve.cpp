@@ -622,6 +622,13 @@ void IcvICurve::pasteCurve()
 
 void IcvICurve::filterCurve()
 {
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(0 == allCurves.count())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
     if(filterDlg->exec() != QDialog::Accepted)
