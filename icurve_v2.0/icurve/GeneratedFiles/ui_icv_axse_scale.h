@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_axse_scale.ui'
 **
-** Created: Wed Jun 22 00:39:22 2016
+** Created: Wed Jun 22 21:10:47 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -60,10 +60,10 @@ public:
         lineEditMaxX->setGeometry(QRect(124, 33, 70, 20));
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(151, 16, 31, 16));
+        label_2->setGeometry(QRect(126, 16, 41, 16));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(34, 14, 31, 20));
+        label->setGeometry(QRect(10, 14, 41, 20));
         groupBox_2 = new QGroupBox(AxseScaleDialog);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(20, 100, 211, 71));
@@ -76,10 +76,10 @@ public:
         lineEditMinY->setGeometry(QRect(10, 33, 70, 20));
         label_7 = new QLabel(groupBox_2);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(149, 15, 31, 16));
+        label_7->setGeometry(QRect(127, 15, 41, 16));
         label_8 = new QLabel(groupBox_2);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(34, 14, 31, 20));
+        label_8->setGeometry(QRect(10, 14, 41, 20));
         lineEditMaxY->raise();
         label_7->raise();
         label_8->raise();
@@ -95,12 +95,12 @@ public:
     void retranslateUi(QDialog *AxseScaleDialog)
     {
         AxseScaleDialog->setWindowTitle(QApplication::translate("AxseScaleDialog", "Dialog", 0, QApplication::UnicodeUTF8));
-        groupBox->setTitle(QApplication::translate("AxseScaleDialog", "Axse X:", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("AxseScaleDialog", "Max", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("AxseScaleDialog", "Min", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("AxseScaleDialog", "Axse Y:", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("AxseScaleDialog", "Max", 0, QApplication::UnicodeUTF8));
-        label_8->setText(QApplication::translate("AxseScaleDialog", "Min", 0, QApplication::UnicodeUTF8));
+        groupBox->setTitle(QApplication::translate("AxseScaleDialog", "X Range:", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("AxseScaleDialog", "Max:", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("AxseScaleDialog", "Min:", 0, QApplication::UnicodeUTF8));
+        groupBox_2->setTitle(QApplication::translate("AxseScaleDialog", "Y Range:", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("AxseScaleDialog", "Max:", 0, QApplication::UnicodeUTF8));
+        label_8->setText(QApplication::translate("AxseScaleDialog", "Min:", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

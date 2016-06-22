@@ -139,7 +139,7 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     QwtPlot *plot = static_cast<QwtPlot*>(plotWidget);
 
     plot->setCanvasBackground( Qt::white );
-    plot->setAxisScale( QwtPlot::yLeft, -200.0, 200.0 );
+    plot->setAxisScale( QwtPlot::yLeft, -150.0, 150.0 );
     plot->setAxisScale( QwtPlot::xBottom, 0, 5000 );
 
     plot->setAxisLabelAlignment(QwtPlot::xBottom,Qt::AlignLeft);
@@ -244,11 +244,8 @@ void IcvICurve::openFile()
         plotCurve->setCanvas(plotCanvas);
         plotCurve->setDataPos(pos);
         plotCurve->setCommand(plotData[pos]);
-
+		/* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
-
-        plot->setAxisScale( QwtPlot::yLeft, 0, 70 );
-        plot->setAxisScale( QwtPlot::xBottom, 0.0, 5000 );
         plot->replot();
     }
 
@@ -671,6 +668,12 @@ void IcvICurve::filterCurve()
             curvesFound.push_back(curves.at(cnt));
         }
     } 
+
+	if(0 == curvesFound.count()) 
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve found!"));
+		return;
+	}
 
     /* remove the curves from list of deletion*/
     QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
@@ -1144,15 +1147,15 @@ void IcvICurve::setAxseAlignment()
 
     QComboBox *alignComboVX = new QComboBox(axseAlignDlg);
     alignComboVX->setObjectName("alignComboVX");
-    alignComboVX->addItem(tr("Left"));
-    alignComboVX->addItem(tr("Right"));
+    alignComboVX->addItem(tr("Top"));
+    alignComboVX->addItem(tr("Bottom"));
     alignComboVX->addItem(tr("Center"));
 
     QLabel *labelY = new QLabel("Y:");
     QComboBox *alignComboHY = new QComboBox(axseAlignDlg);
     alignComboHY->setObjectName("alignComboHY");
-    alignComboHY->addItem(tr("Top"));
-    alignComboHY->addItem(tr("Bottom"));
+    alignComboHY->addItem(tr("Left"));
+    alignComboHY->addItem(tr("Right"));
     alignComboHY->addItem(tr("Center"));
 
     QComboBox *alignComboVY = new QComboBox(axseAlignDlg);
@@ -1170,26 +1173,18 @@ void IcvICurve::setAxseAlignment()
     QGridLayout *layout = new QGridLayout(axseAlignDlg);
     layout->addWidget(labelHor,     0, 1, 1, 1);
     layout->addWidget(labelVer,     0, 2, 1, 1);
-
     layout->addWidget(labelX,       1, 0, 1, 1);
     layout->addWidget(alignComboHX, 1, 1, 1, 1);
     layout->addWidget(alignComboVX, 1, 2, 1, 1);
-
     layout->addWidget(labelY,       2, 0, 1, 1);
     layout->addWidget(alignComboHY, 2, 1, 1, 1);
     layout->addWidget(alignComboVY, 2, 2, 1, 1);
-
-    layout->addWidget(buttonBox,    3, 2);
-
-    layout->setColumnStretch(0,1);
-    layout->setColumnStretch(1,1);
-    layout->setColumnStretch(2,1);
-
-    layout->setRowMinimumHeight(1,20);
-
+	/* ok and cancel button span 2 column */
+    layout->addWidget(buttonBox,    3, 1, 1, 2); 
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
     axseAlignDlg->setLayout(layout);
+	axseAlignDlg->setFixedSize(200,120);
 
     qint16 retcode = (qint16)axseAlignDlg->exec();
     if(QDialog::Accepted == retcode)
@@ -1208,7 +1203,6 @@ void IcvICurve::setAxseAlignment()
         childV = axseAlignDlg->findChild<QComboBox *>("alignComboVY");
         Qt::Alignment alignY = childH->currentText().toInt(&ok) |
                                childV->currentText().toInt(&ok) ;
-
         plot->setAxisLabelAlignment(QwtPlot::yLeft,alignY);
 
     }
@@ -1276,7 +1270,6 @@ void IcvICurve::setAxseProperties()
 {
     return;
 }
-
 
 
 ICU_RET_STATUS IcvICurve::loadData(const QString &filename)

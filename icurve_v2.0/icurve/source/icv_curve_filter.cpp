@@ -13,8 +13,10 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     radioComandName->setCheckable(true);
     radioComandName->setChecked(true);
 
-    QStringList wordList;
-    wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc";
+	/* default completion */
+	QStringList wordList;
+    wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"\
+		     << "psd" <<"snr" << "margin" << "hlog" << "bitalloc";
     completer = new QCompleter(wordList);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -22,8 +24,11 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     lineEdit->setFocus();
     
     lookupType = ICV_BY_COMANDNAME;
-    keywords<<"getTxPsd"<<"getSnr"<<"getQln"<<"getHlog"<<"getNoiseMargin"<<"DS"<<"US";
+	/* legally accept command name*/
+    keywords << "getTxPsd" << "getSnr" << "getQln" << "getHlog" << "getNoiseMargin" << "getBitAlloc"\
+		     << "DS" << "US";
 
+	/* default actions */
     connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
@@ -154,22 +159,43 @@ void IcvCurveFilterDialog::accept()
     }
 
 	keyword = lineEdit->text();
-    if(!radioCompleteComand->isChecked())
-    {
-        for(qint16 cnt = 0; cnt < keywords.count(); cnt++)
-        {
-            if(lineEdit->text().contains(keywords.at(cnt), Qt::CaseInsensitive))
-            {
-                keyword = keywords.at(cnt);
-                if(keyword == "1")
-                    keyword = "DS";
+	if(radioDirection->isChecked())
+	{
+		for(qint16 cnt = 0; cnt < keywords.count(); cnt++)
+		{
+			if(lineEdit->text().contains(keywords.at(cnt), Qt::CaseInsensitive))
+			{
+				keyword = keywords.at(cnt);
+				if(keyword == "1")
+					keyword = "DS";
 
-                if(keyword == "0")
-                    keyword = "US";
-            }
-        }
-    }
-
+				if(keyword == "0")
+					keyword = "US";
+			}
+		}
+	}
+	else if(radioComandName->isChecked())
+	{
+		QRegExp expr("psd|gettxpsd|snr|getsnr|margin|getnoisemargin|qln|getqln|hlog|gethlog|bit|getbitalloc");
+		if(lineEdit->text().contains(expr))
+		{
+			QString word = expr.cap(0);
+			QStringList keywordList = keywords.filter(word, Qt::CaseInsensitive);
+			if(keywordList.count() == 0)
+				return;
+			
+			keyword = keywordList[0];
+			if(lineEdit->text().length() > word.length())
+			{
+				QMessageBox msgBox(this);
+				msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+				msgBox.setText("A fuzzy matching: " + word + " is detected,you want continue?");
+				qint16 retcode = msgBox.exec();
+				if(QDialog::Rejected == retcode)
+					return;
+			}
+		}
+	}
     if(previewCheckBox->checkState() == Qt::Checked )
     {
         emit previewSignal(lookupType, lineEdit->text());
@@ -194,6 +220,6 @@ void IcvCurveFilterDialog::reject()
 
 void IcvCurveFilterDialog::displayWarning(QString info)
 {
-	QMessageBox::warning(this,tr("Warning"),info);
+	QMessageBox::warning(this,tr("Warning"), info, QMessageBox::Close);
 	return ;
 }

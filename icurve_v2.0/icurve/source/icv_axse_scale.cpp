@@ -49,6 +49,16 @@ IcvAxseSCaleDialog::~IcvAxseSCaleDialog(void)
 void IcvAxseSCaleDialog::accept()
 {
     bool ok = false;
+
+	if(lineEditMinX->text().isEmpty() || lineEditMaxX->text().isEmpty() ||
+	   lineEditMinY->text().isEmpty() || lineEditMaxY->text().isEmpty())
+	{
+		QMessageBox::warning(this,tr("Warning"),\
+			tr("Empty input is not allowed."));
+		lineEditMinX->setFocus();
+		return;
+	}
+
     double minX = lineEditMinX->text().toDouble(&ok);
     double maxX  = lineEditMaxX->text().toDouble(&ok);
 

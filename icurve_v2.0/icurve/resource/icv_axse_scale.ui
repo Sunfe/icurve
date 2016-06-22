@@ -42,7 +42,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Axse X:</string>
+    <string>X Range:</string>
    </property>
    <widget class="QLineEdit" name="lineEditMinX">
     <property name="geometry">
@@ -67,27 +67,27 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>151</x>
+      <x>126</x>
       <y>16</y>
-      <width>31</width>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Max</string>
+     <string>Max:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>34</x>
+      <x>10</x>
       <y>14</y>
-      <width>31</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Min</string>
+     <string>Min:</string>
     </property>
    </widget>
   </widget>
@@ -104,7 +104,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="title">
-    <string>Axse Y:</string>
+    <string>Y Range:</string>
    </property>
    <widget class="QLineEdit" name="lineEditMaxY">
     <property name="geometry">
@@ -129,27 +129,27 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>149</x>
+      <x>127</x>
       <y>15</y>
-      <width>31</width>
+      <width>41</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Max</string>
+     <string>Max:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>34</x>
+      <x>10</x>
       <y>14</y>
-      <width>31</width>
+      <width>41</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Min</string>
+     <string>Min:</string>
     </property>
    </widget>
    <zorder>lineEditMaxY</zorder>
