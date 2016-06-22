@@ -66,6 +66,9 @@ public:
     qint16 getShowMarkerState();
     void setShowMarkerState(qint16 state);
 
+	bool isAttached();
+	void setAttachedState(bool state);
+
     void setColor(QColor color);
     void setWidth(qint16 width);
     void setStyle(Qt::PenStyle style);
@@ -82,11 +85,11 @@ private:
     IcvPlotCanvas *canvas;
     QList<QwtPlotMarker *> markers;
 	QList<QwtPlotMarker *> indicator;
+	IcvCommand command;
     qint16     dataPosition;        /* the postion in QList data repository */
     qint16     activateState;
     qint16     showMarkerState;
-    IcvCommand command;
-
+	bool       attached;
 };
 
 #endif

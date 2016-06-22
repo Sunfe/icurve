@@ -84,7 +84,7 @@ void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
     curve = crv;
     setMarkers();
-
+	setAttachedState(true);
     return ;
 }
 
@@ -122,8 +122,21 @@ void IcvPlotCurve::showVividCurve()
         curve->attach(canvas->getCanvas()->plot());
         showMarkers();
     }
-
+	setAttachedState(true);
     return;
+}
+
+
+bool IcvPlotCurve::isAttached()
+{
+	return attached;
+}
+
+
+void IcvPlotCurve::setAttachedState(bool state)
+{
+	attached = state;
+	return;
 }
 
 
@@ -133,6 +146,7 @@ void IcvPlotCurve::showCurve()
 	{
 		curve->attach(canvas->getCanvas()->plot());;
 	}
+	setAttachedState(true);
 	return;
 }
 
@@ -162,6 +176,7 @@ void IcvPlotCurve::removeCurve()
 		markers[pos]->detach();
 	}
 
+	setAttachedState(false);
 	return;
 }
 

@@ -140,7 +140,7 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
 
     plot->setCanvasBackground( Qt::white );
     plot->setAxisScale( QwtPlot::yLeft, -150.0, 150.0 );
-    plot->setAxisScale( QwtPlot::xBottom, 0, 5000 );
+    plot->setAxisScale( QwtPlot::xBottom, 0, 3000 );
 
     plot->setAxisLabelAlignment(QwtPlot::xBottom,Qt::AlignLeft);
     plot->setAxisLabelAlignment(QwtPlot::yLeft,Qt::AlignTop);
@@ -244,6 +244,7 @@ void IcvICurve::openFile()
         plotCurve->setCanvas(plotCanvas);
         plotCurve->setDataPos(pos);
         plotCurve->setCommand(plotData[pos]);
+		plotCurve->setAttachedState(true);
 		/* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
         plot->replot();

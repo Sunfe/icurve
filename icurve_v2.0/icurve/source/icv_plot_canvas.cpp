@@ -249,6 +249,7 @@ void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
 
 	for(qint16 cnt = 0; cnt < crv.count(); cnt++)
 	{
+		/*remove curve from canvas*/
 		crv.at(cnt)->removeCurve();
 		/*update selected curve state*/
 		curSelectedCurve.removeAll(crv[cnt]);
@@ -284,218 +285,6 @@ void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
 QList<IcvPlotCurve*> IcvPlotCanvas::getSelectedCurve()
 {
     return curSelectedCurve;
-}
-
-
-void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
-{
-    if(true == mainWin->isHandMoveChecked())
-        return;
-
-    /*release magnifier*/
-    unlockMagnifier();
-
-    /*hide previous seleced curve marker*/
-    for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
-    {
-        if(NULL == prevSelectedCurve[cnt])
-            continue;
-
-        prevSelectedCurve[cnt]->hideMarkers();
-        prevSelectedCurve[cnt]->boldTitle(false);
-    }
-
-    /*try to retrieve the closest curves*/
-    curSelectedCurve.clear();
-    const QPoint        pos = event->pos();
-    qint16 cntCurveSelected = 0;
-    for(qint16 i = 0; i < curves.count(); i++)
-    {
-        QwtPlotCurve *curve = curves[i]->getCurve();
-        double dist         = 0.0;
-        curve->closestPoint(pos, &dist);
-
-        if(dist < ICV_TOLERENCE_DISTANCE )
-        {
-            curSelectedCurve.push_back(curves[i]);
-            cntCurveSelected++;
-        }
-    }
-
-    /*show current selected curve markers*/
-    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-    {
-        if(NULL == curSelectedCurve[cnt])
-            continue;
-
-        curSelectedCurve[cnt]->showMarkers();
-        curSelectedCurve[cnt]->boldTitle(true);
-    }
-
-    prevSelectedCurve = curSelectedCurve;
-    
-    if(true == curSelectedCurve.isEmpty())
-    {
-        lockCursorMoveAction = false;
-    }
-    else
-    {
-        /*enable cursor moving action*/
-        lockCursorMoveAction = true;
-    }
-
-    /*update replot*/
-    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-    canvas->plot()->replot();
-    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-
-    return ;
-}
-
-
-void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
-{
-
-    QwtPlotZoomer *zoomer = mainWin->getZoomer();
-    if(zoomer->isEnabled())
-        return ;
-
-    lockMagnifier();
-
-    lockCursorMoveAction = false;
-    /*hide previous seleced curve marker*/
-    for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
-    {
-        if(NULL == prevSelectedCurve[cnt])
-            continue;
-
-        prevSelectedCurve[cnt]->hideMarkers();
-    }
-    prevSelectedCurve.clear();
-
-    /*try to retrieve the closest curves*/
-    curSelectedCurve.clear();
-    const QPoint pos = event->pos();
-    qint16 cntCurveSelected = 0;
-    for(qint16 i = 0; i < curves.count(); i++)
-    {
-        QwtPlotCurve *curve = curves[i]->getCurve();
-        double dist         = 0.0;
-        curve->closestPoint(pos, &dist);
-
-        if(dist < ICV_TOLERENCE_DISTANCE )
-        {
-            curSelectedCurve.push_back(curves[i]);
-            cntCurveSelected++;
-        }
-    }
-
-    /*show current selected curve markers*/
-    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-    {
-        if(NULL == curSelectedCurve[cnt])
-            continue;
-
-        curSelectedCurve[cnt]->showMarkers();
-        curSelectedCurve[cnt]->boldTitle(true);
-    }
-    prevSelectedCurve = curSelectedCurve;
-
-    /*popup menu*/
-    crvSelPopMenu->exec(event->globalPos());
-
-    /*update replot*/
-    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-    canvas->plot()->replot();
-    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-
-    return;
-}
-
-
-void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
-{
-    return ;
-    if(mainWin->isHandMoveChecked())
-        return;
-
-    QwtPlotZoomer *zoomer = mainWin->getZoomer();
-    if(zoomer->isEnabled())
-        return ;
-
-
-    if(true == lockCursorMoveAction)
-        return ;
-
-    if(curves.isEmpty())
-    {
-        canvas->setCursor(Qt::ArrowCursor);
-        return;
-    }
-
-    /* pick the selected curve */
-    const QPoint pos = event->pos();
-    for(qint16 i = 0; i < curves.count(); i++)
-    {
-        QwtPlotCurve *curve = curves[i]->getCurve();
-        double dist        = 0.0;
-        curve->closestPoint(pos, &dist);
-
-        if(dist <= ICV_TOLERENCE_DISTANCE )
-        {
-            canvas->setCursor(Qt::PointingHandCursor);
-            curves[i]->setActivateState(ICV_CURVE_ACTIVATED);
-            break;
-        }
-        else
-        {
-            canvas->setCursor(Qt::ArrowCursor);
-        }
-    }
-
-    return;
-}
-
-
-bool IcvPlotCanvas::eventFilter(QObject *object, QEvent *event)
-{
-    if((NULL == object) || (NULL == event) || (object != canvas))
-        return false;
-
-    switch(event->type())
-    {
-    case QEvent::MouseButtonPress:
-        {
-            const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-            if(mouseEvent->button() == Qt::LeftButton)
-            {
-                onMouseLeftButtonClick(mouseEvent);
-            }
-            else if(mouseEvent->button() == Qt::RightButton)
-            {
-                onMouseRightButtonClick(mouseEvent);
-            }
-            break;
-        }
-
-    case QEvent::MouseMove:
-        {
-            const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-            onMouseMove(mouseEvent);
-            break;
-        }
-    default:
-        break;
-
-    }
-
-    return QObject::eventFilter(object,event);
-}
-
-
-bool IcvPlotCanvas::event(QEvent *eve)
-{
-    return QObject::event(eve);
 }
 
 
@@ -885,3 +674,216 @@ void IcvPlotCanvas::createCurvePopMenuAction()
 }
 
 
+void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
+{
+	if(true == mainWin->isHandMoveChecked())
+		return;
+
+	/*release magnifier*/
+	unlockMagnifier();
+
+	/*hide previous seleced curve marker*/
+	for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
+	{
+		if(NULL == prevSelectedCurve[cnt])
+			continue;
+
+		prevSelectedCurve[cnt]->hideMarkers();
+		prevSelectedCurve[cnt]->boldTitle(false);
+	}
+
+	/*try to retrieve the closest curves*/
+	curSelectedCurve.clear();
+	const QPoint        pos = event->pos();
+	qint16 cntCurveSelected = 0;
+	for(qint16 i = 0; i < curves.count(); i++)
+	{
+		QwtPlotCurve *curve = curves[i]->getCurve();
+		double dist         = 0.0;
+		curve->closestPoint(pos, &dist);
+
+		if(dist < ICV_TOLERENCE_DISTANCE )
+		{
+			curSelectedCurve.push_back(curves[i]);
+			cntCurveSelected++;
+		}
+	}
+
+	/*show current selected curve markers*/
+	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+	{
+		if(NULL == curSelectedCurve[cnt])
+			continue;
+
+		if(curSelectedCurve[cnt]->isAttached() ==true)
+		{
+			curSelectedCurve[cnt]->showMarkers();
+			curSelectedCurve[cnt]->boldTitle(true);
+		}
+	}
+
+	prevSelectedCurve = curSelectedCurve;
+
+	if(true == curSelectedCurve.isEmpty())
+	{
+		lockCursorMoveAction = false;
+	}
+	else
+	{
+		/*enable cursor moving action*/
+		lockCursorMoveAction = true;
+	}
+
+	/*update replot*/
+	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+	canvas->plot()->replot();
+	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+
+	return ;
+}
+
+
+void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
+{
+
+	QwtPlotZoomer *zoomer = mainWin->getZoomer();
+	if(zoomer->isEnabled())
+		return ;
+
+	lockMagnifier();
+
+	lockCursorMoveAction = false;
+	/*hide previous seleced curve marker*/
+	for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
+	{
+		if(NULL == prevSelectedCurve[cnt])
+			continue;
+
+		prevSelectedCurve[cnt]->hideMarkers();
+	}
+	prevSelectedCurve.clear();
+
+	/*try to retrieve the closest curves*/
+	curSelectedCurve.clear();
+	const QPoint pos = event->pos();
+	qint16 cntCurveSelected = 0;
+	for(qint16 i = 0; i < curves.count(); i++)
+	{
+		QwtPlotCurve *curve = curves[i]->getCurve();
+		double dist         = 0.0;
+		curve->closestPoint(pos, &dist);
+
+		if(dist < ICV_TOLERENCE_DISTANCE )
+		{
+			curSelectedCurve.push_back(curves[i]);
+			cntCurveSelected++;
+		}
+	}
+
+	/*show current selected curve markers*/
+	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+	{
+		if(NULL == curSelectedCurve[cnt])
+			continue;
+
+		curSelectedCurve[cnt]->showMarkers();
+		curSelectedCurve[cnt]->boldTitle(true);
+	}
+	prevSelectedCurve = curSelectedCurve;
+
+	/*popup menu*/
+	crvSelPopMenu->exec(event->globalPos());
+
+	/*update replot*/
+	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+	canvas->plot()->replot();
+	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+
+	return;
+}
+
+
+void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
+{
+	return ;
+	if(mainWin->isHandMoveChecked())
+		return;
+
+	QwtPlotZoomer *zoomer = mainWin->getZoomer();
+	if(zoomer->isEnabled())
+		return ;
+
+
+	if(true == lockCursorMoveAction)
+		return ;
+
+	if(curves.isEmpty())
+	{
+		canvas->setCursor(Qt::ArrowCursor);
+		return;
+	}
+
+	/* pick the selected curve */
+	const QPoint pos = event->pos();
+	for(qint16 i = 0; i < curves.count(); i++)
+	{
+		QwtPlotCurve *curve = curves[i]->getCurve();
+		double dist        = 0.0;
+		curve->closestPoint(pos, &dist);
+
+		if(dist <= ICV_TOLERENCE_DISTANCE )
+		{
+			canvas->setCursor(Qt::PointingHandCursor);
+			curves[i]->setActivateState(ICV_CURVE_ACTIVATED);
+			break;
+		}
+		else
+		{
+			canvas->setCursor(Qt::ArrowCursor);
+		}
+	}
+
+	return;
+}
+
+
+bool IcvPlotCanvas::eventFilter(QObject *object, QEvent *event)
+{
+	if((NULL == object) || (NULL == event) || (object != canvas))
+		return false;
+
+	switch(event->type())
+	{
+	case QEvent::MouseButtonPress:
+		{
+			const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+			if(mouseEvent->button() == Qt::LeftButton)
+			{
+				onMouseLeftButtonClick(mouseEvent);
+			}
+			else if(mouseEvent->button() == Qt::RightButton)
+			{
+				onMouseRightButtonClick(mouseEvent);
+			}
+			break;
+		}
+
+	case QEvent::MouseMove:
+		{
+			const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+			onMouseMove(mouseEvent);
+			break;
+		}
+	default:
+		break;
+
+	}
+
+	return QObject::eventFilter(object,event);
+}
+
+
+bool IcvPlotCanvas::event(QEvent *eve)
+{
+	return QObject::event(eve);
+}
