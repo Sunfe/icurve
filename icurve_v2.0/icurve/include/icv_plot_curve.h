@@ -46,8 +46,10 @@ public:
 
     qint16 getActivateState();
     void setActivateState(qint16 state);
+	void removeCurve();
     void deleteCurve();
-    void showCurve();
+    void showVividCurve();
+	void showCurve();
     void hideCurve();
     void boldTitle(bool enable);
 

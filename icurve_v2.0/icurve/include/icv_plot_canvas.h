@@ -48,7 +48,7 @@ public:
     void lookforCurves();
     void appendCurves(IcvPlotCurve *curve);
     void clearCurves(QList<IcvPlotCurve *> crvs);
-    void clearSelectCurves();
+    void removeSelectCurves();
     void clearAllCurves();
     QList<IcvPlotCurve*> getSelectedCurve();
     void deleteCurve(QList<IcvPlotCurve*> crv);

@@ -697,7 +697,7 @@ void IcvICurve::pasteCurve()
 void IcvICurve::filterCurve()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(0 == allCurves.count())
+	if(allCurves.empty())
 	{
 		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
 		return ;
@@ -706,7 +706,7 @@ void IcvICurve::filterCurve()
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
     if(filterDlg->exec() != QDialog::Accepted)
-        return ;
+        return;
 
     QString    keyword = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
@@ -752,7 +752,7 @@ void IcvICurve::filterCurve()
 
 	if(0 == curvesFound.count()) 
 	{
-		QMessageBox::information(this,tr("Info"),tr("No curve found!"));
+		QMessageBox::information(this,tr("Info"),tr("No curves filtered!"));
 		return;
 	}
 
@@ -855,6 +855,12 @@ void IcvICurve::recoverCurveVisible()
 
 void IcvICurve::findCurve()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
 
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Find curves");
@@ -926,16 +932,22 @@ void IcvICurve::deleteCurve()
     plotCanvas->deleteCurve(curves);
 
     plot->replot();
-
     return;
 }
 
 void IcvICurve::removeCurve()
 {
-    if(NULL == plotCanvas)
-        return ;
+	if(NULL == plotCanvas)
+		return ;
 
-    plotCanvas->clearSelectCurves();
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
+    plotCanvas->removeSelectCurves();
     plot->replot();
     return;
 }
@@ -946,6 +958,18 @@ void IcvICurve::showAllCurve()
     if(NULL == plotCanvas)
         return;
 
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curves plotted, maybe file not opened."));
+		return ;
+	}
+
+	for(qint16 pos = 0; pos < allCurves.count(); pos++)
+		allCurves.at(pos)->showCurve();
+
+	plot->replot();
+#if 0
     plotCanvas->clearAllCurves();
     for(qint16 pos = 0; pos < plotData.count(); pos++)
     {
@@ -970,7 +994,7 @@ void IcvICurve::showAllCurve()
         plot->setAxisScale( QwtPlot::xBottom, 0.0, 3000 );
         plot->replot();
     }
-
+#endif
     return;
 }
 

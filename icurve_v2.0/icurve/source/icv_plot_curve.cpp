@@ -115,7 +115,7 @@ void IcvPlotCurve::setActivateState(qint16 state)
 }
 
 
-void IcvPlotCurve::showCurve()
+void IcvPlotCurve::showVividCurve()
 {
     if(curve != NULL)
     {
@@ -126,6 +126,15 @@ void IcvPlotCurve::showCurve()
     return;
 }
 
+
+void IcvPlotCurve::showCurve()
+{
+	if(curve != NULL)
+	{
+		curve->attach(canvas->getCanvas()->plot());;
+	}
+	return;
+}
 
 void IcvPlotCurve::hideCurve()
 {
@@ -139,6 +148,21 @@ void IcvPlotCurve::hideCurve()
     }
 
     return;
+}
+
+
+void IcvPlotCurve::removeCurve()
+{
+	if(curve == NULL)
+		return;
+
+	curve->detach();
+	for(qint16 pos= 0; pos < markers.count(); pos++)
+	{
+		markers[pos]->detach();
+	}
+
+	return;
 }
 
 
