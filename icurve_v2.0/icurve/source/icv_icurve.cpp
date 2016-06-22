@@ -320,7 +320,7 @@ void IcvICurve::insertYLabel()
 void IcvICurve::insertLegend()
 {
 	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(0 == allCurves.count())
+	if(allCurves.empty())
 	{
 		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
 		ui.actionLegend->setChecked(false);
@@ -352,7 +352,7 @@ void IcvICurve::insertLegend()
 void IcvICurve::insertCurveName()
 {
 	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(0 == allCurves.count())
+	if(allCurves.empty())
 	{
 		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
 		ui.actionCurveName->setChecked(false);
@@ -390,7 +390,7 @@ void IcvICurve::insertFooter()
 void IcvICurve::insertIndicator()
 {
 	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(0 == allCurves.count())
+	if(allCurves.empty())
 	{
 		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
 		ui.actionIndicator->setChecked(false);
@@ -475,6 +475,13 @@ void IcvICurve::insertIndicator()
 
 void IcvICurve::setCurveColor()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve *>selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
@@ -499,6 +506,13 @@ void IcvICurve::setCurveColor()
 
 void IcvICurve::setCurveWidth()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
@@ -521,6 +535,13 @@ void IcvICurve::setCurveWidth()
 
 void IcvICurve::setCurveStyle()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
@@ -576,6 +597,13 @@ void IcvICurve::setCurveStyle()
 
 void IcvICurve::setCurveMarker()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
@@ -962,6 +990,13 @@ void IcvICurve::selectAllCurve()
 
 void IcvICurve::expandCurve()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(0 == curve.count())
     {
@@ -1015,6 +1050,13 @@ void IcvICurve::legendChecked( const QVariant &itemInfo, bool on)
 
 void IcvICurve::showCurveInfo()
 {
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(0 == curve.count())
     {
