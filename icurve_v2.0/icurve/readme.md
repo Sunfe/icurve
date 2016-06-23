@@ -28,6 +28,8 @@ icurve
    - 加入recent file
    - 增加曲线最大，最小值指示标志，标志还携带curve title信息[done]
 	- 支持多文件
+	- 增加工具栏[done]
+	- 增加快捷键
 
 
 1. bugs

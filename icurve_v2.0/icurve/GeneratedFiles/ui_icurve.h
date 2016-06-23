@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Fri Jun 24 00:23:30 2016
+** Created: Fri Jun 24 01:36:25 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -130,6 +130,9 @@ public:
         actionRemove = new QAction(icurveClass);
         actionRemove->setObjectName(QString::fromUtf8("actionRemove"));
         actionRemove->setEnabled(true);
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/icurve/images/remove.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRemove->setIcon(icon2);
         actionSelectAll = new QAction(icurveClass);
         actionSelectAll->setObjectName(QString::fromUtf8("actionSelectAll"));
         actionSelectAll->setEnabled(true);
@@ -139,9 +142,9 @@ public:
         actionY_label->setObjectName(QString::fromUtf8("actionY_label"));
         actionTitle = new QAction(icurveClass);
         actionTitle->setObjectName(QString::fromUtf8("actionTitle"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/icurve/images/title.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionTitle->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/icurve/images/title.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionTitle->setIcon(icon3);
         actionClose = new QAction(icurveClass);
         actionClose->setObjectName(QString::fromUtf8("actionClose"));
         actionClose->setEnabled(false);
@@ -149,42 +152,42 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionColor = new QAction(icurveClass);
         actionColor->setObjectName(QString::fromUtf8("actionColor"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/icurve/images/color.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionColor->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/icurve/images/color.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionColor->setIcon(icon4);
         actionWidth = new QAction(icurveClass);
         actionWidth->setObjectName(QString::fromUtf8("actionWidth"));
         actionLegend = new QAction(icurveClass);
         actionLegend->setObjectName(QString::fromUtf8("actionLegend"));
         actionLegend->setCheckable(true);
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/icurve/images/legend.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionLegend->setIcon(icon4);
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/icurve/images/legend.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionLegend->setIcon(icon5);
         actionFooter = new QAction(icurveClass);
         actionFooter->setObjectName(QString::fromUtf8("actionFooter"));
         actionCalc = new QAction(icurveClass);
         actionCalc->setObjectName(QString::fromUtf8("actionCalc"));
         actionStyle = new QAction(icurveClass);
         actionStyle->setObjectName(QString::fromUtf8("actionStyle"));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/icurve/images/style.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionStyle->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/icurve/images/style.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionStyle->setIcon(icon6);
         actionMarker = new QAction(icurveClass);
         actionMarker->setObjectName(QString::fromUtf8("actionMarker"));
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/icurve/images/marker.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionMarker->setIcon(icon6);
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/icurve/images/marker.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionMarker->setIcon(icon7);
         actionFilter = new QAction(icurveClass);
         actionFilter->setObjectName(QString::fromUtf8("actionFilter"));
         actionFilter->setCheckable(false);
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/icurve/images/filter.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionFilter->setIcon(icon7);
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/icurve/images/filter.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionFilter->setIcon(icon8);
         actionFind = new QAction(icurveClass);
         actionFind->setObjectName(QString::fromUtf8("actionFind"));
-        QIcon icon8;
-        icon8.addFile(QString::fromUtf8(":/icurve/images/find.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionFind->setIcon(icon8);
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/icurve/images/find.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionFind->setIcon(icon9);
         actionShowAll = new QAction(icurveClass);
         actionShowAll->setObjectName(QString::fromUtf8("actionShowAll"));
         actionExpand = new QAction(icurveClass);
@@ -206,9 +209,9 @@ public:
         actionCurveName->setEnabled(true);
         actionDelete = new QAction(icurveClass);
         actionDelete->setObjectName(QString::fromUtf8("actionDelete"));
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/icurve/images/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionDelete->setIcon(icon9);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/icurve/images/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDelete->setIcon(icon10);
         actionDiffer = new QAction(icurveClass);
         actionDiffer->setObjectName(QString::fromUtf8("actionDiffer"));
         actionReset = new QAction(icurveClass);
@@ -216,9 +219,9 @@ public:
         actionZoom = new QAction(icurveClass);
         actionZoom->setObjectName(QString::fromUtf8("actionZoom"));
         actionZoom->setCheckable(true);
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8(":/icurve/images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionZoom->setIcon(icon10);
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/icurve/images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionZoom->setIcon(icon11);
         actionIndicator = new QAction(icurveClass);
         actionIndicator->setObjectName(QString::fromUtf8("actionIndicator"));
         actionIndicator->setCheckable(true);
@@ -248,16 +251,16 @@ public:
         actionHandMove = new QAction(icurveClass);
         actionHandMove->setObjectName(QString::fromUtf8("actionHandMove"));
         actionHandMove->setCheckable(true);
-        QIcon icon11;
-        icon11.addFile(QString::fromUtf8(":/icurve/images/hand.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHandMove->setIcon(icon11);
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8(":/icurve/images/hand.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHandMove->setIcon(icon12);
         actionReset_2 = new QAction(icurveClass);
         actionReset_2->setObjectName(QString::fromUtf8("actionReset_2"));
         actionHide = new QAction(icurveClass);
         actionHide->setObjectName(QString::fromUtf8("actionHide"));
-        QIcon icon12;
-        icon12.addFile(QString::fromUtf8(":/icurve/images/hide.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHide->setIcon(icon12);
+        QIcon icon13;
+        icon13.addFile(QString::fromUtf8(":/icurve/images/hide.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHide->setIcon(icon13);
         actionShow = new QAction(icurveClass);
         actionShow->setObjectName(QString::fromUtf8("actionShow"));
         actionSelect_mode = new QAction(icurveClass);
@@ -398,15 +401,16 @@ public:
         mainToolBar->addAction(actionOpen);
         mainToolBar->addAction(actionFind);
         mainToolBar->addAction(actionFilter);
+        mainToolBar->addAction(actionRemove);
         mainToolBar->addAction(actionDelete);
         mainToolBar->addAction(actionColor);
         mainToolBar->addAction(actionStyle);
         mainToolBar->addAction(actionMarker);
-        mainToolBar->addAction(actionHide);
-        mainToolBar->addAction(actionHandMove);
-        mainToolBar->addAction(actionZoom);
         mainToolBar->addAction(actionLegend);
         mainToolBar->addAction(actionTitle);
+        mainToolBar->addAction(actionHide);
+        mainToolBar->addAction(actionZoom);
+        mainToolBar->addAction(actionHandMove);
 
         retranslateUi(icurveClass);
 

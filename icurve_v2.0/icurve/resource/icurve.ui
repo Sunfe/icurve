@@ -273,15 +273,16 @@
    <addaction name="actionOpen"/>
    <addaction name="actionFind"/>
    <addaction name="actionFilter"/>
+   <addaction name="actionRemove"/>
    <addaction name="actionDelete"/>
    <addaction name="actionColor"/>
    <addaction name="actionStyle"/>
    <addaction name="actionMarker"/>
-   <addaction name="actionHide"/>
-   <addaction name="actionHandMove"/>
-   <addaction name="actionZoom"/>
    <addaction name="actionLegend"/>
    <addaction name="actionTitle"/>
+   <addaction name="actionHide"/>
+   <addaction name="actionZoom"/>
+   <addaction name="actionHandMove"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
@@ -349,6 +350,10 @@
   <action name="actionRemove">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/remove.png</normaloff>:/icurve/images/remove.png</iconset>
    </property>
    <property name="text">
     <string>Remove</string>
