@@ -100,7 +100,7 @@ private slots:
     void cutCurve();
     void copyCurve();
     void pasteCurve();
-    void removeCurve();
+    void removeCurves();
     void deleteCurve();
     void findCurve();
     void showAllCurve();

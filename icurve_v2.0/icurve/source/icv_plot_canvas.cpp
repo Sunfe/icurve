@@ -709,6 +709,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 	}
 
 	/*show current selected curve markers*/
+	prevSelectedCurve.clear();
 	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
 	{
 		if(NULL == curSelectedCurve[cnt])
@@ -718,10 +719,9 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 		{
 			curSelectedCurve[cnt]->showMarkers();
 			curSelectedCurve[cnt]->boldTitle(true);
+			prevSelectedCurve.append(curSelectedCurve[cnt]);
 		}
 	}
-
-	prevSelectedCurve = curSelectedCurve;
 
 	if(true == curSelectedCurve.isEmpty())
 	{
@@ -780,17 +780,19 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 	}
 
 	/*show current selected curve markers*/
+	prevSelectedCurve.clear();
 	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
 	{
 		if(NULL == curSelectedCurve[cnt])
 			continue;
+
 		if(curSelectedCurve[cnt]->isAttached() == true)
 		{
 			curSelectedCurve[cnt]->showMarkers();
 			curSelectedCurve[cnt]->boldTitle(true);
+			prevSelectedCurve.append(curSelectedCurve[cnt]);
 		}
 	}
-	prevSelectedCurve = curSelectedCurve;
 	/*popup menu*/
 	crvSelPopMenu->exec(event->globalPos());
 	/*update replot*/
