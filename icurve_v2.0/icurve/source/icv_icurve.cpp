@@ -100,7 +100,6 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
     connect(ui.actionAxseAlignment,  SIGNAL(triggered()), this, SLOT(setAxseAlignment()));
     connect(ui.actionAxseRotation,   SIGNAL(triggered()), this, SLOT(setAxseRotation()));
-    connect(ui.actionAxseProperties, SIGNAL(triggered()), this, SLOT(setAxseProperties()));
     /*insert menu*/
     connect(ui.actionTitle,          SIGNAL(triggered()), this, SLOT(insertTitle()));
     connect(ui.actionX_label,        SIGNAL(triggered()), this, SLOT(insertXLabel()));

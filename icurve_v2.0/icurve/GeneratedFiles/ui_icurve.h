@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Thu Jun 23 20:20:32 2016
+** Created: Fri Jun 24 00:23:30 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -30,7 +30,7 @@ public:
     QAction *actionOpen;
     QAction *actionSave;
     QAction *actionSaveAs;
-    QAction *actionDo;
+    QAction *actionUndo;
     QAction *actionRedo;
     QAction *actionCut;
     QAction *actionCopy;
@@ -73,12 +73,12 @@ public:
     QAction *actionAxseTitle;
     QAction *actionAxseAlignment;
     QAction *actionAxseRotation;
-    QAction *actionAxseProperties;
     QAction *actionCurveProperties;
     QAction *actionHandMove;
     QAction *actionReset_2;
     QAction *actionHide;
     QAction *actionShow;
+    QAction *actionSelect_mode;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -105,16 +105,16 @@ public:
         actionOpen = new QAction(icurveClass);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/icurve/images/file_open.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8(":/icurve/images/file_open.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionOpen->setIcon(icon1);
         actionSave = new QAction(icurveClass);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionSave->setEnabled(false);
         actionSaveAs = new QAction(icurveClass);
         actionSaveAs->setObjectName(QString::fromUtf8("actionSaveAs"));
-        actionDo = new QAction(icurveClass);
-        actionDo->setObjectName(QString::fromUtf8("actionDo"));
-        actionDo->setEnabled(false);
+        actionUndo = new QAction(icurveClass);
+        actionUndo->setObjectName(QString::fromUtf8("actionUndo"));
+        actionUndo->setEnabled(false);
         actionRedo = new QAction(icurveClass);
         actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
         actionRedo->setEnabled(false);
@@ -139,6 +139,9 @@ public:
         actionY_label->setObjectName(QString::fromUtf8("actionY_label"));
         actionTitle = new QAction(icurveClass);
         actionTitle->setObjectName(QString::fromUtf8("actionTitle"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/icurve/images/title.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionTitle->setIcon(icon2);
         actionClose = new QAction(icurveClass);
         actionClose->setObjectName(QString::fromUtf8("actionClose"));
         actionClose->setEnabled(false);
@@ -146,24 +149,42 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionColor = new QAction(icurveClass);
         actionColor->setObjectName(QString::fromUtf8("actionColor"));
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/icurve/images/color.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionColor->setIcon(icon3);
         actionWidth = new QAction(icurveClass);
         actionWidth->setObjectName(QString::fromUtf8("actionWidth"));
         actionLegend = new QAction(icurveClass);
         actionLegend->setObjectName(QString::fromUtf8("actionLegend"));
         actionLegend->setCheckable(true);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/icurve/images/legend.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionLegend->setIcon(icon4);
         actionFooter = new QAction(icurveClass);
         actionFooter->setObjectName(QString::fromUtf8("actionFooter"));
         actionCalc = new QAction(icurveClass);
         actionCalc->setObjectName(QString::fromUtf8("actionCalc"));
         actionStyle = new QAction(icurveClass);
         actionStyle->setObjectName(QString::fromUtf8("actionStyle"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/icurve/images/style.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionStyle->setIcon(icon5);
         actionMarker = new QAction(icurveClass);
         actionMarker->setObjectName(QString::fromUtf8("actionMarker"));
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/icurve/images/marker.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionMarker->setIcon(icon6);
         actionFilter = new QAction(icurveClass);
         actionFilter->setObjectName(QString::fromUtf8("actionFilter"));
         actionFilter->setCheckable(false);
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/icurve/images/filter.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionFilter->setIcon(icon7);
         actionFind = new QAction(icurveClass);
         actionFind->setObjectName(QString::fromUtf8("actionFind"));
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/icurve/images/find.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionFind->setIcon(icon8);
         actionShowAll = new QAction(icurveClass);
         actionShowAll->setObjectName(QString::fromUtf8("actionShowAll"));
         actionExpand = new QAction(icurveClass);
@@ -185,6 +206,9 @@ public:
         actionCurveName->setEnabled(true);
         actionDelete = new QAction(icurveClass);
         actionDelete->setObjectName(QString::fromUtf8("actionDelete"));
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/icurve/images/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDelete->setIcon(icon9);
         actionDiffer = new QAction(icurveClass);
         actionDiffer->setObjectName(QString::fromUtf8("actionDiffer"));
         actionReset = new QAction(icurveClass);
@@ -192,6 +216,9 @@ public:
         actionZoom = new QAction(icurveClass);
         actionZoom->setObjectName(QString::fromUtf8("actionZoom"));
         actionZoom->setCheckable(true);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/icurve/images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionZoom->setIcon(icon10);
         actionIndicator = new QAction(icurveClass);
         actionIndicator->setObjectName(QString::fromUtf8("actionIndicator"));
         actionIndicator->setCheckable(true);
@@ -216,19 +243,25 @@ public:
         actionAxseAlignment->setObjectName(QString::fromUtf8("actionAxseAlignment"));
         actionAxseRotation = new QAction(icurveClass);
         actionAxseRotation->setObjectName(QString::fromUtf8("actionAxseRotation"));
-        actionAxseProperties = new QAction(icurveClass);
-        actionAxseProperties->setObjectName(QString::fromUtf8("actionAxseProperties"));
         actionCurveProperties = new QAction(icurveClass);
         actionCurveProperties->setObjectName(QString::fromUtf8("actionCurveProperties"));
         actionHandMove = new QAction(icurveClass);
         actionHandMove->setObjectName(QString::fromUtf8("actionHandMove"));
         actionHandMove->setCheckable(true);
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/icurve/images/hand.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHandMove->setIcon(icon11);
         actionReset_2 = new QAction(icurveClass);
         actionReset_2->setObjectName(QString::fromUtf8("actionReset_2"));
         actionHide = new QAction(icurveClass);
         actionHide->setObjectName(QString::fromUtf8("actionHide"));
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8(":/icurve/images/hide.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHide->setIcon(icon12);
         actionShow = new QAction(icurveClass);
         actionShow->setObjectName(QString::fromUtf8("actionShow"));
+        actionSelect_mode = new QAction(icurveClass);
+        actionSelect_mode->setObjectName(QString::fromUtf8("actionSelect_mode"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -282,7 +315,6 @@ public:
         mainToolBar->setCursor(QCursor(Qt::ArrowCursor));
         mainToolBar->setMovable(false);
         mainToolBar->setAllowedAreas(Qt::TopToolBarArea);
-        mainToolBar->setIconSize(QSize(24, 24));
         mainToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
         mainToolBar->setFloatable(false);
         icurveClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
@@ -307,7 +339,7 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionClose);
         menuFile->addAction(actionExit);
-        menuEdit->addAction(actionDo);
+        menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
         menuEdit->addAction(actionCut);
@@ -359,11 +391,22 @@ public:
         menuAxse->addAction(actionAxseTitle);
         menuAxse->addAction(actionAxseAlignment);
         menuAxse->addAction(actionAxseRotation);
-        menuAxse->addAction(actionAxseProperties);
         menuView->addAction(actionZoom);
         menuView->addAction(actionTree);
         menuView->addAction(actionReset_2);
+        menuView->addAction(actionSelect_mode);
         mainToolBar->addAction(actionOpen);
+        mainToolBar->addAction(actionFind);
+        mainToolBar->addAction(actionFilter);
+        mainToolBar->addAction(actionDelete);
+        mainToolBar->addAction(actionColor);
+        mainToolBar->addAction(actionStyle);
+        mainToolBar->addAction(actionMarker);
+        mainToolBar->addAction(actionHide);
+        mainToolBar->addAction(actionHandMove);
+        mainToolBar->addAction(actionZoom);
+        mainToolBar->addAction(actionLegend);
+        mainToolBar->addAction(actionTitle);
 
         retranslateUi(icurveClass);
 
@@ -376,7 +419,7 @@ public:
         actionOpen->setText(QApplication::translate("icurveClass", "Open", 0, QApplication::UnicodeUTF8));
         actionSave->setText(QApplication::translate("icurveClass", "Save", 0, QApplication::UnicodeUTF8));
         actionSaveAs->setText(QApplication::translate("icurveClass", "Save as", 0, QApplication::UnicodeUTF8));
-        actionDo->setText(QApplication::translate("icurveClass", "Undo", 0, QApplication::UnicodeUTF8));
+        actionUndo->setText(QApplication::translate("icurveClass", "Undo", 0, QApplication::UnicodeUTF8));
         actionRedo->setText(QApplication::translate("icurveClass", "Redo", 0, QApplication::UnicodeUTF8));
         actionCut->setText(QApplication::translate("icurveClass", "Cut", 0, QApplication::UnicodeUTF8));
         actionCopy->setText(QApplication::translate("icurveClass", "Copy", 0, QApplication::UnicodeUTF8));
@@ -419,12 +462,12 @@ public:
         actionAxseTitle->setText(QApplication::translate("icurveClass", "Title", 0, QApplication::UnicodeUTF8));
         actionAxseAlignment->setText(QApplication::translate("icurveClass", "Alignment", 0, QApplication::UnicodeUTF8));
         actionAxseRotation->setText(QApplication::translate("icurveClass", "Rotation", 0, QApplication::UnicodeUTF8));
-        actionAxseProperties->setText(QApplication::translate("icurveClass", "More...", 0, QApplication::UnicodeUTF8));
         actionCurveProperties->setText(QApplication::translate("icurveClass", "Properties...", 0, QApplication::UnicodeUTF8));
         actionHandMove->setText(QApplication::translate("icurveClass", "Hand Tool", 0, QApplication::UnicodeUTF8));
         actionReset_2->setText(QApplication::translate("icurveClass", "Reset", 0, QApplication::UnicodeUTF8));
         actionHide->setText(QApplication::translate("icurveClass", "Hide", 0, QApplication::UnicodeUTF8));
         actionShow->setText(QApplication::translate("icurveClass", "Show", 0, QApplication::UnicodeUTF8));
+        actionSelect_mode->setText(QApplication::translate("icurveClass", "Select mode", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));
