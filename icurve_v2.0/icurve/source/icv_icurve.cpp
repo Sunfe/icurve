@@ -27,6 +27,7 @@
 #include "icv_icurve.h"
 #include "icv_curve_filter.h"
 #include "icv_penstyle.h"
+#include "icv_curve_property.h"
 #include "icv_marker_property.h"
 #include "icv_clipboard.h"
 #include "icv_symbol.h"
@@ -92,6 +93,8 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionExpand,         SIGNAL(triggered()), this, SLOT(expandCurve()));
     connect(ui.actionFilter,         SIGNAL(triggered()), this, SLOT(filterCurve()));
     connect(ui.actionInfo,           SIGNAL(triggered()), this, SLOT(showCurveInfo()));
+    connect(ui.actionCurveProperties,SIGNAL(triggered()), this, SLOT(setCurveProperties()));
+
     /*axse menu*/
     connect(ui.actionAxseScale,      SIGNAL(triggered()), this, SLOT(setAxseScale()));
     connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
@@ -1157,6 +1160,30 @@ void IcvICurve::showCurveInfo()
 
     return;
 }
+
+
+void IcvICurve::setCurveProperties()
+{
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+
+	QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
+	if(curve.isEmpty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+		return ;
+	}
+
+	IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curve, this, Qt::Dialog);
+	propDiag->resize(400,150);
+	propDiag->exec();
+	return;
+}
+
 
 QwtPlotZoomer* IcvICurve::getZoomer()
 {

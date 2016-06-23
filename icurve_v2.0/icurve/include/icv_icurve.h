@@ -119,6 +119,7 @@ private slots:
     void filterCurvePreview(qint16 type, QString keyword);
     void recoverCurveVisible();
     void showCurveInfo();
+	void setCurveProperties();
 
     /*curve Axse slots*/
     void setAxseScale();
