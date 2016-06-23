@@ -130,7 +130,8 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     QPalette mainWinPalette;
     mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
     self->setPalette(mainWinPalette);
-
+	QDesktopWidget* desktop = QApplication::desktop();
+	move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
     //ui.actionZoom->setEnabled(false);
 
     return ;

@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     //application.setWindowIcon(QIcon(":/icurve/../images/iCurve.ico"));
     
     QApplication::addLibraryPath("./plugins");
+
     return application.exec();
 }
 
