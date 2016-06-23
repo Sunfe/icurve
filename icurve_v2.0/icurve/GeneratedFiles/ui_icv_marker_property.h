@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_marker_property.ui'
 **
-** Created: Thu Jun 23 18:33:08 2016
+** Created: Thu Jun 23 19:19:00 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
