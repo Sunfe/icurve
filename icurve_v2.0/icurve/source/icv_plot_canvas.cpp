@@ -139,6 +139,26 @@ void IcvPlotCanvas::removeSelectCurves()
 }
 
 
+void IcvPlotCanvas::hideSelectCurves()
+{
+	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+	{
+		curSelectedCurve.at(cnt)->hideCurve();
+	}
+	return ;
+}
+
+
+void IcvPlotCanvas::showSelectCurves()
+{
+	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+	{
+		curSelectedCurve.at(cnt)->showCurve();
+	}
+	return ;
+}
+
+
 void IcvPlotCanvas::clearAllCurves()
 {
     for(qint16 pos = 0; pos < curves.count(); pos++)

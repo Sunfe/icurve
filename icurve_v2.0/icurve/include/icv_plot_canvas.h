@@ -54,6 +54,8 @@ public:
     void deleteCurve(QList<IcvPlotCurve*> crv);
 	void removeCurves(QList<IcvPlotCurve *> crv);
     void highlightCurve(QList<IcvPlotCurve*> crv);
+	void hideSelectCurves();
+	void showSelectCurves();
     void lockMagnifier();
     void unlockMagnifier();
     void setZoomState(bool state);

@@ -145,9 +145,24 @@ void IcvPlotCurve::showCurve()
 {
 	if(curve != NULL)
 	{
-		curve->attach(canvas->getCanvas()->plot());;
+		curve->attach(canvas->getCanvas()->plot());
+		curve->show();
+		for(qint16 cnt = 0; cnt < markers.count(); cnt++)
+			markers.at(cnt)->show();
 	}
 	setAttachedState(true);
+	return;
+}
+
+
+void IcvPlotCurve::hideCurve()
+{
+	if(curve != NULL)
+	{
+		curve->hide();
+		for(qint16 cnt = 0; cnt < markers.count(); cnt++)
+			markers.at(cnt)->hide();
+	}
 	return;
 }
 

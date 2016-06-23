@@ -51,14 +51,17 @@
     <addaction name="actionCopy_plot"/>
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
-    <addaction name="separator"/>
     <addaction name="actionReset"/>
+    <addaction name="separator"/>
     <addaction name="actionRemove"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
-    <addaction name="actionFind"/>
     <addaction name="actionHide"/>
+    <addaction name="actionShow"/>
     <addaction name="actionShowAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionFilter"/>
+    <addaction name="actionFind"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
     <addaction name="actionSelectReverse"/>
@@ -111,7 +114,6 @@
     <addaction name="actionStyle"/>
     <addaction name="actionMarker"/>
     <addaction name="actionExpand"/>
-    <addaction name="actionFilter"/>
     <addaction name="actionView_data"/>
     <addaction name="actionLocate_to_file"/>
     <addaction name="actionInfo"/>
@@ -594,6 +596,11 @@
   <action name="actionHide">
    <property name="text">
     <string>Hide</string>
+   </property>
+  </action>
+  <action name="actionShow">
+   <property name="text">
+    <string>Show</string>
    </property>
   </action>
  </widget>

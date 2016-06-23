@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Thu Jun 23 19:19:00 2016
+** Created: Thu Jun 23 20:20:32 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -78,6 +78,7 @@ public:
     QAction *actionHandMove;
     QAction *actionReset_2;
     QAction *actionHide;
+    QAction *actionShow;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -226,6 +227,8 @@ public:
         actionReset_2->setObjectName(QString::fromUtf8("actionReset_2"));
         actionHide = new QAction(icurveClass);
         actionHide->setObjectName(QString::fromUtf8("actionHide"));
+        actionShow = new QAction(icurveClass);
+        actionShow->setObjectName(QString::fromUtf8("actionShow"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -312,14 +315,17 @@ public:
         menuEdit->addAction(actionCopy_plot);
         menuEdit->addAction(actionPaste);
         menuEdit->addSeparator();
-        menuEdit->addSeparator();
         menuEdit->addAction(actionReset);
+        menuEdit->addSeparator();
         menuEdit->addAction(actionRemove);
         menuEdit->addAction(actionDelete);
         menuEdit->addSeparator();
-        menuEdit->addAction(actionFind);
         menuEdit->addAction(actionHide);
+        menuEdit->addAction(actionShow);
         menuEdit->addAction(actionShowAll);
+        menuEdit->addSeparator();
+        menuEdit->addAction(actionFilter);
+        menuEdit->addAction(actionFind);
         menuEdit->addSeparator();
         menuEdit->addAction(actionSelectAll);
         menuEdit->addAction(actionSelectReverse);
@@ -344,7 +350,6 @@ public:
         menuCurve->addAction(actionStyle);
         menuCurve->addAction(actionMarker);
         menuCurve->addAction(actionExpand);
-        menuCurve->addAction(actionFilter);
         menuCurve->addAction(actionView_data);
         menuCurve->addAction(actionLocate_to_file);
         menuCurve->addAction(actionInfo);
@@ -419,6 +424,7 @@ public:
         actionHandMove->setText(QApplication::translate("icurveClass", "Hand Tool", 0, QApplication::UnicodeUTF8));
         actionReset_2->setText(QApplication::translate("icurveClass", "Reset", 0, QApplication::UnicodeUTF8));
         actionHide->setText(QApplication::translate("icurveClass", "Hide", 0, QApplication::UnicodeUTF8));
+        actionShow->setText(QApplication::translate("icurveClass", "Show", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));

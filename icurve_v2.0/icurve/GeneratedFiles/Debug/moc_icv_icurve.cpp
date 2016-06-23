@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Thu Jun 23 19:19:01 2016
+** Created: Thu Jun 23 21:39:10 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvICurve[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      41,   14, // methods
+      43,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -43,37 +43,39 @@ static const uint qt_meta_data_IcvICurve[] = {
      172,   10,   10,   10, 0x08,
      185,   10,   10,   10, 0x08,
      200,   10,   10,   10, 0x08,
-     214,   10,   10,   10, 0x08,
+     213,   10,   10,   10, 0x08,
      226,   10,   10,   10, 0x08,
-     241,   10,   10,   10, 0x08,
-     259,   10,   10,   10, 0x08,
-     281,   10,   10,   10, 0x08,
-     297,   10,   10,   10, 0x08,
-     313,   10,   10,   10, 0x08,
-     329,   10,   10,   10, 0x08,
-     346,   10,   10,   10, 0x08,
-     360,   10,   10,   10, 0x08,
-     387,  374,   10,   10, 0x08,
-     422,   10,   10,   10, 0x08,
-     444,   10,   10,   10, 0x08,
-     460,   10,   10,   10, 0x08,
-     475,   10,   10,   10, 0x08,
-     490,   10,   10,   10, 0x08,
-     509,   10,   10,   10, 0x08,
-     527,   10,   10,   10, 0x08,
-     547,   10,   10,   10, 0x08,
-     561,   10,   10,   10, 0x08,
-     576,   10,   10,   10, 0x08,
-     591,   10,   10,   10, 0x08,
-     606,   10,   10,   10, 0x08,
-     624,   10,   10,   10, 0x08,
-     639,   10,   10,   10, 0x08,
-     665,  657,   10,   10, 0x08,
-     689,  684,   10,   10, 0x08,
-     706,  657,   10,   10, 0x08,
-     739,  727,   10,   10, 0x08,
-     768,   11,   10,   10, 0x08,
-     799,   10,   10,   10, 0x08,
+     240,   10,   10,   10, 0x08,
+     252,   10,   10,   10, 0x08,
+     267,   10,   10,   10, 0x08,
+     285,   10,   10,   10, 0x08,
+     307,   10,   10,   10, 0x08,
+     323,   10,   10,   10, 0x08,
+     339,   10,   10,   10, 0x08,
+     355,   10,   10,   10, 0x08,
+     372,   10,   10,   10, 0x08,
+     386,   10,   10,   10, 0x08,
+     413,  400,   10,   10, 0x08,
+     448,   10,   10,   10, 0x08,
+     470,   10,   10,   10, 0x08,
+     486,   10,   10,   10, 0x08,
+     501,   10,   10,   10, 0x08,
+     516,   10,   10,   10, 0x08,
+     535,   10,   10,   10, 0x08,
+     553,   10,   10,   10, 0x08,
+     573,   10,   10,   10, 0x08,
+     587,   10,   10,   10, 0x08,
+     602,   10,   10,   10, 0x08,
+     617,   10,   10,   10, 0x08,
+     632,   10,   10,   10, 0x08,
+     650,   10,   10,   10, 0x08,
+     665,   10,   10,   10, 0x08,
+     691,  683,   10,   10, 0x08,
+     715,  710,   10,   10, 0x08,
+     732,  683,   10,   10, 0x08,
+     765,  753,   10,   10, 0x08,
+     794,   11,   10,   10, 0x08,
+     825,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -84,12 +86,12 @@ static const char qt_meta_stringdata_IcvICurve[] = {
     "displayCurveInfoSignal(QString,QString,QString)\0"
     "openFile()\0saveAs()\0closePlot()\0"
     "cutCurve()\0copyCurve()\0pasteCurve()\0"
-    "removeCurves()\0deleteCurve()\0findCurve()\0"
-    "showAllCurve()\0selectAllCurves()\0"
-    "selectReverseCurves()\0setCurveColor()\0"
-    "setCurveWidth()\0setCurveStyle()\0"
-    "setCurveMarker()\0expandCurve()\0"
-    "filterCurve()\0type,keyword\0"
+    "removeCurves()\0hideCurves()\0showCurves()\0"
+    "deleteCurve()\0findCurve()\0showAllCurve()\0"
+    "selectAllCurves()\0selectReverseCurves()\0"
+    "setCurveColor()\0setCurveWidth()\0"
+    "setCurveStyle()\0setCurveMarker()\0"
+    "expandCurve()\0filterCurve()\0type,keyword\0"
     "filterCurvePreview(qint16,QString)\0"
     "recoverCurveVisible()\0showCurveInfo()\0"
     "setAxseScale()\0setAxseTitle()\0"
@@ -143,41 +145,43 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 6: copyCurve(); break;
         case 7: pasteCurve(); break;
         case 8: removeCurves(); break;
-        case 9: deleteCurve(); break;
-        case 10: findCurve(); break;
-        case 11: showAllCurve(); break;
-        case 12: selectAllCurves(); break;
-        case 13: selectReverseCurves(); break;
-        case 14: setCurveColor(); break;
-        case 15: setCurveWidth(); break;
-        case 16: setCurveStyle(); break;
-        case 17: setCurveMarker(); break;
-        case 18: expandCurve(); break;
-        case 19: filterCurve(); break;
-        case 20: filterCurvePreview((*reinterpret_cast< qint16(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 21: recoverCurveVisible(); break;
-        case 22: showCurveInfo(); break;
-        case 23: setAxseScale(); break;
-        case 24: setAxseTitle(); break;
-        case 25: setAxseAlignment(); break;
-        case 26: setAxseRotation(); break;
-        case 27: setAxseProperties(); break;
-        case 28: insertTitle(); break;
-        case 29: insertXLabel(); break;
-        case 30: insertYLabel(); break;
-        case 31: insertLegend(); break;
-        case 32: insertCurveName(); break;
-        case 33: insertFooter(); break;
-        case 34: insertIndicator(); break;
-        case 35: enableZoomer((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 36: zoomPlot((*reinterpret_cast< const QRectF(*)>(_a[1]))); break;
-        case 37: enableHandMove((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 38: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 39: updateAnalyProgressBar((*reinterpret_cast< qint32(*)>(_a[1]))); break;
-        case 40: cancelAnalyProgressBar(); break;
+        case 9: hideCurves(); break;
+        case 10: showCurves(); break;
+        case 11: deleteCurve(); break;
+        case 12: findCurve(); break;
+        case 13: showAllCurve(); break;
+        case 14: selectAllCurves(); break;
+        case 15: selectReverseCurves(); break;
+        case 16: setCurveColor(); break;
+        case 17: setCurveWidth(); break;
+        case 18: setCurveStyle(); break;
+        case 19: setCurveMarker(); break;
+        case 20: expandCurve(); break;
+        case 21: filterCurve(); break;
+        case 22: filterCurvePreview((*reinterpret_cast< qint16(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 23: recoverCurveVisible(); break;
+        case 24: showCurveInfo(); break;
+        case 25: setAxseScale(); break;
+        case 26: setAxseTitle(); break;
+        case 27: setAxseAlignment(); break;
+        case 28: setAxseRotation(); break;
+        case 29: setAxseProperties(); break;
+        case 30: insertTitle(); break;
+        case 31: insertXLabel(); break;
+        case 32: insertYLabel(); break;
+        case 33: insertLegend(); break;
+        case 34: insertCurveName(); break;
+        case 35: insertFooter(); break;
+        case 36: insertIndicator(); break;
+        case 37: enableZoomer((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 38: zoomPlot((*reinterpret_cast< const QRectF(*)>(_a[1]))); break;
+        case 39: enableHandMove((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 40: legendChecked((*reinterpret_cast< const QVariant(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 41: updateAnalyProgressBar((*reinterpret_cast< qint32(*)>(_a[1]))); break;
+        case 42: cancelAnalyProgressBar(); break;
         default: ;
         }
-        _id -= 41;
+        _id -= 43;
     }
     return _id;
 }

@@ -50,6 +50,7 @@ public:
     void deleteCurve();
     void showVividCurve();
 	void showCurve();
+	void hideCurve();
     void boldTitle(bool enable);
 
     void setMarkers();

@@ -3,10 +3,10 @@ icurve
 
 1. 版本   
    > qt4.7.3 + qwt6.1.3
-   > ​
+   > ?
 2. 功能
    > 对既定格式的数据进行绘图
-   > ​
+   > ?
 3. TO DO list
    - curve filter [done]
    - legend checkable [done]
@@ -18,7 +18,7 @@ icurve
    - 鼠标拖放文件打开功能
    - 支持多tab
    - filter支持关键字[done]
-   - filter/find支持补全
+   - filter/find支持补全[done]
    - 增加曲线取点[done]
    - 信息提示，包括在文件中的位置，显示该命令在文件中对应的一行[done]
    - 查找支持均值、峰值最大最小，平均波动最大，最小
@@ -27,6 +27,7 @@ icurve
    - 曲线增加树形分组
    - 加入recent file
    - 增加曲线最大，最小值指示标志，标志还携带curve title信息[done]
+	- 支持多文件
 
 
 1. bugs

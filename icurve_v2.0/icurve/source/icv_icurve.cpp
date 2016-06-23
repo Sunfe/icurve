@@ -76,7 +76,8 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionCopy,           SIGNAL(triggered()), this, SLOT(copyCurve()));
     connect(ui.actionPaste,          SIGNAL(triggered()), this, SLOT(pasteCurve()));
     connect(ui.actionRemove,         SIGNAL(triggered()), this, SLOT(removeCurves()));
-    connect(ui.actionHide,           SIGNAL(triggered()), this, SLOT(removeCurves()));
+    connect(ui.actionHide,           SIGNAL(triggered()), this, SLOT(hideCurves()));
+	connect(ui.actionShow,           SIGNAL(triggered()), this, SLOT(showCurves()));
     connect(ui.actionDelete,         SIGNAL(triggered()), this, SLOT(deleteCurve()));
     connect(ui.actionFind,           SIGNAL(triggered()), this, SLOT(findCurve()));
     connect(ui.actionShowAll,        SIGNAL(triggered()), this, SLOT(showAllCurve()));
@@ -960,6 +961,55 @@ void IcvICurve::removeCurves()
     plotCanvas->removeSelectCurves();
     plot->replot();
     return;
+}
+
+
+void IcvICurve::hideCurves()
+{
+	if(NULL == plotCanvas)
+		return ;
+
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+	QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
+	if(selCurve.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+		return ;
+	}
+
+	plotCanvas->hideSelectCurves();
+	plot->replot();
+	return;
+}
+
+
+
+void IcvICurve::showCurves()
+{
+	if(NULL == plotCanvas)
+		return ;
+
+	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+	if(allCurves.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+		return ;
+	}
+	QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
+	if(selCurve.empty())
+	{
+		QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+		return ;
+	}
+
+	plotCanvas->showSelectCurves();
+	plot->replot();
+	return;
 }
 
 
