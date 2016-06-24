@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_icurve.h'
 **
-** Created: Fri Jun 24 01:36:26 2016
+** Created: Fri Jun 24 22:30:36 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -49,34 +49,34 @@ static const uint qt_meta_data_IcvICurve[] = {
      252,   10,   10,   10, 0x08,
      267,   10,   10,   10, 0x08,
      285,   10,   10,   10, 0x08,
-     307,   10,   10,   10, 0x08,
-     323,   10,   10,   10, 0x08,
-     339,   10,   10,   10, 0x08,
-     355,   10,   10,   10, 0x08,
-     372,   10,   10,   10, 0x08,
-     386,   10,   10,   10, 0x08,
-     413,  400,   10,   10, 0x08,
-     448,   10,   10,   10, 0x08,
-     470,   10,   10,   10, 0x08,
-     486,   10,   10,   10, 0x08,
-     507,   10,   10,   10, 0x08,
-     522,   10,   10,   10, 0x08,
-     537,   10,   10,   10, 0x08,
-     556,   10,   10,   10, 0x08,
-     574,   10,   10,   10, 0x08,
-     594,   10,   10,   10, 0x08,
-     608,   10,   10,   10, 0x08,
-     623,   10,   10,   10, 0x08,
-     638,   10,   10,   10, 0x08,
-     653,   10,   10,   10, 0x08,
-     671,   10,   10,   10, 0x08,
-     686,   10,   10,   10, 0x08,
-     712,  704,   10,   10, 0x08,
-     736,  731,   10,   10, 0x08,
-     753,  704,   10,   10, 0x08,
-     786,  774,   10,   10, 0x08,
-     815,   11,   10,   10, 0x08,
-     846,   10,   10,   10, 0x08,
+     306,   10,   10,   10, 0x08,
+     322,   10,   10,   10, 0x08,
+     338,   10,   10,   10, 0x08,
+     354,   10,   10,   10, 0x08,
+     371,   10,   10,   10, 0x08,
+     385,   10,   10,   10, 0x08,
+     412,  399,   10,   10, 0x08,
+     447,   10,   10,   10, 0x08,
+     469,   10,   10,   10, 0x08,
+     485,   10,   10,   10, 0x08,
+     506,   10,   10,   10, 0x08,
+     521,   10,   10,   10, 0x08,
+     536,   10,   10,   10, 0x08,
+     555,   10,   10,   10, 0x08,
+     573,   10,   10,   10, 0x08,
+     593,   10,   10,   10, 0x08,
+     607,   10,   10,   10, 0x08,
+     622,   10,   10,   10, 0x08,
+     637,   10,   10,   10, 0x08,
+     652,   10,   10,   10, 0x08,
+     670,   10,   10,   10, 0x08,
+     685,   10,   10,   10, 0x08,
+     711,  703,   10,   10, 0x08,
+     735,  730,   10,   10, 0x08,
+     752,  703,   10,   10, 0x08,
+     785,  773,   10,   10, 0x08,
+     814,   11,   10,   10, 0x08,
+     845,   10,   10,   10, 0x08,
 
        0        // eod
 };
@@ -89,7 +89,7 @@ static const char qt_meta_stringdata_IcvICurve[] = {
     "cutCurve()\0copyCurve()\0pasteCurve()\0"
     "removeCurves()\0hideCurves()\0showCurves()\0"
     "deleteCurve()\0findCurve()\0showAllCurve()\0"
-    "selectAllCurves()\0selectReverseCurves()\0"
+    "selectAllCurves()\0selectInvertCurves()\0"
     "setCurveColor()\0setCurveWidth()\0"
     "setCurveStyle()\0setCurveMarker()\0"
     "expandCurve()\0filterCurve()\0type,keyword\0"
@@ -152,7 +152,7 @@ int IcvICurve::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 12: findCurve(); break;
         case 13: showAllCurve(); break;
         case 14: selectAllCurves(); break;
-        case 15: selectReverseCurves(); break;
+        case 15: selectInvertCurves(); break;
         case 16: setCurveColor(); break;
         case 17: setCurveWidth(); break;
         case 18: setCurveStyle(); break;

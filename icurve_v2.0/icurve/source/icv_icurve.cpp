@@ -78,12 +78,12 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionPaste,          SIGNAL(triggered()), this, SLOT(pasteCurve()));
     connect(ui.actionRemove,         SIGNAL(triggered()), this, SLOT(removeCurves()));
     connect(ui.actionHide,           SIGNAL(triggered()), this, SLOT(hideCurves()));
-	connect(ui.actionShow,           SIGNAL(triggered()), this, SLOT(showCurves()));
+   	connect(ui.actionShow,           SIGNAL(triggered()), this, SLOT(showCurves()));
     connect(ui.actionDelete,         SIGNAL(triggered()), this, SLOT(deleteCurve()));
     connect(ui.actionFind,           SIGNAL(triggered()), this, SLOT(findCurve()));
     connect(ui.actionShowAll,        SIGNAL(triggered()), this, SLOT(showAllCurve()));
     connect(ui.actionSelectAll,      SIGNAL(triggered()), this, SLOT(selectAllCurves()));  
-    connect(ui.actionSelectReverse,  SIGNAL(triggered()), this, SLOT(selectReverseCurves()));  
+    connect(ui.actionSelectInvert,  SIGNAL(triggered()), this, SLOT(selectInvertCurves()));  
 	
     /*curve menu*/
     connect(ui.actionColor,          SIGNAL(triggered()), this, SLOT(setCurveColor()));
@@ -133,15 +133,15 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     QPalette mainWinPalette;
     mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
     self->setPalette(mainWinPalette);
-	QDesktopWidget* desktop = QApplication::desktop();
-	move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
+    QDesktopWidget* desktop = QApplication::desktop();
+    move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
     //ui.actionZoom->setEnabled(false);
-	
-	/* shortcuts */
-	ui.actionOpen->setShortcut(QKeySequence::Open);
-	ui.actionFilter->setShortcut(QKeySequence::Find);
-	ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
-	ui.actionDelete->setShortcut(QKeySequence::Delete);
+
+    /* shortcuts */
+    ui.actionOpen->setShortcut(QKeySequence::Open);
+    ui.actionFilter->setShortcut(QKeySequence::Find);
+    ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
+    ui.actionDelete->setShortcut(QKeySequence::Delete);
 
     return ;
 }
@@ -225,7 +225,7 @@ void IcvICurve::openFile()
     QString fileName = QFileDialog::getOpenFileName(this,
             tr("Open file..."),
             fileInfo.absolutePath(),
-            tr("Text files (*.txt);;All Files (*)"));
+            tr("Text files (*.txt *.log *.cap *.bak);;All Files (*)"));
 
     if(fileName.isEmpty())
     {
@@ -1057,7 +1057,7 @@ void IcvICurve::selectAllCurves()
 }
 
 
-void IcvICurve::selectReverseCurves()
+void IcvICurve::selectInvertCurves()
 {
 	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
 	if(allCurves.empty())
