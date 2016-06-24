@@ -36,7 +36,8 @@ icurve
    - 增加打开文件时的路径记忆功能
    - debug版本和release版本
    - lint检查
-   - 增加refresh
+   - 增加refresh[done]
+   - 界面美化
 
 1. bugs
    - 多重filter后，再curve show all,会出现越界 [已解决]

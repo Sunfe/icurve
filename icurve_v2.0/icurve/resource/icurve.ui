@@ -278,13 +278,17 @@
    <addaction name="actionDelete"/>
    <addaction name="actionColor"/>
    <addaction name="actionStyle"/>
+   <addaction name="actionWidth"/>
    <addaction name="actionMarker"/>
-   <addaction name="actionLegend"/>
    <addaction name="actionTitle"/>
+   <addaction name="actionAxseScale"/>
+   <addaction name="actionLegend"/>
    <addaction name="actionShow"/>
    <addaction name="actionHide"/>
    <addaction name="actionZoom"/>
    <addaction name="actionHandMove"/>
+   <addaction name="actionExpand"/>
+   <addaction name="actionInfo"/>
    <addaction name="actionRefresh"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -412,6 +416,10 @@
    </property>
   </action>
   <action name="actionWidth">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/line_width.png</normaloff>:/icurve/images/line_width.png</iconset>
+   </property>
    <property name="text">
     <string>Width</string>
    </property>
@@ -483,6 +491,10 @@
    </property>
   </action>
   <action name="actionExpand">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/expand.png</normaloff>:/icurve/images/expand.png</iconset>
+   </property>
    <property name="text">
     <string>Expand</string>
    </property>
@@ -580,6 +592,10 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/info.png</normaloff>:/icurve/images/info.png</iconset>
+   </property>
    <property name="text">
     <string>Command Info</string>
    </property>
@@ -600,6 +616,10 @@
    </property>
   </action>
   <action name="actionAxseScale">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/scale.png</normaloff>:/icurve/images/scale.png</iconset>
+   </property>
    <property name="text">
     <string>Scale</string>
    </property>

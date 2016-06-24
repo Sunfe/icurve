@@ -144,6 +144,8 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     ui.actionFilter->setShortcut(QKeySequence::Find);
     ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
     ui.actionDelete->setShortcut(QKeySequence::Delete);
+    ui.actionRefresh->setShortcut(QKeySequence::Refresh);
+    ui.actionExpand->setShortcut(Qt::CTRL + Qt::Key_G);
 
     return ;
 }
