@@ -26,11 +26,17 @@ icurve
    - 查找、filter的时候增加预览[done]
    - 曲线增加树形分组
    - 加入recent file
-   - 增加曲线最大，最小值指示标志，标志还携带curve title信息[done]
-	- 支持多文件
-	- 增加工具栏[done]
-	- 增加快捷键
-
+   - 增加曲线最大，最小值指示标志，标志还携带curve title信息[done]   
+   - 支持多文件
+   - 增加工具栏[done]
+   - 增加快捷键[done]
+   - 加入曲线调整至合适的尺度
+   - 加入数据保存
+   - 增加曲线条数的信息
+   - 增加打开文件时的路径记忆功能
+   - debug版本和release版本
+   - lint检查
+   - 增加refresh
 
 1. bugs
    - 多重filter后，再curve show all,会出现越界 [已解决]

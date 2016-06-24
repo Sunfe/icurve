@@ -17,5 +17,6 @@
     <file>../images/show.png</file>
     <file>../images/hand.png</file>
     <file>../images/zoom.png</file>
+    <file>../images/refresh.png</file>
   </qresource>
 </RCC>

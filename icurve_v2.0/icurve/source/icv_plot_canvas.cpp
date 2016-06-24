@@ -706,7 +706,6 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 
     /*release magnifier*/
     unlockMagnifier();
-
     /*hide previous seleced curve marker*/
     for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
     {
@@ -723,10 +722,12 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
     qint16 cntCurveSelected = 0;
     for(qint16 i = 0; i < curves.count(); i++)
     {
+        if(!curves[i]->isAttached())
+            continue;
+
         QwtPlotCurve *curve = curves[i]->getCurve();
         double dist         = 0.0;
         curve->closestPoint(pos, &dist);
-
         if(dist < ICV_TOLERENCE_DISTANCE )
         {
             curSelectedCurve.push_back(curves[i]);
@@ -774,17 +775,14 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
         return ;
 
     lockMagnifier();
-
     lockCursorMoveAction = false;
     /*hide previous seleced curve marker*/
     for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
     {
         if(NULL == prevSelectedCurve[cnt])
             continue;
-
         prevSelectedCurve[cnt]->hideMarkers();
     }
-    prevSelectedCurve.clear();
 
     /*try to retrieve the closest curves*/
     curSelectedCurve.clear();
@@ -792,10 +790,12 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     qint16 cntCurveSelected = 0;
     for(qint16 i = 0; i < curves.count(); i++)
     {
+        if(!curves[i]->isAttached())
+            continue;
+
         QwtPlotCurve *curve = curves[i]->getCurve();
         double dist         = 0.0;
         curve->closestPoint(pos, &dist);
-
         if(dist < ICV_TOLERENCE_DISTANCE )
         {
             curSelectedCurve.push_back(curves[i]);
@@ -836,7 +836,6 @@ void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
     QwtPlotZoomer *zoomer = mainWin->getZoomer();
     if(zoomer->isEnabled())
         return ;
-
 
     if(true == lockCursorMoveAction)
         return ;

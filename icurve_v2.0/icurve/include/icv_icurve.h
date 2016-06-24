@@ -97,6 +97,7 @@ private slots:
         void closePlot();
 
         /*edit menu slots*/
+        void refreshPlot();
         void cutCurve();
         void copyCurve();
         void pasteCurve();

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Fri Jun 24 22:30:35 2016
+** Created: Fri Jun 24 23:04:04 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -79,6 +79,7 @@ public:
     QAction *actionHide;
     QAction *actionShow;
     QAction *actionSelect_mode;
+    QAction *actionRefresh;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -268,6 +269,11 @@ public:
         actionShow->setIcon(icon14);
         actionSelect_mode = new QAction(icurveClass);
         actionSelect_mode->setObjectName(QString::fromUtf8("actionSelect_mode"));
+        actionRefresh = new QAction(icurveClass);
+        actionRefresh->setObjectName(QString::fromUtf8("actionRefresh"));
+        QIcon icon15;
+        icon15.addFile(QString::fromUtf8(":/icurve/images/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRefresh->setIcon(icon15);
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -345,6 +351,7 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionClose);
         menuFile->addAction(actionExit);
+        menuEdit->addAction(actionRefresh);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
@@ -415,6 +422,7 @@ public:
         mainToolBar->addAction(actionHide);
         mainToolBar->addAction(actionZoom);
         mainToolBar->addAction(actionHandMove);
+        mainToolBar->addAction(actionRefresh);
 
         retranslateUi(icurveClass);
 
@@ -463,7 +471,7 @@ public:
         actionCopy_plot->setText(QApplication::translate("icurveClass", "Copy Plot", 0, QApplication::UnicodeUTF8));
         actionTree->setText(QApplication::translate("icurveClass", "Tree", 0, QApplication::UnicodeUTF8));
         actionInfo->setText(QApplication::translate("icurveClass", "Command Info", 0, QApplication::UnicodeUTF8));
-        actionSelectInvert->setText(QApplication::translate("icurveClass", "Select Reverse", 0, QApplication::UnicodeUTF8));
+        actionSelectInvert->setText(QApplication::translate("icurveClass", "Select Invert", 0, QApplication::UnicodeUTF8));
         actionData_picker->setText(QApplication::translate("icurveClass", "Data Picker", 0, QApplication::UnicodeUTF8));
         actionData_tracker->setText(QApplication::translate("icurveClass", "Curve Tracker", 0, QApplication::UnicodeUTF8));
         actionAxseScale->setText(QApplication::translate("icurveClass", "Scale", 0, QApplication::UnicodeUTF8));
@@ -476,6 +484,7 @@ public:
         actionHide->setText(QApplication::translate("icurveClass", "Hide", 0, QApplication::UnicodeUTF8));
         actionShow->setText(QApplication::translate("icurveClass", "Show", 0, QApplication::UnicodeUTF8));
         actionSelect_mode->setText(QApplication::translate("icurveClass", "Select mode", 0, QApplication::UnicodeUTF8));
+        actionRefresh->setText(QApplication::translate("icurveClass", "Refresh", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));

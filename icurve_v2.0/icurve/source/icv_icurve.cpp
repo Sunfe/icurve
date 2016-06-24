@@ -73,6 +73,8 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionClose,          SIGNAL(triggered()), this, SLOT(closePlot()));
     connect(ui.actionExit,           SIGNAL(triggered()), this, SLOT(close()));
     /*edit menu*/
+
+    connect(ui.actionRefresh,        SIGNAL(triggered()), this, SLOT(refreshPlot()));
     connect(ui.actionCut,            SIGNAL(triggered()), this, SLOT(cutCurve()));
     connect(ui.actionCopy,           SIGNAL(triggered()), this, SLOT(copyCurve()));
     connect(ui.actionPaste,          SIGNAL(triggered()), this, SLOT(pasteCurve()));
@@ -652,6 +654,13 @@ void IcvICurve::setCurveMarker()
     }
 
     delete markrPropDlg;
+    return;
+}
+
+
+void IcvICurve::refreshPlot()
+{
+    plot->replot();
     return;
 }
 
