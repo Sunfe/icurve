@@ -280,6 +280,7 @@
    <addaction name="actionMarker"/>
    <addaction name="actionLegend"/>
    <addaction name="actionTitle"/>
+   <addaction name="actionShow"/>
    <addaction name="actionHide"/>
    <addaction name="actionZoom"/>
    <addaction name="actionHandMove"/>
@@ -648,6 +649,10 @@
    </property>
   </action>
   <action name="actionShow">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/show.png</normaloff>:/icurve/images/show.png</iconset>
+   </property>
    <property name="text">
     <string>Show</string>
    </property>

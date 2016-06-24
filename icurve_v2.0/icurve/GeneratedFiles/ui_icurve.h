@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Fri Jun 24 01:36:25 2016
+** Created: Fri Jun 24 21:00:02 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -263,6 +263,9 @@ public:
         actionHide->setIcon(icon13);
         actionShow = new QAction(icurveClass);
         actionShow->setObjectName(QString::fromUtf8("actionShow"));
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8(":/icurve/images/show.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionShow->setIcon(icon14);
         actionSelect_mode = new QAction(icurveClass);
         actionSelect_mode->setObjectName(QString::fromUtf8("actionSelect_mode"));
         centralWidget = new QWidget(icurveClass);
@@ -408,6 +411,7 @@ public:
         mainToolBar->addAction(actionMarker);
         mainToolBar->addAction(actionLegend);
         mainToolBar->addAction(actionTitle);
+        mainToolBar->addAction(actionShow);
         mainToolBar->addAction(actionHide);
         mainToolBar->addAction(actionZoom);
         mainToolBar->addAction(actionHandMove);

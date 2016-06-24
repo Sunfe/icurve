@@ -1199,57 +1199,54 @@ QwtPlotZoomer* IcvICurve::getZoomer()
 void IcvICurve::enableZoomer( bool checked)
 {
     bool enable = checked;
-
     zoomer->setEnabled(enable);
     plotCanvas->setZoomState(enable);
-    plotCanvas->getCanvas()->setCursor(Qt::CrossCursor);
-
-    /*disable magnifier and panner*/
+    /* disable magnifier and panner */
     magnifier->setEnabled(!enable);
     panner->setEnabled(!enable);
 
+    if(checked)
+        plotCanvas->getCanvas()->setCursor(Qt::CrossCursor);
+    else if(ui.actionHandMove->isChecked())
+        plotCanvas->getCanvas()->setCursor(Qt::OpenHandCursor);
+    else
+        plotCanvas->getCanvas()->setCursor(Qt::ArrowCursor);
+
     ui.actionZoom->setCheckable(true);
     ui.actionZoom->setChecked(checked);
-
     plot->replot();
-
     return;
 }
 
 
 void IcvICurve::enableHandMove( bool checked)
 {
-    bool enable = checked;
-
-    /* toggle magnifier and panner */
-    magnifier->setEnabled(enable);
-    panner->setEnabled(enable);
-    /* toggle zoomer*/
-    zoomer->setEnabled(!enable);
-
-    if(enable)
-    {
-        plotCanvas->getCanvas()->setCursor(Qt::OpenHandCursor);
-        plotCanvas->getCanvas()->setMouseTracking(false);
-    }
+    /* magnifier and panner are compliant with 
+       hand-move */
+    magnifier->setEnabled(checked);
+    panner->setEnabled(checked);
+    /* zoomer is only enabled*/
+    if(!checked && true == ui.actionZoom->isChecked())
+        zoomer->setEnabled(true);
     else
-    {
-        plotCanvas->getCanvas()->setCursor(Qt::ArrowCursor);
-        plotCanvas->getCanvas()->setMouseTracking(true);
+        zoomer->setEnabled(false);
 
-    }
+    if(checked)
+        plotCanvas->getCanvas()->setCursor(Qt::OpenHandCursor);
+    else if(ui.actionZoom->isChecked())
+        plotCanvas->getCanvas()->setCursor(Qt::CrossCursor);
+    else
+        plotCanvas->getCanvas()->setCursor(Qt::ArrowCursor);
 
     ui.actionHandMove->setCheckable(true);
     ui.actionHandMove->setChecked(checked);
 
-
+    plot->replot();
     return;
 }
 
-
 bool IcvICurve::isHandMoveChecked()
 {
-
     return ui.actionHandMove->isChecked();
 }
 

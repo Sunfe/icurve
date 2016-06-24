@@ -58,6 +58,26 @@ void IcvPlotCanvas::setCanvas(QwtPlotCanvas * cvs)
 }
 
 
+QCursor IcvPlotCanvas::getCursor()
+{
+	return cursor;
+}
+
+
+void IcvPlotCanvas::setCursor(QCursor csr)
+{
+	cursor = csr;
+	return;
+}
+
+
+void IcvPlotCanvas::restoreCursor()
+{
+	canvas->setCursor(cursor);
+	return;
+}
+
+
 QList<IcvPlotCurve *> IcvPlotCanvas::getCurves()
 {
     return curves;

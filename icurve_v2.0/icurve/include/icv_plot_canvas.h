@@ -40,6 +40,10 @@ public:
     QwtPlotCanvas *getCanvas();
     void setCanvas(QwtPlotCanvas *cvs);
 
+	QCursor getCursor();
+	void setCursor(QCursor csr);
+	void restoreCursor();
+
     QList<IcvPlotCurve *> getCurves();
     void setCurves(QList<IcvPlotCurve *> crvs);
     void setCurSelectCurves(QList<IcvPlotCurve *> crvs);
@@ -103,6 +107,7 @@ private:
 
     bool lockCursorMoveAction;
     bool zoomStateEnabled;
+	QCursor cursor;
 
 private slots:
     void setCurveColor();
