@@ -40,9 +40,9 @@ public:
     QwtPlotCanvas *getCanvas();
     void setCanvas(QwtPlotCanvas *cvs);
 
-	QCursor getCursor();
-	void setCursor(QCursor csr);
-	void restoreCursor();
+    QCursor getCursor();
+    void setCursor(QCursor csr);
+    void restoreCursor();
 
     QList<IcvPlotCurve *> getCurves();
     void setCurves(QList<IcvPlotCurve *> crvs);
@@ -56,10 +56,10 @@ public:
     void clearAllCurves();
     QList<IcvPlotCurve*> getSelectedCurve();
     void deleteCurve(QList<IcvPlotCurve*> crv);
-	void removeCurves(QList<IcvPlotCurve *> crv);
+    void removeCurves(QList<IcvPlotCurve *> crv);
     void highlightCurve(QList<IcvPlotCurve*> crv);
-	void hideSelectCurves();
-	void showSelectCurves();
+    void hideSelectCurves();
+    void showSelectCurves();
     void lockMagnifier();
     void unlockMagnifier();
     void setZoomState(bool state);
@@ -69,12 +69,10 @@ public:
     virtual bool eventFilter( QObject *, QEvent * );
     virtual bool event( QEvent * );
 
-
 private:
     void onMouseLeftButtonClick(const QMouseEvent *event);
     void onMouseRightButtonClick(const QMouseEvent *event);
     void onMouseMove(const QMouseEvent *event);
-
 
 private:
     QwtPlotCanvas *canvas;
@@ -107,20 +105,17 @@ private:
 
     bool lockCursorMoveAction;
     bool zoomStateEnabled;
-	QCursor cursor;
+    QCursor cursor;
 
 private slots:
-    void setCurveColor();
-    void setCurveWidth(QAction *action);
-    void setCurveStyle(QAction *action);
-    void setCurveMarker(QAction *action);
-    void setCurveMarkerSize(QAction *action);
-    void setCurveGroupSize(QAction *action);
-    void setCurveProperty();
-    void deleteSelectCurve();
-
-
-
+        void setCurveColor();
+        void setCurveWidth(QAction *action);
+        void setCurveStyle(QAction *action);
+        void setCurveMarker(QAction *action);
+        void setCurveMarkerSize(QAction *action);
+        void setCurveGroupSize(QAction *action);
+        void setCurveProperty();
+        void deleteSelectCurve();
 };
 
 #endif

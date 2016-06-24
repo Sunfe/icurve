@@ -78,13 +78,13 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionPaste,          SIGNAL(triggered()), this, SLOT(pasteCurve()));
     connect(ui.actionRemove,         SIGNAL(triggered()), this, SLOT(removeCurves()));
     connect(ui.actionHide,           SIGNAL(triggered()), this, SLOT(hideCurves()));
-   	connect(ui.actionShow,           SIGNAL(triggered()), this, SLOT(showCurves()));
+    connect(ui.actionShow,           SIGNAL(triggered()), this, SLOT(showCurves()));
     connect(ui.actionDelete,         SIGNAL(triggered()), this, SLOT(deleteCurve()));
     connect(ui.actionFind,           SIGNAL(triggered()), this, SLOT(findCurve()));
     connect(ui.actionShowAll,        SIGNAL(triggered()), this, SLOT(showAllCurve()));
     connect(ui.actionSelectAll,      SIGNAL(triggered()), this, SLOT(selectAllCurves()));  
     connect(ui.actionSelectInvert,  SIGNAL(triggered()), this, SLOT(selectInvertCurves()));  
-	
+ 
     /*curve menu*/
     connect(ui.actionColor,          SIGNAL(triggered()), this, SLOT(setCurveColor()));
     connect(ui.actionWidth,          SIGNAL(triggered()), this, SLOT(setCurveWidth()));
@@ -257,8 +257,8 @@ void IcvICurve::openFile()
         plotCurve->setCanvas(plotCanvas);
         plotCurve->setDataPos(pos);
         plotCurve->setCommand(plotData[pos]);
-		plotCurve->setAttachedState(true);
-		/* attach curves to plot canvas*/
+        plotCurve->setAttachedState(true);
+        /* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
         plot->replot();
     }
@@ -333,13 +333,13 @@ void IcvICurve::insertYLabel()
 
 void IcvICurve::insertLegend()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		ui.actionLegend->setChecked(false);
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        ui.actionLegend->setChecked(false);
+        return ;
+    }
 
     if(true == ui.actionLegend->isChecked())
     {
@@ -365,13 +365,13 @@ void IcvICurve::insertLegend()
 
 void IcvICurve::insertCurveName()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		ui.actionCurveName->setChecked(false);
-		return ;
-	}
+ QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+ if(allCurves.empty())
+ {
+  QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+  ui.actionCurveName->setChecked(false);
+  return ;
+ }
 
     if(true == ui.actionCurveName->isChecked())
     {
@@ -403,98 +403,98 @@ void IcvICurve::insertFooter()
 
 void IcvICurve::insertIndicator()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		ui.actionIndicator->setChecked(false);
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        ui.actionIndicator->setChecked(false);
+        return ;
+    }
 
-	if(true == ui.actionIndicator->isChecked())
-	{
-		for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
-		{
-			QList<QwtPlotMarker *>indicators = allCurves.at(cnt)->getIndicators();
-			if(!indicators.isEmpty())
-				continue;
+    if(true == ui.actionIndicator->isChecked())
+    {
+        for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+        {
+            QList<QwtPlotMarker *>indicators = allCurves.at(cnt)->getIndicators();
+            if(!indicators.isEmpty())
+                continue;
 
-			/* if not indicator attached to the curve, create and attach*/
-			QPointF maxSample;
-			QPointF minSample;
-			QPointF sample;
+            /* if not indicator attached to the curve, create and attach*/
+            QPointF maxSample;
+            QPointF minSample;
+            QPointF sample;
 
-			maxSample.setX(0);
-			maxSample.setY(0);
+            maxSample.setX(0);
+            maxSample.setY(0);
 
-			minSample.setX(0xff);
-			minSample.setY(0xff);
-			for(qint16 posX = 0; posX < allCurves.at(cnt)->getCurve()->dataSize(); posX++)
-			{
-				sample = allCurves.at(cnt)->getCurve()->sample(posX);
-				if(sample.ry() >  maxSample.ry())
-				{
-					maxSample.setX(posX);
-					maxSample.setY(sample.ry());
-				}
+            minSample.setX(0xff);
+            minSample.setY(0xff);
+            for(qint16 posX = 0; posX < allCurves.at(cnt)->getCurve()->dataSize(); posX++)
+            {
+                sample = allCurves.at(cnt)->getCurve()->sample(posX);
+                if(sample.ry() >  maxSample.ry())
+                {
+                    maxSample.setX(posX);
+                    maxSample.setY(sample.ry());
+                }
 
-				if(sample.ry()!= 0 && sample.ry() < minSample.ry())
-				{
-					minSample.setX(posX);
-					minSample.setY(sample.ry());
-				}
-			}
+                if(sample.ry()!= 0 && sample.ry() < minSample.ry())
+                {
+                    minSample.setX(posX);
+                    minSample.setY(sample.ry());
+                }
+            }
 
-			QString name = allCurves.at(cnt)->getCommand().getCommandTitle();
-			QwtPlotMarker *maxPosMarker = new QwtPlotMarker();
-			maxPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
-			maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-			maxPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
-			maxPosMarker->setValue(maxSample);
-			maxPosMarker->setLabel(QString("max(%1,%2)@%3").arg(maxSample.rx()).arg(maxSample.ry()).arg(name));
-			maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-			maxPosMarker->attach(plot);
+            QString name = allCurves.at(cnt)->getCommand().getCommandTitle();
+            QwtPlotMarker *maxPosMarker = new QwtPlotMarker();
+            maxPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
+            maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
+            maxPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
+            maxPosMarker->setValue(maxSample);
+            maxPosMarker->setLabel(QString("max(%1,%2)@%3").arg(maxSample.rx()).arg(maxSample.ry()).arg(name));
+            maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
+            maxPosMarker->attach(plot);
 
-			QwtPlotMarker *minPosMarker = new QwtPlotMarker();
-			minPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
-			minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-			minPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
-			minPosMarker->setValue(minSample);
-			minPosMarker->setLabel( QString("min(%1,%2)@%3").arg(minSample.rx()).arg(minSample.ry()).arg(name));
-			minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-			minPosMarker->attach(plot);
+            QwtPlotMarker *minPosMarker = new QwtPlotMarker();
+            minPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
+            minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
+            minPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
+            minPosMarker->setValue(minSample);
+            minPosMarker->setLabel( QString("min(%1,%2)@%3").arg(minSample.rx()).arg(minSample.ry()).arg(name));
+            minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
+            minPosMarker->attach(plot);
 
-			QList<QwtPlotMarker *>markers;
-			markers.append(maxPosMarker);
-			markers.append(minPosMarker);
-			allCurves.at(cnt)->setIndicator(markers);
+            QList<QwtPlotMarker *>markers;
+            markers.append(maxPosMarker);
+            markers.append(minPosMarker);
+            allCurves.at(cnt)->setIndicator(markers);
 
-			ui.actionIndicator->setChecked(true);
-		}
-	}
-	else
-	{
-		for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
-		{
-			allCurves.at(cnt)->deleteIndicator();
-		}
+            ui.actionIndicator->setChecked(true);
+        }
+    }
+    else
+    {
+        for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+        {
+            allCurves.at(cnt)->deleteIndicator();
+        }
 
-		ui.actionIndicator->setChecked(false);
-	}
+        ui.actionIndicator->setChecked(false);
+    }
 
-	plot->replot();
+    plot->replot();
     return;
 }
 
 
 void IcvICurve::setCurveColor()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *>selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
@@ -520,12 +520,12 @@ void IcvICurve::setCurveColor()
 
 void IcvICurve::setCurveWidth()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
@@ -549,12 +549,12 @@ void IcvICurve::setCurveWidth()
 
 void IcvICurve::setCurveStyle()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
@@ -604,19 +604,18 @@ void IcvICurve::setCurveStyle()
 
     delete curveStyleDlg;
     curveStyleDlg = NULL;
-
     return;
 }
 
 
 void IcvICurve::setCurveMarker()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
@@ -653,7 +652,6 @@ void IcvICurve::setCurveMarker()
     }
 
     delete markrPropDlg;
-
     return;
 }
 
@@ -696,7 +694,7 @@ void IcvICurve::copyCurve()
     board->setMimeData(&mime);
 #endif
 
-    return ;
+    return;
 }
 
 
@@ -711,11 +709,11 @@ void IcvICurve::pasteCurve()
 void IcvICurve::filterCurve()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
@@ -724,7 +722,7 @@ void IcvICurve::filterCurve()
 
     QString    keyword = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
-   
+
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
     QList<IcvPlotCurve *> curvesFound;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
@@ -764,11 +762,11 @@ void IcvICurve::filterCurve()
         }
     } 
 
-	if(0 == curvesFound.count()) 
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curves filtered!"));
-		return;
-	}
+    if(0 == curvesFound.count()) 
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curves filtered!"));
+        return;
+    }
 
     /* remove the curves from list of deletion*/
     QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
@@ -779,7 +777,7 @@ void IcvICurve::filterCurve()
             targetCurves.removeAll(curvesFound.at(cntF));
         }
     }
-	plotCanvas->removeCurves(targetCurves);
+    plotCanvas->removeCurves(targetCurves);
 
     plot->updateLegend();
     plot->replot();
@@ -869,12 +867,12 @@ void IcvICurve::recoverCurveVisible()
 
 void IcvICurve::findCurve()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Find curves");
@@ -921,7 +919,6 @@ void IcvICurve::findCurve()
         {
             curvesFound.push_back(curves.at(cnt));
         }
-
     } 
 
     plotCanvas->highlightCurve(curvesFound);
@@ -931,7 +928,6 @@ void IcvICurve::findCurve()
     /*clear memory*/
     delete filterDlg;
     filterDlg = NULL;
-
     return;
 }
 
@@ -941,12 +937,12 @@ void IcvICurve::deleteCurve()
     if(NULL == plotCanvas)
         return ;
 
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve*> curves = plotCanvas->getSelectedCurve();
     plotCanvas->deleteCurve(curves);
@@ -954,17 +950,18 @@ void IcvICurve::deleteCurve()
     return;
 }
 
+
 void IcvICurve::removeCurves()
 {
-	if(NULL == plotCanvas)
-		return ;
+    if(NULL == plotCanvas)
+        return ;
 
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     plotCanvas->removeSelectCurves();
     plot->replot();
@@ -974,50 +971,49 @@ void IcvICurve::removeCurves()
 
 void IcvICurve::hideCurves()
 {
-	if(NULL == plotCanvas)
-		return ;
+    if(NULL == plotCanvas)
+        return ;
 
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
-	QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
-	if(selCurve.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve selected."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
+    QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
+    if(selCurve.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+        return ;
+    }
 
-	plotCanvas->hideSelectCurves();
-	plot->replot();
-	return;
+    plotCanvas->hideSelectCurves();
+    plot->replot();
+    return;
 }
-
 
 
 void IcvICurve::showCurves()
 {
-	if(NULL == plotCanvas)
-		return ;
+    if(NULL == plotCanvas)
+        return ;
 
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
-	QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
-	if(selCurve.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve selected."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
+    QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
+    if(selCurve.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+        return ;
+    }
 
-	plotCanvas->showSelectCurves();
-	plot->replot();
-	return;
+    plotCanvas->showSelectCurves();
+    plot->replot();
+    return;
 }
 
 
@@ -1027,69 +1023,69 @@ void IcvICurve::showAllCurve()
         return;
 
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curves plotted, maybe file not opened."));
-		return ;
-	}
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curves plotted, maybe file not opened."));
+        return ;
+    }
 
-	for(qint16 pos = 0; pos < allCurves.count(); pos++)
-		allCurves.at(pos)->showCurve();
+    for(qint16 pos = 0; pos < allCurves.count(); pos++)
+        allCurves.at(pos)->showCurve();
 
-	plot->replot();
+    plot->replot();
     return;
 }
 
 
 void IcvICurve::selectAllCurves()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return;
+    }
 
-	plotCanvas->highlightCurve(allCurves);
-	plotCanvas->setCurSelectCurves(allCurves);
-	plot->replot();
+    plotCanvas->highlightCurve(allCurves);
+    plotCanvas->setCurSelectCurves(allCurves);
+    plot->replot();
     return;
 }
 
 
 void IcvICurve::selectInvertCurves()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
-	for(qint16 cnt = 0; cnt < curve.count(); cnt++)
-	{
-		curve.at(cnt)->hideMarkers();
-		allCurves.removeAll(curve.at(cnt));
-	}
+    for(qint16 cnt = 0; cnt < curve.count(); cnt++)
+    {
+        curve.at(cnt)->hideMarkers();
+        allCurves.removeAll(curve.at(cnt));
+    }
 
-	QList<IcvPlotCurve *> reversedCurves = allCurves;
-	plotCanvas->highlightCurve(reversedCurves);
-	plotCanvas->setCurSelectCurves(reversedCurves);
-	plot->replot();
+    QList<IcvPlotCurve *> reversedCurves = allCurves;
+    plotCanvas->highlightCurve(reversedCurves);
+    plotCanvas->setCurSelectCurves(reversedCurves);
+    plot->replot();
 
-	return;
+    return;
 }
 
 
 void IcvICurve::expandCurve()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(curve.empty())
@@ -1113,7 +1109,6 @@ void IcvICurve::expandCurve()
     }
 
     plot->replot();
-
     return;
 }
 
@@ -1137,19 +1132,18 @@ void IcvICurve::legendChecked( const QVariant &itemInfo, bool on)
     }
 
     plot->replot();
-
     return ;
 }
 
 
 void IcvICurve::showCurveInfo()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(curve.isEmpty())
@@ -1160,33 +1154,31 @@ void IcvICurve::showCurveInfo()
 
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
     IcvCurveInfoDialog *infoDlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
-
     infoDlg->exec();
-
     return;
 }
 
 
 void IcvICurve::setCurveProperties()
 {
-	QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-	if(allCurves.empty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-		return ;
-	}
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
 
-	QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
-	if(curve.isEmpty())
-	{
-		QMessageBox::information(this,tr("Info"),tr("No curve selected."));
-		return ;
-	}
+    QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
+    if(curve.isEmpty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+        return ;
+    }
 
-	IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curve, this, Qt::Dialog);
-	propDiag->resize(400,150);
-	propDiag->exec();
-	return;
+    IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curve, this, Qt::Dialog);
+    propDiag->resize(400,150);
+    propDiag->exec();
+    return;
 }
 
 
@@ -1266,17 +1258,15 @@ void IcvICurve::setAxseScale()
     if(axseScaleDlg->exec() != QDialog::Accepted)
         return ;
 
-    bool ok = false;
+    bool   ok    = false;
     double minX  = axseScaleDlg->lineEditMinX->text().toDouble(&ok);
     double maxX  = axseScaleDlg->lineEditMaxX->text().toDouble(&ok);
     double minY  = axseScaleDlg->lineEditMinY->text().toDouble(&ok);
     double maxY  = axseScaleDlg->lineEditMaxY->text().toDouble(&ok);
 
-
     plot->setAxisScale(QwtPlot::xBottom, minX, maxX, 0);
     plot->setAxisScale(QwtPlot::yLeft, minY, maxY, 0);
     plot->replot();
-
     return;
 }
 
@@ -1335,7 +1325,6 @@ void IcvICurve::setAxseTitle()
     }
 
     delete axseTitleDlg;
-   
     return;
 }
 
@@ -1389,12 +1378,12 @@ void IcvICurve::setAxseAlignment()
     layout->addWidget(labelY,       2, 0, 1, 1);
     layout->addWidget(alignComboHY, 2, 1, 1, 1);
     layout->addWidget(alignComboVY, 2, 2, 1, 1);
-	/* ok and cancel button span 2 column */
+ /* ok and cancel button span 2 column */
     layout->addWidget(buttonBox,    3, 1, 1, 2); 
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
     axseAlignDlg->setLayout(layout);
-	axseAlignDlg->setFixedSize(200,120);
+    axseAlignDlg->setFixedSize(200,120);
 
     qint16 retcode = (qint16)axseAlignDlg->exec();
     if(QDialog::Accepted == retcode)
@@ -1621,15 +1610,15 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
          plotData.push_back(cmd);   
     }
 
-	/* import data action was halt, data should also be cleared*/
+ /* import data action was halt, data should also be cleared*/
     if(isDataAnalyCanceled)
         plotData.clear();
 
-	if((NULL != analyProgressDialog))
-	{
-		delete analyProgressDialog;
-		analyProgressDialog = NULL;
-	}
+    if((NULL != analyProgressDialog))
+    {
+        delete analyProgressDialog;
+        analyProgressDialog = NULL;
+    }
 
     return ICU_OK; 
 }
@@ -1637,8 +1626,8 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 
 ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 {
-	QStringList splitList;
-	QStringList digList;
+    QStringList splitList;
+    QStringList digList;
 
     if((cmd->getName() == "getTxPsd") && dataLine.contains("---"))
     {
@@ -1647,27 +1636,27 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 
     QRegExp regExpNonBitAlloc;
     QRegExp regExpBitAlloc;
-	regExpNonBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
-	regExpNonBitAlloc.setPattern("\\s+\\d{,5}\\s+:([ ]+-{,1}\\d{1,}.\\d){1,10}$");
-	regExpBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
-	regExpBitAlloc.setPattern("\\s+\\d{,5}\\s+:(\\s+\\d+){,20}$");
+    regExpNonBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
+    regExpNonBitAlloc.setPattern("\\s+\\d{,5}\\s+:([ ]+-{,1}\\d{1,}.\\d){1,10}$");
+    regExpBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
+    regExpBitAlloc.setPattern("\\s+\\d{,5}\\s+:(\\s+\\d+){,20}$");
 
     splitList = dataLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
     digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
-	if(-1 != regExpNonBitAlloc.indexIn(dataLine))
-	{
-		appendCommandData(cmd, digList);
+    if(-1 != regExpNonBitAlloc.indexIn(dataLine))
+    {
+        appendCommandData(cmd, digList);
         if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
             cmd->setState(CMD_CLOSED);
-		return ICU_OK;
-	}
-	else if(-1 != regExpBitAlloc.indexIn(dataLine))
-	{
-		appendCommandData(cmd, digList);
+        return ICU_OK;
+    }
+    else if(-1 != regExpBitAlloc.indexIn(dataLine))
+    {
+        appendCommandData(cmd, digList);
         if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
             cmd->setState(CMD_CLOSED);
-		return ICU_OK;
-	}
+        return ICU_OK;
+    }
 
     return ICU_ERROR;
 }
@@ -1675,22 +1664,22 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 
 ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
 {
-	QList<QPointF> points; 
-	QPointF        point;
-	qint16         tone = cmd->getData().count();
-	for(qint16 i = ICV_PLOT_DATA_START_POS; i < data.count(); i++)
-	{
+    QList<QPointF> points; 
+    QPointF        point;
+    qint16         tone = cmd->getData().count();
+    for(qint16 i = ICV_PLOT_DATA_START_POS; i < data.count(); i++)
+    {
         bool ok = false;
-		qreal dataItem = data.at(i).toFloat(&ok);
-		if(false == ok)
-			return ICU_PLOT_DATA_FORMAT_ERROR;
-		tone++;
-		point.setX(tone);
-		point.setY(dataItem);
-		points.append(point);
-	}
+        qreal dataItem = data.at(i).toFloat(&ok);
+        if(false == ok)
+            return ICU_PLOT_DATA_FORMAT_ERROR;
+        tone++;
+        point.setX(tone);
+        point.setY(dataItem);
+        points.append(point);
+    }
 
-	cmd->setData(points,true);
+    cmd->setData(points,true);
     return ICU_OK;
 }
 

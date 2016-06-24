@@ -60,21 +60,21 @@ void IcvPlotCanvas::setCanvas(QwtPlotCanvas * cvs)
 
 QCursor IcvPlotCanvas::getCursor()
 {
-	return cursor;
+    return cursor;
 }
 
 
 void IcvPlotCanvas::setCursor(QCursor csr)
 {
-	cursor = csr;
-	return;
+    cursor = csr;
+    return;
 }
 
 
 void IcvPlotCanvas::restoreCursor()
 {
-	canvas->setCursor(cursor);
-	return;
+    canvas->setCursor(cursor);
+    return;
 }
 
 
@@ -120,6 +120,7 @@ void IcvPlotCanvas::updateCurves()
             curves.append(curve);
         }
     }
+    return;
 }
 
 
@@ -152,7 +153,7 @@ void IcvPlotCanvas::clearCurves(QList<IcvPlotCurve *> crvs)
 void IcvPlotCanvas::removeSelectCurves()
 {
     for(qint16 pos = 0; pos < curSelectedCurve.count(); pos++)
-       prevSelectedCurve.removeAll(curSelectedCurve[pos]);     
+        prevSelectedCurve.removeAll(curSelectedCurve[pos]);     
 
     removeCurves(curSelectedCurve);
     return ;
@@ -161,21 +162,21 @@ void IcvPlotCanvas::removeSelectCurves()
 
 void IcvPlotCanvas::hideSelectCurves()
 {
-	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-	{
-		curSelectedCurve.at(cnt)->hideCurve();
-	}
-	return ;
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+    {
+        curSelectedCurve.at(cnt)->hideCurve();
+    }
+    return ;
 }
 
 
 void IcvPlotCanvas::showSelectCurves()
 {
-	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-	{
-		curSelectedCurve.at(cnt)->showCurve();
-	}
-	return ;
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+    {
+        curSelectedCurve.at(cnt)->showCurve();
+    }
+    return ;
 }
 
 
@@ -192,132 +193,130 @@ void IcvPlotCanvas::clearAllCurves()
 
 void IcvPlotCanvas::deleteSelectCurve()
 {
-	lockMagnifier();
+    lockMagnifier();
 
-	if(0 == curSelectedCurve.count())
-		return;
+    if(0 == curSelectedCurve.count())
+        return;
 
-	QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
-		"Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
-	msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
-	msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
-	if (msgBox.exec() != QMessageBox::AcceptRole)
-	{
-		return;
-	}
+    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
+        "Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
+    msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
+    if (msgBox.exec() != QMessageBox::AcceptRole)
+    {
+        return;
+    }
 
-	/*remove from the curves' queue*/
-	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-	{
-		curves.removeAll(curSelectedCurve[cnt]); 
+    /*remove from the curves' queue*/
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+    {
+        curves.removeAll(curSelectedCurve[cnt]); 
 
-		/*remove relative data from QList data repository*/
-		QList <IcvCommand> *plotData = retrieveParent()->getPlotData();
-		qint16 dataPos = curSelectedCurve[cnt]->getDataPos();
-		if(dataPos < plotData->count())
-			plotData->removeAt(dataPos);
+        /*remove relative data from QList data repository*/
+        QList <IcvCommand> *plotData = retrieveParent()->getPlotData();
+        qint16 dataPos = curSelectedCurve[cnt]->getDataPos();
+        if(dataPos < plotData->count())
+            plotData->removeAt(dataPos);
 
-		/*update previous selected curves state*/
-		prevSelectedCurve.removeAll(curSelectedCurve[cnt]);
+        /*update previous selected curves state*/
+        prevSelectedCurve.removeAll(curSelectedCurve[cnt]);
 
-		/*deconstruct IcvPlotCurve object */
-		delete curSelectedCurve[cnt];       
+        /*deconstruct IcvPlotCurve object */
+        delete curSelectedCurve[cnt];       
 
-		/*memset,important!*/
-		curSelectedCurve[cnt] = NULL; 
-	}
+        /*memset,important!*/
+        curSelectedCurve[cnt] = NULL; 
+    }
 
-	if(canvas !=NULL && canvas->plot() != NULL)
-	{
-		canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-		canvas->plot()->replot();
-		canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-	}
+    if(canvas !=NULL && canvas->plot() != NULL)
+    {
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+        canvas->plot()->replot();
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+    }
 
-	return;
+    return;
 }
 
 
 void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
 {
-	if(0 == crv.count())
-		return ;
+    if(0 == crv.count())
+        return ;
 
-	QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
-		"Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
-	msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
-	msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
-	if (msgBox.exec() != QMessageBox::AcceptRole)
-	{
-		return;
-	}
+    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
+        "Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
+    msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
+    if (msgBox.exec() != QMessageBox::AcceptRole)
+    {
+        return;
+    }
 
-	for(qint16 cnt = 0; cnt < crv.count(); cnt++)
-	{
-		QwtPlotCurve *qwtCurve = crv[cnt]->getCurve();
-		if(NULL == qwtCurve)
-			continue;
+    for(qint16 cnt = 0; cnt < crv.count(); cnt++)
+    {
+        QwtPlotCurve *qwtCurve = crv[cnt]->getCurve();
+        if(NULL == qwtCurve)
+            continue;
 
-		/*delete from qwtcavas*/
-		qwtCurve->detach();
-		/*delete from heap*/
-		delete qwtCurve;  
+        /*delete from qwtcavas*/
+        qwtCurve->detach();
+        /*delete from heap*/
+        delete qwtCurve;  
 
-		/*remove corresponding data from data repository*/
-		QList <IcvCommand> *plotData = retrieveParent()->getPlotData();
-		qint16 dataPos = crv[cnt]->getDataPos();
-		if(dataPos < plotData->count())
-			plotData->removeAt(dataPos);
+        /*remove corresponding data from data repository*/
+        QList <IcvCommand> *plotData = retrieveParent()->getPlotData();
+        qint16 dataPos = crv[cnt]->getDataPos();
+        if(dataPos < plotData->count())
+            plotData->removeAt(dataPos);
 
-		/*remove from list of curves in the IcvCanvas  */
-		curves.removeAll(crv[cnt]);  
-		/*detete corresponding markers*/
-		crv[cnt]->deleteMakers();
-		/*update selected curve state*/
-		curSelectedCurve.removeAll(crv[cnt]);
-		prevSelectedCurve.removeAll(crv[cnt]);
-	}
-	return;
+        /*remove from list of curves in the IcvCanvas  */
+        curves.removeAll(crv[cnt]);  
+        /*detete corresponding markers*/
+        crv[cnt]->deleteMakers();
+        /*update selected curve state*/
+        curSelectedCurve.removeAll(crv[cnt]);
+        prevSelectedCurve.removeAll(crv[cnt]);
+    }
+    return;
 }
 
 
 void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
 {
-	if(0 == crv.count())
-		return ;
+    if(0 == crv.count())
+        return ;
 
-	for(qint16 cnt = 0; cnt < crv.count(); cnt++)
-	{
-		/*remove curve from canvas*/
-		crv.at(cnt)->removeCurve();
-		/*update selected curve state*/
-		curSelectedCurve.removeAll(crv[cnt]);
-		prevSelectedCurve.removeAll(crv[cnt]);
-	}
-
-	return;
+    for(qint16 cnt = 0; cnt < crv.count(); cnt++)
+    {
+        /*remove curve from canvas*/
+        crv.at(cnt)->removeCurve();
+        /*update selected curve state*/
+        curSelectedCurve.removeAll(crv[cnt]);
+        prevSelectedCurve.removeAll(crv[cnt]);
+    }
+    return;
 }
 
 
 void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
 {
-	if(0 == crv.count())
-		return;
+    if(0 == crv.count())
+        return;
 
-	for(qint16 cnt = 0; cnt < crv.count(); cnt++)
-	{
-		crv.at(cnt)->showMarkers();
-		crv.at(cnt)->setActivateState(ICV_CURVE_ACTIVATED);
-	}
+    for(qint16 cnt = 0; cnt < crv.count(); cnt++)
+    {
+        crv.at(cnt)->showMarkers();
+        crv.at(cnt)->setActivateState(ICV_CURVE_ACTIVATED);
+    }
 
-	if(NULL != canvas && canvas->plot() != NULL)
-	{
-		canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-		canvas->plot()->replot();
-		canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-	}
-
-	return;
+    if(NULL != canvas && canvas->plot() != NULL)
+    {
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+        canvas->plot()->replot();
+        canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+    }
+    return;
 }
 
 
@@ -345,7 +344,6 @@ void IcvPlotCanvas::setCurveColor()
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
-
     return;
 }
 
@@ -376,7 +374,6 @@ void IcvPlotCanvas::setCurveWidth(QAction *action)
 
     action->setCheckable(true);
     action->setChecked(true);
-
     return;
 }
 
@@ -408,7 +405,6 @@ void IcvPlotCanvas::setCurveStyle(QAction *action)
 
     action->setCheckable(true);
     action->setChecked(true);
-
     return;
 }
 
@@ -439,7 +435,6 @@ void IcvPlotCanvas::setCurveMarker(QAction *action)
 
     action->setCheckable(true);
     action->setChecked(true);
-
     return;
 }
 
@@ -470,7 +465,6 @@ void IcvPlotCanvas::setCurveMarkerSize(QAction *action)
 
     action->setCheckable(true);
     action->setChecked(true);
-
     return;
 }
 
@@ -481,7 +475,7 @@ void IcvPlotCanvas::setCurveGroupSize(QAction *action)
 
     if(NULL == action)
         return;
-   
+
     bool isConvertSuccess;
     qint16 size = action->data().toInt(&isConvertSuccess);
     if(!isConvertSuccess)
@@ -501,7 +495,6 @@ void IcvPlotCanvas::setCurveGroupSize(QAction *action)
 
     action->setCheckable(true);
     action->setChecked(true);
-
     return;
 }
 
@@ -516,7 +509,6 @@ void IcvPlotCanvas::setCurveProperty()
     IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curSelectedCurve, mainWin, Qt::Dialog);
     propDiag->resize(400,150);
     propDiag->exec();
-
     return;
 }
 
@@ -525,7 +517,6 @@ void IcvPlotCanvas::lockMagnifier()
 {
     if(NULL != mainWin)
         mainWin->getMagnifier()->setEnabled(false);
-
     return;
 }
 
@@ -534,7 +525,6 @@ void IcvPlotCanvas::unlockMagnifier()
 {
     if(NULL != mainWin)
         mainWin->getMagnifier()->setEnabled(true);
-
     return;
 }
 
@@ -575,7 +565,6 @@ void IcvPlotCanvas::createCurvePopMenu()
     crvSelPopMenu->addMenu(subCrvSelGroupSizeMenu);
 
     crvSelPopMenu->addAction(propertySetAction);
-
     return;
 }
 
@@ -659,7 +648,6 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     connect(markerStyleActGrp,SIGNAL(triggered(QAction *)),this,SLOT(setCurveMarker(QAction *)));
     /*}}}*/
 
-
     /*{{{set curve marker size action*/
     QList< QPair<QString,int> > markerSize;
     markerSize.append(qMakePair(tr("2"),2));
@@ -685,7 +673,6 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     connect(markerSizeActGrp,SIGNAL(triggered(QAction *)),this,SLOT(setCurveMarkerSize(QAction *)));
     /*}}}*/
 
-
     /*{{{set curve group size, to expand curve*/
     QList< QPair<QString,int> > groupSize;
     groupSize.append(qMakePair(tr("1"), 1));
@@ -708,223 +695,218 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     propertySetAction = new QAction(tr("Properties..."),this);
     propertySetAction->setStatusTip("set curve properties");
     connect(propertySetAction,SIGNAL(triggered()),this,SLOT(setCurveProperty()));
-
     return;
 }
 
 
 void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
 {
-	if(true == mainWin->isHandMoveChecked())
-		return;
+    if(true == mainWin->isHandMoveChecked())
+        return;
 
-	/*release magnifier*/
-	unlockMagnifier();
+    /*release magnifier*/
+    unlockMagnifier();
 
-	/*hide previous seleced curve marker*/
-	for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
-	{
-		if(NULL == prevSelectedCurve[cnt])
-			continue;
+    /*hide previous seleced curve marker*/
+    for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
+    {
+        if(NULL == prevSelectedCurve[cnt])
+            continue;
 
-		prevSelectedCurve[cnt]->hideMarkers();
-		prevSelectedCurve[cnt]->boldTitle(false);
-	}
+        prevSelectedCurve[cnt]->hideMarkers();
+        prevSelectedCurve[cnt]->boldTitle(false);
+    }
 
-	/*try to retrieve the closest curves*/
-	curSelectedCurve.clear();
-	const QPoint        pos = event->pos();
-	qint16 cntCurveSelected = 0;
-	for(qint16 i = 0; i < curves.count(); i++)
-	{
-		QwtPlotCurve *curve = curves[i]->getCurve();
-		double dist         = 0.0;
-		curve->closestPoint(pos, &dist);
+    /*try to retrieve the closest curves*/
+    curSelectedCurve.clear();
+    const QPoint        pos = event->pos();
+    qint16 cntCurveSelected = 0;
+    for(qint16 i = 0; i < curves.count(); i++)
+    {
+        QwtPlotCurve *curve = curves[i]->getCurve();
+        double dist         = 0.0;
+        curve->closestPoint(pos, &dist);
 
-		if(dist < ICV_TOLERENCE_DISTANCE )
-		{
-			curSelectedCurve.push_back(curves[i]);
-			cntCurveSelected++;
-		}
-	}
+        if(dist < ICV_TOLERENCE_DISTANCE )
+        {
+            curSelectedCurve.push_back(curves[i]);
+            cntCurveSelected++;
+        }
+    }
 
-	/*show current selected curve markers*/
-	prevSelectedCurve.clear();
-	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-	{
-		if(NULL == curSelectedCurve[cnt])
-			continue;
+    /*show current selected curve markers*/
+    prevSelectedCurve.clear();
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+    {
+        if(NULL == curSelectedCurve[cnt])
+            continue;
 
-		if(curSelectedCurve[cnt]->isAttached() == true)
-		{
-			curSelectedCurve[cnt]->showMarkers();
-			curSelectedCurve[cnt]->boldTitle(true);
-			prevSelectedCurve.append(curSelectedCurve[cnt]);
-		}
-	}
+        if(curSelectedCurve[cnt]->isAttached() == true)
+        {
+            curSelectedCurve[cnt]->showMarkers();
+            curSelectedCurve[cnt]->boldTitle(true);
+            prevSelectedCurve.append(curSelectedCurve[cnt]);
+        }
+    }
 
-	if(true == curSelectedCurve.isEmpty())
-	{
-		lockCursorMoveAction = false;
-	}
-	else
-	{
-		/*enable cursor moving action*/
-		lockCursorMoveAction = true;
-	}
+    if(true == curSelectedCurve.isEmpty())
+    {
+        lockCursorMoveAction = false;
+    }
+    else
+    {
+        /*enable cursor moving action*/
+        lockCursorMoveAction = true;
+    }
 
-	/*update replot*/
-	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-	canvas->plot()->replot();
-	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-
-	return ;
+    /*update replot*/
+    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+    canvas->plot()->replot();
+    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+    return ;
 }
 
 
 void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
 {
+    QwtPlotZoomer *zoomer = mainWin->getZoomer();
+    if(zoomer->isEnabled())
+        return ;
 
-	QwtPlotZoomer *zoomer = mainWin->getZoomer();
-	if(zoomer->isEnabled())
-		return ;
+    lockMagnifier();
 
-	lockMagnifier();
+    lockCursorMoveAction = false;
+    /*hide previous seleced curve marker*/
+    for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
+    {
+        if(NULL == prevSelectedCurve[cnt])
+            continue;
 
-	lockCursorMoveAction = false;
-	/*hide previous seleced curve marker*/
-	for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
-	{
-		if(NULL == prevSelectedCurve[cnt])
-			continue;
+        prevSelectedCurve[cnt]->hideMarkers();
+    }
+    prevSelectedCurve.clear();
 
-		prevSelectedCurve[cnt]->hideMarkers();
-	}
-	prevSelectedCurve.clear();
+    /*try to retrieve the closest curves*/
+    curSelectedCurve.clear();
+    const QPoint pos = event->pos();
+    qint16 cntCurveSelected = 0;
+    for(qint16 i = 0; i < curves.count(); i++)
+    {
+        QwtPlotCurve *curve = curves[i]->getCurve();
+        double dist         = 0.0;
+        curve->closestPoint(pos, &dist);
 
-	/*try to retrieve the closest curves*/
-	curSelectedCurve.clear();
-	const QPoint pos = event->pos();
-	qint16 cntCurveSelected = 0;
-	for(qint16 i = 0; i < curves.count(); i++)
-	{
-		QwtPlotCurve *curve = curves[i]->getCurve();
-		double dist         = 0.0;
-		curve->closestPoint(pos, &dist);
+        if(dist < ICV_TOLERENCE_DISTANCE )
+        {
+            curSelectedCurve.push_back(curves[i]);
+            cntCurveSelected++;
+        }
+    }
 
-		if(dist < ICV_TOLERENCE_DISTANCE )
-		{
-			curSelectedCurve.push_back(curves[i]);
-			cntCurveSelected++;
-		}
-	}
+    /*show current selected curve markers*/
+    prevSelectedCurve.clear();
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+    {
+        if(NULL == curSelectedCurve[cnt])
+            continue;
 
-	/*show current selected curve markers*/
-	prevSelectedCurve.clear();
-	for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
-	{
-		if(NULL == curSelectedCurve[cnt])
-			continue;
-
-		if(curSelectedCurve[cnt]->isAttached() == true)
-		{
-			curSelectedCurve[cnt]->showMarkers();
-			curSelectedCurve[cnt]->boldTitle(true);
-			prevSelectedCurve.append(curSelectedCurve[cnt]);
-		}
-	}
-	/*popup menu*/
-	crvSelPopMenu->exec(event->globalPos());
-	/*update replot*/
-	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
-	canvas->plot()->replot();
-	canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
-
-	return;
+        if(curSelectedCurve[cnt]->isAttached() == true)
+        {
+            curSelectedCurve[cnt]->showMarkers();
+            curSelectedCurve[cnt]->boldTitle(true);
+            prevSelectedCurve.append(curSelectedCurve[cnt]);
+        }
+    }
+    /*popup menu*/
+    crvSelPopMenu->exec(event->globalPos());
+    /*update replot*/
+    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
+    canvas->plot()->replot();
+    canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
+    return;
 }
 
 
 void IcvPlotCanvas::onMouseMove(const QMouseEvent * event)
 {
-	return ;
-	if(mainWin->isHandMoveChecked())
-		return;
+    return ;
+    if(mainWin->isHandMoveChecked())
+        return;
 
-	QwtPlotZoomer *zoomer = mainWin->getZoomer();
-	if(zoomer->isEnabled())
-		return ;
+    QwtPlotZoomer *zoomer = mainWin->getZoomer();
+    if(zoomer->isEnabled())
+        return ;
 
 
-	if(true == lockCursorMoveAction)
-		return ;
+    if(true == lockCursorMoveAction)
+        return ;
 
-	if(curves.isEmpty())
-	{
-		canvas->setCursor(Qt::ArrowCursor);
-		return;
-	}
+    if(curves.isEmpty())
+    {
+        canvas->setCursor(Qt::ArrowCursor);
+        return;
+    }
 
-	/* pick the selected curve */
-	const QPoint pos = event->pos();
-	for(qint16 i = 0; i < curves.count(); i++)
-	{
-		QwtPlotCurve *curve = curves[i]->getCurve();
-		double dist        = 0.0;
-		curve->closestPoint(pos, &dist);
+    /* pick the selected curve */
+    const QPoint pos = event->pos();
+    for(qint16 i = 0; i < curves.count(); i++)
+    {
+        QwtPlotCurve *curve = curves[i]->getCurve();
+        double dist        = 0.0;
+        curve->closestPoint(pos, &dist);
 
-		if(dist <= ICV_TOLERENCE_DISTANCE )
-		{
-			canvas->setCursor(Qt::PointingHandCursor);
-			curves[i]->setActivateState(ICV_CURVE_ACTIVATED);
-			break;
-		}
-		else
-		{
-			canvas->setCursor(Qt::ArrowCursor);
-		}
-	}
-
-	return;
+        if(dist <= ICV_TOLERENCE_DISTANCE )
+        {
+            canvas->setCursor(Qt::PointingHandCursor);
+            curves[i]->setActivateState(ICV_CURVE_ACTIVATED);
+            break;
+        }
+        else
+        {
+            canvas->setCursor(Qt::ArrowCursor);
+        }
+    }
+    return;
 }
 
 
 bool IcvPlotCanvas::eventFilter(QObject *object, QEvent *event)
 {
-	if((NULL == object) || (NULL == event) || (object != canvas))
-		return false;
+    if((NULL == object) || (NULL == event) || (object != canvas))
+        return false;
 
-	switch(event->type())
-	{
-	case QEvent::MouseButtonPress:
-		{
-			const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-			if(mouseEvent->button() == Qt::LeftButton)
-			{
-				onMouseLeftButtonClick(mouseEvent);
-			}
-			else if(mouseEvent->button() == Qt::RightButton)
-			{
-				onMouseRightButtonClick(mouseEvent);
-			}
-			break;
-		}
+    switch(event->type())
+    {
+    case QEvent::MouseButtonPress:
+        {
+            const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+                onMouseLeftButtonClick(mouseEvent);
+            }
+            else if(mouseEvent->button() == Qt::RightButton)
+            {
+                onMouseRightButtonClick(mouseEvent);
+            }
+            break;
+        }
 
-	case QEvent::MouseMove:
-		{
-			const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-			onMouseMove(mouseEvent);
-			break;
-		}
-	default:
-		break;
+    case QEvent::MouseMove:
+        {
+            const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            onMouseMove(mouseEvent);
+            break;
+        }
+    default:
+        break;
 
-	}
-
-	return QObject::eventFilter(object,event);
+    }
+    return QObject::eventFilter(object,event);
 }
 
 
 bool IcvPlotCanvas::event(QEvent *eve)
 {
-	return QObject::event(eve);
+    return QObject::event(eve);
 }
+

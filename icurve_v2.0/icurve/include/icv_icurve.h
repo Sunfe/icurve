@@ -52,7 +52,7 @@ public:
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
-	ICU_RET_STATUS appendCommandData(IcvCommand *cmd, QStringList data);
+    ICU_RET_STATUS appendCommandData(IcvCommand *cmd, QStringList data);
     QList <IcvCommand> *getPlotData();
     QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
@@ -85,73 +85,73 @@ private:
     QwtPlotPanner *panner;
     QwtPlotZoomer *zoomer;
     QwtSymbol *symbol;
-    
+
     IcvPlotCanvas *plotCanvas;
     QList <IcvCommand> plotData;
     bool isDataAnalyCanceled;
 
 private slots:
-    /*file menu slots*/
-    void openFile();
-    void saveAs();
-    void closePlot();
+        /*file menu slots*/
+        void openFile();
+        void saveAs();
+        void closePlot();
 
-    /*edit menu slots*/
-    void cutCurve();
-    void copyCurve();
-    void pasteCurve();
-    void removeCurves();
-	void hideCurves();
-	void showCurves();
-    void deleteCurve();
-    void findCurve();
-    void showAllCurve();
-    void selectAllCurves();
-	void selectInvertCurves();
+        /*edit menu slots*/
+        void cutCurve();
+        void copyCurve();
+        void pasteCurve();
+        void removeCurves();
+        void hideCurves();
+        void showCurves();
+        void deleteCurve();
+        void findCurve();
+        void showAllCurve();
+        void selectAllCurves();
+        void selectInvertCurves();
 
-    /*curve menu slots*/
-    void setCurveColor(); 
-    void setCurveWidth();
-    void setCurveStyle();
-    void setCurveMarker();
-    void expandCurve();
-    void filterCurve();
-    void filterCurvePreview(qint16 type, QString keyword);
-    void recoverCurveVisible();
-    void showCurveInfo();
-	void setCurveProperties();
+        /*curve menu slots*/
+        void setCurveColor(); 
+        void setCurveWidth();
+        void setCurveStyle();
+        void setCurveMarker();
+        void expandCurve();
+        void filterCurve();
+        void filterCurvePreview(qint16 type, QString keyword);
+        void recoverCurveVisible();
+        void showCurveInfo();
+        void setCurveProperties();
 
-    /*curve Axse slots*/
-    void setAxseScale();
-    void setAxseTitle();
-    void setAxseAlignment();
-    void setAxseRotation();
-    void setAxseProperties();
+        /*curve Axse slots*/
+        void setAxseScale();
+        void setAxseTitle();
+        void setAxseAlignment();
+        void setAxseRotation();
+        void setAxseProperties();
 
-    /*insert menu slots*/
-    void insertTitle();
-    void insertXLabel();
-    void insertYLabel();
-    void insertLegend();
-    void insertCurveName();
-    void insertFooter();
-    void insertIndicator();
+        /*insert menu slots*/
+        void insertTitle();
+        void insertXLabel();
+        void insertYLabel();
+        void insertLegend();
+        void insertCurveName();
+        void insertFooter();
+        void insertIndicator();
 
-    /*view menu slots*/
-    void enableZoomer(bool checked);
-    void zoomPlot(const QRectF &rect);
+        /*view menu slots*/
+        void enableZoomer(bool checked);
+        void zoomPlot(const QRectF &rect);
 
-    /* tool menu slots*/
-    void enableHandMove(bool checked);
+        /* tool menu slots*/
+        void enableHandMove(bool checked);
 
-    void legendChecked( const QVariant &itemInfo, bool on );
-    void updateAnalyProgressBar(qint32 progress);
-    void cancelAnalyProgressBar();
+        void legendChecked( const QVariant &itemInfo, bool on );
+        void updateAnalyProgressBar(qint32 progress);
+        void cancelAnalyProgressBar();
 
 
 signals:
-    void analyDataProgress(qint32 progress);
-    void displayCurveInfoSignal(QString name, QString position, QString lineInfo);
+        void analyDataProgress(qint32 progress);
+        void displayCurveInfoSignal(QString name, QString position, QString lineInfo);
 
 };
 
