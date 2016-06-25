@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Sat Jun 25 00:56:52 2016
+** Created: Sat Jun 25 02:44:45 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -194,11 +194,14 @@ public:
         actionFind->setIcon(icon10);
         actionShowAll = new QAction(icurveClass);
         actionShowAll->setObjectName(QString::fromUtf8("actionShowAll"));
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/icurve/images/show.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionShowAll->setIcon(icon11);
         actionExpand = new QAction(icurveClass);
         actionExpand->setObjectName(QString::fromUtf8("actionExpand"));
-        QIcon icon11;
-        icon11.addFile(QString::fromUtf8(":/icurve/images/expand.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionExpand->setIcon(icon11);
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8(":/icurve/images/expand.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionExpand->setIcon(icon12);
         actionView_data = new QAction(icurveClass);
         actionView_data->setObjectName(QString::fromUtf8("actionView_data"));
         actionView_data->setEnabled(false);
@@ -216,9 +219,9 @@ public:
         actionCurveName->setEnabled(true);
         actionDelete = new QAction(icurveClass);
         actionDelete->setObjectName(QString::fromUtf8("actionDelete"));
-        QIcon icon12;
-        icon12.addFile(QString::fromUtf8(":/icurve/images/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionDelete->setIcon(icon12);
+        QIcon icon13;
+        icon13.addFile(QString::fromUtf8(":/icurve/images/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDelete->setIcon(icon13);
         actionDiffer = new QAction(icurveClass);
         actionDiffer->setObjectName(QString::fromUtf8("actionDiffer"));
         actionReset = new QAction(icurveClass);
@@ -226,12 +229,15 @@ public:
         actionZoom = new QAction(icurveClass);
         actionZoom->setObjectName(QString::fromUtf8("actionZoom"));
         actionZoom->setCheckable(true);
-        QIcon icon13;
-        icon13.addFile(QString::fromUtf8(":/icurve/images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionZoom->setIcon(icon13);
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8(":/icurve/images/zoom.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionZoom->setIcon(icon14);
         actionIndicator = new QAction(icurveClass);
         actionIndicator->setObjectName(QString::fromUtf8("actionIndicator"));
         actionIndicator->setCheckable(true);
+        QIcon icon15;
+        icon15.addFile(QString::fromUtf8(":/icurve/images/indicator.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionIndicator->setIcon(icon15);
         actionCopy_plot = new QAction(icurveClass);
         actionCopy_plot->setObjectName(QString::fromUtf8("actionCopy_plot"));
         actionTree = new QAction(icurveClass);
@@ -239,9 +245,9 @@ public:
         actionInfo = new QAction(icurveClass);
         actionInfo->setObjectName(QString::fromUtf8("actionInfo"));
         actionInfo->setEnabled(true);
-        QIcon icon14;
-        icon14.addFile(QString::fromUtf8(":/icurve/images/info.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionInfo->setIcon(icon14);
+        QIcon icon16;
+        icon16.addFile(QString::fromUtf8(":/icurve/images/info.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionInfo->setIcon(icon16);
         actionSelectInvert = new QAction(icurveClass);
         actionSelectInvert->setObjectName(QString::fromUtf8("actionSelectInvert"));
         actionData_picker = new QAction(icurveClass);
@@ -250,9 +256,9 @@ public:
         actionData_tracker->setObjectName(QString::fromUtf8("actionData_tracker"));
         actionAxseScale = new QAction(icurveClass);
         actionAxseScale->setObjectName(QString::fromUtf8("actionAxseScale"));
-        QIcon icon15;
-        icon15.addFile(QString::fromUtf8(":/icurve/images/scale.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionAxseScale->setIcon(icon15);
+        QIcon icon17;
+        icon17.addFile(QString::fromUtf8(":/icurve/images/scale.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAxseScale->setIcon(icon17);
         actionAxseTitle = new QAction(icurveClass);
         actionAxseTitle->setObjectName(QString::fromUtf8("actionAxseTitle"));
         actionAxseAlignment = new QAction(icurveClass);
@@ -264,28 +270,25 @@ public:
         actionHandMove = new QAction(icurveClass);
         actionHandMove->setObjectName(QString::fromUtf8("actionHandMove"));
         actionHandMove->setCheckable(true);
-        QIcon icon16;
-        icon16.addFile(QString::fromUtf8(":/icurve/images/hand.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHandMove->setIcon(icon16);
+        QIcon icon18;
+        icon18.addFile(QString::fromUtf8(":/icurve/images/hand.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHandMove->setIcon(icon18);
         actionReset_2 = new QAction(icurveClass);
         actionReset_2->setObjectName(QString::fromUtf8("actionReset_2"));
         actionHide = new QAction(icurveClass);
         actionHide->setObjectName(QString::fromUtf8("actionHide"));
-        QIcon icon17;
-        icon17.addFile(QString::fromUtf8(":/icurve/images/hide.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHide->setIcon(icon17);
+        QIcon icon19;
+        icon19.addFile(QString::fromUtf8(":/icurve/images/hide.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHide->setIcon(icon19);
         actionShow = new QAction(icurveClass);
         actionShow->setObjectName(QString::fromUtf8("actionShow"));
-        QIcon icon18;
-        icon18.addFile(QString::fromUtf8(":/icurve/images/show.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionShow->setIcon(icon18);
         actionSelect_mode = new QAction(icurveClass);
         actionSelect_mode->setObjectName(QString::fromUtf8("actionSelect_mode"));
         actionRefresh = new QAction(icurveClass);
         actionRefresh->setObjectName(QString::fromUtf8("actionRefresh"));
-        QIcon icon19;
-        icon19.addFile(QString::fromUtf8(":/icurve/images/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRefresh->setIcon(icon19);
+        QIcon icon20;
+        icon20.addFile(QString::fromUtf8(":/icurve/images/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRefresh->setIcon(icon20);
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -429,6 +432,7 @@ public:
         mainToolBar->addAction(actionStyle);
         mainToolBar->addAction(actionWidth);
         mainToolBar->addAction(actionMarker);
+        mainToolBar->addAction(actionIndicator);
         mainToolBar->addAction(actionTitle);
         mainToolBar->addAction(actionAxseScale);
         mainToolBar->addAction(actionLegend);

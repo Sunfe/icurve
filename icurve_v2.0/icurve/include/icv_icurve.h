@@ -48,7 +48,6 @@ public:
     IcvICurve(QWidget *parent = 0, Qt::WFlags flags = 0);
     void initMainPlotter(QWidget *plotWidget);
     void initMainWinStyle(QMainWindow *self);
-
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
@@ -58,7 +57,6 @@ public:
     QwtPlotMagnifier* getMagnifier();
     QwtPlotZoomer *getZoomer();
     bool isHandMoveChecked();
-
     ~IcvICurve();
 
 protected:
@@ -68,13 +66,11 @@ protected:
 private:
     Ui::icurveClass ui;
     Ui::IcvCurveFilterDialog *curveFilterDialog;
-
     /*Qt objects*/
     QRectF titleRect;
     QLabel *label;
     QProgressDialog *analyProgressDialog;
     QFileInfo fileInfo;
-
     /*Qwt objects*/	
     QwtPlot *plot;
     QwtLegend *legend;
@@ -95,7 +91,6 @@ private slots:
         void openFile();
         void saveAs();
         void closePlot();
-
         /*edit menu slots*/
         void refreshPlot();
         void cutCurve();
@@ -109,7 +104,6 @@ private slots:
         void showAllCurve();
         void selectAllCurves();
         void selectInvertCurves();
-
         /*curve menu slots*/
         void setCurveColor(); 
         void setCurveWidth();
@@ -121,14 +115,12 @@ private slots:
         void recoverCurveVisible();
         void showCurveInfo();
         void setCurveProperties();
-
         /*curve Axse slots*/
         void setAxseScale();
         void setAxseTitle();
         void setAxseAlignment();
         void setAxseRotation();
         void setAxseProperties();
-
         /*insert menu slots*/
         void insertTitle();
         void insertXLabel();
@@ -137,18 +129,15 @@ private slots:
         void insertCurveName();
         void insertFooter();
         void insertIndicator();
-
         /*view menu slots*/
         void enableZoomer(bool checked);
         void zoomPlot(const QRectF &rect);
-
         /* tool menu slots*/
         void enableHandMove(bool checked);
 
         void legendChecked( const QVariant &itemInfo, bool on );
         void updateAnalyProgressBar(qint32 progress);
         void cancelAnalyProgressBar();
-
 
 signals:
         void analyDataProgress(qint32 progress);

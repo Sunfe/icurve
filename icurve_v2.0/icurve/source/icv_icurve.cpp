@@ -143,7 +143,8 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     ui.actionOpen->setShortcut(QKeySequence::Open);
     ui.actionFilter->setShortcut(QKeySequence::Find);
     ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
-    ui.actionDelete->setShortcut(QKeySequence::Delete);
+    ui.actionRemove->setShortcut(QKeySequence::Delete);
+    ui.actionDelete->setShortcut(Qt::CTRL + Qt::Key_Delete);
     ui.actionRefresh->setShortcut(QKeySequence::Refresh);
     ui.actionExpand->setShortcut(Qt::CTRL + Qt::Key_G);
 
@@ -266,7 +267,6 @@ void IcvICurve::openFile()
         plotCanvas->appendCurves(plotCurve);
         plot->replot();
     }
-
     return;
 }
 
@@ -317,7 +317,6 @@ void IcvICurve::insertXLabel()
         tr("X lable:"), QLineEdit::Normal, origLabel, &ok);
     if (ok)
         plot->setAxisTitle(QwtPlot::xBottom,text);
-
     return;
 }
 
@@ -330,7 +329,6 @@ void IcvICurve::insertYLabel()
         tr("Y lable:"), QLineEdit::Normal, origLabel, &ok);
     if (ok)
         plot->setAxisTitle(QwtPlot::yLeft,text);
-
     return ;
 }
 
@@ -362,20 +360,19 @@ void IcvICurve::insertLegend()
         legend = NULL;
         ui.actionLegend->setChecked(false);
     }
-
     return;
 }
 
 
 void IcvICurve::insertCurveName()
 {
- QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
- if(allCurves.empty())
- {
-  QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-  ui.actionCurveName->setChecked(false);
-  return ;
- }
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        ui.actionCurveName->setChecked(false);
+        return ;
+    }
 
     if(true == ui.actionCurveName->isChecked())
     {
@@ -400,7 +397,6 @@ void IcvICurve::insertFooter()
         tr("Footer"), QLineEdit::Normal, "", &ok);
     if (ok)
         plot->setFooter(text);
-
     return;
 }
 
@@ -517,7 +513,6 @@ void IcvICurve::setCurveColor()
     }
 
     plot->replot();
-
     return;
 }
 
@@ -546,7 +541,6 @@ void IcvICurve::setCurveWidth()
     {
         selectedCurve.at(cnt)->setWidth(width);
     }
-
     return;
 }
 
@@ -837,7 +831,6 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
         {
             curvesFound.push_back(curves.at(cnt));
         }
-
     } 
 
     /*retrieve the bak of all curve list*/
@@ -1084,7 +1077,6 @@ void IcvICurve::selectInvertCurves()
     plotCanvas->highlightCurve(reversedCurves);
     plotCanvas->setCurSelectCurves(reversedCurves);
     plot->replot();
-
     return;
 }
 
@@ -1709,7 +1701,6 @@ void IcvICurve::updateAnalyProgressBar(qint32 progress)
         analyProgressDialog->setLabelText(QString("%1/%2").arg(progress).arg(analyProgressDialog->maximum()));
         analyProgressDialog->repaint();
     }
-
     return ;
 }
 

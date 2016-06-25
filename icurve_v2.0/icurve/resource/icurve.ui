@@ -280,6 +280,7 @@
    <addaction name="actionStyle"/>
    <addaction name="actionWidth"/>
    <addaction name="actionMarker"/>
+   <addaction name="actionIndicator"/>
    <addaction name="actionTitle"/>
    <addaction name="actionAxseScale"/>
    <addaction name="actionLegend"/>
@@ -486,6 +487,10 @@
    </property>
   </action>
   <action name="actionShowAll">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/show.png</normaloff>:/icurve/images/show.png</iconset>
+   </property>
    <property name="text">
     <string>Show All</string>
    </property>
@@ -573,6 +578,10 @@
   <action name="actionIndicator">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/indicator.png</normaloff>:/icurve/images/indicator.png</iconset>
    </property>
    <property name="text">
     <string>Indicator</string>
@@ -671,10 +680,6 @@
    </property>
   </action>
   <action name="actionShow">
-   <property name="icon">
-    <iconset resource="icurve.qrc">
-     <normaloff>:/icurve/images/show.png</normaloff>:/icurve/images/show.png</iconset>
-   </property>
    <property name="text">
     <string>Show</string>
    </property>

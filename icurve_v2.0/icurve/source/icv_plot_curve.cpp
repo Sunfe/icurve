@@ -39,27 +39,27 @@ IcvPlotCurve::~IcvPlotCurve()
         delete curve;
     }
 
-	/* delete markers */
+    /* delete markers */
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
         markers.at(pos)->detach();
-		delete markers.value(pos);
+        delete markers.value(pos);
     }
     markers.clear();
 
-	/* delete indicators */
-	for(qint16 pos= 0; pos < indicator.count(); pos++)
-	{
-		indicator.at(pos)->detach();
-		delete indicator.value(pos);
-	}
-	indicator.clear();
+    /* delete indicators */
+    for(qint16 pos= 0; pos < indicator.count(); pos++)
+    {
+        indicator.at(pos)->detach();
+        delete indicator.value(pos);
+    }
+    indicator.clear();
 
     curve  = NULL;
     canvas = NULL;
     activateState   = 0;
     showMarkerState = 0;
-	attached = false;
+    attached = false;
 }
 
 
@@ -85,7 +85,7 @@ void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
     curve = crv;
     setMarkers();
-	setAttachedState(true);
+    setAttachedState(true);
     return ;
 }
 
@@ -123,63 +123,63 @@ void IcvPlotCurve::showVividCurve()
         curve->attach(canvas->getCanvas()->plot());
         showMarkers();
     }
-	setAttachedState(true);
+    setAttachedState(true);
     return;
 }
 
 
 bool IcvPlotCurve::isAttached()
 {
-	return attached;
+    return attached;
 }
 
 
 void IcvPlotCurve::setAttachedState(bool state)
 {
-	attached = state;
-	return;
+    attached = state;
+    return;
 }
 
 
 void IcvPlotCurve::showCurve()
 {
-	if(curve != NULL)
-	{
-		curve->attach(canvas->getCanvas()->plot());
-		curve->show();
-		for(qint16 cnt = 0; cnt < markers.count(); cnt++)
-			markers.at(cnt)->show();
-	}
-	setAttachedState(true);
-	return;
+    if(curve != NULL)
+    {
+        curve->attach(canvas->getCanvas()->plot());
+        curve->show();
+        for(qint16 cnt = 0; cnt < markers.count(); cnt++)
+            markers.at(cnt)->show();
+    }
+    setAttachedState(true);
+    return;
 }
 
 
 void IcvPlotCurve::hideCurve()
 {
-	if(curve != NULL)
-	{
-		curve->hide();
-		for(qint16 cnt = 0; cnt < markers.count(); cnt++)
-			markers.at(cnt)->hide();
-	}
-	return;
+    if(curve != NULL)
+    {
+        curve->hide();
+        for(qint16 cnt = 0; cnt < markers.count(); cnt++)
+            markers.at(cnt)->hide();
+    }
+    return;
 }
 
 
 void IcvPlotCurve::removeCurve()
 {
-	if(curve == NULL)
-		return;
+    if(curve == NULL)
+        return;
 
-	curve->detach();
-	for(qint16 pos= 0; pos < markers.count(); pos++)
-	{
-		markers[pos]->detach();
-	}
+    curve->detach();
+    for(qint16 pos= 0; pos < markers.count(); pos++)
+    {
+        markers[pos]->detach();
+    }
 
-	setAttachedState(false);
-	return;
+    setAttachedState(false);
+    return;
 }
 
 
@@ -197,8 +197,7 @@ void IcvPlotCurve::deleteCurve()
         delete markers[pos];
     }
     markers.clear();
-	attached = false;
- 
+    attached = false;
     return;
 }
 
@@ -244,7 +243,6 @@ void IcvPlotCurve::setMarkers()
         markers.append(marker);
         samplePos += step;
     }
-
     return;
 }
 
@@ -258,7 +256,6 @@ void IcvPlotCurve::showMarkers()
     }
 
     showMarkerState = ICV_CURVE_SHOW_MARKER;
-
     return;
 }
 
@@ -291,42 +288,41 @@ void IcvPlotCurve::updateMakers()
 {
     deleteMakers();  /* delete previous markers */
     setMarkers();    /* set new markers */
-    
     return;
 }
 
 
 void IcvPlotCurve::setIndicator(QList<QwtPlotMarker *>markers)
 {
-  indicator = markers;
+    indicator = markers;
 }
 
 
 QList<QwtPlotMarker *> IcvPlotCurve::getIndicators()
 {
-	return indicator;
+    return indicator;
 }
 
 
 void IcvPlotCurve::removeIndicator()
 {
-	for(qint16 pos= 0; pos < indicator.count(); pos++)
-	{
-		indicator[pos]->detach();
-	}
-	return;
+    for(qint16 pos= 0; pos < indicator.count(); pos++)
+    {
+        indicator[pos]->detach();
+    }
+    return;
 }
 
 
 void IcvPlotCurve::deleteIndicator()
 {
-	for(qint16 pos= 0; pos < indicator.count(); pos++)
-	{
-		indicator[pos]->detach();
-		delete indicator[pos];
-	}
-	indicator.clear();
-	return;
+    for(qint16 pos= 0; pos < indicator.count(); pos++)
+    {
+        indicator[pos]->detach();
+        delete indicator[pos];
+    }
+    indicator.clear();
+    return;
 }
 
 
@@ -339,7 +335,6 @@ qint16 IcvPlotCurve::getShowMarkerState()
 void IcvPlotCurve::setShowMarkerState(qint16 state)
 {
     showMarkerState = state;
-
     return;
 }
 
@@ -361,7 +356,6 @@ void IcvPlotCurve::setColor(QColor color)
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
-
     return;
 }
 
@@ -371,7 +365,6 @@ void IcvPlotCurve::setWidth(qint16 width)
     QPen pen = curve->pen();
     pen.setWidth(width);
     curve->setPen(pen);
-
     return;
 }
 
@@ -381,7 +374,6 @@ void IcvPlotCurve::setStyle(Qt::PenStyle style)
     QPen pen = curve->pen();
     pen.setStyle(style);
     curve->setPen(pen);
-
     return;
 }
 
@@ -400,7 +392,6 @@ void IcvPlotCurve::setMarker(QwtSymbol::Style style)
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
-
     return;
 }
 
@@ -419,7 +410,6 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
-
     return;
 }
 
@@ -436,7 +426,6 @@ void IcvPlotCurve::setMarkerColor(QBrush brush, QPen pen)
             markers.value(cnt)->setSymbol(symbolNew);
         }
     }
-
     return;
 }
 
@@ -462,7 +451,6 @@ void IcvPlotCurve::setGroupSize(qint16 size)
 
     curve->setSamples(dataExpand.toVector());
     updateMakers();
-
     return;
 }
 
