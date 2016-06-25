@@ -38,6 +38,7 @@ icurve
    - lint检查
    - 增加refresh[done]
    - 界面美化
+   - indicator只针对于select curve
 
 1. bugs
    - 多重filter后，再curve show all,会出现越界 [已解决]
