@@ -84,12 +84,14 @@ private:
     QwtPlotCurve  *curve;
     IcvPlotCanvas *canvas;
     QList<QwtPlotMarker *> markers;
-	QList<QwtPlotMarker *> indicator;
-	IcvCommand command;
+    QList<QwtPlotMarker *> indicator;
+    IcvCommand command;
     qint16     dataPosition;        /* the postion in QList data repository */
     qint16     activateState;
     qint16     showMarkerState;
-	bool       attached;
+    bool       attached;
+
+QwtPlotMarker *markertest;
 };
 
 #endif

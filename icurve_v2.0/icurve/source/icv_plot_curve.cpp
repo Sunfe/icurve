@@ -2,6 +2,7 @@
 #include <qapplication.h>
 #include <qevent.h>
 #include <QtGlobal>
+#include <QObject>
 #include <QLine>
 #include <QPolygonF>
 #include <QMessageBox>
@@ -236,16 +237,15 @@ void IcvPlotCurve::setMarkers()
             curve->sample(samplePos).y());
         marker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom);
         marker->setLinePen(QPen( Qt::green, 0, Qt::DashDotLine));
-        marker->setSymbol(new QwtSymbol( QwtSymbol::Ellipse,
-            QColor(curve->pen().color()), 
-            QColor(curve->pen().color()), 
-            QSize(4, 4)));
+        marker->setSymbol(new QwtSymbol(QwtSymbol::Ellipse,
+                                        QBrush(curve->pen().color()), 
+                                        QPen(curve->pen().color()), 
+                                        QSize(4, 4)));
         markers.append(marker);
         samplePos += step;
     }
     return;
 }
-
 
 
 void IcvPlotCurve::showMarkers()
@@ -266,7 +266,6 @@ void IcvPlotCurve::hideMarkers()
     {
         markers[pos]->detach();
     }
-
     showMarkerState = ICV_CURVE_HIDE_MARKER;
     return;
 }
@@ -341,20 +340,15 @@ void IcvPlotCurve::setShowMarkerState(qint16 state)
 
 void IcvPlotCurve::setColor(QColor color)
 {
-    QPen pen(color);
-    QBrush brush(color);
-
-    curve->setPen(pen);
-
-    for(qint16 cnt= 0; cnt < markers.count(); cnt++)
+    curve->setPen(QPen(color));
+    /* markers color keep compliant with line */
+    const QwtSymbol *symbol = markers.value(0)->symbol();
+    QwtSymbol::Style style  = symbol->style();
+    QSize            size   = symbol->size();
+    for(qint16 cnt = 0; cnt < markers.count(); cnt++)
     {
-        const QwtSymbol *symbol = markers.value(cnt)->symbol();
-        if(symbol != NULL)
-        {
-            QwtSymbol *symbolNew = new QwtSymbol(symbol->style(),
-                brush, pen, symbol->size());
-            markers.value(cnt)->setSymbol(symbolNew);
-        }
+        QwtPlotMarker *mar = markers.at(cnt);
+        mar->setSymbol(new QwtSymbol(style, QBrush(color), QPen(color), size));
     }
     return;
 }

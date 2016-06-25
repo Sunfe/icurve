@@ -46,7 +46,6 @@
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
     ui.setupUi(this);
-
     initMainWinStyle(this);
 
     plot = new QwtPlot();
@@ -220,7 +219,6 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     zoomer->zoom(0);
     connect(zoomer, SIGNAL(zoomed(const QRectF&)), this, SLOT(zoomPlot(QRectF&)));
 
-
     return;
 }
 
@@ -241,7 +239,7 @@ void IcvICurve::openFile()
     if(ICU_OK != loadData(fileName))
         return ;
 
-    /* when a new file export,should not start from scratch */
+    /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {
         QwtPlotCurve *qwtCurve = new QwtPlotCurve();
@@ -451,7 +449,7 @@ void IcvICurve::insertIndicator()
             maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
             maxPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
             maxPosMarker->setValue(maxSample);
-            maxPosMarker->setLabel(QString("max(%1,%2)@%3").arg(maxSample.rx()).arg(maxSample.ry()).arg(name));
+            maxPosMarker->setLabel(QString("max(%1,%2)").arg(maxSample.rx()).arg(maxSample.ry()));
             maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
             maxPosMarker->attach(plot);
 
@@ -460,7 +458,7 @@ void IcvICurve::insertIndicator()
             minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
             minPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
             minPosMarker->setValue(minSample);
-            minPosMarker->setLabel( QString("min(%1,%2)@%3").arg(minSample.rx()).arg(minSample.ry()).arg(name));
+            minPosMarker->setLabel( QString("min(%1,%2)").arg(minSample.rx()).arg(minSample.ry()));
             minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
             minPosMarker->attach(plot);
 
