@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Tue Jun 28 22:00:08 2016
+** Created: Tue Jun 28 23:27:53 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -216,7 +216,7 @@ public:
         actionCurveName = new QAction(icurveClass);
         actionCurveName->setObjectName(QString::fromUtf8("actionCurveName"));
         actionCurveName->setCheckable(true);
-        actionCurveName->setChecked(false);
+        actionCurveName->setChecked(true);
         actionCurveName->setEnabled(true);
         actionDelete = new QAction(icurveClass);
         actionDelete->setObjectName(QString::fromUtf8("actionDelete"));

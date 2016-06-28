@@ -742,7 +742,6 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
     }
 
     /*show current selected curve markers*/
-    prevSelectedCurve.clear();
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
         if(NULL == curSelectedCurve[cnt])
@@ -752,19 +751,18 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
         {
             curSelectedCurve[cnt]->showMarkers();
             curSelectedCurve[cnt]->boldTitle(true);
-            prevSelectedCurve.append(curSelectedCurve[cnt]);
         }
     }
 
-    if(true == curSelectedCurve.isEmpty())
-    {
+    if(curSelectedCurve.isEmpty())
         lockCursorMoveAction = false;
-    }
     else
-    {
-        /*enable cursor moving action*/
         lockCursorMoveAction = true;
-    }
+
+    /* update previously selected curves */
+    prevSelectedCurve.clear();
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+        prevSelectedCurve.append(curSelectedCurve[cnt]);
 
     /*update replot*/
     canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
@@ -810,7 +808,6 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     }
 
     /*show current selected curve markers*/
-    prevSelectedCurve.clear();
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
         if(NULL == curSelectedCurve[cnt])
@@ -820,13 +817,18 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
         {
             curSelectedCurve[cnt]->showMarkers();
             curSelectedCurve[cnt]->boldTitle(true);
-            prevSelectedCurve.append(curSelectedCurve[cnt]);
         }
     }
 
     /*popup menu*/
     if(!curSelectedCurve.isEmpty())
         crvSelPopMenu->exec(event->globalPos());
+
+    /* update previously selected curves */
+    prevSelectedCurve.clear();
+    for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
+        prevSelectedCurve.append(curSelectedCurve[cnt]);
+
     /*update replot*/
     canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
     canvas->plot()->replot();
