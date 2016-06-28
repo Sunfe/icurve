@@ -52,7 +52,7 @@ public:
     void lookforCurves();
     void appendCurves(IcvPlotCurve *curve);
     void clearCurves(QList<IcvPlotCurve *> crvs);
-    void removeSelectCurves();
+
     void clearAllCurves();
     QList<IcvPlotCurve*> getSelectedCurve();
     void deleteCurve(QList<IcvPlotCurve*> crv);
@@ -65,7 +65,6 @@ public:
     void setZoomState(bool state);
     void createCurvePopMenu();
     void createCurvePopMenuAction();
-
     virtual bool eventFilter( QObject *, QEvent * );
     virtual bool event( QEvent * );
 
@@ -108,7 +107,7 @@ private:
     bool zoomStateEnabled;
     QCursor cursor;
 
-private slots:
+public slots:
         void setCurveColor();
         void setCurveWidth(QAction *action);
         void setCurveStyle(QAction *action);
@@ -117,6 +116,7 @@ private slots:
         void setCurveGroupSize(QAction *action);
         void setCurveProperty();
         void deleteSelectCurve();
+        void removeSelectCurves();
 };
 
 #endif

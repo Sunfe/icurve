@@ -186,8 +186,8 @@ void IcvPlotCanvas::clearAllCurves()
     {
         delete curves[pos]; 
     }
-
     curves.clear();
+    return;
 }
 
 

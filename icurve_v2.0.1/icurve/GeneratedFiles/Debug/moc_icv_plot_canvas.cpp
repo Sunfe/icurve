@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_plot_canvas.h'
 **
-** Created: Tue Jun 28 22:52:04 2016
+** Created: Tue Jun 28 23:37:41 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_IcvPlotCanvas[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,14 +31,15 @@ static const uint qt_meta_data_IcvPlotCanvas[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      15,   14,   14,   14, 0x08,
-      38,   31,   14,   14, 0x08,
-      62,   31,   14,   14, 0x08,
-      86,   31,   14,   14, 0x08,
-     111,   31,   14,   14, 0x08,
-     140,   31,   14,   14, 0x08,
-     168,   14,   14,   14, 0x08,
-     187,   14,   14,   14, 0x08,
+      15,   14,   14,   14, 0x0a,
+      38,   31,   14,   14, 0x0a,
+      62,   31,   14,   14, 0x0a,
+      86,   31,   14,   14, 0x0a,
+     111,   31,   14,   14, 0x0a,
+     140,   31,   14,   14, 0x0a,
+     168,   14,   14,   14, 0x0a,
+     187,   14,   14,   14, 0x0a,
+     207,   14,   14,   14, 0x0a,
 
        0        // eod
 };
@@ -50,6 +51,7 @@ static const char qt_meta_stringdata_IcvPlotCanvas[] = {
     "setCurveMarkerSize(QAction*)\0"
     "setCurveGroupSize(QAction*)\0"
     "setCurveProperty()\0deleteSelectCurve()\0"
+    "removeSelectCurves()\0"
 };
 
 const QMetaObject IcvPlotCanvas::staticMetaObject = {
@@ -89,9 +91,10 @@ int IcvPlotCanvas::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 5: setCurveGroupSize((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
         case 6: setCurveProperty(); break;
         case 7: deleteSelectCurve(); break;
+        case 8: removeSelectCurves(); break;
         default: ;
         }
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }
