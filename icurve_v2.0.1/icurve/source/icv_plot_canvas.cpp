@@ -823,8 +823,10 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
             prevSelectedCurve.append(curSelectedCurve[cnt]);
         }
     }
+
     /*popup menu*/
-    crvSelPopMenu->exec(event->globalPos());
+    if(!curSelectedCurve.isEmpty())
+        crvSelPopMenu->exec(event->globalPos());
     /*update replot*/
     canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,true);
     canvas->plot()->replot();
