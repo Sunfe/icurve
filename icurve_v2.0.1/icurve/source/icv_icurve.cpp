@@ -263,8 +263,9 @@ void IcvICurve::openFile()
         plotCurve->setAttachedState(true);
         /* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
-        plot->replot();
     }
+
+    plot->replot();
     return;
 }
 
