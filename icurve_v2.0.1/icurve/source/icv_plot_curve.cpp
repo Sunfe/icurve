@@ -174,9 +174,15 @@ void IcvPlotCurve::removeCurve()
         return;
 
     curve->detach();
+    /* remove markers */
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
         markers[pos]->detach();
+    }
+    /* remove indicators */
+    for(qint16 pos= 0; pos < indicator.count(); pos++)
+    {
+        indicator[pos]->detach();
     }
 
     setAttachedState(false);
@@ -197,6 +203,13 @@ void IcvPlotCurve::deleteCurve()
         markers[pos]->detach();
         delete markers[pos];
     }
+    /* remove indicators */
+    for(qint16 pos= 0; pos < indicator.count(); pos++)
+    {
+        indicator[pos]->detach();
+        delete indicator[pos];
+    }
+
     markers.clear();
     attached = false;
     return;

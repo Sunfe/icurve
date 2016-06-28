@@ -240,8 +240,8 @@ void IcvPlotCanvas::deleteSelectCurve()
 
 void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
 {
-    if(0 == crv.count())
-        return ;
+    if(crv.isEmpty())
+        return;
 
     QMessageBox msgBox(QMessageBox::Warning, tr("Warning"),
         "Curve will be deleted permanently, are you sure to proceeding?", 0, mainWin);
@@ -273,6 +273,8 @@ void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
         curves.removeAll(crv[cnt]);  
         /*detete corresponding markers*/
         crv[cnt]->deleteMakers();
+        /*detete corresponding indicators*/
+        crv[cnt]->deleteIndicator();
         /*update selected curve state*/
         curSelectedCurve.removeAll(crv[cnt]);
         prevSelectedCurve.removeAll(crv[cnt]);
