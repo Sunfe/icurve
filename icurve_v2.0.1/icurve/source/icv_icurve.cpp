@@ -135,12 +135,13 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     self->setPalette(mainWinPalette);
     QDesktopWidget* desktop = QApplication::desktop();
     move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
-    //ui.actionZoom->setEnabled(false);
 
     /* shortcuts */
     ui.actionOpen->setShortcut(QKeySequence::Open);
+    ui.actionSaveAs->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     ui.actionFilter->setShortcut(QKeySequence::Find);
     ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
+    ui.actionSelectInvert->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
     ui.actionRemove->setShortcut(QKeySequence::Delete);
     ui.actionDelete->setShortcut(Qt::CTRL + Qt::Key_Delete);
     ui.actionRefresh->setShortcut(QKeySequence::Refresh);
