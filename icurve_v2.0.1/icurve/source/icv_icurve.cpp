@@ -116,7 +116,6 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
 
     connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
-
 }
 
 

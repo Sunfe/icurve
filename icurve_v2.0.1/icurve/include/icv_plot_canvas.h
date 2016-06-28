@@ -93,6 +93,7 @@ private:
     QAction *cutAction;
     QAction *copyAction;
     QAction *delAction;
+    QAction *rmvAction;
     QAction *colorSetAction;
     QAction *propertySetAction;
 

@@ -234,7 +234,6 @@ void IcvPlotCanvas::deleteSelectCurve()
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
-
     return;
 }
 
@@ -541,6 +540,7 @@ void IcvPlotCanvas::createCurvePopMenu()
     QWidget * parent  = this;
 
     crvSelPopMenu = new QMenu(parent);
+    crvSelPopMenu->addAction(rmvAction);
     crvSelPopMenu->addAction(delAction);
     crvSelPopMenu->addAction(colorSetAction);
 
@@ -574,9 +574,15 @@ void IcvPlotCanvas::createCurvePopMenuAction()
     QWidget * parent  = this;
     QAction *action = NULL;
 
-    /*delete the curve*/
+    /* remove the curve */
+    rmvAction = new QAction(QIcon(":/images/remove.png"),tr("Remove"),parent);
+    rmvAction->setShortcut(QKeySequence::Delete);
+    rmvAction->setStatusTip("curve remove");
+    connect(rmvAction, SIGNAL(triggered()),this,SLOT(removeSelectCurves()));
+
+    /* delete the curve */
     delAction = new QAction(QIcon(":/images/delete.png"),tr("Delete"),parent);
-    delAction->setShortcut(QKeySequence::Delete);
+    delAction->setShortcut(Qt::CTRL + Qt::Key_Delete);
     delAction->setStatusTip("curve delete");
     connect(delAction,SIGNAL(triggered()),this,SLOT(deleteSelectCurve()));
 
