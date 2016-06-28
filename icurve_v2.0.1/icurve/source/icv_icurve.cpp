@@ -414,6 +414,9 @@ void IcvICurve::insertIndicator()
     {
         for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
         {
+            if(!allCurves.at(cnt)->isAttached())
+                continue;
+
             QList<QwtPlotMarker *>indicators = allCurves.at(cnt)->getIndicators();
             if(!indicators.isEmpty())
                 continue;
