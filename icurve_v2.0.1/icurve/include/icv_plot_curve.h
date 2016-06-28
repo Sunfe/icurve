@@ -46,11 +46,11 @@ public:
 
     qint16 getActivateState();
     void setActivateState(qint16 state);
-	void removeCurve();
+    void removeCurve();
     void deleteCurve();
     void showVividCurve();
-	void showCurve();
-	void hideCurve();
+    void showCurve();
+    void hideCurve();
     void boldTitle(bool enable);
 
     void setMarkers();
@@ -59,15 +59,15 @@ public:
     void hideMarkers();
     void deleteMakers();
     void updateMakers();
-	void setIndicator(QList<QwtPlotMarker *>markers);
-	QList<QwtPlotMarker *>getIndicators();
-	void removeIndicator();
-	void deleteIndicator();
+    void setIndicator(QList<QwtPlotMarker *>markers);
+    QList<QwtPlotMarker *>getIndicators();
+    void removeIndicator();
+    void deleteIndicator();
     qint16 getShowMarkerState();
     void setShowMarkerState(qint16 state);
 
-	bool isAttached();
-	void setAttachedState(bool state);
+    bool isAttached();
+    void setAttachedState(bool state);
 
     void setColor(QColor color);
     void setWidth(qint16 width);
@@ -91,7 +91,7 @@ private:
     qint16     showMarkerState;
     bool       attached;
 
-QwtPlotMarker *markertest;
+    QwtPlotMarker *markertest;
 };
 
 #endif

@@ -35,7 +35,8 @@ void IcvCommand::initFamily()
     family.push_back("getSnr");
     family.push_back("getQln");
     family.push_back("getHlog");
-    family.push_back("getNoiseMargin");		
+    family.push_back("getNoiseMargin");
+    family.push_back("getBitAlloc");
 }
 
 

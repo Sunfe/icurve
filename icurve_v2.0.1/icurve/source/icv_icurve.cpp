@@ -946,6 +946,12 @@ void IcvICurve::deleteCurve()
         return ;
     }
 
+    QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
+    if(selCurve.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+        return ;
+    }
     QList<IcvPlotCurve*> curves = plotCanvas->getSelectedCurve();
     plotCanvas->deleteCurve(curves);
     plot->replot();
@@ -962,6 +968,13 @@ void IcvICurve::removeCurves()
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
+
+    QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
+    if(selCurve.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
 
@@ -982,6 +995,7 @@ void IcvICurve::hideCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
+
     QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
     if(selCurve.empty())
     {

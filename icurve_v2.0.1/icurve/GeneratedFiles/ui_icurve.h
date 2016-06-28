@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Sat Jun 25 21:09:34 2016
+** Created: Tue Jun 28 22:00:08 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -80,6 +80,7 @@ public:
     QAction *actionShow;
     QAction *actionSelect_mode;
     QAction *actionRefresh;
+    QAction *actionResize;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -289,6 +290,8 @@ public:
         QIcon icon20;
         icon20.addFile(QString::fromUtf8(":/icurve/images/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRefresh->setIcon(icon20);
+        actionResize = new QAction(icurveClass);
+        actionResize->setObjectName(QString::fromUtf8("actionResize"));
         centralWidget = new QWidget(icurveClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         icurveClass->setCentralWidget(centralWidget);
@@ -421,13 +424,12 @@ public:
         menuAxse->addAction(actionAxseRotation);
         menuView->addAction(actionZoom);
         menuView->addAction(actionTree);
+        menuView->addAction(actionResize);
         menuView->addAction(actionReset_2);
         menuView->addAction(actionSelect_mode);
         mainToolBar->addAction(actionOpen);
         mainToolBar->addAction(actionFind);
         mainToolBar->addAction(actionFilter);
-        mainToolBar->addAction(actionRemove);
-        mainToolBar->addAction(actionDelete);
         mainToolBar->addAction(actionColor);
         mainToolBar->addAction(actionStyle);
         mainToolBar->addAction(actionWidth);
@@ -436,13 +438,15 @@ public:
         mainToolBar->addAction(actionTitle);
         mainToolBar->addAction(actionAxseScale);
         mainToolBar->addAction(actionLegend);
-        mainToolBar->addAction(actionShow);
+        mainToolBar->addAction(actionShowAll);
         mainToolBar->addAction(actionHide);
         mainToolBar->addAction(actionZoom);
         mainToolBar->addAction(actionHandMove);
         mainToolBar->addAction(actionExpand);
         mainToolBar->addAction(actionInfo);
         mainToolBar->addAction(actionRefresh);
+        mainToolBar->addAction(actionRemove);
+        mainToolBar->addAction(actionDelete);
 
         retranslateUi(icurveClass);
 
@@ -503,8 +507,9 @@ public:
         actionReset_2->setText(QApplication::translate("icurveClass", "Reset", 0, QApplication::UnicodeUTF8));
         actionHide->setText(QApplication::translate("icurveClass", "Hide", 0, QApplication::UnicodeUTF8));
         actionShow->setText(QApplication::translate("icurveClass", "Show", 0, QApplication::UnicodeUTF8));
-        actionSelect_mode->setText(QApplication::translate("icurveClass", "Select mode", 0, QApplication::UnicodeUTF8));
+        actionSelect_mode->setText(QApplication::translate("icurveClass", "Selecter", 0, QApplication::UnicodeUTF8));
         actionRefresh->setText(QApplication::translate("icurveClass", "Refresh", 0, QApplication::UnicodeUTF8));
+        actionResize->setText(QApplication::translate("icurveClass", "Resize", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("icurveClass", "File", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("icurveClass", "Edit", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("icurveClass", "Insert", 0, QApplication::UnicodeUTF8));

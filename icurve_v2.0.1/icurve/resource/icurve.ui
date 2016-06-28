@@ -141,6 +141,7 @@
     </property>
     <addaction name="actionZoom"/>
     <addaction name="actionTree"/>
+    <addaction name="actionResize"/>
     <addaction name="actionReset_2"/>
     <addaction name="actionSelect_mode"/>
    </widget>
@@ -274,8 +275,6 @@
    <addaction name="actionOpen"/>
    <addaction name="actionFind"/>
    <addaction name="actionFilter"/>
-   <addaction name="actionRemove"/>
-   <addaction name="actionDelete"/>
    <addaction name="actionColor"/>
    <addaction name="actionStyle"/>
    <addaction name="actionWidth"/>
@@ -284,13 +283,15 @@
    <addaction name="actionTitle"/>
    <addaction name="actionAxseScale"/>
    <addaction name="actionLegend"/>
-   <addaction name="actionShow"/>
+   <addaction name="actionShowAll"/>
    <addaction name="actionHide"/>
    <addaction name="actionZoom"/>
    <addaction name="actionHandMove"/>
    <addaction name="actionExpand"/>
    <addaction name="actionInfo"/>
    <addaction name="actionRefresh"/>
+   <addaction name="actionRemove"/>
+   <addaction name="actionDelete"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
@@ -686,7 +687,7 @@
   </action>
   <action name="actionSelect_mode">
    <property name="text">
-    <string>Select mode</string>
+    <string>Selecter</string>
    </property>
   </action>
   <action name="actionRefresh">
@@ -696,6 +697,11 @@
    </property>
    <property name="text">
     <string>Refresh</string>
+   </property>
+  </action>
+  <action name="actionResize">
+   <property name="text">
+    <string>Resize</string>
    </property>
   </action>
  </widget>
