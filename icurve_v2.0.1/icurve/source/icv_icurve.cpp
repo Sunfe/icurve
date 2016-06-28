@@ -1614,7 +1614,7 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
             }
         }
 
-        if(NULL != analyProgressDialog)
+        if((NULL != analyProgressDialog) && (line%100 == 0))
             emit analyDataProgress(line);
     }
     /*no more new command found when at file end, save the current data*/
