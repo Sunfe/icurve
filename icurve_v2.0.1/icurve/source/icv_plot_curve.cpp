@@ -185,6 +185,7 @@ void IcvPlotCurve::removeCurve()
         indicator[pos]->detach();
     }
 
+    boldTitle(false);
     setAttachedState(false);
     return;
 }

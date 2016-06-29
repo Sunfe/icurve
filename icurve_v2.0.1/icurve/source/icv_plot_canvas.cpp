@@ -744,6 +744,7 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
     }
 
     /*show current selected curve markers*/
+    QList<IcvPlotCurve *> allCurve = curves;
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
         if(NULL == curSelectedCurve[cnt])
@@ -753,7 +754,17 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
         {
             curSelectedCurve[cnt]->showMarkers();
             curSelectedCurve[cnt]->boldTitle(true);
+            allCurve.removeAll(curSelectedCurve[cnt]);
         }
+    }
+
+    /* the left curves were the unselected curves */
+    for(qint16 cnt = 0; cnt < allCurve.count(); cnt++)
+    {
+        if(NULL == allCurve[cnt])
+            continue;
+        allCurve[cnt]->hideMarkers();
+        allCurve[cnt]->boldTitle(false);
     }
 
     if(curSelectedCurve.isEmpty())
@@ -810,6 +821,7 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
     }
 
     /*show current selected curve markers*/
+    QList<IcvPlotCurve *> allCurve = curves;
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
     {
         if(NULL == curSelectedCurve[cnt])
@@ -819,7 +831,17 @@ void IcvPlotCanvas::onMouseRightButtonClick(const QMouseEvent * event)
         {
             curSelectedCurve[cnt]->showMarkers();
             curSelectedCurve[cnt]->boldTitle(true);
+            allCurve.removeAll(curSelectedCurve[cnt]);
         }
+    }
+
+    /* the left curves were the unselected curves */
+    for(qint16 cnt = 0; cnt < allCurve.count(); cnt++)
+    {
+        if(NULL == allCurve[cnt])
+            continue;
+        allCurve[cnt]->hideMarkers();
+        allCurve[cnt]->boldTitle(false);
     }
 
     /*popup menu*/
