@@ -226,44 +226,48 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
 
 void IcvICurve::openFile()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
+    QStringList fileNames = QFileDialog::getOpenFileNames(this,
             tr("Open file..."),
             fileInfo.absolutePath(),
             tr("Text files (*.txt *.log *.cap *.bak);;All Files (*)"));
 
-    if(fileName.isEmpty())
+    if(fileNames.isEmpty())
     {
         return; 
     }
 
-    qint16 posCurRepository = plotData.count();
-    if(ICU_OK != loadData(fileName))
-        return ;
-
-    /* when a new file exported, should not start from scratch */
-    for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
+    for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
     {
-        QwtPlotCurve *qwtCurve = new QwtPlotCurve();
-        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
-        qwtCurve->setSamples(plotData[pos].getData().toVector());
+        /* before loading new data, get data postion for a new file */
+        qint16 posCurRepository = plotData.count();
+        if(ICU_OK != loadData(fileNames[fileCnt]))
+            continue ;
 
-        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol,
-                                          QBrush(Qt::yellow),
-                                          QPen(Qt::red, 2),
-                                          QSize(2, 2));
-        qwtCurve->setSymbol(symbol);
-        qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
-        qwtCurve->setStyle(QwtPlotCurve::Lines);
-        qwtCurve->attach(plot);
+        /* when a new file exported, should not start from scratch */
+        for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
+        {
+            QwtPlotCurve *qwtCurve = new QwtPlotCurve();
+            qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
+            qwtCurve->setSamples(plotData[pos].getData().toVector());
 
-        IcvPlotCurve *plotCurve = new IcvPlotCurve;
-        plotCurve->setCurve(qwtCurve);
-        plotCurve->setCanvas(plotCanvas);
-        plotCurve->setDataPos(pos);
-        plotCurve->setCommand(plotData[pos]);
-        plotCurve->setAttachedState(true);
-        /* attach curves to plot canvas*/
-        plotCanvas->appendCurves(plotCurve);
+            QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol,
+                                              QBrush(Qt::yellow),
+                                              QPen(Qt::red, 2),
+                                              QSize(2, 2));
+            qwtCurve->setSymbol(symbol);
+            qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
+            qwtCurve->setStyle(QwtPlotCurve::Lines);
+            qwtCurve->attach(plot);
+
+            IcvPlotCurve *plotCurve = new IcvPlotCurve;
+            plotCurve->setCurve(qwtCurve);
+            plotCurve->setCanvas(plotCanvas);
+            plotCurve->setDataPos(pos);
+            plotCurve->setCommand(plotData[pos]);
+            plotCurve->setAttachedState(true);
+            /* attach curves to plot canvas*/
+            plotCanvas->appendCurves(plotCurve);
+        }
     }
 
     plot->replot();
