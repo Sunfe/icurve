@@ -23,5 +23,6 @@
     <file>../images/scale.png</file>
     <file>../images/line_width.png</file>
     <file>../images/indicator.png</file>
+    <file>../images/save.png</file>
   </qresource>
 </RCC>

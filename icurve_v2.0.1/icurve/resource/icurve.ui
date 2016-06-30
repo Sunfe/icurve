@@ -273,6 +273,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpen"/>
+   <addaction name="actionSaveAs"/>
    <addaction name="actionFind"/>
    <addaction name="actionFilter"/>
    <addaction name="actionColor"/>
@@ -312,6 +313,10 @@
    </property>
   </action>
   <action name="actionSaveAs">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/save.png</normaloff>:/icurve/images/save.png</iconset>
+   </property>
    <property name="text">
     <string>Save as</string>
    </property>

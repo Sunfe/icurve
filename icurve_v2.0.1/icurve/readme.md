@@ -25,7 +25,7 @@ icurve
    - 支持部分xdsl参数的估算
    - 查找、filter的时候增加预览[done]
    - 曲线增加树形分组
-   - 加入recent file
+   - 加入recent file[done]
    - 增加曲线最大，最小值指示标志，标志还携带curve title信息[done]   
    - 支持多文件[done]
    - 增加工具栏[done]
