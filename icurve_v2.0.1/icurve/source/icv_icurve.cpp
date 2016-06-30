@@ -34,6 +34,7 @@
 #include "icv_symbol.h"
 #include "icv_curve_info.h"
 #include "icv_axse_scale.h"
+#include "icv_about.h"
 
 
 /*including tone index at head of the line*/
@@ -78,8 +79,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionSaveAs,         SIGNAL(triggered()), this, SLOT(saveAs()));
     connect(ui.actionClose,          SIGNAL(triggered()), this, SLOT(closePlot()));
     connect(ui.actionExit,           SIGNAL(triggered()), this, SLOT(close()));
-    /*edit menu*/
-
+    /* edit menu */
     connect(ui.actionRefresh,        SIGNAL(triggered()), this, SLOT(refreshPlot()));
     connect(ui.actionCut,            SIGNAL(triggered()), this, SLOT(cutCurve()));
     connect(ui.actionCopy,           SIGNAL(triggered()), this, SLOT(copyCurve()));
@@ -91,9 +91,8 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionFind,           SIGNAL(triggered()), this, SLOT(findCurve()));
     connect(ui.actionShowAll,        SIGNAL(triggered()), this, SLOT(showAllCurve()));
     connect(ui.actionSelectAll,      SIGNAL(triggered()), this, SLOT(selectAllCurves()));  
-    connect(ui.actionSelectInvert,  SIGNAL(triggered()), this, SLOT(selectInvertCurves()));  
- 
-    /*curve menu*/
+    connect(ui.actionSelectInvert,   SIGNAL(triggered()), this, SLOT(selectInvertCurves()));  
+    /* curve menu */
     connect(ui.actionColor,          SIGNAL(triggered()), this, SLOT(setCurveColor()));
     connect(ui.actionWidth,          SIGNAL(triggered()), this, SLOT(setCurveWidth()));
     connect(ui.actionStyle,          SIGNAL(triggered()), this, SLOT(setCurveStyle()));
@@ -102,13 +101,12 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionFilter,         SIGNAL(triggered()), this, SLOT(filterCurve()));
     connect(ui.actionInfo,           SIGNAL(triggered()), this, SLOT(showCurveInfo()));
     connect(ui.actionCurveProperties,SIGNAL(triggered()), this, SLOT(setCurveProperties()));
-
-    /*axse menu*/
+    /* axse menu */
     connect(ui.actionAxseScale,      SIGNAL(triggered()), this, SLOT(setAxseScale()));
     connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
     connect(ui.actionAxseAlignment,  SIGNAL(triggered()), this, SLOT(setAxseAlignment()));
     connect(ui.actionAxseRotation,   SIGNAL(triggered()), this, SLOT(setAxseRotation()));
-    /*insert menu*/
+    /* insert menu */
     connect(ui.actionTitle,          SIGNAL(triggered()), this, SLOT(insertTitle()));
     connect(ui.actionX_label,        SIGNAL(triggered()), this, SLOT(insertXLabel()));
     connect(ui.actionY_label,        SIGNAL(triggered()), this, SLOT(insertYLabel()));
@@ -120,7 +118,9 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionZoom,           SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
     /* tool menu */
     connect(ui.actionHandMove,       SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
-
+    /* help menu */
+    connect(ui.actionAbout,          SIGNAL(triggered()),  this, SLOT(aboutIcurve()));
+    /* others */
     connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
 }
@@ -1599,6 +1599,14 @@ void IcvICurve::setAxseRotation()
 
 void IcvICurve::setAxseProperties()
 {
+    return;
+}
+
+
+void IcvICurve::aboutIcurve()
+{
+    IcvAboutDialog *dlg = new IcvAboutDialog(this);
+    dlg->show();
     return;
 }
 

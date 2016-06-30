@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_preference.ui'
 **
-** Created: Fri Jul 1 00:17:45 2016
+** Created: Fri Jul 1 01:03:41 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

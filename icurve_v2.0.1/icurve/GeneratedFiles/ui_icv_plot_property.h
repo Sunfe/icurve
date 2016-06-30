@@ -1,14 +1,14 @@
 /********************************************************************************
-** Form generated from reading UI file 'plot.ui'
+** Form generated from reading UI file 'icv_plot_property.ui'
 **
-** Created: Fri Jul 1 00:17:45 2016
+** Created: Fri Jul 1 01:03:38 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef UI_PLOT_H
-#define UI_PLOT_H
+#ifndef UI_ICV_PLOT_PROPERTY_H
+#define UI_ICV_PLOT_PROPERTY_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -110,4 +110,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // UI_PLOT_H
+#endif // UI_ICV_PLOT_PROPERTY_H

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Fri Jul 1 00:30:56 2016
+** Created: Fri Jul 1 01:29:20 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -311,7 +311,7 @@ public:
         menuTools->setObjectName(QString::fromUtf8("menuTools"));
         menuWindows = new QMenu(menuBar);
         menuWindows->setObjectName(QString::fromUtf8("menuWindows"));
-        menuWindows->setEnabled(false);
+        menuWindows->setEnabled(true);
         menuHelp_2 = new QMenu(menuBar);
         menuHelp_2->setObjectName(QString::fromUtf8("menuHelp_2"));
         menuCurve = new QMenu(menuBar);

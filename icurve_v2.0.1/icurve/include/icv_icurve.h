@@ -139,6 +139,8 @@ private slots:
         void zoomPlot(const QRectF &rect);
         /* tool menu slots*/
         void enableHandMove(bool checked);
+        /* help menu slots */
+        void aboutIcurve();
 
         void legendChecked( const QVariant &itemInfo, bool on );
         void updateAnalyProgressBar(qint32 progress);
