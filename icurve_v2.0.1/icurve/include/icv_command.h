@@ -39,8 +39,8 @@ public:
     void setState(qint16 cmdState);
     qint16 getState();
     
-    void setDataPosInFile(qint16 pos);
-    qint16  getDataPosInFile();
+    void setDataPosInFile(qint32 pos);
+    qint32  getDataPosInFile();
 
     void setBriefInfo(QString info);
     QString getBriefInfo();
@@ -59,7 +59,7 @@ private:
     qint16 direction;
     qint16 state;
     QString fileName;
-    qint16 dataPosInFile;
+    qint32 dataPosInFile;
     QString briefInfo;
 };
 

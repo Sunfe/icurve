@@ -120,14 +120,14 @@ void IcvCommand::setFamily(QStringList cmdFamily)
 }
 
 
-void IcvCommand::setDataPosInFile(qint16 pos)
+void IcvCommand::setDataPosInFile(qint32 pos)
 {
     dataPosInFile = pos;
     return;
 }
 
 
-qint16 IcvCommand::getDataPosInFile()
+qint32 IcvCommand::getDataPosInFile()
 {
    return dataPosInFile;
 }
