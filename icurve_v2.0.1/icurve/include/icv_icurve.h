@@ -48,6 +48,9 @@ public:
     IcvICurve(QWidget *parent = 0, Qt::WFlags flags = 0);
     void initMainPlotter(QWidget *plotWidget);
     void initMainWinStyle(QMainWindow *self);
+    void createExtraActions();
+    void createExtraMenus();
+    void setCurrentFile(const QString &fileName);
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeData(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
@@ -66,6 +69,7 @@ protected:
 private:
     Ui::icurveClass ui;
     Ui::IcvCurveFilterDialog *curveFilterDialog;
+    QList<QAction *> recentFileActs;
     /*Qt objects*/
     QRectF titleRect;
     QLabel *label;
@@ -89,6 +93,7 @@ private:
 private slots:
         /*file menu slots*/
         void openFile();
+        void openRecentFile();
         void saveAs();
         void closePlot();
         /*edit menu slots*/
@@ -138,6 +143,7 @@ private slots:
         void legendChecked( const QVariant &itemInfo, bool on );
         void updateAnalyProgressBar(qint32 progress);
         void cancelAnalyProgressBar();
+        void updateRecentFileActions();
 
 signals:
         void analyDataProgress(qint32 progress);

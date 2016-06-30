@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_curve_info.h'
 **
-** Created: Tue Jun 28 22:52:06 2016
+** Created: Fri Jul 1 00:17:44 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!

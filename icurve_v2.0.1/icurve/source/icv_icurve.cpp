@@ -19,6 +19,7 @@
 #include <QDebug>
 #include <QVariant>
 #include <QMimeData>
+#include <QSettings>
 
 #include <qwt_legend.h>
 #include <qwt_plot_renderer.h>
@@ -41,11 +42,17 @@
 #define ICV_PLOT_DATA_START_POS             (1)
 #define ICV_MAX_LINE_NUM_BACKGROUD_PROCESS  (2000)
 
+#define ICV_MAX_RECENT_FILE_NUM             (5)
+
 
 
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
     ui.setupUi(this);
+
+    createExtraActions();
+    createExtraMenus();
+
     initMainWinStyle(this);
 
     plot = new QwtPlot();
@@ -224,6 +231,30 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
 }
 
 
+void IcvICurve::createExtraActions()
+{
+    /* create extra actions */
+    for (qint16 cnt = 0; cnt < ICV_MAX_RECENT_FILE_NUM; cnt++)
+    {
+        QAction* action = new QAction(this);
+        action->setVisible(false);
+        connect(action, SIGNAL(triggered()),this, SLOT(openRecentFile()));
+        recentFileActs.append(action);
+    }
+    return;
+}
+
+
+void IcvICurve::createExtraMenus()
+{
+    /* create extra menus*/
+    for (qint16 cnt = 0; cnt < ICV_MAX_RECENT_FILE_NUM; cnt++)
+        ui.menuFile->addAction(recentFileActs[cnt]);
+    updateRecentFileActions();
+    return;
+}
+
+
 void IcvICurve::openFile()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this,
@@ -238,14 +269,14 @@ void IcvICurve::openFile()
 
     /* save file info */
     fileInfo.setFile(fileNames[0]);
-
-    /* parse and analyze file content */
     for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
     {
         /* before loading new data, get data postion for a new file */
         qint16 posCurRepository = plotData.count();
+
+        /* parse and analyze file content */
         if(ICU_OK != loadData(fileNames[fileCnt]))
-            continue ;
+            continue;
 
         /* when a new file exported, should not start from scratch */
         for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
@@ -272,9 +303,82 @@ void IcvICurve::openFile()
             /* attach curves to plot canvas*/
             plotCanvas->appendCurves(plotCurve);
         }
+        /* append file to recent file list */
+        setCurrentFile(fileNames[fileCnt]);
     }
 
     plot->replot();
+    return;
+}
+
+
+void IcvICurve::openRecentFile()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (!action)
+        return;
+
+    QString fileName = action->data().toString();
+    /* save file info */
+    fileInfo.setFile(fileName);
+    /* before loading new data, get data postion for a new file */
+    qint16 posCurRepository = plotData.count();
+
+    /*analyze file content */
+    if(ICU_OK != loadData(fileName))
+        return;
+
+    /* when a new file exported, should not start from scratch */
+    for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
+    {
+        QwtPlotCurve *qwtCurve = new QwtPlotCurve();
+        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
+        qwtCurve->setSamples(plotData[pos].getData().toVector());
+
+        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol,
+                                          QBrush(Qt::yellow),
+                                          QPen(Qt::red, 2),
+                                          QSize(2, 2));
+        qwtCurve->setSymbol(symbol);
+        qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
+        qwtCurve->setStyle(QwtPlotCurve::Lines);
+        qwtCurve->attach(plot);
+
+        IcvPlotCurve *plotCurve = new IcvPlotCurve;
+        plotCurve->setCurve(qwtCurve);
+        plotCurve->setCanvas(plotCanvas);
+        plotCurve->setDataPos(pos);
+        plotCurve->setCommand(plotData[pos]);
+        plotCurve->setAttachedState(true);
+        /* attach curves to plot canvas*/
+        plotCanvas->appendCurves(plotCurve);
+    }
+    /* append file to recent file list */
+    setCurrentFile(fileName);
+
+    plot->replot();
+    return;
+}
+
+
+void IcvICurve::setCurrentFile(const QString &fileName)
+{
+    QSettings settings("tmp/history.ini",QSettings::IniFormat);;
+    QStringList files = settings.value("recentFileList").toStringList();
+    files.removeAll(fileName);
+    files.prepend(fileName);
+    while (files.size() > ICV_MAX_RECENT_FILE_NUM)
+    {
+        files.removeLast();
+    }
+
+    settings.setValue("recentFileList", files);
+    foreach (QWidget *widget, QApplication::topLevelWidgets())
+    {
+        IcvICurve *mainWin = qobject_cast<IcvICurve *>(widget);
+        if (mainWin)
+            mainWin->updateRecentFileActions();
+    }
     return;
 }
 
@@ -1733,6 +1837,28 @@ void IcvICurve::updateAnalyProgressBar(qint32 progress)
 void IcvICurve::cancelAnalyProgressBar()
 {
     isDataAnalyCanceled = true;
+    return;
+}
+
+
+void IcvICurve::updateRecentFileActions()
+{
+    QSettings settings("tmp/history.ini",QSettings::IniFormat);;
+    QStringList files = settings.value("recentFileList").toStringList();
+    qint16 numRecentFiles = qMin(files.size(), (int)ICV_MAX_RECENT_FILE_NUM);
+
+    for (qint16 i = 0; i < numRecentFiles; i++) 
+    {
+        QString text = tr("&%1 %2").arg(i + 1).arg(QFileInfo(files[i]).fileName());
+        recentFileActs[i]->setText(text);
+        recentFileActs[i]->setData(files[i]);
+        recentFileActs[i]->setVisible(true);
+    }
+    for (qint16 j = numRecentFiles; j < ICV_MAX_RECENT_FILE_NUM; ++j)
+    {
+        recentFileActs[j]->setVisible(false);
+    }
+
     return;
 }
 

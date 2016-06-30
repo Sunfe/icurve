@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Thu Jun 30 00:37:04 2016
+** Created: Fri Jul 1 00:17:42 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -100,7 +100,7 @@ public:
     {
         if (icurveClass->objectName().isEmpty())
             icurveClass->setObjectName(QString::fromUtf8("icurveClass"));
-        icurveClass->resize(759, 475);
+        icurveClass->resize(750, 450);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/icurve/images/icurve.ico"), QSize(), QIcon::Normal, QIcon::Off);
         icurveClass->setWindowIcon(icon);
@@ -297,7 +297,7 @@ public:
         icurveClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(icurveClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 759, 23));
+        menuBar->setGeometry(QRect(0, 0, 750, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);
