@@ -27,7 +27,7 @@ icurve
    - 曲线增加树形分组
    - 加入recent file
    - 增加曲线最大，最小值指示标志，标志还携带curve title信息[done]   
-   - 支持多文件
+   - 支持多文件[done]
    - 增加工具栏[done]
    - 增加快捷键[done]
    - 加入曲线调整至合适的尺度

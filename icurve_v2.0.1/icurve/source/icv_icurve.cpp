@@ -236,6 +236,10 @@ void IcvICurve::openFile()
         return; 
     }
 
+    /* save file info */
+    fileInfo.setFile(fileNames[0]);
+
+    /* parse and analyze file content */
     for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
     {
         /* before loading new data, get data postion for a new file */
