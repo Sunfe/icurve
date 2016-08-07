@@ -884,7 +884,7 @@ void IcvICurve::filterCurve()
 
     if(0 == curvesFound.count()) 
     {
-        QMessageBox::information(this,tr("Info"),tr("No curves filtered!"));
+        QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
         return;
     }
 
@@ -1656,101 +1656,74 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         analyProgressDialog->setModal(true);
         analyProgressDialog->setRange(0, totalLineNum);
         analyProgressDialog->setWindowTitle("File analyzing...");
-        /*display immediately*/
+        /* display immediately */
         analyProgressDialog->show();
         analyProgressDialog->repaint();
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
     dataTextStream.seek(0);
-    isDataAnalyCanceled   = false;
-    QStringList cmdFamily = cmd.getFamily();
+    isDataAnalyCanceled = false;
     line = 0;
     while(!dataTextStream.atEnd() && !isDataAnalyCanceled)
     {
         line++;
         QString dataLine = dataTextStream.readLine();
-        qint16 pos       = 0;
+        qint16      pos  = 0;
         QString curCmdName("NULL");
-        for(qint16 i = 0; i< cmdFamily.count(); i++)
-        {
-            regExp.setPattern(cmdFamily.value(i));
-            regExp.setCaseSensitivity(Qt::CaseInsensitive);
-            pos = regExp.indexIn(dataLine);
-            if(-1 != pos)
-            {
-                curCmdName = cmdFamily.value(i);
-                break;
-            }
-        }
+        QString curPromt("NULL");
+        QString lineId("NULL");
+        QString direction("NULL");
 
-        /* if no command contained in this line, and no pattern 
-        like: "280 : -133.0 ", skip the line */
-        regExp.setPattern("\\s+\\d{,5}\\s+:\\s+-{,1}\\d{1,}.\\d\\s+");
-        regExp.setCaseSensitivity(Qt::CaseInsensitive);
-        pos = regExp.indexIn(dataLine);
-        if((-1 == pos) && (curCmdName == "NULL"))
-            continue;
-
-        /* continue to handle data of the line, try to get parameters of 
-        command */
-        QString pattern(curCmdName + "\\s+([0-9]|1[0-9])\\s+([0-1])");		
-        regExp.setPattern(pattern);
-        pos = regExp.indexIn(dataLine);
-        if(-1 != pos)
+        if(cmd.matchTitle(dataLine))
         {
-            /* if a new command found,and the last command is not empty,
-            set the last command complete. */
+            /* if the last command is not empty, terminate it */
             prevCmd = cmd;
-
-            cmd.reset();
-            cmd.setName(curCmdName);  
-            QString port(regExp.capturedTexts().at(1));
-            cmd.setLineId(port.toInt(&ok));
-            QString dir(regExp.capturedTexts().at(2));
-            cmd.setDirection(dir.toInt(&ok));
+            /* preparing the new command */
             cmd.setState(CMD_STARTED);
             cmd.setDataPosInFile(line);
             cmd.setBriefInfo(dataLine);
             cmd.setFileName(file.fileName());
+
+            continue;
         }
 
-        if(CMD_STARTED == cmd.getState())
+        if(CMD_STARTED != cmd.getState())
+            continue;
+
+        /* math groupsize, if found, loop continue */
+        if(cmd.matchGroupSize(dataLine))
+            continue;
+
+        /* command already started, try to parse data */
+        if(prevCmd.getData().count() > 0)              
         {
-            if(prevCmd.getData().count() > 0)      
-            {
-                plotData.push_back(prevCmd);   
-                prevCmd.reset();
-            }
+            /* reset previous command */
+            plotData.push_back(prevCmd);   
+            prevCmd.reset();
+        }
 
-            regExp.setPattern("\\s+:\\s+");
-            if(-1 == regExp.indexIn(dataLine))
-            {
-                continue;
-            }
+        qint16 ret = assembleData(dataLine,&cmd);
+        if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
+        {
+            QString error = file.fileName() + " at line " + QString::number(line) \
+                + ":data format incorrect.";
+            QMessageBox::critical(this,"ERROR",error);
 
-            qint16 ret = assembleData(dataLine,&cmd);
-            if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
-            {
-                QString error = file.fileName() + " at line " + QString::number(line) \
-                    + ":data format incorrect.";
-                QMessageBox::critical(this,"ERROR",error);
-
-                return ICU_PLOT_DATA_FORMAT_ERROR; 
-            }
+            return ICU_PLOT_DATA_FORMAT_ERROR; 
         }
 
         if((NULL != analyProgressDialog) && (line%100 == 0))
             emit analyDataProgress(line);
     }
-    /*no more new command found when at file end, save the current data*/
+    /* no more new command found when at file end, save the current data */
     if(cmd.getData().count() > 0)     
     {
-         cmd.setState(CMD_CLOSED);
-         plotData.push_back(cmd);   
+        cmd.setState(CMD_CLOSED);
+        plotData.push_back(cmd);   
     }
 
- /* import data action was halt, data should also be cleared*/
+    /* importing data action halted, data should also be cleared*/
     if(isDataAnalyCanceled)
         plotData.clear();
 
@@ -1774,31 +1747,23 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
         dataLine = dataLine.replace("---","-150.0");
     }
 
-    QRegExp regExpNonBitAlloc;
-    QRegExp regExpBitAlloc;
-    regExpNonBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
-    regExpNonBitAlloc.setPattern("\\s+\\d{,5}\\s+:([ ]+-{,1}\\d{1,}.\\d){1,10}$");
-    regExpBitAlloc.setCaseSensitivity(Qt::CaseInsensitive);
-    regExpBitAlloc.setPattern("\\s+\\d{,5}\\s+:(\\s+\\d+){,20}$");
+    QRegExp regExpr;
+    regExpr.setCaseSensitivity(Qt::CaseInsensitive);
+    regExpr.setPattern(cmd->dataPattern());
+    if(-1 == regExpr.indexIn(dataLine))
+        return ICU_OK;
 
     splitList = dataLine.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    /* filter some type of date like: 11, -11, -11.1 */
     digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
-    if(-1 != regExpNonBitAlloc.indexIn(dataLine))
+    appendCommandData(cmd, digList);
+    if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
     {
-        appendCommandData(cmd, digList);
-        if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
-            cmd->setState(CMD_CLOSED);
-        return ICU_OK;
-    }
-    else if(-1 != regExpBitAlloc.indexIn(dataLine))
-    {
-        appendCommandData(cmd, digList);
-        if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
-            cmd->setState(CMD_CLOSED);
-        return ICU_OK;
+        cmd->setState(CMD_CLOSED);
+        return ICU_ERROR;
     }
 
-    return ICU_ERROR;
+    return ICU_OK;
 }
 
 
@@ -1806,17 +1771,23 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
 {
     QList<QPointF> points; 
     QPointF        point;
-    qint16         tone = cmd->getData().count();
+    bool           ok = false;
+    qint16         tone = data.at(0).toInt(&ok); /* the first data is TONE */
     for(qint16 i = ICV_PLOT_DATA_START_POS; i < data.count(); i++)
     {
-        bool ok = false;
         qreal dataItem = data.at(i).toFloat(&ok);
         if(false == ok)
             return ICU_PLOT_DATA_FORMAT_ERROR;
-        tone++;
-        point.setX(tone);
-        point.setY(dataItem);
+
+        for(qint16 si = 0; si < cmd->getGroupSize(); si++)
+        {
+            QPointF sample ;
+            point.setX(tone * cmd->getGroupSize() + si );
+            point.setY(dataItem); 
+        }
+
         points.append(point);
+        tone++;
     }
 
     cmd->setData(points,true);

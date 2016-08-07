@@ -4,6 +4,8 @@
 IcvCommand::IcvCommand(void)
 {
     initFamily();
+    initPromtFamily();
+    groupSize = 1;
 }
 
 
@@ -15,6 +17,8 @@ IcvCommand::~IcvCommand()
 IcvCommand::IcvCommand(QString cmd)
 {
     initFamily();
+    initPromtFamily();
+    groupSize = 1;
     name = cmd;
 }
 
@@ -22,6 +26,8 @@ IcvCommand::IcvCommand(QString cmd)
 IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
 {
     initFamily();
+    initPromtFamily();
+    groupSize = 1;
     name      = cmd;
     lineId    = line;
     direction = dir;
@@ -37,6 +43,20 @@ void IcvCommand::initFamily()
     family.push_back("getHlog");
     family.push_back("getNoiseMargin");
     family.push_back("getBitAlloc");
+    family.push_back("getRmcBitAlloc");
+
+    return;
+}
+
+
+void IcvCommand::initPromtFamily()
+{
+    promtFamily.push_back("rfc");
+    promtFamily.push_back("bcm");
+    promtFamily.push_back("api");
+    promtFamily.push_back("fast");
+
+    return;
 }
 
 
@@ -113,12 +133,109 @@ QStringList IcvCommand::getFamily()
 }
 
 
+QStringList IcvCommand::getPromtFamily()
+{
+    return promtFamily;
+}
+
+
+bool IcvCommand::matchTitle(QString dataLine)
+{
+    bool convertStatus = false;
+    QString pattern;
+    pattern += "(";
+    for(qint16 i = 0; i < promtFamily.count(); i++)
+    {
+        pattern += promtFamily.value(i);
+        if(i < promtFamily.count() - 1)
+            pattern += "|";
+    }
+    pattern += ").+(";
+
+    for(qint16 i = 0; i < family.count(); i++)
+    {
+        pattern += family.value(i);
+        if(i < family.count() - 1)
+            pattern += "|";
+    }
+    pattern += ")\\s+([0-9]|1[0-9])\\s+([0-1])";
+
+    QRegExp cmdRegExp;
+    cmdRegExp.setPattern(pattern);
+    cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+    bool isMatch = dataLine.contains(cmdRegExp);
+    if(!isMatch)
+       return false;
+
+    QStringList caps = cmdRegExp.capturedTexts();
+    promt            = caps[1];
+    QString nameCap  = caps[2];
+    for(qint16 i = 0; i < family.count(); i++)
+    {
+        if(!family.value(i).compare(nameCap, Qt::CaseInsensitive))
+            name = family.value(i);
+    }
+
+    lineId    = caps[3].toInt(&convertStatus);
+    direction = caps[4].toInt(&convertStatus);
+
+    return true;
+}
+
+
+bool IcvCommand::matchGroupSize(QString dataLine)
+{
+    QString pattern="grouped by ([1-9]) tones";
+    QRegExp cmdRegExp;
+    cmdRegExp.setPattern(pattern);
+    cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+    bool isGroupsizeFound = dataLine.contains(cmdRegExp);
+    if(isGroupsizeFound)
+    {
+        QStringList caps = cmdRegExp.capturedTexts();
+        bool ok = false;
+        groupSize = caps[1].toInt(&ok);
+        return true;
+    }
+
+    return false;
+}
+
+
+qint16 IcvCommand::getGroupSize()
+{
+    return groupSize;
+}
+
+
+QString IcvCommand::dataPattern()
+{
+    QString pattern;
+    if("getBitAlloc" == name)
+    {
+        /* pattern like: 360 : 11 11 11 12 12 12 13 13 */
+        pattern = "\\s+\\d{,5}\\s+:(\\s+\\d+){,20}$";
+    }
+    else
+    {
+        pattern = "\\s+\\d{,5}\\s+:([ ]+-{,1}\\d{1,}.\\d){1,10}$";
+    }
+
+    return pattern;
+}
+
+
 void IcvCommand::setFamily(QStringList cmdFamily)
 {
     family = cmdFamily;
     return ;
 }
 
+void IcvCommand::setPrompt(qint16 cmdPromt)
+{
+    promt = cmdPromt;
+    return ;
+}
 
 void IcvCommand::setDataPosInFile(qint32 pos)
 {
