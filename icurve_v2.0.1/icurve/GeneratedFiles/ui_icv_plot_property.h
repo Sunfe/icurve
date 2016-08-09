@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_plot_property.ui'
 **
-** Created: Fri Jul 1 01:03:38 2016
+** Created: Wed Aug 10 00:25:54 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

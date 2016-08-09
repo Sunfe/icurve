@@ -16,7 +16,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     /* default completion */
     QStringList wordList;
     wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"\
-        << "psd" <<"snr" << "margin" << "hlog" << "bitalloc";
+        << "psd" <<"snr" << "margin" << "hlog" << "bitalloc" << "rmcbitalloc";
     completer = new QCompleter(wordList);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -74,7 +74,7 @@ void IcvCurveFilterDialog::prepareCommitAction()
     QStringList wordList;
     if (radioComandName->isChecked())
     {
-        wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc";
+        wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"<<"getrmcbitalloc";
     }
     else if(radioDirection->isChecked())
     {
@@ -82,7 +82,7 @@ void IcvCurveFilterDialog::prepareCommitAction()
     }
     else if(radioCompleteComand->isChecked())
     {
-        wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc";
+        wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"<<"getrmcbitalloc";
     }
 
     completer = new QCompleter(wordList);
@@ -139,7 +139,7 @@ void IcvCurveFilterDialog::accept()
     else if(radioCompleteComand->isChecked())
     {
         QRegExp  expr;
-        expr.setPattern("(gettxpsd|getsnr|getnoisemargin|gethlog|getqln|getbitalloc)[ ]+[0-9]+[ ]+[0|1]");
+        expr.setPattern("(gettxpsd|getsnr|getnoisemargin|gethlog|getqln|getbitalloc|getrmcbitalloc)[ ]+[0-9]+[ ]+[0|1]");
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {
@@ -176,7 +176,7 @@ void IcvCurveFilterDialog::accept()
     }
     else if(radioComandName->isChecked())
     {
-        QRegExp expr("psd|gettxpsd|snr|getsnr|margin|getnoisemargin|qln|getqln|hlog|gethlog|bit|getbitalloc");
+        QRegExp expr("psd|gettxpsd|snr|getsnr|margin|getnoisemargin|qln|getqln|hlog|gethlog|bit|getbitalloc|getrmcbitalloc");
         if(lineEdit->text().contains(expr))
         {
             QString word = expr.cap(0);

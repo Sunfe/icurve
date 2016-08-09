@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'icv_plot_canvas.h'
 **
-** Created: Thu Jun 30 20:08:43 2016
+** Created: Tue Aug 9 23:57:14 2016
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!

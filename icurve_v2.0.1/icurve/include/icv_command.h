@@ -7,8 +7,11 @@
 #include <QList>
 #include <QPointF>
 
-#define CMD_STARTED      (1)
-#define CMD_CLOSED       (2)
+#define CMD_TITLE_MATCHED            (1)
+#define CMD_GROUPSIZE_MATCHED        (2)
+#define CMD_PLOTDATA_MATCHED         (3)
+#define CMD_CLOSED                   (4)
+
 
 #define ICV_PROMT_RFC    (1)
 #define ICV_PROMT_BCM    (2)
@@ -26,15 +29,18 @@ public:
     void reset();
     void initFamily();
     void initPromtFamily();
+    void initTitlePattern();
     void setFamily(QStringList cmdFamily);
     QStringList getFamily();
-    void setPrompt(qint16 promt);
+    void setPrompt(QString promt);
     QStringList getPromtFamily();
 
     bool matchTitle(QString dataLine);
     bool matchGroupSize(QString dataLine);
-    QString dataPattern();
-    qint16 getGroupSize();
+
+    QString getTitlePattern();
+    QString getDataPattern();
+    qint16  getGroupSize();
 
     void setName(QString cmd);	
     QString getName();
@@ -69,6 +75,7 @@ private:
     qint16         groupSize;
     QStringList    family;
     QStringList    promtFamily;
+    QString        titlePattern;
 
     qint16 lineId;
     qint16 direction;

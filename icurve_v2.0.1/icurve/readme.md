@@ -39,6 +39,9 @@ icurve
    - 增加refresh[done]
    - 界面美化
    - 增加save工具栏
+   - 加入对不同命令提示符的支持，如rfc,fast[done]
+   - 加入对getaln，getrmcbitalloc数据格式的支持[done]
+   - 优化数据匹配模式，加快数据解析速度[done]
 
 1. bugs
    - 多重filter后，再curve show all,会出现越界 [已解决]
