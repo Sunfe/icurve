@@ -1683,7 +1683,7 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         {
             /* if the last command is not empty, terminate it */
             prevCmd = cmd;
-
+            /* begin to set new command */
             QStringList caps = cmdRegExp.capturedTexts();
             QString promt    = caps[1];
             QString nameCap  = caps[2];
@@ -1694,10 +1694,9 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
                     name = cmd.getFamily().value(i);
             }
 
-            bool  ok = false;
+            bool ok = false;
             qint16 lineId    = caps[3].toInt(&ok);
             qint16 direction = caps[4].toInt(&ok);
-
             /* preparing the new command */
             cmd.reset();
             cmd.setPrompt(promt);
@@ -1826,15 +1825,10 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
 
     for(qint16 i = ICV_PLOT_DATA_START_POS; i < data.count(); i++)
     {
-
         qreal dataItem = data.at(i).toFloat(&ok);
-
-        if(dataItem > 20)
-        {
-            break;
-        }
         if(false == ok)
             return ICU_PLOT_DATA_FORMAT_ERROR;
+
         tone++;
         point.setX(tone);
         point.setY(dataItem);
