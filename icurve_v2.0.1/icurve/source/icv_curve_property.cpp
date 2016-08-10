@@ -222,7 +222,7 @@ void IcvCurvePropertyDialog::accept()
       to change*/
     if(0 != curveName.size())
     {
-        if(curve.count() < 1)
+        if(curve.count() < 2)
         {
             curve.at(0)->getCurve()->setTitle(curveName);
         }
