@@ -1793,7 +1793,7 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
     qint16 n = splitList.count();
     /* filter some type of date like: 11, -11, -11.1 */
     QStringList digList;
-    digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d$|^-\\d+\\.\\d$"));
+    digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
     qint16 n2 = digList.count();
     if(digList.isEmpty())
         return ICU_OK;
