@@ -354,7 +354,9 @@ void IcvPlotCurve::setShowMarkerState(qint16 state)
 
 void IcvPlotCurve::setColor(QColor color)
 {
-    curve->setPen(QPen(color));
+    QPen pen = curve->pen();
+    pen.setColor(color);
+    curve->setPen(pen);
     /* markers color keep compliant with line */
     const QwtSymbol *symbol = markers.value(0)->symbol();
     QwtSymbol::Style style  = symbol->style();
