@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>202</height>
+    <width>237</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>63</x>
-     <y>165</y>
+     <y>140</y>
      <width>161</width>
-     <height>32</height>
+     <height>40</height>
     </rect>
    </property>
    <property name="orientation">
@@ -38,7 +38,7 @@
      <x>13</x>
      <y>10</y>
      <width>211</width>
-     <height>71</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="title">
@@ -95,7 +95,7 @@
    <property name="geometry">
     <rect>
      <x>13</x>
-     <y>90</y>
+     <y>70</y>
      <width>211</width>
      <height>71</height>
     </rect>

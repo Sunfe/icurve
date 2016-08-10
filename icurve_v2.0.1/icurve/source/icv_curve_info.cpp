@@ -22,6 +22,10 @@ QDialog(parent,flag)
     comboBoxCurveTitle->setParent(this);
     connect(comboBoxCurveTitle, SIGNAL(activated(int)), this, SLOT(setCurveFileInfo(int)));
 
+    /* set the first curve info to default */
+    lineEditPromt->setText(curves.at(0)->getCommand().getPromt());
+    lineEditGroupSize->setText(QString::number(curves.at(0)->getCommand().getGroupSize()));
+
     plainTextEditFilePos->setReadOnly(true);
     QString posInfo  = "at line " +
                         QString::number(curves.at(0)->getCommand().getDataPosInFile()) + 
@@ -29,7 +33,7 @@ QDialog(parent,flag)
     plainTextEditFilePos->setPlainText(posInfo);
 
     plainEditFileBriefInfo->setReadOnly(true);
-    plainEditFileBriefInfo->setPlainText(curves.at(0)->getCommand().getBriefInfo());
+    plainEditFileBriefInfo->setText(curves.at(0)->getCommand().getBriefInfo());
 
 }
 
@@ -46,11 +50,16 @@ void IcvCurveInfoDialog::setCurveFileInfo(int index)
         return;
 
     IcvPlotCurve *curve   = curves.at(index);
-    QString      posInfo  = "at line " + \
-                             QString::number(curve->getCommand().getDataPosInFile()) + 
-                             " of file \"" + curve->getCommand().getFileName() +"\"";
+    if(NULL == curve)
+        return;
+
+    lineEditPromt->setText(curve->getCommand().getPromt());
+    lineEditGroupSize->setText(QString::number(curve->getCommand().getGroupSize()));
+
+    QString posInfo  = "at line " + QString::number(curve->getCommand().getDataPosInFile()) + 
+                       " of file \"" + curve->getCommand().getFileName() +"\"";
     plainTextEditFilePos->setPlainText(posInfo);
-    plainEditFileBriefInfo->setPlainText(curve->getCommand().getBriefInfo());
+    plainEditFileBriefInfo->setText(curve->getCommand().getBriefInfo());
 
     return;
 }

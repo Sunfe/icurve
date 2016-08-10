@@ -33,11 +33,10 @@ public:
     void setFamily(QStringList cmdFamily);
     QStringList getFamily();
     void setPrompt(QString promt);
+    QString getPromt();
     QStringList getPromtFamily();
 
-    bool matchTitle(QString dataLine);
     bool matchGroupSize(QString dataLine);
-
     QString getTitlePattern();
     QString getDataPattern();
     qint16  getGroupSize();

@@ -102,6 +102,9 @@ void IcvCommand::reset()
     setState(CMD_CLOSED);
     data.erase(data.begin(),data.end());
 
+    groupSize = 1;
+    promt = "";
+
     return ;
 }
 
@@ -173,35 +176,6 @@ QStringList IcvCommand::getPromtFamily()
 }
 
 
-bool IcvCommand::matchTitle(QString dataLine)
-{
-#if 0
-    bool ok = false;
-  
-    QRegExp cmdRegExp;
-    cmdRegExp.setPattern(pattern);
-    cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
-    bool isMatch = dataLine.contains(cmdRegExp);
-    if(!isMatch)
-       return false;
-
-    QStringList caps = cmdRegExp.capturedTexts();
-    promt            = caps[1];
-    QString nameCap  = caps[2];
-    for(qint16 i = 0; i < family.count(); i++)
-    {
-        if(!family.value(i).compare(nameCap, Qt::CaseInsensitive))
-            name = family.value(i);
-    }
-
-    lineId    = caps[3].toInt(&ok);
-    direction = caps[4].toInt(&ok);
-#endif
-
-    return true;
-}
-
-
 QString IcvCommand::getTitlePattern()
 {
     return titlePattern;
@@ -265,11 +239,19 @@ void IcvCommand::setFamily(QStringList cmdFamily)
     return ;
 }
 
+
 void IcvCommand::setPrompt(QString cmdPromt)
 {
     promt = cmdPromt;
     return ;
 }
+
+
+QString IcvCommand::getPromt()
+{
+    return promt;
+}
+
 
 void IcvCommand::setDataPosInFile(qint32 pos)
 {
