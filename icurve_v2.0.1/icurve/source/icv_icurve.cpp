@@ -44,6 +44,7 @@
 #define ICV_MAX_LINE_NUM_BACKGROUD_PROCESS  (200)
 
 #define ICV_MAX_RECENT_FILE_NUM             (5)
+#define ICV_MAX_ACCEPT_FILE_SIZE            (50000000)
 
 
 
@@ -1622,6 +1623,14 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
     if(!file.open(QFile::ReadOnly ))
     {
         return ICU_FILE_READ_ERROR;
+    }
+
+    QFileInfo fileInfo(file);
+    if(fileInfo.size() > ICV_MAX_ACCEPT_FILE_SIZE)
+    {
+        QString warn = fileInfo.fileName() + " larger than 50M, rejected!";
+        QMessageBox::warning(this,"Warning",warn);
+        return ICU_OK;
     }
 
     if(ICU_OK != analyzeData(file))

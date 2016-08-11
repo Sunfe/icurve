@@ -210,23 +210,26 @@ qint16 IcvCommand::getGroupSize()
 QString IcvCommand::getDataPattern()
 {
     QString pattern;
-    if("getBitAlloc" == name)
-    {
-        /* pattern like: 360 : 11 11 11 12 12 12 13 13 */
-        pattern = "\\s+\\d{1,5}\\s+:(\\s+\\d+){1,20}$";
-    }
-    else if("getRmcBitAlloc" == name)
-    {
-        /*pattern like: 43:  x  x  x  x  x  x */
-        pattern = "\\s+\\d+:(\\s+\\d+){1,20}$";
-    }
-    else if("getQln" == name && "fast" == promt)
+    if("fast" == promt)
     {
         pattern = "([ ]+-{,1}\\d{1,}\.\\d\,){1,10}";
     }
-    else
+    else /* rfc, api,bcm, .. */
     {
-        pattern = "\\s+\\d{1,5}\\s+:(\\s+-{,1}\\d{1,}.\\d+){1,10}$";
+        if("getBitAlloc" == name)
+        {
+            /* pattern like: 360 : 11 11 11 12 12 12 13 13 */
+            pattern = "\\s+\\d{1,5}\\s+:(\\s+\\d+){1,20}$";
+        }
+        else if("getRmcBitAlloc" == name)
+        {
+            /*pattern like: 43:  x  x  x  x  x  x */
+            pattern = "\\s+\\d+:(\\s+\\d+){1,20}$";
+        }
+        else
+        {
+            pattern = "\\s+\\d{1,5}\\s+:(\\s+-{,1}\\d{1,}.\\d+){1,10}$";
+        }
     }
 
     return pattern;
