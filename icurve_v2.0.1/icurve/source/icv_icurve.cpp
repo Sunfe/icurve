@@ -44,7 +44,7 @@
 #define ICV_MAX_LINE_NUM_BACKGROUD_PROCESS  (200)
 
 #define ICV_MAX_RECENT_FILE_NUM             (5)
-#define ICV_MAX_ACCEPT_FILE_SIZE            (50000000)
+#define ICV_MAX_ACCEPT_FILE_SIZE            (100000000)  /* 100M */
 
 
 
@@ -268,47 +268,58 @@ void IcvICurve::openFile()
         return; 
     }
 
-    /* save file info */
+    /* before loading new data, get data postion for a new file */
+    qint16 posCurRepository = plotData.count();
+#if 0
+ /* save file info */
     fileInfo.setFile(fileNames[0]);
+#endif
     for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
     {
-        /* before loading new data, get data postion for a new file */
-        qint16 posCurRepository = plotData.count();
-
         /* parse and analyze file content */
         if(ICU_OK != loadData(fileNames[fileCnt]))
             continue;
-
-        /* when a new file exported, should not start from scratch */
-        for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
-        {
-            QwtPlotCurve *qwtCurve = new QwtPlotCurve();
-            qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
-            qwtCurve->setSamples(plotData[pos].getData().toVector());
-
-            QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol,
-                                              QBrush(Qt::yellow),
-                                              QPen(Qt::red, 2),
-                                              QSize(2, 2));
-            qwtCurve->setSymbol(symbol);
-            qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
-            qwtCurve->setStyle(QwtPlotCurve::Lines);
-            qwtCurve->attach(plot);
-
-            IcvPlotCurve *plotCurve = new IcvPlotCurve;
-            plotCurve->setCurve(qwtCurve);
-            plotCurve->setCanvas(plotCanvas);
-            plotCurve->setDataPos(pos);
-            plotCurve->setCommand(plotData[pos]);
-            plotCurve->setAttachedState(true);
-            /* attach curves to plot canvas*/
-            plotCanvas->appendCurves(plotCurve);
-        }
         /* append file to recent file list */
         setCurrentFile(fileNames[fileCnt]);
     }
 
+    QProgressDialog *plotProgressDialog = new QProgressDialog(plot);
+    plotProgressDialog->setModal(true);
+    plotProgressDialog->setRange(posCurRepository, plotData.count());
+    plotProgressDialog->setWindowTitle("plotting...");
+    plotProgressDialog->setFixedSize(300, 100);
+    plotProgressDialog->show();
+    /* when a new file exported, should not start from scratch */
+    for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
+    {       
+        QwtPlotCurve *qwtCurve = new QwtPlotCurve();
+        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
+        qwtCurve->setSamples(plotData[pos].getData().toVector());
+
+        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
+                                          QPen(Qt::red, 2), QSize(2, 2));
+        qwtCurve->setSymbol(symbol);
+        qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
+        qwtCurve->setStyle(QwtPlotCurve::Lines);
+        qwtCurve->attach(plot);
+
+        IcvPlotCurve *plotCurve = new IcvPlotCurve;
+        plotCurve->setCurve(qwtCurve);
+        plotCurve->setCanvas(plotCanvas);
+        plotCurve->setDataPos(pos);
+        plotCurve->setCommand(plotData[pos]);
+        plotCurve->setAttachedState(true);
+        /* attach curves to plot canvas*/
+        plotCanvas->appendCurves(plotCurve);
+
+        /* plotting progress */
+        plotProgressDialog->setValue(pos + 1);
+        plotProgressDialog->repaint();  
+    }
+
+    delete plotProgressDialog;
     plot->replot();
+
     return;
 }
 
@@ -949,7 +960,7 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
         }
     } 
 
-    /*retrieve the bak of all curve list*/
+    /* retrieve the bak of all curve list */
     QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
     for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
     {
@@ -1628,7 +1639,7 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
     QFileInfo fileInfo(file);
     if(fileInfo.size() > ICV_MAX_ACCEPT_FILE_SIZE)
     {
-        QString warn = fileInfo.fileName() + " larger than 50M, rejected!";
+        QString warn = fileInfo.fileName() + " larger than 100M, rejected!";
         QMessageBox::warning(this,"Warning",warn);
         return ICU_OK;
     }
@@ -1643,6 +1654,7 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
 
 ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 {
+    QFileInfo  fileInfo(file);
     qint32     cout = 0;
     bool       ok   = true;
     qint32     line = 0;
@@ -1651,21 +1663,43 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
     IcvCommand cmd;
     IcvCommand prevCmd;
 
+    QDialog *dialogInfo = new QDialog(plot);
+    QLabel *labelInfo = new QLabel("Scanning " + fileInfo.fileName() + " ...");
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(labelInfo);
+    dialogInfo->setLayout(layout);
+    dialogInfo->setFixedSize(300,50);
+    dialogInfo->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    dialogInfo->setModal(true);
+    dialogInfo->show();
+
     QTextStream dataTextStream(&file);
     totalLineNum = 0;
     while (!dataTextStream.atEnd()) 
     {
         QString line = dataTextStream.readLine();
         totalLineNum++; 
+        /* delay 50ms to handle other event,preventing high cpu usage */
+        if(0 == (totalLineNum % 20000))
+        {
+            QElapsedTimer timer;
+            timer.start();  
+            while(timer.elapsed() < 50)  
+            {
+                QCoreApplication::processEvents();  
+            }
+        }
     }
+    delete dialogInfo;
 
     if(totalLineNum > ICV_MAX_LINE_NUM_BACKGROUD_PROCESS)
     {
         analyProgressDialog = new QProgressDialog(plot);
         analyProgressDialog->setModal(true);
         analyProgressDialog->setRange(0, totalLineNum);
-        analyProgressDialog->setWindowTitle("File analyzing...");
+        analyProgressDialog->setWindowTitle("Analyzing " + fileInfo.fileName() + " ...");
         /* display immediately */
+        analyProgressDialog->setFixedSize(300, 100);
         analyProgressDialog->show();
         analyProgressDialog->repaint();
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
@@ -1673,6 +1707,7 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 
     dataTextStream.seek(0);
     isDataAnalyCanceled = false;
+    qint32 cntPlotDataBeforeLoad = plotData.count();
     line = 0;
     while(!dataTextStream.atEnd() && !isDataAnalyCanceled)
     {
@@ -1731,10 +1766,10 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
             }
         }
 
-        /* command already started, try to parse data */
+        /* {{{command already started, try to parse data */
         if(prevCmd.getData().count() > 0)              
         {
-            /* reset previous command */
+            /* reset previous command first*/
             plotData.push_back(prevCmd);   
             prevCmd.reset();
         }
@@ -1748,9 +1783,21 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
 
             return ICU_PLOT_DATA_FORMAT_ERROR; 
         }
+        /* }}} */
 
         if((NULL != analyProgressDialog) && (line%100 == 0))
             emit analyDataProgress(line);
+
+        /* delay 500ms to handle other event,preventing high cpu usage */
+        if(0 == (line % 2000))
+        {
+            QElapsedTimer timer;
+            timer.start();  
+            while(timer.elapsed() < 50)  
+            {
+                QCoreApplication::processEvents();  
+            }
+        }
     }
     /* no more new command found when at file end, save the current data */
     if(cmd.getData().count() > 0)     
@@ -1854,6 +1901,19 @@ QList <IcvCommand>* IcvICurve::getPlotData()
     return &plotData;
 }
 
+
+#if 0
+void IcvICurve::updatePlotProgressBar(qint32 progress)
+{
+    if(analyProgressDialog != NULL)
+    {
+        analyProgressDialog->setValue(progress);
+        analyProgressDialog->setLabelText(QString("%1/%2").arg(progress).arg(analyProgressDialog->maximum()));
+        analyProgressDialog->repaint();
+    }
+    return ;
+}
+#endif
 
 void IcvICurve::updateAnalyProgressBar(qint32 progress)
 {
