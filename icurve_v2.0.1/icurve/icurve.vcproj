@@ -168,6 +168,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\icv_about.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\icv_about.h"
 				>
 				<FileConfiguration
@@ -192,10 +196,6 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\icv_about.h"
-				>
 			</File>
 			<File
 				RelativePath=".\include\icv_axse_scale.h"

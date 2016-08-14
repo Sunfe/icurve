@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_axse_scale.ui'
 **
-** Created: Wed Aug 10 00:25:48 2016
+** Created: Sun Aug 14 09:34:36 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -42,16 +42,16 @@ public:
     {
         if (AxseScaleDialog->objectName().isEmpty())
             AxseScaleDialog->setObjectName(QString::fromUtf8("AxseScaleDialog"));
-        AxseScaleDialog->resize(235, 202);
+        AxseScaleDialog->resize(237, 180);
         AxseScaleDialog->setFocusPolicy(Qt::TabFocus);
         buttonBox = new QDialogButtonBox(AxseScaleDialog);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(63, 165, 161, 32));
+        buttonBox->setGeometry(QRect(63, 140, 161, 40));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         groupBox = new QGroupBox(AxseScaleDialog);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(13, 10, 211, 71));
+        groupBox->setGeometry(QRect(13, 10, 211, 61));
         lineEditMinX = new QLineEdit(groupBox);
         lineEditMinX->setObjectName(QString::fromUtf8("lineEditMinX"));
         lineEditMinX->setGeometry(QRect(11, 33, 70, 20));
@@ -66,7 +66,7 @@ public:
         label->setGeometry(QRect(12, 14, 41, 20));
         groupBox_2 = new QGroupBox(AxseScaleDialog);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(13, 90, 211, 71));
+        groupBox_2->setGeometry(QRect(13, 70, 211, 71));
         groupBox_2->setFocusPolicy(Qt::NoFocus);
         lineEditMaxY = new QLineEdit(groupBox_2);
         lineEditMaxY->setObjectName(QString::fromUtf8("lineEditMaxY"));

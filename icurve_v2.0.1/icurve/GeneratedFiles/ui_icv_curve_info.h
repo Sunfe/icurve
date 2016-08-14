@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icv_curve_info.ui'
 **
-** Created: Wed Aug 10 00:25:49 2016
+** Created: Sun Aug 14 09:34:36 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -18,9 +18,9 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
-#include <QtGui/QFrame>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QPlainTextEdit>
 
 QT_BEGIN_NAMESPACE
@@ -32,52 +32,59 @@ public:
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
-    QFrame *line;
-    QFrame *line_2;
-    QPlainTextEdit *plainEditFileBriefInfo;
     QComboBox *comboBoxCurveTitle;
     QPlainTextEdit *plainTextEditFilePos;
+    QLabel *label_4;
+    QLineEdit *lineEditPromt;
+    QLabel *label_5;
+    QLineEdit *lineEditGroupSize;
+    QLineEdit *plainEditFileBriefInfo;
 
     void setupUi(QDialog *IcvCurveInfo)
     {
         if (IcvCurveInfo->objectName().isEmpty())
             IcvCurveInfo->setObjectName(QString::fromUtf8("IcvCurveInfo"));
-        IcvCurveInfo->resize(468, 327);
+        IcvCurveInfo->resize(471, 306);
         IcvCurveInfo->setSizeGripEnabled(false);
         buttonBox = new QDialogButtonBox(IcvCurveInfo);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(370, 290, 81, 32));
+        buttonBox->setGeometry(QRect(370, 270, 81, 32));
         buttonBox->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Close);
         label = new QLabel(IcvCurveInfo);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(21, 15, 71, 21));
+        label->setGeometry(QRect(21, 17, 71, 21));
         label_2 = new QLabel(IcvCurveInfo);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(20, 53, 91, 21));
+        label_2->setGeometry(QRect(20, 164, 91, 21));
         label_3 = new QLabel(IcvCurveInfo);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(20, 150, 81, 31));
-        line = new QFrame(IcvCurveInfo);
-        line->setObjectName(QString::fromUtf8("line"));
-        line->setGeometry(QRect(20, 40, 431, 16));
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-        line_2 = new QFrame(IcvCurveInfo);
-        line_2->setObjectName(QString::fromUtf8("line_2"));
-        line_2->setGeometry(QRect(20, 140, 431, 16));
-        line_2->setFrameShape(QFrame::HLine);
-        line_2->setFrameShadow(QFrame::Sunken);
-        plainEditFileBriefInfo = new QPlainTextEdit(IcvCurveInfo);
-        plainEditFileBriefInfo->setObjectName(QString::fromUtf8("plainEditFileBriefInfo"));
-        plainEditFileBriefInfo->setGeometry(QRect(110, 163, 341, 111));
+        label_3->setGeometry(QRect(20, 122, 81, 31));
         comboBoxCurveTitle = new QComboBox(IcvCurveInfo);
         comboBoxCurveTitle->setObjectName(QString::fromUtf8("comboBoxCurveTitle"));
-        comboBoxCurveTitle->setGeometry(QRect(110, 20, 191, 22));
+        comboBoxCurveTitle->setGeometry(QRect(110, 20, 201, 22));
         plainTextEditFilePos = new QPlainTextEdit(IcvCurveInfo);
         plainTextEditFilePos->setObjectName(QString::fromUtf8("plainTextEditFilePos"));
-        plainTextEditFilePos->setGeometry(QRect(110, 58, 341, 81));
+        plainTextEditFilePos->setGeometry(QRect(110, 170, 341, 91));
+        label_4 = new QLabel(IcvCurveInfo);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(20, 51, 81, 21));
+        lineEditPromt = new QLineEdit(IcvCurveInfo);
+        lineEditPromt->setObjectName(QString::fromUtf8("lineEditPromt"));
+        lineEditPromt->setGeometry(QRect(110, 53, 201, 20));
+        lineEditPromt->setReadOnly(true);
+        label_5 = new QLabel(IcvCurveInfo);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setGeometry(QRect(20, 88, 71, 20));
+        lineEditGroupSize = new QLineEdit(IcvCurveInfo);
+        lineEditGroupSize->setObjectName(QString::fromUtf8("lineEditGroupSize"));
+        lineEditGroupSize->setGeometry(QRect(110, 90, 201, 20));
+        lineEditGroupSize->setReadOnly(true);
+        plainEditFileBriefInfo = new QLineEdit(IcvCurveInfo);
+        plainEditFileBriefInfo->setObjectName(QString::fromUtf8("plainEditFileBriefInfo"));
+        plainEditFileBriefInfo->setGeometry(QRect(110, 130, 341, 20));
+        plainEditFileBriefInfo->setReadOnly(true);
 
         retranslateUi(IcvCurveInfo);
         QObject::connect(buttonBox, SIGNAL(accepted()), IcvCurveInfo, SLOT(accept()));
@@ -92,6 +99,8 @@ public:
         label->setText(QApplication::translate("IcvCurveInfo", "Curve Name:", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("IcvCurveInfo", "File position:", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("IcvCurveInfo", "Command info:", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("IcvCurveInfo", "Promt:", 0, QApplication::UnicodeUTF8));
+        label_5->setText(QApplication::translate("IcvCurveInfo", "Group Size:", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

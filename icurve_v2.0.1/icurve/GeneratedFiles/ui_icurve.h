@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Wed Aug 10 00:25:47 2016
+** Created: Sun Aug 14 09:34:34 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -100,7 +100,7 @@ public:
     {
         if (icurveClass->objectName().isEmpty())
             icurveClass->setObjectName(QString::fromUtf8("icurveClass"));
-        icurveClass->resize(750, 450);
+        icurveClass->resize(655, 79);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/icurve/images/icurve.ico"), QSize(), QIcon::Normal, QIcon::Off);
         icurveClass->setWindowIcon(icon);
@@ -300,7 +300,7 @@ public:
         icurveClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(icurveClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 750, 23));
+        menuBar->setGeometry(QRect(0, 0, 655, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -326,6 +326,7 @@ public:
         mainToolBar = new QToolBar(icurveClass);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
         mainToolBar->setEnabled(true);
+        mainToolBar->setMaximumSize(QSize(850, 24));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);

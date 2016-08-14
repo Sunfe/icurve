@@ -1752,10 +1752,10 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
             cmd.setFileName(file.fileName());
             /* set cmd matched state */
             cmd.setState(CMD_TITLE_MATCHED);
-
-            continue;
         }
-
+        
+        /* some case like: >rfc getqln 0 0  Line  3 DS QLN (dBm/Hz, grouped by 8 tones),
+           so continue to parsing the left characters in the same line */
         if(CMD_GROUPSIZE_MATCHED != cmd.getState() || CMD_PLOTDATA_MATCHED != cmd.getState())
         {
             /* math groupsize, if found, loop continue */
