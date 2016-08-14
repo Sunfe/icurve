@@ -252,6 +252,10 @@ void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
         return;
     }
 
+    qint16 maxCnt = crv.count();
+    QProgressDialog *progress =  retrieveParent()->createIcvProgressDiag(canvas->plot(), 0, maxCnt, 
+        "progress", "deleting...", QSize(300,100), true);
+    progress->show();
     for(qint16 cnt = 0; cnt < crv.count(); cnt++)
     {
         QwtPlotCurve *qwtCurve = crv[cnt]->getCurve();
@@ -278,7 +282,13 @@ void IcvPlotCanvas::deleteCurve(QList<IcvPlotCurve *> crv)
         /*update selected curve state*/
         curSelectedCurve.removeAll(crv[cnt]);
         prevSelectedCurve.removeAll(crv[cnt]);
+
+        progress->setValue(cnt);
+        if(0 == cnt %50)
+            retrieveParent()->taskDelay(50);
     }
+    delete progress;
+
     return;
 }
 
@@ -288,6 +298,11 @@ void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
     if(0 == crv.count())
         return ;
 
+    qint16 maxCnt = crv.count();
+    QProgressDialog *progress =  retrieveParent()->createIcvProgressDiag(canvas->plot(), 0, maxCnt, 
+        "progress", "removing...", QSize(300,100), true);
+    progress->show();
+
     for(qint16 cnt = 0; cnt < crv.count(); cnt++)
     {
         /*remove curve from canvas*/
@@ -295,7 +310,13 @@ void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
         /*update selected curve state*/
         curSelectedCurve.removeAll(crv[cnt]);
         prevSelectedCurve.removeAll(crv[cnt]);
+
+        progress->setValue(cnt);
+        if(0 == cnt %50)
+            retrieveParent()->taskDelay(50);
     }
+    delete progress;
+
     return;
 }
 
@@ -305,10 +326,19 @@ void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
     if(0 == crv.count())
         return;
 
-    for(qint16 cnt = 0; cnt < crv.count(); cnt++)
+    qint16 maxCnt = crv.count();
+    QProgressDialog *progress =  retrieveParent()->createIcvProgressDiag(canvas->plot(), 0, maxCnt, 
+        "progress", "highlighting...", QSize(300,100), true);
+    progress->show();
+
+    for(qint16 cnt = 0; cnt < maxCnt; cnt++)
     {
         crv.at(cnt)->showMarkers();
         crv.at(cnt)->setActivateState(ICV_CURVE_ACTIVATED);
+        progress->setValue(cnt);
+
+        if(0 == cnt%50)
+            retrieveParent()->taskDelay(50);
     }
 
     if(NULL != canvas && canvas->plot() != NULL)
@@ -317,6 +347,8 @@ void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
         canvas->plot()->replot();
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
+
+    delete progress;
     return;
 }
 

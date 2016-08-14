@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'icurve.ui'
 **
-** Created: Sun Aug 14 09:34:34 2016
+** Created: Sun Aug 14 23:52:01 2016
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -100,7 +100,7 @@ public:
     {
         if (icurveClass->objectName().isEmpty())
             icurveClass->setObjectName(QString::fromUtf8("icurveClass"));
-        icurveClass->resize(655, 79);
+        icurveClass->resize(655, 496);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/icurve/images/icurve.ico"), QSize(), QIcon::Normal, QIcon::Off);
         icurveClass->setWindowIcon(icon);
@@ -443,12 +443,12 @@ public:
         mainToolBar->addAction(actionTitle);
         mainToolBar->addAction(actionAxseScale);
         mainToolBar->addAction(actionLegend);
-        mainToolBar->addAction(actionShowAll);
-        mainToolBar->addAction(actionHide);
+        mainToolBar->addAction(actionExpand);
         mainToolBar->addAction(actionZoom);
         mainToolBar->addAction(actionHandMove);
-        mainToolBar->addAction(actionExpand);
         mainToolBar->addAction(actionInfo);
+        mainToolBar->addAction(actionHide);
+        mainToolBar->addAction(actionShowAll);
         mainToolBar->addAction(actionRefresh);
         mainToolBar->addAction(actionRemove);
         mainToolBar->addAction(actionDelete);

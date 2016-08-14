@@ -42,6 +42,21 @@ icurve
    - 加入对不同命令提示符的支持，如rfc,fast[done]
    - 加入对getaln，getrmcbitalloc数据格式的支持[done]
    - 优化数据匹配模式，加快数据解析速度[done]
+   - 加入多条件filter
+   - 坐标轴能实时调整
+   - 右键将delete变更给remove[v2.0.1][done]
+   - delete/remove如果没有选中，加入提示[v2.0.1][done]
+   - 大批量绘制曲线的时候给出进度条[done]
+   - 进度条显示可以以10为单位，减少信号发送的次数[done]
+   - 查找时，输入部分关键字如“psd”的时候没有效果
+   - 当曲线remove的时候indicator还会有显示。[done]
+   - 还存在curve name已经加粗，但实际没有选中的情况。复现：选中，remove,showall
+   - filter后后退到上一个状态
+   - 加入aln、gfast的数据格式
+   - filter加入端口list
+   - 数据格式的多样化，如：>rfc getsnr all >rfc getsnr 1:2 0 >rfc getsnr 1,2 0[done]
+   - filter,show all ,select all的时候加入进度条和sleep[done]
+   - toolbar图标设置为24x24[done]
 
 1. bugs
    - 多重filter后，再curve show all,会出现越界 [已解决]

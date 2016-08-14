@@ -60,6 +60,9 @@ public:
     QwtPlotMagnifier* getMagnifier();
     QwtPlotZoomer *getZoomer();
     bool isHandMoveChecked();
+    void taskDelay(qint32 mseconds);
+    QProgressDialog * createIcvProgressDiag(QWidget *parent, int rangeMin, int rangeMax, QString winTitle,
+        QString LabelText, QSize size, bool isModal);
     ~IcvICurve();
 
 protected:

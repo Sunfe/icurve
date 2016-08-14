@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>655</width>
-    <height>79</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>icurve</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icurve.qrc">
+   <iconset>
     <normaloff>:/icurve/images/icurve.ico</normaloff>:/icurve/images/icurve.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget"/>
@@ -290,12 +290,12 @@
    <addaction name="actionTitle"/>
    <addaction name="actionAxseScale"/>
    <addaction name="actionLegend"/>
-   <addaction name="actionShowAll"/>
-   <addaction name="actionHide"/>
+   <addaction name="actionExpand"/>
    <addaction name="actionZoom"/>
    <addaction name="actionHandMove"/>
-   <addaction name="actionExpand"/>
    <addaction name="actionInfo"/>
+   <addaction name="actionHide"/>
+   <addaction name="actionShowAll"/>
    <addaction name="actionRefresh"/>
    <addaction name="actionRemove"/>
    <addaction name="actionDelete"/>
@@ -303,7 +303,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/file_open.png</normaloff>:/icurve/images/file_open.png</iconset>
    </property>
    <property name="text">
@@ -320,7 +320,7 @@
   </action>
   <action name="actionSaveAs">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/save.png</normaloff>:/icurve/images/save.png</iconset>
    </property>
    <property name="text">
@@ -372,7 +372,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/remove.png</normaloff>:/icurve/images/remove.png</iconset>
    </property>
    <property name="text">
@@ -399,7 +399,7 @@
   </action>
   <action name="actionTitle">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/title.png</normaloff>:/icurve/images/title.png</iconset>
    </property>
    <property name="text">
@@ -421,7 +421,7 @@
   </action>
   <action name="actionColor">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/color.png</normaloff>:/icurve/images/color.png</iconset>
    </property>
    <property name="text">
@@ -430,7 +430,7 @@
   </action>
   <action name="actionWidth">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/line_width.png</normaloff>:/icurve/images/line_width.png</iconset>
    </property>
    <property name="text">
@@ -442,7 +442,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/legend.png</normaloff>:/icurve/images/legend.png</iconset>
    </property>
    <property name="text">
@@ -461,7 +461,7 @@
   </action>
   <action name="actionStyle">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/style.png</normaloff>:/icurve/images/style.png</iconset>
    </property>
    <property name="text">
@@ -470,7 +470,7 @@
   </action>
   <action name="actionMarker">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/marker.png</normaloff>:/icurve/images/marker.png</iconset>
    </property>
    <property name="text">
@@ -482,7 +482,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/filter.png</normaloff>:/icurve/images/filter.png</iconset>
    </property>
    <property name="text">
@@ -491,7 +491,7 @@
   </action>
   <action name="actionFind">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/find.png</normaloff>:/icurve/images/find.png</iconset>
    </property>
    <property name="text">
@@ -500,7 +500,7 @@
   </action>
   <action name="actionShowAll">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/show.png</normaloff>:/icurve/images/show.png</iconset>
    </property>
    <property name="text">
@@ -509,7 +509,7 @@
   </action>
   <action name="actionExpand">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/expand.png</normaloff>:/icurve/images/expand.png</iconset>
    </property>
    <property name="text">
@@ -558,7 +558,7 @@
   </action>
   <action name="actionDelete">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/delete.png</normaloff>:/icurve/images/delete.png</iconset>
    </property>
    <property name="text">
@@ -580,7 +580,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/zoom.png</normaloff>:/icurve/images/zoom.png</iconset>
    </property>
    <property name="text">
@@ -592,7 +592,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/indicator.png</normaloff>:/icurve/images/indicator.png</iconset>
    </property>
    <property name="text">
@@ -614,7 +614,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/info.png</normaloff>:/icurve/images/info.png</iconset>
    </property>
    <property name="text">
@@ -638,7 +638,7 @@
   </action>
   <action name="actionAxseScale">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/scale.png</normaloff>:/icurve/images/scale.png</iconset>
    </property>
    <property name="text">
@@ -670,7 +670,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/hand.png</normaloff>:/icurve/images/hand.png</iconset>
    </property>
    <property name="text">
@@ -684,7 +684,7 @@
   </action>
   <action name="actionHide">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/hide.png</normaloff>:/icurve/images/hide.png</iconset>
    </property>
    <property name="text">
@@ -703,7 +703,7 @@
   </action>
   <action name="actionRefresh">
    <property name="icon">
-    <iconset resource="icurve.qrc">
+    <iconset>
      <normaloff>:/icurve/images/refresh.png</normaloff>:/icurve/images/refresh.png</iconset>
    </property>
    <property name="text">

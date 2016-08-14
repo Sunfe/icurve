@@ -338,6 +338,7 @@ void IcvCurvePropertyDialog::setMarkerStyle(int indexSel)
     return;
 }
 
+
 void IcvCurvePropertyDialog::setMarkerBush()
 {
     QColor curColor = markerBrush.color();
@@ -375,5 +376,7 @@ bool IcvCurvePropertyDialog::eventFilter ( QObject * obj, QEvent * event )
     else
         return QDialog::eventFilter ( obj, event );
 }
+
+
 
 

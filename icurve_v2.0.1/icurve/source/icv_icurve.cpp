@@ -270,10 +270,6 @@ void IcvICurve::openFile()
 
     /* before loading new data, get data postion for a new file */
     qint16 posCurRepository = plotData.count();
-#if 0
- /* save file info */
-    fileInfo.setFile(fileNames[0]);
-#endif
     for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
     {
         /* parse and analyze file content */
@@ -283,11 +279,10 @@ void IcvICurve::openFile()
         setCurrentFile(fileNames[fileCnt]);
     }
 
-    QProgressDialog *plotProgressDialog = new QProgressDialog(plot);
-    plotProgressDialog->setModal(true);
-    plotProgressDialog->setRange(posCurRepository, plotData.count());
-    plotProgressDialog->setWindowTitle("plotting...");
-    plotProgressDialog->setFixedSize(300, 100);
+
+    QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
+    QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
+        "plotting progress", labelText, QSize(300,100), true);
     plotProgressDialog->show();
     /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
@@ -315,10 +310,13 @@ void IcvICurve::openFile()
         /* plotting progress */
         plotProgressDialog->setValue(pos + 1);
         plotProgressDialog->repaint();  
-    }
 
-    delete plotProgressDialog;
+        /* 50 curves plotted, delay 50ms to handle the other events */
+        if(0 == pos % 50)
+            taskDelay(50);
+    }
     plot->replot();
+    delete plotProgressDialog;
 
     return;
 }
@@ -375,7 +373,7 @@ void IcvICurve::openRecentFile()
 
 void IcvICurve::setCurrentFile(const QString &fileName)
 {
-    QSettings settings("tmp/history.ini",QSettings::IniFormat);;
+    QSettings settings("history.ini",QSettings::IniFormat);;
     QStringList files = settings.value("recentFileList").toStringList();
     files.removeAll(fileName);
     files.prepend(fileName);
@@ -438,7 +436,7 @@ void IcvICurve::insertXLabel()
     bool ok;
     QString origLabel = plot->axisTitle(QwtPlot::xBottom).text();
     QString      text = QInputDialog::getText(this, tr("Input"),
-        tr("X lable:"), QLineEdit::Normal, origLabel, &ok);
+        tr("X label:"), QLineEdit::Normal, origLabel, &ok);
     if (ok)
         plot->setAxisTitle(QwtPlot::xBottom,text);
     return;
@@ -450,7 +448,7 @@ void IcvICurve::insertYLabel()
     bool ok;
     QString origLabel = plot->axisTitle(QwtPlot::yLeft).text();
     QString      text = QInputDialog::getText(this, tr("Input"),
-        tr("Y lable:"), QLineEdit::Normal, origLabel, &ok);
+        tr("Y label:"), QLineEdit::Normal, origLabel, &ok);
     if (ok)
         plot->setAxisTitle(QwtPlot::yLeft,text);
     return ;
@@ -691,7 +689,7 @@ void IcvICurve::setCurveStyle()
     QDialog *curveStyleDlg = new QDialog(this);
 
     QLabel *titleLabel = new QLabel(curveStyleDlg);
-    titleLabel->setText("Select style:");
+    titleLabel->setText("style:");
 
     QComboBox *styleComboBox = new QComboBox(curveStyleDlg);
     styleComboBox->setObjectName("styleComboBox");
@@ -711,7 +709,6 @@ void IcvICurve::setCurveStyle()
     gridLayout->addWidget(titleLabel,0,0);  
     gridLayout->addWidget(styleComboBox,0,1);  
     gridLayout->addWidget(btnBox,1,1);  
-    gridLayout->setRowMinimumHeight(1,50);
 
     qint16 retcode = (qint16)curveStyleDlg->exec();
     if(QDialog::Accepted == retcode)
@@ -809,22 +806,6 @@ void IcvICurve::copyCurve()
     QVariant data;
 
     QList<QPointF> plotdata = plotData[0].getData();
-#if 0
-    data.setValue<QList<QPointF>>(plotdata);
-
-    QList<QPointF>  clipBoard2 = data.value<QList<QPointF>>();
-
-    bool isCanConvet = data.canConvert(QVariant::BitArray);
-
-    QByteArray byteStream = data.toByteArray();
-
-    QMimeData mime;
-
-    mime.setData("IcvClipBoard",byteStream);
-
-    QClipboard *board = QApplication::clipboard();
-    board->setMimeData(&mime);
-#endif
 
     return;
 }
@@ -856,7 +837,12 @@ void IcvICurve::filterCurve()
     qint16  filterType = filterDlg->getLookupType();
 
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QList<IcvPlotCurve *> curvesFound;
+    QList<IcvPlotCurve *> curvesFound;  
+
+    QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
+        "filter progress", "filtering...", QSize(300,100), true);
+    progress->show();
+
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -867,14 +853,11 @@ void IcvICurve::filterCurve()
         {
             QString completeComand = cmd.getName() + " " + QString::number(cmd.getLineId()) +
                 " " + QString::number(cmd.getDirection());
-            isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)?
-                true : false;
+            isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)? true : false;
         }
-
         else if (ICV_BY_COMANDNAME == filterType)
         {
-            isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)?
-                true : false;
+            isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
         }
         else if (ICV_BY_LINEID == filterType)
         {
@@ -884,17 +867,21 @@ void IcvICurve::filterCurve()
         else if (ICV_BY_DIRECTION == filterType)
         {
             QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
-            isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? 
-                true : false;
+            isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
         }
 
         if(true == isMatch)   
         {
             curvesFound.push_back(curves.at(cnt));
         }
+
+        progress->setValue(cnt);
+        /* every 50 curves processed, delay 50ms to handle the other events */
+        if(0 == cnt % 50)
+            taskDelay(50);
     } 
 
-    if(0 == curvesFound.count()) 
+    if(curvesFound.isEmpty()) 
     {
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
         return;
@@ -908,13 +895,20 @@ void IcvICurve::filterCurve()
         {
             targetCurves.removeAll(curvesFound.at(cntF));
         }
+
+        /* every 50 curves processed, delay 50ms to handle the other events */
+        if(0 == cnt % 50)
+            taskDelay(50);
     }
     plotCanvas->removeCurves(targetCurves);
 
     plot->updateLegend();
     plot->replot();
+
     /*clear memory*/
+    delete progress;
     delete filterDlg;
+
     return;
 }
 
@@ -1174,10 +1168,20 @@ void IcvICurve::showAllCurve()
         return ;
     }
 
-    for(qint16 pos = 0; pos < allCurves.count(); pos++)
+    qint16 maxCnt = allCurves.count();
+    QProgressDialog *progress = createIcvProgressDiag(plot, 0, maxCnt, "progress", "displaying", QSize(300,100), true);
+    progress->show();
+    for(qint16 pos = 0; pos < maxCnt; pos++)
+    {
         allCurves.at(pos)->showCurve();
+        progress->setValue(pos);
+        if( 0 == pos%50)
+            taskDelay(50);
 
+    }
     plot->replot();
+    delete progress;
+
     return;
 }
 
@@ -1240,10 +1244,10 @@ void IcvICurve::expandCurve()
 
     bool ok;
     int groupSize = QInputDialog::getInt(this, tr("Input"),tr("Group size:"), 
-                                         4, 1, 8, 2, &ok);
+                                         4, 1, 8, 1, &ok);
     if (!ok)
     {
-        QMessageBox::information(this,tr("Error"),tr("group size may not be correct."));
+        //QMessageBox::information(this,tr("Error"),tr("group size may not be correct."));
         return ;
     }
 
@@ -1639,8 +1643,8 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
     QFileInfo fileInfo(file);
     if(fileInfo.size() > ICV_MAX_ACCEPT_FILE_SIZE)
     {
-        QString warn = fileInfo.fileName() + " larger than 100M, rejected!";
-        QMessageBox::warning(this,"Warning",warn);
+        QString info = fileInfo.fileName() + " larger than 100M, rejected!";
+        QMessageBox::critical(this,"Error",info);
         return ICU_OK;
     }
 
@@ -1697,7 +1701,7 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         analyProgressDialog = new QProgressDialog(plot);
         analyProgressDialog->setModal(true);
         analyProgressDialog->setRange(0, totalLineNum);
-        analyProgressDialog->setWindowTitle("Analyzing " + fileInfo.fileName() + " ...");
+        analyProgressDialog->setWindowTitle("analyzing " + fileInfo.fileName() + " ...");
         /* display immediately */
         analyProgressDialog->setFixedSize(300, 100);
         analyProgressDialog->show();
@@ -1902,19 +1906,6 @@ QList <IcvCommand>* IcvICurve::getPlotData()
 }
 
 
-#if 0
-void IcvICurve::updatePlotProgressBar(qint32 progress)
-{
-    if(analyProgressDialog != NULL)
-    {
-        analyProgressDialog->setValue(progress);
-        analyProgressDialog->setLabelText(QString("%1/%2").arg(progress).arg(analyProgressDialog->maximum()));
-        analyProgressDialog->repaint();
-    }
-    return ;
-}
-#endif
-
 void IcvICurve::updateAnalyProgressBar(qint32 progress)
 {
     if(analyProgressDialog != NULL)
@@ -1936,7 +1927,7 @@ void IcvICurve::cancelAnalyProgressBar()
 
 void IcvICurve::updateRecentFileActions()
 {
-    QSettings settings("tmp/history.ini",QSettings::IniFormat);;
+    QSettings settings("history.ini",QSettings::IniFormat);;
     QStringList files = settings.value("recentFileList").toStringList();
     qint16 numRecentFiles = qMin(files.size(), (int)ICV_MAX_RECENT_FILE_NUM);
 
@@ -1953,6 +1944,33 @@ void IcvICurve::updateRecentFileActions()
     }
 
     return;
+}
+
+
+void IcvICurve::taskDelay(qint32 mseconds)
+{
+    QElapsedTimer timer;
+    timer.start();  
+    while(timer.elapsed() < mseconds)  
+    {
+        QCoreApplication::processEvents();  
+    }
+
+    return;
+}
+
+
+QProgressDialog * IcvICurve::createIcvProgressDiag(QWidget *parent, int rangeMin, int rangeMax,
+     QString winTitle, QString LabelText, QSize size, bool isModal)
+{
+    QProgressDialog *prgDiag = new QProgressDialog(parent);
+    prgDiag->setRange(rangeMin, rangeMax);
+    prgDiag->setWindowTitle(winTitle);
+    prgDiag->setLabelText(LabelText);
+    prgDiag->setFixedSize(size);
+    prgDiag->setModal(isModal);
+    
+    return prgDiag;
 }
 
 
