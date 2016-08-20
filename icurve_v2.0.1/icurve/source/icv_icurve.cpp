@@ -830,11 +830,44 @@ void IcvICurve::filterCurve()
 
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
+    qint16 width  = filterDlg->geometry().width();
+    qint16 height = filterDlg->geometry().height();
+    filterDlg->setFixedSize(width,height);
     if(filterDlg->exec() != QDialog::Accepted)
         return;
 
     QString    keyword = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
+    delete filterDlg;
+
+    /* parse keyword for lineId */
+    QStringList lineId;
+    if(keyword.contains(QRegExp("^[0-9]+$")))
+    {
+        lineId.push_back(keyword);
+    }
+    else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
+    {
+        lineId =  keyword.split(",");
+    }
+    else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
+    {
+
+        QStringList line = keyword.split(":");
+        if(line.count() < 2)
+            return;
+        bool ok = false;
+        qint16  lineStart = line.at(0).toInt(&ok);
+        qint16  lineEnd   = line.at(1).toInt(&ok);
+        for(qint16 i = lineStart; i < lineEnd; i++)
+        {
+            lineId.push_back(QString::number(i));
+        }
+    }
+    else if(keyword == "all")
+    {
+       lineId.push_back(keyword);
+    }
 
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
     QList<IcvPlotCurve *> curvesFound;  
@@ -843,6 +876,7 @@ void IcvICurve::filterCurve()
         "filter progress", "filtering...", QSize(300,100), true);
     progress->show();
 
+    qint16 foundCnt = 0;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -861,8 +895,10 @@ void IcvICurve::filterCurve()
         }
         else if (ICV_BY_LINEID == filterType)
         {
-            QString strLineId = QString::number(cmd.getLineId());
-            isMatch = (keyword == strLineId) ? true : false;
+            if(lineId.count("all"))
+                isMatch = true;
+            else
+                isMatch = (0 != lineId.count(QString::number(cmd.getLineId())))? true : false;
         }
         else if (ICV_BY_DIRECTION == filterType)
         {
@@ -870,9 +906,10 @@ void IcvICurve::filterCurve()
             isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
         }
 
-        if(true == isMatch)   
+        if(true != isMatch)   
         {
-            curvesFound.push_back(curves.at(cnt));
+             curves.at(cnt)->removeCurve();
+             foundCnt++;
         }
 
         progress->setValue(cnt);
@@ -880,34 +917,18 @@ void IcvICurve::filterCurve()
         if(0 == cnt % 50)
             taskDelay(50);
     } 
+    /*clear memory*/
+    delete progress;
 
-    if(curvesFound.isEmpty()) 
+
+    if(0 == foundCnt) 
     {
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
         return;
     }
 
-    /* remove the curves from list of deletion*/
-    QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
-    for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
-    {
-        for(qint16 cntF = 0; cntF < curvesFound.count(); cntF++)
-        {
-            targetCurves.removeAll(curvesFound.at(cntF));
-        }
-
-        /* every 50 curves processed, delay 50ms to handle the other events */
-        if(0 == cnt % 50)
-            taskDelay(50);
-    }
-    plotCanvas->removeCurves(targetCurves);
-
     plot->updateLegend();
     plot->replot();
-
-    /*clear memory*/
-    delete progress;
-    delete filterDlg;
 
     return;
 }
@@ -916,7 +937,6 @@ void IcvICurve::filterCurve()
 void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
 {
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QList<IcvPlotCurve *> curvesFound;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -948,28 +968,15 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
                 true : false;
         }
 
-        if(true == isMatch)   
+        if(isMatch)   
         {
-            curvesFound.push_back(curves.at(cnt));
+            curves.at(cnt)->removeCurve();;
         }
+
+        /* every 50 curves processed, delay 50ms to handle the other events */
+        if(0 == cnt % 50)
+            taskDelay(50);
     } 
-
-    /* retrieve the bak of all curve list */
-    QList<IcvPlotCurve*> targetCurves = plotCanvas->getCurves();
-    for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
-    {
-        for(qint16 cntF = 0; cntF < curvesFound.count(); cntF++)
-        {
-            targetCurves.removeAll(curvesFound.at(cntF));
-        }
-    }
-
-    /* process the left curves */
-    for(qint16 cnt = 0; cnt < targetCurves.count(); cnt++)
-    {
-        QwtPlotCurve *curve = targetCurves.at(cnt)->getCurve();
-        curve->hide();
-    }
 
     plot->replot();
     return;
@@ -1040,10 +1047,14 @@ void IcvICurve::findCurve()
                 true : false;
         }
 
-        if(true == isMatch)   
+        if(isMatch)   
         {
-            curvesFound.push_back(curves.at(cnt));
+            curves.at(cnt)->removeCurve();;
         }
+
+        /* every 50 curves processed, delay 50ms to handle the other events */
+        if(0 == cnt % 50)
+            taskDelay(50);
     } 
 
     plotCanvas->highlightCurve(curvesFound);
@@ -1169,7 +1180,7 @@ void IcvICurve::showAllCurve()
     }
 
     qint16 maxCnt = allCurves.count();
-    QProgressDialog *progress = createIcvProgressDiag(plot, 0, maxCnt, "progress", "displaying", QSize(300,100), true);
+    QProgressDialog *progress = createIcvProgressDiag(plot, 0, maxCnt, "progress", "displaying...", QSize(300,100), true);
     progress->show();
     for(qint16 pos = 0; pos < maxCnt; pos++)
     {
@@ -1850,11 +1861,9 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
     /* begin to parse data */
     QStringList splitList;
     splitList = dataLine.split(QRegExp("\\s+|\\,"),QString::SkipEmptyParts);
-    qint16 n = splitList.count();
     /* filter some type of date like: 11, -11, -11.1 */
     QStringList digList;
     digList = splitList.filter(QRegExp("^\\d+$|^\\d+\\.\\d+$|^-\\d+\\.\\d+$"));
-    qint16 n2 = digList.count();
     if(digList.isEmpty())
         return ICU_OK;
 
