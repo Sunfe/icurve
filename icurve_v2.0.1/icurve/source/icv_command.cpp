@@ -228,7 +228,7 @@ QString IcvCommand::getDataPattern()
         }
         else
         {
-            pattern = "\\s+\\d{1,5}\\s+:(\\s+-{,1}\\d{1,}.\\d+){1,10}$";
+            pattern = "\\s+\\d{1,5}\\s+:(\\s+-{,1}\\d{1,}\\.\\d+\\s?){1,10}$";
         }
     }
 
