@@ -10,11 +10,6 @@ IcvCommand::IcvCommand(void)
 }
 
 
-IcvCommand::~IcvCommand()
-{
-}
-
-
 IcvCommand::IcvCommand(QString cmd)
 {
     initFamily();
@@ -35,6 +30,12 @@ IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
     lineId    = line;
     direction = dir;
     state     = CMD_CLOSED;
+}
+
+
+IcvCommand::~IcvCommand()
+{
+
 }
 
 
@@ -87,7 +88,7 @@ void IcvCommand::initTitlePattern()
         if(i < family.count() - 1)
             pattern += "|";
     }
-    pattern += ")\\s+([0-9]|1[0-9])\\s+([0-1])";
+    pattern += ")\\s+([0-9]|[1-9][0-9]+)\\s+([0-1])";
     titlePattern = pattern;
 
     return;
