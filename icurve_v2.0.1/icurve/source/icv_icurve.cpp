@@ -852,7 +852,6 @@ void IcvICurve::filterCurve()
     }
     else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
     {
-
         QStringList line = keyword.split(":");
         if(line.count() < 2)
             return;
@@ -864,14 +863,8 @@ void IcvICurve::filterCurve()
             lineId.push_back(QString::number(i));
         }
     }
-    else if(keyword == "all")
-    {
-       lineId.push_back(keyword);
-    }
-
+  
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QList<IcvPlotCurve *> curvesFound;  
-
     QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
         "filter progress", "filtering...", QSize(300,100), true);
     progress->show();
@@ -895,10 +888,7 @@ void IcvICurve::filterCurve()
         }
         else if (ICV_BY_LINEID == filterType)
         {
-            if(lineId.count("all"))
-                isMatch = true;
-            else
-                isMatch = (0 != lineId.count(QString::number(cmd.getLineId())))? true : false;
+            isMatch = (0 != lineId.count(QString::number(cmd.getLineId())))? true : false;
         }
         else if (ICV_BY_DIRECTION == filterType)
         {
@@ -920,7 +910,6 @@ void IcvICurve::filterCurve()
     /*clear memory*/
     delete progress;
 
-
     if(0 == foundCnt) 
     {
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
@@ -936,7 +925,38 @@ void IcvICurve::filterCurve()
 
 void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
 {
+    /* parse keyword for lineId */
+    QStringList lineId;
+    if(keyword.contains(QRegExp("^[0-9]+$")))
+    {
+        lineId.push_back(keyword);
+    }
+    else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
+    {
+        lineId =  keyword.split(",");
+    }
+    else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
+    {
+        QStringList line = keyword.split(":");
+        if(line.count() < 2)
+            return;
+        bool ok = false;
+        qint16  lineStart = line.at(0).toInt(&ok);
+        qint16  lineEnd   = line.at(1).toInt(&ok);
+        for(qint16 i = lineStart; i < lineEnd; i++)
+        {
+            lineId.push_back(QString::number(i));
+        }
+    }
+
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
+    QList<IcvPlotCurve *> curvesFound;  
+
+    QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
+        "filter progress", "filtering...", QSize(300,100), true);
+    progress->show();
+
+    qint16 foundCnt = 0;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -958,8 +978,7 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
         }
         else if (ICV_BY_LINEID == type)
         {
-            QString strLineId = QString::number(cmd.getLineId());
-            isMatch = (keyword == strLineId) ? true : false;
+            isMatch = (0 != lineId.count(QString::number(cmd.getLineId())))? true : false;
         }
         else if (ICV_BY_DIRECTION == type)
         {
@@ -968,16 +987,25 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
                 true : false;
         }
 
-        if(isMatch)   
+         if(true != isMatch)   
         {
             curves.at(cnt)->removeCurve();;
+            foundCnt++;
         }
 
         /* every 50 curves processed, delay 50ms to handle the other events */
         if(0 == cnt % 50)
             taskDelay(50);
     } 
+    /*clear memory*/
+    delete progress;
+    if(0 == foundCnt) 
+    {
+        QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
+        return;
+    }
 
+    plot->updateLegend();
     plot->replot();
     return;
 }
@@ -1008,14 +1036,47 @@ void IcvICurve::findCurve()
 
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Find curves");
+    qint16 width  = filterDlg->geometry().width();
+    qint16 height = filterDlg->geometry().height();
+    filterDlg->setFixedSize(width,height);
     if(filterDlg->exec() != QDialog::Accepted)
         return;
 
     QString    keyword = filterDlg->lineEdit->text();
     qint16  filterType = filterDlg->getLookupType();
+    delete filterDlg;
+    filterDlg = NULL;
+
+    /* parse keyword for lineId */
+    QStringList lineId;
+    if(keyword.contains(QRegExp("^[0-9]+$")))
+    {
+        lineId.push_back(keyword);
+    }
+    else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
+    {
+        lineId =  keyword.split(",");
+    }
+    else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
+    {
+        QStringList line = keyword.split(":");
+        if(line.count() < 2)
+            return;
+        bool ok = false;
+        qint16  lineStart = line.at(0).toInt(&ok);
+        qint16  lineEnd   = line.at(1).toInt(&ok);
+        for(qint16 i = lineStart; i <= lineEnd; i++)
+        {
+            lineId.push_back(QString::number(i));
+        }
+    }
 
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QList<IcvPlotCurve *> curvesFound;
+    QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
+        "progress", "searching...", QSize(300,100), true);
+    progress->show();
+    qint16 matchCnt = 0;
+    QList<IcvPlotCurve *> crvMatch;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -1037,8 +1098,7 @@ void IcvICurve::findCurve()
         }
         else if (ICV_BY_LINEID == filterType)
         {
-            QString strLineId = QString::number(cmd.getLineId());
-            isMatch = (keyword == strLineId) ? true : false;
+            isMatch = (0 != lineId.count(QString::number(cmd.getLineId())))? true : false;
         }
         else if (ICV_BY_DIRECTION == filterType)
         {
@@ -1049,21 +1109,28 @@ void IcvICurve::findCurve()
 
         if(isMatch)   
         {
-            curves.at(cnt)->removeCurve();;
+            crvMatch.push_back(curves.at(cnt));
+            matchCnt++;
         }
 
         /* every 50 curves processed, delay 50ms to handle the other events */
         if(0 == cnt % 50)
             taskDelay(50);
     } 
+    /*clear memory*/
+    delete progress;
 
-    plotCanvas->highlightCurve(curvesFound);
-    plotCanvas->setCurSelectCurves(curvesFound);
+    if(0 == matchCnt) 
+    {
+        QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
+        return;
+    }
+
+    plotCanvas->highlightCurve(crvMatch);
+    plotCanvas->setCurSelectCurves(crvMatch);
+    plot->updateLegend();
     plot->replot();
 
-    /*clear memory*/
-    delete filterDlg;
-    filterDlg = NULL;
     return;
 }
 

@@ -327,16 +327,10 @@ void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
         return;
 
     qint16 maxCnt = crv.count();
-    QProgressDialog *progress =  retrieveParent()->createIcvProgressDiag(canvas->plot(), 0, maxCnt, 
-        "progress", "highlighting...", QSize(300,100), true);
-    progress->show();
-
     for(qint16 cnt = 0; cnt < maxCnt; cnt++)
     {
         crv.at(cnt)->showMarkers();
         crv.at(cnt)->setActivateState(ICV_CURVE_ACTIVATED);
-        progress->setValue(cnt);
-
         if(0 == cnt%50)
             retrieveParent()->taskDelay(50);
     }
@@ -348,7 +342,6 @@ void IcvPlotCanvas::highlightCurve(QList<IcvPlotCurve *> crv)
         canvas->setPaintAttribute( QwtPlotCanvas::ImmediatePaint,false);
     }
 
-    delete progress;
     return;
 }
 

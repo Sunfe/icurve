@@ -64,7 +64,7 @@ void IcvCurveFilterDialog::prepareCommitAction()
     /*validation constraints*/
     if(radioLineId->isChecked())
     {
-        QRegExp constraint("^[0-9]+|^([0-9]+,){1,}[0-9]?|^[0-9]+:[0-9]+|all");   
+        QRegExp constraint("^[0-9]+|^([0-9]+,){1,}[0-9]?|^[0-9]+:[0-9]+");   
         lineEdit->setValidator(new QRegExpValidator(constraint, lineEdit)); 
     }
     else
