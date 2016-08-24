@@ -139,8 +139,7 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     /*}}}*/
 
 
-    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | \
-        QDialogButtonBox::Cancel);
+    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(btnBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(btnBox, SIGNAL(rejected()), this, SLOT(reject()));
 
@@ -150,27 +149,30 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
 
     QGridLayout *layout = new QGridLayout;
     /*name*/
-    layout->addWidget(nameLabel,0,0);
-    layout->addWidget(nameText,0,1);
+    layout->addWidget(nameLabel, 0, 0);
+    layout->addWidget(nameText, 0, 1);
     /*line*/
-    layout->addWidget(lineLabel,1,0);
-    layout->addWidget(lineTypeCombox,1,1);
-    layout->addWidget(curveWidthCombox,1,2);
-    layout->addWidget(btnLineColor,1,3);
+    layout->addWidget(lineLabel, 1, 0);
+    layout->addWidget(lineTypeCombox, 1, 1);
+    layout->addWidget(curveWidthCombox, 1, 2);
+    layout->addWidget(btnLineColor, 1, 3);
     /*marker*/
-    layout->addWidget(markerLabel,2,0);
-    layout->addWidget(markerTypeCombox,2,1);
-    layout->addWidget(markerSizeCombox,2,2);
-    layout->addWidget(btnMarkerBrush,2,3);
-    layout->addWidget(btnMarkerPen,2,4);
-    layout->addLayout(btnLayout,3,0,1,5);
+    layout->addWidget(markerLabel, 2, 0);
+    layout->addWidget(markerTypeCombox, 2, 1);
+    layout->addWidget(markerSizeCombox, 2, 2);
+    layout->addWidget(btnMarkerBrush, 2, 3);
+    layout->addWidget(btnMarkerPen, 2, 4);
+    /* buttons */
+    layout->addLayout(btnLayout, 3, 0, 1, 5);
 
     /*alignment*/
     layout->itemAtPosition(0,0)->setAlignment(Qt::AlignRight);
     layout->itemAtPosition(1,0)->setAlignment(Qt::AlignRight);
     layout->itemAtPosition(2,0)->setAlignment(Qt::AlignRight);
+    layout->itemAtPosition(3,0)->setAlignment(Qt::AlignRight);
     layout->setAlignment(Qt::AlignTop);
     setLayout(layout);
+
 }
 
 

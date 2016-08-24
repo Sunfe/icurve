@@ -11,6 +11,6 @@ public:
         Star
     };
 
-    IcvSymbol(Style = Arrow);
+    IcvSymbol(Style = Arrow,  QColor color = Qt::red);
     ~IcvSymbol(void);
 };

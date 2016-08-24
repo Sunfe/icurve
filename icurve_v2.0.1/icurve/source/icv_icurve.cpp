@@ -155,6 +155,8 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     ui.actionDelete->setShortcut(Qt::CTRL + Qt::Key_Delete);
     ui.actionRefresh->setShortcut(QKeySequence::Refresh);
     ui.actionExpand->setShortcut(Qt::CTRL + Qt::Key_G);
+    ui.actionInfo->setShortcut(Qt::CTRL + Qt::Key_I);
+    ui.actionCurveProperties->setShortcut(Qt::CTRL + Qt::Key_P);
 
     return ;
 }
@@ -574,7 +576,7 @@ void IcvICurve::insertIndicator()
             QwtPlotMarker *maxPosMarker = new QwtPlotMarker();
             maxPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
             maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-            maxPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
+            maxPosMarker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, Qt::red));
             maxPosMarker->setValue(maxSample);
             maxPosMarker->setLabel(QString("max(%1,%2)").arg(maxSample.rx()).arg(maxSample.ry()));
             maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
@@ -583,7 +585,7 @@ void IcvICurve::insertIndicator()
             QwtPlotMarker *minPosMarker = new QwtPlotMarker();
             minPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
             minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-            minPosMarker->setSymbol( new IcvSymbol(IcvSymbol::Arrow) );
+            minPosMarker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, Qt::red));
             minPosMarker->setValue(minSample);
             minPosMarker->setLabel( QString("min(%1,%2)").arg(minSample.rx()).arg(minSample.ry()));
             minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
@@ -1402,8 +1404,8 @@ void IcvICurve::setCurveProperties()
     }
 
     IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curve, this, Qt::Dialog);
-    propDiag->resize(400,150);
     propDiag->exec();
+
     return;
 }
 

@@ -5,15 +5,15 @@
 
 #include "icv_symbol.h"
 
-IcvSymbol::IcvSymbol(IcvSymbol::Style  styleType)
+IcvSymbol::IcvSymbol(IcvSymbol::Style styleType, QColor color)
 {
     if(styleType == IcvSymbol::Arrow)
     {
         QPen pen( Qt::black, 0 );
         pen.setJoinStyle( Qt::MiterJoin );
 
-        setPen( pen );
-        setBrush( Qt::red );
+        setPen(pen);
+        setBrush(color);
 
         QPainterPath path;
         path.moveTo( 0, 8 );

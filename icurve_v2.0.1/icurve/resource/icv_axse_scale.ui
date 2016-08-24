@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>180</height>
+    <width>260</width>
+    <height>190</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="focusPolicy">
    <enum>Qt::TabFocus</enum>
@@ -19,8 +25,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>63</x>
-     <y>140</y>
+     <x>46</x>
+     <y>145</y>
      <width>161</width>
      <height>40</height>
     </rect>
@@ -37,17 +43,17 @@
     <rect>
      <x>13</x>
      <y>10</y>
-     <width>211</width>
+     <width>221</width>
      <height>61</height>
     </rect>
    </property>
    <property name="title">
-    <string>X Range:</string>
+    <string>X :</string>
    </property>
    <widget class="QLineEdit" name="lineEditMinX">
     <property name="geometry">
      <rect>
-      <x>11</x>
+      <x>19</x>
       <y>33</y>
       <width>70</width>
       <height>20</height>
@@ -57,7 +63,7 @@
    <widget class="QLineEdit" name="lineEditMaxX">
     <property name="geometry">
      <rect>
-      <x>117</x>
+      <x>125</x>
       <y>33</y>
       <width>70</width>
       <height>20</height>
@@ -67,7 +73,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>119</x>
+      <x>127</x>
       <y>16</y>
       <width>41</width>
       <height>16</height>
@@ -80,7 +86,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>12</x>
+      <x>20</x>
       <y>14</y>
       <width>41</width>
       <height>20</height>
@@ -96,7 +102,7 @@
     <rect>
      <x>13</x>
      <y>70</y>
-     <width>211</width>
+     <width>221</width>
      <height>71</height>
     </rect>
    </property>
@@ -104,12 +110,12 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="title">
-    <string>Y Range:</string>
+    <string>Y :</string>
    </property>
    <widget class="QLineEdit" name="lineEditMaxY">
     <property name="geometry">
      <rect>
-      <x>117</x>
+      <x>125</x>
       <y>33</y>
       <width>70</width>
       <height>20</height>
@@ -119,7 +125,7 @@
    <widget class="QLineEdit" name="lineEditMinY">
     <property name="geometry">
      <rect>
-      <x>11</x>
+      <x>19</x>
       <y>33</y>
       <width>70</width>
       <height>20</height>
@@ -129,7 +135,7 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>128</x>
       <y>15</y>
       <width>41</width>
       <height>16</height>
@@ -142,7 +148,7 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>13</x>
+      <x>21</x>
       <y>14</y>
       <width>41</width>
       <height>20</height>
