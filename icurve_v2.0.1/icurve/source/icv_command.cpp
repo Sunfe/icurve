@@ -88,7 +88,7 @@ void IcvCommand::initTitlePattern()
         if(i < family.count() - 1)
             pattern += "|";
     }
-    pattern += ")\\s+([0-9]|[1-9][0-9]+)\\s+([0-1])";
+    pattern += ")\\s+([0-9]|[1-9][0-9]+)\\s+([0-1])?";
     titlePattern = pattern;
 
     return;
@@ -307,7 +307,7 @@ qint16 IcvCommand::getState()
 }
 
 
-QString IcvCommand::getCommandTitle()
+QString IcvCommand::getTitle()
 {
     QString lineIdStr = QString::number((int)lineId);
     QString    title  = name.remove("get") +".line " +  lineIdStr +\

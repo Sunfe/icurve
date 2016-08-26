@@ -15,7 +15,7 @@ QDialog(parent,flag)
     QStringList curveTitile;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
-        QString title = curves.at(cnt)->getCommand().getCommandTitle();
+        QString title = curves.at(cnt)->getCommand().getTitle();
         curveTitile.append(title);     
     }
     comboBoxCurveTitle->addItems(curveTitile);

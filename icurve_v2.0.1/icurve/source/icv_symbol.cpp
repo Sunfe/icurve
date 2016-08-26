@@ -9,7 +9,7 @@ IcvSymbol::IcvSymbol(IcvSymbol::Style styleType, QColor color)
 {
     if(styleType == IcvSymbol::Arrow)
     {
-        QPen pen( Qt::black, 0 );
+        QPen pen(color);
         pen.setJoinStyle( Qt::MiterJoin );
 
         setPen(pen);
@@ -17,14 +17,14 @@ IcvSymbol::IcvSymbol(IcvSymbol::Style styleType, QColor color)
 
         QPainterPath path;
         path.moveTo( 0, 8 );
-        path.lineTo( 0, 5 );
-        path.lineTo( -3, 5 );
+        path.lineTo( 0, 4 );
+        path.lineTo( -2, 4 );
         path.lineTo( 0, 0 );
-        path.lineTo( 3, 5 );
-        path.lineTo( 0, 5 );
+        path.lineTo( 2, 4 );
+        path.lineTo( 0, 4 );
 
         QTransform transform;
-        transform.rotate( -30.0 );
+        transform.rotate( 210.0 );
         path = transform.map( path );
 
         setPath( path );

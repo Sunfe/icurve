@@ -65,7 +65,7 @@ public:
     void setFileName(QString name);
     QString getFileName();
 
-    QString getCommandTitle();
+    QString getTitle();
 
 private:
     QString        name;

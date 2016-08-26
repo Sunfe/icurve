@@ -5,10 +5,11 @@
 #include <QString>
 #include "ui_icv_curve_filter.h"
 
-#define ICV_BY_COMPLETECOMAND 1
-#define ICV_BY_COMANDNAME     2
-#define ICV_BY_LINEID         3
-#define ICV_BY_DIRECTION      4
+#define ICV_BY_COMPLETECOMAND (1)
+#define ICV_BY_COMANDNAME     (2)
+#define ICV_BY_LINEID         (3)
+#define ICV_BY_DIRECTION      (4)
+#define ICV_BY_PROMT          (5)
 
 
 class IcvCurveFilterDialog : public QDialog, public Ui::IcvCurveFilterDialog

@@ -26,7 +26,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     lookupType = ICV_BY_COMANDNAME;
     /* legally accept command name*/
     keywords << "getTxPsd" << "getSnr" << "getQln" << "getHlog" << "getNoiseMargin" << "getBitAlloc"\
-        << "DS" << "US";
+        << "DS" << "US"<<"api"<<"rfc"<<"bcm"<<"fast";
 
     /* default actions */
     connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
@@ -60,6 +60,8 @@ void IcvCurveFilterDialog::prepareCommitAction()
         lookupType = ICV_BY_LINEID;
     else if(sender() == radioDirection)
         lookupType = ICV_BY_DIRECTION;
+    else if(sender() == radioPromt)
+        lookupType = ICV_BY_PROMT;
 
     /*validation constraints*/
     if(radioLineId->isChecked())
@@ -83,6 +85,10 @@ void IcvCurveFilterDialog::prepareCommitAction()
     else if(radioCompleteComand->isChecked())
     {
         wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"<<"getrmcbitalloc";
+    }
+    else if(radioPromt->isChecked())
+    {
+        wordList << "rfc" << "bcm" << "api" << "fast";
     }
 
     completer = new QCompleter(wordList);
@@ -148,13 +154,22 @@ void IcvCurveFilterDialog::accept()
             return;
         }
     }
-    else if(!radioLineId->isChecked())
+    else if(radioLineId->isChecked())
     {
-        if(!userInput.contains(QRegExp("[0-9]|([1-9]([0-9]{,2})",Qt::CaseInsensitive)))
+        if(!userInput.contains(QRegExp("[0-9]|([1-9][0-9]+)",Qt::CaseInsensitive)))
         {
-            emit warningSignal("direction invalid!");
+            emit warningSignal("lineid invalid!");
             lineEdit->setFocus();
             return;   
+        }
+    }
+    else if(radioPromt->isChecked())
+    {
+        if(!userInput.contains(QRegExp("rfc|bcm|api|fast",Qt::CaseInsensitive)))
+        {
+            emit warningSignal("promt invalid!");
+            lineEdit->setFocus();
+            return;
         }
     }
 
@@ -196,6 +211,29 @@ void IcvCurveFilterDialog::accept()
             }
         }
     }
+    else if(radioPromt->isChecked())
+    {
+        QRegExp expr("rfc|api|bcm|fast");
+        if(lineEdit->text().contains(expr))
+        {
+            QString word = expr.cap(0);
+            QStringList keywordList = keywords.filter(word, Qt::CaseInsensitive);
+            if(keywordList.count() == 0)
+                return;
+
+            keyword = keywordList[0];
+            if(lineEdit->text().length() > word.length())
+            {
+                QMessageBox msgBox(this);
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setText("A fuzzy matching: " + word + " is detected,you want continue?");
+                qint16 retcode = msgBox.exec();
+                if(QDialog::Rejected == retcode)
+                    return;
+            }
+        }
+    }
+
     if(previewCheckBox->checkState() == Qt::Checked )
     {
         emit previewSignal(lookupType, lineEdit->text());

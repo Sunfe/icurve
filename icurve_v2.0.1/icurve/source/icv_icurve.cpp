@@ -296,7 +296,7 @@ void IcvICurve::openFile()
         QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
                                           QPen(Qt::red, 2), QSize(2, 2));
         qwtCurve->setSymbol(symbol);
-        qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
+        qwtCurve->setTitle(plotData.value(pos).getTitle());
         qwtCurve->setStyle(QwtPlotCurve::Lines);
         qwtCurve->attach(plot);
 
@@ -352,7 +352,7 @@ void IcvICurve::openRecentFile()
                                           QPen(Qt::red, 2),
                                           QSize(2, 2));
         qwtCurve->setSymbol(symbol);
-        qwtCurve->setTitle(plotData.value(pos).getCommandTitle());
+        qwtCurve->setTitle(plotData.value(pos).getTitle());
         qwtCurve->setStyle(QwtPlotCurve::Lines);
         qwtCurve->attach(plot);
 
@@ -547,55 +547,32 @@ void IcvICurve::insertIndicator()
                 continue;
 
             /* if not indicator attached to the curve, create and attach*/
-            QPointF maxSample;
-            QPointF minSample;
-            QPointF sample;
-
-            maxSample.setX(0);
-            maxSample.setY(0);
-
-            minSample.setX(0xff);
-            minSample.setY(0xff);
+            QwtPlotCurve *qwtCurve = allCurves.at(cnt)->getCurve();
+            QPointF pos;
             for(qint16 posX = 0; posX < allCurves.at(cnt)->getCurve()->dataSize(); posX++)
             {
-                sample = allCurves.at(cnt)->getCurve()->sample(posX);
-                if(sample.ry() >  maxSample.ry())
+                if(qwtCurve->maxYValue() == qwtCurve->sample(posX).ry())
                 {
-                    maxSample.setX(posX);
-                    maxSample.setY(sample.ry());
-                }
-
-                if(sample.ry()!= 0 && sample.ry() < minSample.ry())
-                {
-                    minSample.setX(posX);
-                    minSample.setY(sample.ry());
+                    pos.setX(posX);
+                    pos.setY(qwtCurve->maxYValue());
+                    break;   
                 }
             }
 
-            QString name = allCurves.at(cnt)->getCommand().getCommandTitle();
-            QwtPlotMarker *maxPosMarker = new QwtPlotMarker();
-            maxPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
-            maxPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-            maxPosMarker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, Qt::red));
-            maxPosMarker->setValue(maxSample);
-            maxPosMarker->setLabel(QString("max(%1,%2)").arg(maxSample.rx()).arg(maxSample.ry()));
-            maxPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-            maxPosMarker->attach(plot);
-
-            QwtPlotMarker *minPosMarker = new QwtPlotMarker();
-            minPosMarker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
-            minPosMarker->setItemAttribute( QwtPlotItem::Legend, false );
-            minPosMarker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, Qt::red));
-            minPosMarker->setValue(minSample);
-            minPosMarker->setLabel( QString("min(%1,%2)").arg(minSample.rx()).arg(minSample.ry()));
-            minPosMarker->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-            minPosMarker->attach(plot);
+            QString promt = allCurves.at(cnt)->getCommand().getPromt();
+            QString title = allCurves.at(cnt)->getCommand().getTitle();
+            QwtPlotMarker *marker = new QwtPlotMarker();
+            marker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
+            marker->setItemAttribute( QwtPlotItem::Legend, false );
+            marker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, qwtCurve->pen().color()));
+            marker->setValue(pos);
+            marker->setLabel(promt + "." + title);
+            marker->setLabelAlignment( Qt::AlignRight | Qt::AlignTop);
+            marker->attach(plot);
 
             QList<QwtPlotMarker *>markers;
-            markers.append(maxPosMarker);
-            markers.append(minPosMarker);
+            markers.append(marker);
             allCurves.at(cnt)->setIndicator(markers);
-
             ui.actionIndicator->setChecked(true);
         }
     }
@@ -896,6 +873,10 @@ void IcvICurve::filterCurve()
         {
             QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
             isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
+        }
+        else if (ICV_BY_PROMT == filterType)
+        {
+            isMatch = (cmd.getPromt().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
         }
 
         if(true != isMatch)   
@@ -1789,6 +1770,8 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
+    cmd.reset();
+    prevCmd.reset();
     dataTextStream.seek(0);
     isDataAnalyCanceled = false;
     qint32 cntPlotDataBeforeLoad = plotData.count();
@@ -1804,6 +1787,7 @@ ICU_RET_STATUS IcvICurve::analyzeData(QFile &file)
         QString direction("NULL");
 
         QRegExp cmdRegExp;
+        QString str = cmd.getTitlePattern();
         cmdRegExp.setPattern(cmd.getTitlePattern());
         cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
         bool isMatch = dataLine.contains(cmdRegExp);
