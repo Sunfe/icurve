@@ -281,7 +281,6 @@ void IcvICurve::openFile()
         setCurrentFile(fileNames[fileCnt]);
     }
 
-
     QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
     QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
         "plotting progress", labelText, QSize(300,100), true);
@@ -340,6 +339,10 @@ void IcvICurve::openRecentFile()
     if(ICU_OK != loadData(fileName))
         return;
 
+    QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
+    QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
+        "plotting progress", labelText, QSize(300,100), true);
+    plotProgressDialog->show();
     /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {
@@ -364,11 +367,20 @@ void IcvICurve::openRecentFile()
         plotCurve->setAttachedState(true);
         /* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
+
+        /* plotting progress */
+        plotProgressDialog->setValue(pos + 1);
+        plotProgressDialog->repaint();  
+        /* 50 curves plotted, delay 50ms to handle the other events */
+        if(0 == pos % 50)
+            taskDelay(50);
     }
     /* append file to recent file list */
     setCurrentFile(fileName);
 
     plot->replot();
+    delete plotProgressDialog;
+
     return;
 }
 
