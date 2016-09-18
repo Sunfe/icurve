@@ -123,6 +123,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     /* others */
     connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
+
 }
 
 
@@ -279,15 +280,7 @@ void IcvICurve::openFile()
         /* append file to recent file list */
         setCurrentFile(fileNames[fileCnt]);
     }
-
-    QFile file("data\\1.txt");
-    QTextStream out(&file); 
-    //方式：Append为追加，WriteOnly，ReadOnly  
-    if (!file.open(QIODevice::WriteOnly|QIODevice::Text)) {    
-        QMessageBox::critical(NULL, "error", "canot create file");  
-        return;    
-    }  
-
+  
     QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
     QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
         "plotting progress", labelText, QSize(300,100), true);
@@ -295,12 +288,6 @@ void IcvICurve::openFile()
     /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {           
-        for(qint16 i = 0; i < plotData[pos].getData().size(); i++)
-        {
-            out<<" "<< plotData[pos].getData().at(i).x()<< ","<<plotData[pos].getData().at(i).y();    
-        }
-        out <<endl;
-
         QwtPlotCurve *qwtCurve = new QwtPlotCurve();
         qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
         qwtCurve->setSamples(plotData[pos].getData().toVector());
@@ -331,8 +318,7 @@ void IcvICurve::openFile()
     }
     plot->replot();
     delete plotProgressDialog;
-    out.flush(); 
-    file.close();   
+
     return;
 }
 
