@@ -123,7 +123,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     /* others */
     connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
-
+    //setStyleSheet("QMainWindow{image: url(bg.jpg)}");
 }
 
 
@@ -138,9 +138,9 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     self->setWindowTitle("iCurve");
     self->setContentsMargins(0,0,0,0);
 
-    QPalette mainWinPalette;
-    mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
-    self->setPalette(mainWinPalette);
+    // QPalette mainWinPalette;
+    //mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
+    //self->setPalette(mainWinPalette);
     QDesktopWidget* desktop = QApplication::desktop();
     move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
 
@@ -198,7 +198,6 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
 
     /* panner */
     panner = new QwtPlotPanner(plot->canvas());
-    //panner->setMouseButton( Qt::MidButton );
     panner->setEnabled(true);
 
     /* picker */
