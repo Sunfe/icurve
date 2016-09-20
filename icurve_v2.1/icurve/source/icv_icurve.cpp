@@ -1316,7 +1316,7 @@ void IcvICurve::expandCurve()
 
     bool ok;
     int groupSize = QInputDialog::getInt(this, tr("Input"),tr("Group size:"), 
-                                         4, 1, 8, 1, &ok);
+                                         4, 1, 32, 2, &ok);
     if (!ok)
     {
         //QMessageBox::information(this,tr("Error"),tr("group size may not be correct."));

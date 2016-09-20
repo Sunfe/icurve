@@ -185,7 +185,7 @@ QString IcvCommand::getTitlePattern()
 
 bool IcvCommand::matchGroupSize(QString dataLine)
 {
-    QString pattern="grouped by ([1-9]) tones";
+    QString pattern="grouped by ([1-9]+) tones";
     QRegExp cmdRegExp;
     cmdRegExp.setPattern(pattern);
     cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);

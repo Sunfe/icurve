@@ -708,12 +708,16 @@ void IcvPlotCanvas::createCurvePopMenuAction()
 
     /*{{{set curve group size, to expand curve*/
     QList< QPair<QString,int> > groupSize;
-    groupSize.append(qMakePair(tr("1"), 1));
-    groupSize.append(qMakePair(tr("2"), 2));
-    groupSize.append(qMakePair(tr("4"), 4));
-    groupSize.append(qMakePair(tr("6"), 6));
-    groupSize.append(qMakePair(tr("8"), 8));
-    groupSize.append(qMakePair(tr("10"),10));
+    groupSize.append(qMakePair(tr("1"),  1));
+    groupSize.append(qMakePair(tr("2"),  2));
+    groupSize.append(qMakePair(tr("4"),  4));
+    groupSize.append(qMakePair(tr("6"),  6));
+    groupSize.append(qMakePair(tr("8"),  8));
+    groupSize.append(qMakePair(tr("10"), 10));
+    groupSize.append(qMakePair(tr("12"), 12));
+    groupSize.append(qMakePair(tr("14"), 14));
+    groupSize.append(qMakePair(tr("16"), 16));
+
 
     groupSizeActGrp = new QActionGroup(parent);
     QList <QPair<QString,int> >::iterator gsize;
