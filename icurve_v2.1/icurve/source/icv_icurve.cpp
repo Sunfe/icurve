@@ -138,9 +138,17 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     self->setWindowTitle("iCurve");
     self->setContentsMargins(0,0,0,0);
 
-    // QPalette mainWinPalette;
-    //mainWinPalette.setColor(QPalette::Background,Qt::lightGray);
-    //self->setPalette(mainWinPalette);
+    QString path = "resource/skin.css";
+    QFile fCss(path);  
+    if(!fCss.open(QFile::ReadOnly))
+    {  
+        qDebug("css File %s load false",path);
+        return;  
+    }  
+    QString cssContent(fCss.readAll());
+    self->setStyleSheet(cssContent);
+    fCss.close();  
+
     QDesktopWidget* desktop = QApplication::desktop();
     move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
 
