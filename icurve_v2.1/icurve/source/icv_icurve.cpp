@@ -35,6 +35,7 @@
 #include "icv_curve_info.h"
 #include "icv_axse_scale.h"
 #include "icv_about.h"
+#include "icv_skin.h"
 
 
 /*including tone index at head of the line*/
@@ -138,16 +139,8 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     self->setWindowTitle("iCurve");
     self->setContentsMargins(0,0,0,0);
 
-    QString path = "resource/skin.css";
-    QFile fCss(path);  
-    if(!fCss.open(QFile::ReadOnly))
-    {  
-        qDebug("css File %s load false",path);
-        return;  
-    }  
-    QString cssContent(fCss.readAll());
-    self->setStyleSheet(cssContent);
-    fCss.close();  
+    IcvSkin skin;
+    self->setStyleSheet(skin.GetSkinCss());
 
     QDesktopWidget* desktop = QApplication::desktop();
     move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
@@ -1733,7 +1726,7 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
     QFileInfo fileInfo(file);
     if(fileInfo.size() > ICV_MAX_ACCEPT_FILE_SIZE)
     {
-        QString info = fileInfo.fileName() + " larger than 200M, rejected!";
+        QString info = fileInfo.fileName() + " larger than 300M, rejected!";
         QMessageBox::critical(this,"Error",info);
         return ICU_OK;
     }
