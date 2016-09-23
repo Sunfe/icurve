@@ -51,6 +51,7 @@ public:
     void createExtraActions();
     void createExtraMenus();
     void setCurrentFile(const QString &fileName);
+    void loadFile(QStringList fileNames);
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeFile(QFile &file);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
@@ -68,6 +69,8 @@ public:
 protected:
     void paintEvent ( QPaintEvent * event );
     virtual void mouseMoveEvent ( QMouseEvent * event );
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     Ui::icurveClass ui;

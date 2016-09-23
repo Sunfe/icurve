@@ -159,6 +159,7 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     ui.actionInfo->setShortcut(Qt::CTRL + Qt::Key_I);
     ui.actionCurveProperties->setShortcut(Qt::CTRL + Qt::Key_P);
 
+    setAcceptDrops(true);
     return ;
 }
 
@@ -270,55 +271,7 @@ void IcvICurve::openFile()
         return; 
     }
 
-    /* before loading new data, get data postion for a new file */
-    qint16 posCurRepository = plotData.count();
-    for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
-    {
-        /* parse and analyze file content */
-        if(ICU_OK != loadData(fileNames[fileCnt]))
-            continue;
-        /* append file to recent file list */
-        setCurrentFile(fileNames[fileCnt]);
-    }
-  
-    QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
-    QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
-        "plotting progress", labelText, QSize(300,100), true);
-    plotProgressDialog->show();
-    /* when a new file exported, should not start from scratch */
-    for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
-    {           
-        QwtPlotCurve *qwtCurve = new QwtPlotCurve();
-        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
-        qwtCurve->setSamples(plotData[pos].getData().toVector());
-
-        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
-                                          QPen(Qt::red, 2), QSize(2, 2));
-        qwtCurve->setSymbol(symbol);
-        qwtCurve->setTitle(plotData.value(pos).getTitle());
-        qwtCurve->setStyle(QwtPlotCurve::Lines);
-        qwtCurve->attach(plot);
-
-        IcvPlotCurve *plotCurve = new IcvPlotCurve;
-        plotCurve->setCurve(qwtCurve);
-        plotCurve->setCanvas(plotCanvas);
-        plotCurve->setDataPos(pos);
-        plotCurve->setCommand(plotData[pos]);
-        plotCurve->setAttachedState(true);
-        /* attach curves to plot canvas*/
-        plotCanvas->appendCurves(plotCurve);
-
-        /* plotting progress */
-        plotProgressDialog->setValue(pos + 1);
-        plotProgressDialog->repaint();  
-
-        /* 50 curves plotted, delay 50ms to handle the other events */
-        if(0 == pos % 50)
-            taskDelay(50);
-    }
-    plot->replot();
-    delete plotProgressDialog;
-
+    loadFile(fileNames);
     return;
 }
 
@@ -332,12 +285,28 @@ void IcvICurve::openRecentFile()
     QString fileName = action->data().toString();
     /* save file info */
     fileInfo.setFile(fileName);
+
+    QStringList fileNames;
+    fileNames.append(fileName);
+    loadFile(fileNames);
+    /* append file to recent file list */
+    setCurrentFile(fileName);
+    return;
+}
+
+
+void IcvICurve::loadFile(QStringList fileNames)
+{
     /* before loading new data, get data postion for a new file */
     qint16 posCurRepository = plotData.count();
-
-    /*analyze file content */
-    if(ICU_OK != loadData(fileName))
-        return;
+    for(qint16 fileCnt = 0; fileCnt < fileNames.count(); fileCnt++)
+    {
+        /* parse and analyze file content */
+        if(ICU_OK != loadData(fileNames[fileCnt]))
+            continue;
+        /* append file to recent file list */
+        setCurrentFile(fileNames[fileCnt]);
+    }
 
     QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
     QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
@@ -345,15 +314,13 @@ void IcvICurve::openRecentFile()
     plotProgressDialog->show();
     /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
-    {
+    {           
         QwtPlotCurve *qwtCurve = new QwtPlotCurve();
         qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
         qwtCurve->setSamples(plotData[pos].getData().toVector());
 
-        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol,
-                                          QBrush(Qt::yellow),
-                                          QPen(Qt::red, 2),
-                                          QSize(2, 2));
+        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
+            QPen(Qt::red, 2), QSize(2, 2));
         qwtCurve->setSymbol(symbol);
         qwtCurve->setTitle(plotData.value(pos).getTitle());
         qwtCurve->setStyle(QwtPlotCurve::Lines);
@@ -371,13 +338,11 @@ void IcvICurve::openRecentFile()
         /* plotting progress */
         plotProgressDialog->setValue(pos + 1);
         plotProgressDialog->repaint();  
+
         /* 50 curves plotted, delay 50ms to handle the other events */
         if(0 == pos % 50)
             taskDelay(50);
     }
-    /* append file to recent file list */
-    setCurrentFile(fileName);
-
     plot->replot();
     delete plotProgressDialog;
 
@@ -2076,4 +2041,27 @@ void IcvICurve::mouseMoveEvent ( QMouseEvent * event )
     return QWidget::mouseMoveEvent(event);
 }
 
+
+void IcvICurve::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("text/uri-list"))
+        event->acceptProposedAction();
+}
+
+
+void IcvICurve::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls= event->mimeData()->urls();
+    if(urls.isEmpty())
+        return;
+
+    foreach(QUrl url, urls)
+    {
+        QStringList fileNames;
+        fileNames.append(url.toLocalFile());
+        loadFile(fileNames);
+    }
+
+    return ;
+}
 
