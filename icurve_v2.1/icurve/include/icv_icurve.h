@@ -54,6 +54,7 @@ public:
     void loadFile(QStringList fileNames);
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeFile(QFile &file);
+    ICU_RET_STATUS analyzeTextStream(QTextStream &streamText, QString steamName);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
     ICU_RET_STATUS appendCommandData(IcvCommand *cmd, QStringList data);
     QList <IcvCommand> *getPlotData();
@@ -100,8 +101,10 @@ private slots:
         /*file menu slots*/
         void openFile();
         void openRecentFile();
+        void newFile();
         void saveAs();
         void closePlot();
+        void plotBlockData(QString data);
         /*edit menu slots*/
         void refreshPlot();
         void cutCurve();
@@ -152,7 +155,6 @@ private slots:
         void updateAnalyProgressBar(qint32 progress);
         void cancelAnalyProgressBar();
         void updateRecentFileActions();
-
 signals:
         void analyDataProgress(qint32 progress);
         void displayCurveInfoSignal(QString name, QString position, QString lineInfo);

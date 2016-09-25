@@ -36,6 +36,7 @@
 #include "icv_axse_scale.h"
 #include "icv_about.h"
 #include "icv_skin.h"
+#include "icv_data_plot.h"
 
 
 /*including tone index at head of the line*/
@@ -77,6 +78,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
 
     /*{{{signals and slots*/
     connect(ui.actionOpen,           SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(ui.actionNew,            SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui.actionSaveAs,         SIGNAL(triggered()), this, SLOT(saveAs()));
     connect(ui.actionClose,          SIGNAL(triggered()), this, SLOT(closePlot()));
     connect(ui.actionExit,           SIGNAL(triggered()), this, SLOT(close()));
@@ -273,6 +275,49 @@ void IcvICurve::openFile()
 
     loadFile(fileNames);
     return;
+}
+
+
+void IcvICurve::newFile()
+{
+   IcvDataPlotDialog *dataPlotDlg = new IcvDataPlotDialog(this);
+   dataPlotDlg->show();
+   return;
+}
+
+
+void IcvICurve::plotBlockData(QString data)
+{
+    QTextStream stream(&data);
+    qint16 posCurRepository = plotData.count();
+    analyzeTextStream(stream, "block");
+    for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
+    {           
+        QwtPlotCurve *qwtCurve = new QwtPlotCurve();
+        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
+        qwtCurve->setSamples(plotData[pos].getData().toVector());
+
+        QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
+            QPen(Qt::red, 2), QSize(2, 2));
+        qwtCurve->setSymbol(symbol);
+        qwtCurve->setTitle(plotData.value(pos).getTitle());
+        qwtCurve->setStyle(QwtPlotCurve::Lines);
+        qwtCurve->attach(plot);
+
+        IcvPlotCurve *plotCurve = new IcvPlotCurve;
+        plotCurve->setCurve(qwtCurve);
+        plotCurve->setCanvas(plotCanvas);
+        plotCurve->setDataPos(pos);
+        plotCurve->setCommand(plotData[pos]);
+        plotCurve->setAttachedState(true);
+        /* attach curves to plot canvas*/
+        plotCanvas->appendCurves(plotCurve);
+
+        /* 50 curves plotted, delay 50ms to handle the other events */
+        if(0 == pos % 50)
+            taskDelay(50);
+    }
+    plot->replot();
 }
 
 
@@ -1688,6 +1733,7 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
 
 ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
 {
+    QTextStream dataTextStream(&file);
     QFileInfo fileInfo(file);
     if(fileInfo.size() > ICV_MAX_ACCEPT_FILE_SIZE)
     {
@@ -1696,17 +1742,15 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
         return ICU_OK;
     }
 
-    qint32     cout = 0;
-    bool       ok   = true;
-    qint32     line = 0;
-    qint32     totalLineNum = 0;
-    QRegExp    regExp; 
-    IcvCommand cmd;
-    IcvCommand prevCmd;
+    return analyzeTextStream(dataTextStream, fileInfo.fileName());
+}
 
+
+ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString textName)
+{
     /* scanning progress */
     QDialog *dialogInfo = new QDialog(this);
-    QLabel *labelInfo = new QLabel("Scanning " + fileInfo.fileName() + " ...");
+    QLabel *labelInfo = new QLabel("Scanning " + textName + " ...");
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(labelInfo);
     dialogInfo->setLayout(layout);
@@ -1716,10 +1760,9 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
     dialogInfo->show();
 
     QString totalFile;
-    QTextStream dataTextStream(&file);
-    totalFile = dataTextStream.readAll();
     qint32 index = 0;
     qint32 nLine = 0;
+    totalFile = textStream.readAll();
     while(index!=-1)
     {
         /* delay 50ms to handle other event,preventing high cpu usage */
@@ -1736,32 +1779,32 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
         index=totalFile.indexOf('\n',index+1);
         nLine++;
     }
-    totalLineNum = nLine;
+    qint32  totalLineNum = nLine;
     delete dialogInfo;
 
     if(totalLineNum > ICV_MAX_LINE_NUM_BACKGROUD_PROCESS)
     {
-        analyProgressDialog = new QProgressDialog(plot);
-        analyProgressDialog->setModal(true);
-        analyProgressDialog->setRange(0, totalLineNum);
-        analyProgressDialog->setWindowTitle("analyzing " + fileInfo.fileName() + " ...");
-        /* display immediately */
-        analyProgressDialog->setFixedSize(300, 100);
+        analyProgressDialog = createIcvProgressDiag(this, 0, totalLineNum, 
+                                                    QString("analyzing "+ textName + " ..."), 
+                                                    tr(""), QSize(300, 100),true);
         analyProgressDialog->show();
         analyProgressDialog->repaint();
+  
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
+    IcvCommand cmd;
+    IcvCommand prevCmd;
     cmd.reset();
     prevCmd.reset();
-    dataTextStream.seek(0);
+    textStream.seek(0);
     isDataAnalyCanceled = false;
     qint32 cntPlotDataBeforeLoad = plotData.count();
-    line = 0;
-    while(!dataTextStream.atEnd() && !isDataAnalyCanceled)
+    qint32 line = 0;
+    while(!textStream.atEnd() && !isDataAnalyCanceled)
     {
         line++;
-        QString dataLine = dataTextStream.readLine();
+        QString dataLine = textStream.readLine();
         qint16       pos = 0;
         QString curCmdName("NULL");
         QString curPromt("NULL");
@@ -1799,13 +1842,13 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
             cmd.setDirection(direction);
             cmd.setDataPosInFile(line);
             cmd.setBriefInfo(dataLine);
-            cmd.setFileName(file.fileName());
+            cmd.setFileName(textName);
             /* set cmd matched state */
             cmd.setState(CMD_TITLE_MATCHED);
         }
-        
+
         /* some case like: >rfc getqln 0 0  Line  3 DS QLN (dBm/Hz, grouped by 8 tones),
-           so continue to parsing the left characters in the same line */
+        so continue to parsing the left characters in the same line */
         if(CMD_GROUPSIZE_MATCHED != cmd.getState() || CMD_PLOTDATA_MATCHED != cmd.getState())
         {
             /* math groupsize, if found, loop continue */
@@ -1827,7 +1870,7 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
         qint16 ret = assembleData(dataLine,&cmd);
         if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
         {
-            QString error = file.fileName() + " at line " + QString::number(line) \
+            QString error = textName + " at line " + QString::number(line) \
                 + ":data format incorrect.";
             QMessageBox::critical(this,"ERROR",error);
 
@@ -1866,7 +1909,7 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
         analyProgressDialog = NULL;
     }
 
-    return ICU_OK; 
+    return ICU_OK;
 }
 
 
