@@ -19,8 +19,9 @@ IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     qint16 width  = geometry().width();
     qint16 height = geometry().height();
     setFixedSize(width,height);
+    setWindowTitle("block data plot");
 
-    QToolBar *toolBar = new QToolBar( this );
+    QToolBar *toolBar = new QToolBar(this);
     toolBar->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
     toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
     plotAction  = new QAction( QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
