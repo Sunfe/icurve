@@ -25,5 +25,8 @@
     <file>../images/save.png</file>
     <file>../images/new.png</file>
     <file>../images/bg.png</file>
+    <file>../images/draw.png</file>
+    <file>../images/clear.png</file>
+    <file>../images/save_data.png</file>
   </qresource>
 </RCC>

@@ -5,18 +5,39 @@
 #include <QPushButton>
 #include <QString>
 #include <QFileDialog>
+#include <QToolBar>
 #include "icv_data_plot.h"
+#include "start.xpm"
+#include "clear.xpm"
+#include <QWhatsThis>
 
 IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
-    setWindowFlags(Qt::Dialog | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+    ui.plainTextEdit->setFocus();
+    qint16 width  = geometry().width();
+    qint16 height = geometry().height();
+    setFixedSize(width,height);
 
-    connect(ui.plotButton,  SIGNAL(clicked()), this, SLOT(processClickEvent()));
-    connect(ui.saveButton,  SIGNAL(clicked()), this, SLOT(processClickEvent()));
-    connect(ui.closeButton, SIGNAL(clicked()), this, SLOT(processClickEvent()));
+    QToolBar *toolBar = new QToolBar( this );
+    toolBar->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
+    toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    plotAction  = new QAction( QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
+    clearAction = new QAction( QPixmap(":/icurve/images/clear.png"), "Clear", toolBar );
+    saveAction  = new QAction( QPixmap(":/icurve/images/save_data.png"), "Save", toolBar );
+
+    toolBar->addAction( plotAction );
+    toolBar->addAction( clearAction );
+    toolBar->addAction( saveAction );
+    toolBar->setIconSize( QSize( 22, 22 ) );
+    ui.toolbarLayout->addWidget(toolBar);
+
+    connect(plotAction,   SIGNAL(triggered()), this, SLOT(processClickEvent()));
+    connect(clearAction,  SIGNAL(triggered()), this, SLOT(processClickEvent()));
+    connect(saveAction,   SIGNAL(triggered()), this, SLOT(processClickEvent()));
     connect(this, SIGNAL(sigPlotBlockData(QString)), parent, SLOT(plotBlockData(QString)));
+
 }
 
 
@@ -34,7 +55,7 @@ QString IcvDataPlotDialog::getDataSting()
 
 void IcvDataPlotDialog::processClickEvent()
 {
-    if(sender() == ui.plotButton)
+ if(sender() == plotAction)
     {
         if(ui.plainTextEdit->toPlainText() == "")
         {
@@ -43,7 +64,7 @@ void IcvDataPlotDialog::processClickEvent()
         }
         emit sigPlotBlockData(ui.plainTextEdit->toPlainText());
     }
-    else if(sender() == ui.saveButton)
+    else if(sender() == saveAction)
     {
         if(ui.plainTextEdit->toPlainText() == "")
         {
@@ -52,9 +73,9 @@ void IcvDataPlotDialog::processClickEvent()
         }
         saveBlockData();
     }
-    else if(sender() == ui.closeButton)
+    else if(sender() == clearAction)
     {
-        close();
+        ui.plainTextEdit->clear();
     }
 
     return;
@@ -82,7 +103,7 @@ void IcvDataPlotDialog::saveBlockData()
         stream.flush();    
         file.close();    
     }
-  
+
     return;
 }
 

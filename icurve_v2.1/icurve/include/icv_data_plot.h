@@ -22,6 +22,9 @@ signals:
   
 private:
     Ui::IcvDataPlotDialog ui;
+    QAction *plotAction;
+    QAction *clearAction;
+    QAction *saveAction;
 };
 
 #endif // ICV_DATA_PLOT_H
