@@ -281,6 +281,7 @@ void IcvICurve::openFile()
 void IcvICurve::newFile()
 {
    IcvDataPlotDialog *dataPlotDlg = new IcvDataPlotDialog(this);
+   dataPlotDlg->setWindowTitle("new");
    dataPlotDlg->show();
    return;
 }

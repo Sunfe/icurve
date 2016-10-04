@@ -6,33 +6,34 @@
 #include <QString>
 #include <QFileDialog>
 #include <QToolBar>
-#include "icv_data_plot.h"
-#include "start.xpm"
-#include "clear.xpm"
 #include <QWhatsThis>
+#include <QGridLayout>
+#include <QPlainTextEdit>
+#include "icv_data_plot.h"
+
 
 IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     : QDialog(parent)
 {
-    ui.setupUi(this);
-    ui.plainTextEdit->setFocus();
-    qint16 width  = geometry().width();
-    qint16 height = geometry().height();
-    setFixedSize(width,height);
-    setWindowTitle("block data plot");
+    setFixedSize(700,500);
 
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
     toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    plotAction  = new QAction( QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
-    clearAction = new QAction( QPixmap(":/icurve/images/clear.png"), "Clear", toolBar );
-    saveAction  = new QAction( QPixmap(":/icurve/images/save_data.png"), "Save", toolBar );
+    plotAction  = new QAction(QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
+    clearAction = new QAction(QPixmap(":/icurve/images/clear.png"), "Clear", toolBar );
+    saveAction  = new QAction(QPixmap(":/icurve/images/save_data.png"), "Save", toolBar );
 
     toolBar->addAction( plotAction );
     toolBar->addAction( clearAction );
     toolBar->addAction( saveAction );
     toolBar->setIconSize( QSize( 22, 22 ) );
-    ui.toolbarLayout->addWidget(toolBar);
+
+    QPlainTextEdit *plainTextEdit = new QPlainTextEdit(this);
+
+    QGridLayout *laygout = new QGridLayout(this);
+    laygout->addWidget(toolBar,       0, 0, 1, 1);
+    laygout->addWidget(plainTextEdit, 1, 0, 1, 1);
 
     connect(plotAction,   SIGNAL(triggered()), this, SLOT(processClickEvent()));
     connect(clearAction,  SIGNAL(triggered()), this, SLOT(processClickEvent()));
@@ -50,7 +51,7 @@ IcvDataPlotDialog::~IcvDataPlotDialog()
 
 QString IcvDataPlotDialog::getDataSting()
 {
-    return ui.plainTextEdit->toPlainText();
+    return plainTextEdit->toPlainText();
 } 
 
 
@@ -58,16 +59,16 @@ void IcvDataPlotDialog::processClickEvent()
 {
  if(sender() == plotAction)
     {
-        if(ui.plainTextEdit->toPlainText() == "")
+        if(plainTextEdit->toPlainText() == "")
         {
             QMessageBox::warning(this,tr("Warning"), tr("No input!"), QMessageBox::Close);
             return ;
         }
-        emit sigPlotBlockData(ui.plainTextEdit->toPlainText());
+        emit sigPlotBlockData(plainTextEdit->toPlainText());
     }
     else if(sender() == saveAction)
     {
-        if(ui.plainTextEdit->toPlainText() == "")
+        if(plainTextEdit->toPlainText() == "")
         {
             QMessageBox::warning(this,tr("Warning"), tr("No input!"), QMessageBox::Close);
             return ;
@@ -76,7 +77,7 @@ void IcvDataPlotDialog::processClickEvent()
     }
     else if(sender() == clearAction)
     {
-        ui.plainTextEdit->clear();
+        plainTextEdit->clear();
     }
 
     return;
@@ -100,7 +101,7 @@ void IcvDataPlotDialog::saveBlockData()
         }    
 
         QTextStream stream(&file);    
-        stream << ui.plainTextEdit->toPlainText() << endl;    
+        stream << plainTextEdit->toPlainText() << endl;    
         stream.flush();    
         file.close();    
     }

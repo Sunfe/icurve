@@ -3,7 +3,9 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include "ui_icv_data_plot.h"
+#include <QAction>
+#include <QPlainTextEdit>
+#include <QDialog>
 
 class IcvDataPlotDialog : public QDialog
 {
@@ -19,9 +21,8 @@ private slots:
         void processClickEvent();
 signals:
         void sigPlotBlockData(QString data);
-  
 private:
-    Ui::IcvDataPlotDialog ui;
+    QPlainTextEdit *plainTextEdit;
     QAction *plotAction;
     QAction *clearAction;
     QAction *saveAction;
