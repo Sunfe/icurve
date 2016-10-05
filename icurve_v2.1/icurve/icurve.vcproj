@@ -641,18 +641,6 @@
 				RelativePath=".\resource.h"
 				>
 			</File>
-			<File
-				RelativePath=".\resource2.h"
-				>
-			</File>
-			<File
-				RelativePath=".\resource3.h"
-				>
-			</File>
-			<File
-				RelativePath=".\resource4.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Form Files"
@@ -1810,6 +1798,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\icurve.rc"
+			>
+		</File>
 	</Files>
 	<Globals>
 		<Global

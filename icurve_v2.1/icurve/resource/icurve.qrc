@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="icurve">
     <file>../images/file_open.png</file>
+    <file>../images/icurve.png</file>
     <file>../images/icurve.ico</file>
     <file>../images/floodfill.png</file>
     <file>../images/find.png</file>

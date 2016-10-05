@@ -158,6 +158,7 @@ IcvICurve::~IcvICurve()
 void IcvICurve::initMainWinStyle(QMainWindow *self)
 {
     self->setWindowTitle("iCurve");
+    self->setWindowIcon(QIcon(":/icurve/images/icurve.png"));
     self->setContentsMargins(0,0,0,0);
 
     IcvSkin skin;
