@@ -20,16 +20,17 @@ IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
     toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    
     plotAction  = new QAction(QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
     clearAction = new QAction(QPixmap(":/icurve/images/clear.png"), "Clear", toolBar );
     saveAction  = new QAction(QPixmap(":/icurve/images/save_data.png"), "Save", toolBar );
-
     toolBar->addAction( plotAction );
     toolBar->addAction( clearAction );
     toolBar->addAction( saveAction );
     toolBar->setIconSize( QSize( 22, 22 ) );
 
-    QPlainTextEdit *plainTextEdit = new QPlainTextEdit(this);
+    plainTextEdit = new QPlainTextEdit(this);
+    plainTextEdit->setFocus();
 
     QGridLayout *laygout = new QGridLayout(this);
     laygout->addWidget(toolBar,       0, 0, 1, 1);
@@ -65,6 +66,7 @@ void IcvDataPlotDialog::processClickEvent()
             return ;
         }
         emit sigPlotBlockData(plainTextEdit->toPlainText());
+        plainTextEdit->setFocus();
     }
     else if(sender() == saveAction)
     {
