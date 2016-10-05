@@ -571,11 +571,11 @@ void IcvPlotCanvas::createCurvePopMenu()
     crvSelPopMenu->addAction(delAction);
     crvSelPopMenu->addAction(colorSetAction);
 
-    subCrvSelWidthMenu = new QMenu("width",parent);
+    subCrvSelWidthMenu = new QMenu("Width",parent);
     subCrvSelWidthMenu->addActions(widthActGrp->actions());
     crvSelPopMenu->addMenu(subCrvSelWidthMenu);
 
-    subCrvSelStyleMenu = new QMenu("style",this);
+    subCrvSelStyleMenu = new QMenu("Style",this);
     subCrvSelStyleMenu->addActions(styleActGrp->actions());
     crvSelPopMenu->addMenu(subCrvSelStyleMenu);
 

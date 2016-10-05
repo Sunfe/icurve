@@ -36,6 +36,7 @@
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionExport"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="actionExit"/>
@@ -92,6 +93,8 @@
     <addaction name="actionData_picker"/>
     <addaction name="actionData_tracker"/>
     <addaction name="actionHandMove"/>
+    <addaction name="actionConverter"/>
+    <addaction name="actionStatiser"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="enabled">
@@ -116,8 +119,9 @@
     <addaction name="actionStyle"/>
     <addaction name="actionMarker"/>
     <addaction name="actionExpand"/>
-    <addaction name="actionView_data"/>
-    <addaction name="actionLocate_to_file"/>
+    <addaction name="actionViewData"/>
+    <addaction name="actionViewStat"/>
+    <addaction name="actionJumpToFile"/>
     <addaction name="actionInfo"/>
     <addaction name="actionCurveProperties"/>
    </widget>
@@ -415,17 +419,17 @@
     <string>Expand</string>
    </property>
   </action>
-  <action name="actionView_data">
+  <action name="actionViewData">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>View data</string>
    </property>
   </action>
-  <action name="actionLocate_to_file">
+  <action name="actionJumpToFile">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Jump to file</string>
@@ -621,6 +625,36 @@
    </property>
    <property name="text">
     <string>New</string>
+   </property>
+  </action>
+  <action name="actionViewDrawData">
+   <property name="text">
+    <string>View data</string>
+   </property>
+  </action>
+  <action name="actionStatistics">
+   <property name="text">
+    <string>Statistics</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </action>
+  <action name="actionViewStat">
+   <property name="text">
+    <string>View Statistics</string>
+   </property>
+  </action>
+  <action name="actionConverter">
+   <property name="text">
+    <string>Converter</string>
+   </property>
+  </action>
+  <action name="actionStatiser">
+   <property name="text">
+    <string>Statisticser</string>
    </property>
   </action>
  </widget>

@@ -103,6 +103,7 @@ private slots:
         void openRecentFile();
         void newFile();
         void saveAs();
+        void exportData();
         void closePlot();
         void plotBlockData(QString data);
         /*edit menu slots*/
@@ -118,6 +119,10 @@ private slots:
         void showAllCurve();
         void selectAllCurves();
         void selectInvertCurves();
+        /*data menu slots*/
+        void jumpToFilePos();
+        void viewCurveData();
+        void viewCurveStat();
         /*curve menu slots*/
         void setCurveColor(); 
         void setCurveWidth();

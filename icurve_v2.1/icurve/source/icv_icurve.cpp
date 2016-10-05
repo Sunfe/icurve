@@ -20,7 +20,21 @@
 #include <QVariant>
 #include <QMimeData>
 #include <QSettings>
-
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QTableWidget>
+#include <QPixmap>
+#include <QtDebug>
+#include <iostream>     // std::cout  
+#include <functional>   // std::minus  
+#include <numeric>      // std::accumulate  
+#include <iostream>     // std::cout
+#include <vector>       // std::vector, std::begin, std::end
+#include <iostream>
+#include <vector>
+#include <iterator>
+#include <algorithm>    // std::for_each
+#include <vector>       // std::vector
 #include <qwt_legend.h>
 #include <qwt_plot_renderer.h>
 #include <qwt_legend_label.h>
@@ -37,7 +51,8 @@
 #include "icv_about.h"
 #include "icv_skin.h"
 #include "icv_data_plot.h"
-
+#include "icv_curve_statistics.h"
+#include "icv_textedit.h"
 
 /*including tone index at head of the line*/
 #define ICV_MAX_NUM_DIGITS_PERLINE          (11)  
@@ -77,54 +92,58 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     isDataAnalyCanceled  = false;
 
     /*{{{signals and slots*/
-    connect(ui.actionOpen,           SIGNAL(triggered()), this, SLOT(openFile()));
-    connect(ui.actionNew,            SIGNAL(triggered()), this, SLOT(newFile()));
-    connect(ui.actionSaveAs,         SIGNAL(triggered()), this, SLOT(saveAs()));
-    connect(ui.actionClose,          SIGNAL(triggered()), this, SLOT(closePlot()));
-    connect(ui.actionExit,           SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui.actionOpen,           SIGNAL(triggered()),     this, SLOT(openFile()));
+    connect(ui.actionNew,            SIGNAL(triggered()),     this, SLOT(newFile()));
+    connect(ui.actionSaveAs,         SIGNAL(triggered()),     this, SLOT(saveAs()));
+    connect(ui.actionExport,         SIGNAL(triggered()),     this, SLOT(exportData()));
+    connect(ui.actionClose,          SIGNAL(triggered()),     this, SLOT(closePlot()));
+    connect(ui.actionExit,           SIGNAL(triggered()),     this, SLOT(close()));
     /* edit menu */
-    connect(ui.actionRefresh,        SIGNAL(triggered()), this, SLOT(refreshPlot()));
-    connect(ui.actionCut,            SIGNAL(triggered()), this, SLOT(cutCurve()));
-    connect(ui.actionCopy,           SIGNAL(triggered()), this, SLOT(copyCurve()));
-    connect(ui.actionPaste,          SIGNAL(triggered()), this, SLOT(pasteCurve()));
-    connect(ui.actionRemove,         SIGNAL(triggered()), this, SLOT(removeCurves()));
-    connect(ui.actionHide,           SIGNAL(triggered()), this, SLOT(hideCurves()));
-    connect(ui.actionShow,           SIGNAL(triggered()), this, SLOT(showCurves()));
-    connect(ui.actionDelete,         SIGNAL(triggered()), this, SLOT(deleteCurve()));
-    connect(ui.actionFind,           SIGNAL(triggered()), this, SLOT(findCurve()));
-    connect(ui.actionShowAll,        SIGNAL(triggered()), this, SLOT(showAllCurve()));
-    connect(ui.actionSelectAll,      SIGNAL(triggered()), this, SLOT(selectAllCurves()));  
-    connect(ui.actionSelectInvert,   SIGNAL(triggered()), this, SLOT(selectInvertCurves()));  
+    connect(ui.actionRefresh,        SIGNAL(triggered()),     this, SLOT(refreshPlot()));
+    connect(ui.actionCut,            SIGNAL(triggered()),     this, SLOT(cutCurve()));
+    connect(ui.actionCopy,           SIGNAL(triggered()),     this, SLOT(copyCurve()));
+    connect(ui.actionPaste,          SIGNAL(triggered()),     this, SLOT(pasteCurve()));
+    connect(ui.actionRemove,         SIGNAL(triggered()),     this, SLOT(removeCurves()));
+    connect(ui.actionHide,           SIGNAL(triggered()),     this, SLOT(hideCurves()));
+    connect(ui.actionShow,           SIGNAL(triggered()),     this, SLOT(showCurves()));
+    connect(ui.actionDelete,         SIGNAL(triggered()),     this, SLOT(deleteCurve()));
+    connect(ui.actionFind,           SIGNAL(triggered()),     this, SLOT(findCurve()));
+    connect(ui.actionShowAll,        SIGNAL(triggered()),     this, SLOT(showAllCurve()));
+    connect(ui.actionSelectAll,      SIGNAL(triggered()),     this, SLOT(selectAllCurves()));  
+    connect(ui.actionSelectInvert,   SIGNAL(triggered()),     this, SLOT(selectInvertCurves()));  
     /* curve menu */
-    connect(ui.actionColor,          SIGNAL(triggered()), this, SLOT(setCurveColor()));
-    connect(ui.actionWidth,          SIGNAL(triggered()), this, SLOT(setCurveWidth()));
-    connect(ui.actionStyle,          SIGNAL(triggered()), this, SLOT(setCurveStyle()));
-    connect(ui.actionMarker,         SIGNAL(triggered()), this, SLOT(setCurveMarker()));
-    connect(ui.actionExpand,         SIGNAL(triggered()), this, SLOT(expandCurve()));
-    connect(ui.actionFilter,         SIGNAL(triggered()), this, SLOT(filterCurve()));
-    connect(ui.actionInfo,           SIGNAL(triggered()), this, SLOT(showCurveInfo()));
-    connect(ui.actionCurveProperties,SIGNAL(triggered()), this, SLOT(setCurveProperties()));
+    connect(ui.actionColor,          SIGNAL(triggered()),     this, SLOT(setCurveColor()));
+    connect(ui.actionWidth,          SIGNAL(triggered()),     this, SLOT(setCurveWidth()));
+    connect(ui.actionStyle,          SIGNAL(triggered()),     this, SLOT(setCurveStyle()));
+    connect(ui.actionMarker,         SIGNAL(triggered()),     this, SLOT(setCurveMarker()));
+    connect(ui.actionExpand,         SIGNAL(triggered()),     this, SLOT(expandCurve()));
+    connect(ui.actionFilter,         SIGNAL(triggered()),     this, SLOT(filterCurve()));
+    connect(ui.actionViewData,       SIGNAL(triggered()),     this, SLOT(viewCurveData()));
+    connect(ui.actionViewStat,       SIGNAL(triggered()),     this, SLOT(viewCurveStat()));
+    connect(ui.actionJumpToFile,     SIGNAL(triggered()),     this, SLOT(jumpToFilePos()));
+    connect(ui.actionInfo,           SIGNAL(triggered()),     this, SLOT(showCurveInfo()));
+    connect(ui.actionCurveProperties,SIGNAL(triggered()),     this, SLOT(setCurveProperties()));
     /* axse menu */
-    connect(ui.actionAxseScale,      SIGNAL(triggered()), this, SLOT(setAxseScale()));
-    connect(ui.actionAxseTitle,      SIGNAL(triggered()), this, SLOT(setAxseTitle()));
-    connect(ui.actionAxseAlignment,  SIGNAL(triggered()), this, SLOT(setAxseAlignment()));
-    connect(ui.actionAxseRotation,   SIGNAL(triggered()), this, SLOT(setAxseRotation()));
+    connect(ui.actionAxseScale,      SIGNAL(triggered()),     this, SLOT(setAxseScale()));
+    connect(ui.actionAxseTitle,      SIGNAL(triggered()),     this, SLOT(setAxseTitle()));
+    connect(ui.actionAxseAlignment,  SIGNAL(triggered()),     this, SLOT(setAxseAlignment()));
+    connect(ui.actionAxseRotation,   SIGNAL(triggered()),     this, SLOT(setAxseRotation()));
     /* insert menu */
-    connect(ui.actionTitle,          SIGNAL(triggered()), this, SLOT(insertTitle()));
-    connect(ui.actionX_label,        SIGNAL(triggered()), this, SLOT(insertXLabel()));
-    connect(ui.actionY_label,        SIGNAL(triggered()), this, SLOT(insertYLabel()));
-    connect(ui.actionLegend,         SIGNAL(triggered()), this, SLOT(insertLegend()));
-    connect(ui.actionCurveName,      SIGNAL(triggered()), this, SLOT(insertCurveName()));
-    connect(ui.actionFooter,         SIGNAL(triggered()), this, SLOT(insertFooter()));
-    connect(ui.actionIndicator,      SIGNAL(triggered()), this, SLOT(insertIndicator()));
+    connect(ui.actionTitle,          SIGNAL(triggered()),     this, SLOT(insertTitle()));
+    connect(ui.actionX_label,        SIGNAL(triggered()),     this, SLOT(insertXLabel()));
+    connect(ui.actionY_label,        SIGNAL(triggered()),     this, SLOT(insertYLabel()));
+    connect(ui.actionLegend,         SIGNAL(triggered()),     this, SLOT(insertLegend()));
+    connect(ui.actionCurveName,      SIGNAL(triggered()),     this, SLOT(insertCurveName()));
+    connect(ui.actionFooter,         SIGNAL(triggered()),     this, SLOT(insertFooter()));
+    connect(ui.actionIndicator,      SIGNAL(triggered()),     this, SLOT(insertIndicator()));
     /* view menu */
     connect(ui.actionZoom,           SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
     /* tool menu */
     connect(ui.actionHandMove,       SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
     /* help menu */
-    connect(ui.actionAbout,          SIGNAL(triggered()),  this, SLOT(aboutIcurve()));
+    connect(ui.actionAbout,          SIGNAL(triggered()),     this, SLOT(aboutIcurve()));
     /* others */
-    connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
+    connect(this, SIGNAL(analyDataProgress(qint32)),          this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
     //setStyleSheet("QMainWindow{image: url(bg.jpg)}");
 }
@@ -150,6 +169,7 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     /* shortcuts */
     ui.actionOpen->setShortcut(QKeySequence::Open);
     ui.actionSaveAs->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    ui.actionPaste->setShortcut(QKeySequence::Paste);
     ui.actionFilter->setShortcut(QKeySequence::Find);
     ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
     ui.actionSelectInvert->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
@@ -430,6 +450,58 @@ void IcvICurve::saveAs()
 
     renderer.exportTo(plot, plotTitle);
 
+    return;
+}
+
+
+void IcvICurve::exportData()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save File"),
+        "unnamed.txt",
+        tr("text files(*.txt);;csv files(*.csv);;excel(*.xsl *.xlsx)"));
+
+    QDialog *dialogInfo = new QDialog(this);
+    QLabel *labelInfo = new QLabel("Saving...");
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(labelInfo);
+    dialogInfo->setLayout(layout);
+    dialogInfo->setFixedSize(300,50);
+    dialogInfo->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    dialogInfo->setModal(true);
+    dialogInfo->show();
+
+    QString dataStr;
+    for(qint32 row = 0; row < plotData.count(); row++)
+    {
+        IcvCommand cmd = plotData.value(row);
+        dataStr += cmd.getTitle() + ",";
+        dataStr += cmd.getFileName() + ",";
+        dataStr += QString::number(cmd.getDataPosInFile()) + ",";
+        dataStr += ((cmd.getDirection() == 0)? tr("US"):tr("DS")) + ",";
+        dataStr += QString::number(cmd.getGroupSize()) + ",";
+        QList<QPointF> data = plotData.value(row).getData();
+        for(qint32 tone = 0; tone < data.count(); tone++)
+            dataStr += QString::number(data.at(tone).y()) + " ,";
+        dataStr += "\n";
+    }   
+
+    if (!fileName.isNull())
+    {
+
+        QFile file(fileName);  
+        if (!file.open(QIODevice::WriteOnly|QIODevice::Text)) {    
+            QMessageBox::critical(NULL, "error", "unable to create file!");  
+            return;    
+        }    
+
+        QTextStream stream(&file);    
+        stream << dataStr << endl;    
+        stream.flush();    
+        file.close();    
+    }
+
+    delete dialogInfo;
     return;
 }
 
@@ -815,8 +887,9 @@ void IcvICurve::copyCurve()
 
 void IcvICurve::pasteCurve()
 {
-    QClipboard *board = QApplication::clipboard();  
-    QString       str = board->text();  
+    QClipboard *clipboard = QApplication::clipboard();
+    QString           str = clipboard->text();  
+    plotBlockData(str);
     return;
 }
 
@@ -976,7 +1049,6 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
             isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)?
                 true : false;
         }
-
         else if (ICV_BY_COMANDNAME == type)
         {
             isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)?
@@ -993,7 +1065,7 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
                 true : false;
         }
 
-         if(true != isMatch)   
+        if(true != isMatch)   
         {
             curves.at(cnt)->removeCurve();;
             foundCnt++;
@@ -1385,8 +1457,36 @@ void IcvICurve::showCurveInfo()
     }
 
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
-    IcvCurveInfoDialog *infoDlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
-    infoDlg->exec();
+    QStandardItemModel *model=new QStandardItemModel();
+    QStringList horizonHeader;
+    horizonHeader<<"Name"<<"File"<<"Position"<<"Direction"<<"Group Size"<<"Shell"<<"Data";
+    model->setHorizontalHeaderLabels(horizonHeader);
+
+    QStringList vertiHeader;
+    QStandardItem *newItem = NULL;
+    for(qint16 row = 0; row < curve.count(); row++)
+    {
+        vertiHeader << QString::number(row);
+
+        IcvCommand cmd = curve.at(row)->getCommand();
+        newItem = new QStandardItem(cmd.getTitle());
+        model->setItem(row ,0, newItem);
+        newItem = new QStandardItem(cmd.getFileName());
+        model->setItem(row ,1, newItem);
+        newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
+        model->setItem(row ,2, newItem);
+        newItem = new QStandardItem((cmd.getDirection() == 0)? "US": "DS"); 
+        model->setItem(row ,3, newItem);
+        newItem = new QStandardItem(QString::number(cmd.getGroupSize()));
+        model->setItem(row ,4, newItem);
+        newItem = new QStandardItem(cmd.getPromt());
+        model->setItem(row ,5, newItem);
+    }
+    model->setVerticalHeaderLabels(vertiHeader);
+    QTableView *tbl = new QTableView();
+    tbl->setModel(model);
+    tbl->resize(500,300);
+    tbl->show();
     return;
 }
 
@@ -1409,6 +1509,159 @@ void IcvICurve::setCurveProperties()
 
     IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curve, this, Qt::Dialog);
     propDiag->exec();
+
+    return;
+}
+
+
+void IcvICurve::jumpToFilePos()
+{
+    IcvTextEdit *editor = new IcvTextEdit(this);
+    int toLineNumber = 100;
+    editor->load("C:\\LZC\\wkspace\\samples\\log\\00.txt"); 
+    editor->show();
+    return;
+}
+
+
+void IcvICurve::viewCurveData()
+{
+#if 0
+   QDialog *dlg = new QDialog(this);
+   QPlainTextEdit *editor = new QPlainTextEdit(dlg);
+   editor->setPlainText(plotData.value(0).getTitle());
+   QHBoxLayout *layout = new QHBoxLayout(dlg);
+   layout->addWidget(editor);
+   layout->setAlignment(Qt::AlignTop);
+   dlg->setLayout(layout);
+   dlg->resize(250,40);
+   dlg->show();
+#endif
+   QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+   if(allCurves.empty())
+   {
+       QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+       return ;
+   }
+
+   QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
+   if(curve.isEmpty())
+   {
+       QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+       return ;
+   }
+
+   IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
+   QStandardItemModel *model=new QStandardItemModel();
+   QStringList horizonHeader;
+   horizonHeader<<"Name"<<"File"<<"Position"<<"Data";
+   model->setHorizontalHeaderLabels(horizonHeader);
+
+   QStringList vertiHeader;
+   QStandardItem *newItem = NULL;
+   for(qint16 row = 0; row < curve.count(); row++)
+   {
+       vertiHeader << QString::number(row);
+
+       IcvCommand cmd = curve.at(row)->getCommand();
+       newItem = new QStandardItem(cmd.getTitle());
+       model->setItem(row ,0, newItem);
+       newItem = new QStandardItem(cmd.getFileName());
+       model->setItem(row ,1, newItem);
+       newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
+       model->setItem(row ,2, newItem);
+
+       qint16 posInRepo = curve.at(row)->getDataPos();
+       QList<QPointF> data = plotData.value(posInRepo).getData();
+       QString dataStr="";
+       for(qint32 tone = 0; tone < data.count(); tone++)
+       {
+           dataStr += QString::number(data.at(tone).y())+",";
+       }
+       newItem = new QStandardItem(dataStr);
+       model->setItem(row ,3, newItem);
+   }
+   model->setVerticalHeaderLabels(vertiHeader);
+   QTableView *tbl = new QTableView();
+   tbl->setModel(model);
+   tbl->setGeometry(this->geometry());
+   tbl->resize(500,300);
+   tbl->show();
+}
+
+
+void IcvICurve:: viewCurveStat()
+{
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
+
+    QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
+    if(curve.isEmpty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve selected."));
+        return ;
+    }
+
+    QStandardItemModel *model=new QStandardItemModel();
+    QStringList horizonHeader;
+    horizonHeader<<"Name"<<"File"<<"Position"<<"Maximum"<<"Minimum"<<"Average"<<"variance";
+    model->setHorizontalHeaderLabels(horizonHeader);
+
+    QStringList vertiHeader;
+    QStandardItem *newItem = NULL;
+    for(qint16 row = 0; row < curve.count(); row++)
+    {
+        vertiHeader << QString::number(row);
+
+        IcvCommand cmd = curve.at(row)->getCommand();
+        newItem = new QStandardItem(cmd.getTitle());
+        model->setItem(row ,0, newItem);
+
+        newItem = new QStandardItem(cmd.getFileName());
+        model->setItem(row ,1, newItem);
+
+        newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
+        model->setItem(row ,2, newItem);
+
+        QList<QPointF> data =  cmd.getData();
+        std::vector<qreal> crvRy;
+        for(qint16 count = 0; count < data.count(); count++)
+        {
+            crvRy.push_back(data.value(count).ry());
+        }
+        double maxRy = *std::max_element(crvRy.begin(), crvRy.end());
+        newItem = new QStandardItem(QString::number(maxRy));
+        model->setItem(row ,3, newItem);
+
+        double minRy = *std::min_element(crvRy.begin(), crvRy.end());
+        newItem = new QStandardItem(QString::number(minRy));
+        model->setItem(row ,4, newItem);
+
+        double sum = std::accumulate(crvRy.begin(), crvRy.end(), 0.0);  
+        double mean =  sum/crvRy.size(); 
+        newItem = new QStandardItem(QString::number(mean));
+        model->setItem(row ,5, newItem);
+
+        double accum  = 0.0;  
+        for(qint32 i = 0; i < crvRy.size();i++)
+        {  
+            accum  += (crvRy[i]-mean)*(crvRy[i]-mean);  
+        }
+        double stdev = sqrt(accum/(crvRy.size()-1)); 
+        newItem = new QStandardItem(QString::number(stdev));
+        model->setItem(row ,6, newItem);
+    }
+    model->setVerticalHeaderLabels(vertiHeader);
+
+    QTableView *tbl = new QTableView();
+    tbl->setModel(model);
+    tbl->setGeometry(this->geometry());
+    tbl->resize(500,300);
+    tbl->show();
 
     return;
 }
@@ -1662,10 +1915,10 @@ void IcvICurve::setAxseRotation()
     connect(buttonBox, SIGNAL(rejected()), axseRotationDlg, SLOT(reject()));
 
     QGridLayout *layout = new QGridLayout(axseRotationDlg);
-    layout->addWidget(labelX,0,0,1,1);
-    layout->addWidget(textEditX,0,1,1,1);
-    layout->addWidget(labelY,1,0,1,1);
-    layout->addWidget(textEditY,1,1,1,1);
+    layout->addWidget(labelX,    0, 0, 1, 1);
+    layout->addWidget(textEditX, 0, 1, 1, 1);
+    layout->addWidget(labelY,    1, 0, 1, 1);
+    layout->addWidget(textEditY, 1, 1, 1, 1);
     layout->addWidget(buttonBox,2,1);
     layout->setColumnStretch(0,1);
     layout->setColumnStretch(1,3);
@@ -1790,7 +2043,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
                                                     tr(""), QSize(300, 100),true);
         analyProgressDialog->show();
         analyProgressDialog->repaint();
-  
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
