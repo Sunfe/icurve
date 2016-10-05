@@ -1485,6 +1485,7 @@ void IcvICurve::showCurveInfo()
     model->setVerticalHeaderLabels(vertiHeader);
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
+    tbl->setGeometry(this->geometry());
     tbl->resize(500,300);
     tbl->show();
     return;
