@@ -1472,7 +1472,7 @@ void IcvICurve::showCurveInfo()
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
     QStandardItemModel *model=new QStandardItemModel();
     QStringList horizonHeader;
-    horizonHeader<<"Name"<<"File"<<"Position"<<"Direction"<<"Group Size"<<"Shell"<<"Data";
+    horizonHeader<<"name"<<"nile"<<"position"<<"brief"<<"direction"<<"group Size"<<"shell"<<"data";
     model->setHorizontalHeaderLabels(horizonHeader);
 
     QStringList vertiHeader;
@@ -1488,19 +1488,27 @@ void IcvICurve::showCurveInfo()
         model->setItem(row ,1, newItem);
         newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
         model->setItem(row ,2, newItem);
-        newItem = new QStandardItem((cmd.getDirection() == 0)? "US": "DS"); 
+        newItem = new QStandardItem(cmd.getBriefInfo());
         model->setItem(row ,3, newItem);
-        newItem = new QStandardItem(QString::number(cmd.getGroupSize()));
+        newItem = new QStandardItem((cmd.getDirection() == 0)? "US": "DS"); 
         model->setItem(row ,4, newItem);
-        newItem = new QStandardItem(cmd.getPromt());
+        newItem = new QStandardItem(QString::number(cmd.getGroupSize()));
         model->setItem(row ,5, newItem);
+        newItem = new QStandardItem(cmd.getPromt());
+        model->setItem(row ,6, newItem);
     }
     model->setVerticalHeaderLabels(vertiHeader);
+    /* display */
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
-    tbl->setGeometry(this->geometry());
-    tbl->resize(500,300);
-    tbl->show();
+    QDialog *dlg = new QDialog(this);
+    dlg->setWindowTitle("curve brief information");
+    QHBoxLayout *layout = new QHBoxLayout(dlg);
+    layout->addWidget(tbl);
+    layout->setAlignment(Qt::AlignTop);
+    dlg->setLayout(layout);
+    dlg->resize(500,300);
+    dlg->show();
     return;
 }
 
@@ -1568,7 +1576,7 @@ void IcvICurve::viewCurveData()
    IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
    QStandardItemModel *model=new QStandardItemModel();
    QStringList horizonHeader;
-   horizonHeader<<"Name"<<"File"<<"Position"<<"Data";
+   horizonHeader<<"name"<<"file"<<"position"<<"brief"<<"data";
    model->setHorizontalHeaderLabels(horizonHeader);
 
    QStringList vertiHeader;
@@ -1584,7 +1592,8 @@ void IcvICurve::viewCurveData()
        model->setItem(row ,1, newItem);
        newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
        model->setItem(row ,2, newItem);
-
+       newItem = new QStandardItem(cmd.getBriefInfo());
+       model->setItem(row ,3, newItem);
        qint16 posInRepo = curve.at(row)->getDataPos();
        QList<QPointF> data = plotData.value(posInRepo).getData();
        QString dataStr="";
@@ -1593,14 +1602,21 @@ void IcvICurve::viewCurveData()
            dataStr += QString::number(data.at(tone).y())+",";
        }
        newItem = new QStandardItem(dataStr);
-       model->setItem(row ,3, newItem);
+       model->setItem(row ,4, newItem);
    }
    model->setVerticalHeaderLabels(vertiHeader);
    QTableView *tbl = new QTableView();
    tbl->setModel(model);
-   tbl->setGeometry(this->geometry());
-   tbl->resize(500,300);
-   tbl->show();
+   /* display */
+   QDialog *dlg = new QDialog(this);
+   dlg->setWindowTitle("curve data");
+   QHBoxLayout *layout = new QHBoxLayout(dlg);
+   layout->addWidget(tbl);
+   layout->setAlignment(Qt::AlignTop);
+   dlg->setLayout(layout);
+   dlg->resize(500,300);
+   dlg->show();
+   return;
 }
 
 
@@ -1622,7 +1638,7 @@ void IcvICurve:: viewCurveStat()
 
     QStandardItemModel *model=new QStandardItemModel();
     QStringList horizonHeader;
-    horizonHeader<<"Name"<<"File"<<"Position"<<"Maximum"<<"Minimum"<<"Average"<<"variance";
+    horizonHeader<<"name"<<"file"<<"position"<<"brief"<<"maximum"<<"minimum"<<"average"<<"variance";
     model->setHorizontalHeaderLabels(horizonHeader);
 
     QStringList vertiHeader;
@@ -1634,13 +1650,12 @@ void IcvICurve:: viewCurveStat()
         IcvCommand cmd = curve.at(row)->getCommand();
         newItem = new QStandardItem(cmd.getTitle());
         model->setItem(row ,0, newItem);
-
         newItem = new QStandardItem(cmd.getFileName());
         model->setItem(row ,1, newItem);
-
         newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
         model->setItem(row ,2, newItem);
-
+        newItem = new QStandardItem(cmd.getBriefInfo());
+        model->setItem(row ,3, newItem);
         QList<QPointF> data =  cmd.getData();
         std::vector<qreal> crvRy;
         for(qint16 count = 0; count < data.count(); count++)
@@ -1649,16 +1664,16 @@ void IcvICurve:: viewCurveStat()
         }
         double maxRy = *std::max_element(crvRy.begin(), crvRy.end());
         newItem = new QStandardItem(QString::number(maxRy));
-        model->setItem(row ,3, newItem);
+        model->setItem(row ,4, newItem);
 
         double minRy = *std::min_element(crvRy.begin(), crvRy.end());
         newItem = new QStandardItem(QString::number(minRy));
-        model->setItem(row ,4, newItem);
+        model->setItem(row ,5, newItem);
 
         double sum = std::accumulate(crvRy.begin(), crvRy.end(), 0.0);  
         double mean =  sum/crvRy.size(); 
         newItem = new QStandardItem(QString::number(mean));
-        model->setItem(row ,5, newItem);
+        model->setItem(row ,6, newItem);
 
         double accum  = 0.0;  
         for(qint32 i = 0; i < crvRy.size();i++)
@@ -1667,16 +1682,20 @@ void IcvICurve:: viewCurveStat()
         }
         double stdev = sqrt(accum/(crvRy.size()-1)); 
         newItem = new QStandardItem(QString::number(stdev));
-        model->setItem(row ,6, newItem);
+        model->setItem(row ,7, newItem);
     }
     model->setVerticalHeaderLabels(vertiHeader);
-
+    /* display */
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
-    tbl->setGeometry(this->geometry());
-    tbl->resize(500,300);
-    tbl->show();
-
+    QDialog *dlg = new QDialog(this);
+    dlg->setWindowTitle("curve statistics");
+    QHBoxLayout *layout = new QHBoxLayout(dlg);
+    layout->addWidget(tbl);
+    layout->setAlignment(Qt::AlignTop);
+    dlg->setLayout(layout);
+    dlg->resize(500,300);
+    dlg->show();
     return;
 }
 
