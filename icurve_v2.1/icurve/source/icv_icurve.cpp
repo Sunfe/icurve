@@ -457,52 +457,64 @@ void IcvICurve::saveAs()
 
 void IcvICurve::exportData()
 {
+    QFile file;
     QString fileName = QFileDialog::getSaveFileName(this,
         tr("Save File"),
         "unnamed.txt",
         tr("text files(*.txt);;csv files(*.csv);;excel(*.xsl *.xlsx)"));
 
-    QDialog *dialogInfo = new QDialog(this);
-    QLabel *labelInfo = new QLabel("Saving...");
-    QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(labelInfo);
-    dialogInfo->setLayout(layout);
-    dialogInfo->setFixedSize(300,50);
-    dialogInfo->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
-    dialogInfo->setModal(true);
-    dialogInfo->show();
+    if (fileName.isNull())
+    {
+        return;         
+    }
 
-    QString dataStr;
+    file.setFileName(fileName);  
+    if (!file.open(QIODevice::WriteOnly|QIODevice::Text))
+    {    
+        QMessageBox::critical(NULL, "error", "unable to create file!");  
+        file.close();    
+        return;    
+    }    
+
+    QProgressDialog *progress = createIcvProgressDiag(this, 0, plotData.count(),
+        "progress", "exporting...", QSize(300,100), true);
+    progress->show();
+
+    QString dataContent;
+    QString dataTitle;
+    dataTitle = tr("command,") + tr("file,") + tr("position,") + tr("direction,") + tr("group size,");
+    qint32 maxToneNum = 0;
     for(qint32 row = 0; row < plotData.count(); row++)
     {
         IcvCommand cmd = plotData.value(row);
-        dataStr += cmd.getTitle() + ",";
-        dataStr += cmd.getFileName() + ",";
-        dataStr += QString::number(cmd.getDataPosInFile()) + ",";
-        dataStr += ((cmd.getDirection() == 0)? tr("US"):tr("DS")) + ",";
-        dataStr += QString::number(cmd.getGroupSize()) + ",";
+        dataContent += cmd.getTitle() + ",";
+        dataContent += cmd.getFileName() + ",";
+        dataContent += QString::number(cmd.getDataPosInFile()) + ",";
+        dataContent += ((cmd.getDirection() == 0)? tr("US"):tr("DS")) + ",";
+        dataContent += QString::number(cmd.getGroupSize()) + ",";
         QList<QPointF> data = plotData.value(row).getData();
         for(qint32 tone = 0; tone < data.count(); tone++)
-            dataStr += QString::number(data.at(tone).y()) + " ,";
-        dataStr += "\n";
+            dataContent += QString::number(data.at(tone).y()) + " ,";
+        dataContent += "\n";
+        /* find maximum tones in all curves*/
+        if(maxToneNum < data.count())
+            maxToneNum = data.count();
+
+        progress->setValue(row+1);
     }   
 
-    if (!fileName.isNull())
+    for(qint32 i = 0; i < maxToneNum; i++)
     {
-
-        QFile file(fileName);  
-        if (!file.open(QIODevice::WriteOnly|QIODevice::Text)) {    
-            QMessageBox::critical(NULL, "error", "unable to create file!");  
-            return;    
-        }    
-
-        QTextStream stream(&file);    
-        stream << dataStr << endl;    
-        stream.flush();    
-        file.close();    
+        dataTitle += "tone " + QString::number(i) + ",";
     }
+    dataTitle += "\n";
 
-    delete dialogInfo;
+    QTextStream stream(&file);    
+    stream << dataTitle << dataContent << endl;    
+    stream.flush();    
+    file.close();    
+    delete progress;
+
     return;
 }
 
