@@ -2058,12 +2058,12 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     dialogInfo->setModal(true);
     dialogInfo->show();
 
-    QString totalFile;
-    qint32 index = 0;
+    QString totalCharPerTime;
     qint32 nLine = 0;
-    totalFile = textStream.readAll();
-    while(index!=-1)
+    while(!textStream.atEnd())
     {
+        totalCharPerTime = textStream.readLine();
+        nLine++;
         /* delay 50ms to handle other event,preventing high cpu usage */
         if(0 == (nLine % 20000))  
         {
@@ -2074,9 +2074,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
                 QCoreApplication::processEvents();
             }
         }
-
-        index=totalFile.indexOf('\n',index+1);
-        nLine++;
     }
     qint32  totalLineNum = nLine;
     delete dialogInfo;
