@@ -1476,7 +1476,7 @@ void IcvICurve::showCurveInfo()
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
     QStandardItemModel *model=new QStandardItemModel();
     QStringList horizonHeader;
-    horizonHeader<<"name"<<"nile"<<"position"<<"brief"<<"direction"<<"group Size"<<"shell"<<"data";
+    horizonHeader<<"name"<<"file"<<"position"<<"brief"<<"direction"<<"group Size"<<"shell"<<"data";
     model->setHorizontalHeaderLabels(horizonHeader);
 
     QStringList vertiHeader;
