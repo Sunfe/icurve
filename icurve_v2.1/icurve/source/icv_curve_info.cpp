@@ -7,6 +7,7 @@ QDialog(parent,flag)
 {
     setupUi(this);
     setWindowTitle("show curve information");
+    setFixedSize(550,550);
 
     if(curveList.isEmpty())
         return ;
@@ -19,7 +20,6 @@ QDialog(parent,flag)
         curveTitile.append(title);     
     }
     comboBoxCurveTitle->addItems(curveTitile);
-    comboBoxCurveTitle->setParent(this);
     connect(comboBoxCurveTitle, SIGNAL(activated(int)), this, SLOT(setCurveFileInfo(int)));
 
     /* set the first curve info to default */
@@ -34,6 +34,15 @@ QDialog(parent,flag)
 
     plainEditFileBriefInfo->setReadOnly(true);
     plainEditFileBriefInfo->setText(curves.at(0)->getCommand().getBriefInfo());
+
+    plainTextEditData->setReadOnly(true);
+    QList<QPointF> data = curves.at(0)->getCommand().getData();
+    QString dataStr="";
+    for(qint32 tone = 0; tone < data.count(); tone++)
+    {
+        dataStr += QString::number(data.at(tone).y())+",";
+    }
+    plainTextEditData->setPlainText(dataStr);
 
 }
 

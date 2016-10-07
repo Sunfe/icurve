@@ -1473,6 +1473,14 @@ void IcvICurve::showCurveInfo()
         return ;
     }
 
+    if(curve.count() < 2)
+    {
+        IcvCurveInfoDialog *dlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
+        dlg->exec();
+        return;
+    }
+
+    /* more than one curves selected, dispayed as tableview */
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
     QStandardItemModel *model=new QStandardItemModel();
     QStringList horizonHeader;
