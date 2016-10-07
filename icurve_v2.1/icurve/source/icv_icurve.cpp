@@ -460,8 +460,8 @@ void IcvICurve::exportData()
     QFile file;
     QString fileName = QFileDialog::getSaveFileName(this,
         tr("Save File"),
-        "unnamed.txt",
-        tr("text files(*.txt);;csv files(*.csv);;excel(*.xsl *.xlsx)"));
+        "icurve",
+        tr("csv files(*.csv);;text files(*.txt);;excel(*.xsl *.xlsx)"));
 
     if (fileName.isNull())
     {
@@ -482,7 +482,8 @@ void IcvICurve::exportData()
 
     QString dataContent;
     QString dataTitle;
-    dataTitle = tr("command,") + tr("file,") + tr("position,") + tr("direction,") + tr("group size,");
+    dataTitle = tr("title,") + tr("file,") + tr("position,") + tr("brief,")+
+        tr("name,")+tr("lineId,")+tr("direction,") + tr("group size,");
     qint32 maxToneNum = 0;
     for(qint32 row = 0; row < plotData.count(); row++)
     {
@@ -490,6 +491,9 @@ void IcvICurve::exportData()
         dataContent += cmd.getTitle() + ",";
         dataContent += cmd.getFileName() + ",";
         dataContent += QString::number(cmd.getDataPosInFile()) + ",";
+        dataContent += cmd.getBriefInfo() + ",";
+        dataContent += cmd.getName() + ",";
+        dataContent += QString::number(cmd.getLineId()) + ",";
         dataContent += ((cmd.getDirection() == 0)? tr("US"):tr("DS")) + ",";
         dataContent += QString::number(cmd.getGroupSize()) + ",";
         QList<QPointF> data = plotData.value(row).getData();
