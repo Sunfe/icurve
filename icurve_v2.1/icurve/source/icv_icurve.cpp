@@ -491,7 +491,7 @@ void IcvICurve::exportData()
         dataContent += cmd.getTitle() + ",";
         dataContent += cmd.getFileName() + ",";
         dataContent += QString::number(cmd.getDataPosInFile()) + ",";
-        dataContent += cmd.getBriefInfo() + ",";
+        dataContent += cmd.getBriefInfo().replace(QChar(','), QChar(' ')) + ",";
         dataContent += cmd.getName() + ",";
         dataContent += QString::number(cmd.getLineId()) + ",";
         dataContent += ((cmd.getDirection() == 0)? tr("US"):tr("DS")) + ",";
@@ -500,7 +500,7 @@ void IcvICurve::exportData()
         for(qint32 tone = 0; tone < data.count(); tone++)
             dataContent += QString::number(data.at(tone).y()) + " ,";
         dataContent += "\n";
-        /* find maximum tones in all curves*/
+        /* find maximum tones in all curves */
         if(maxToneNum < data.count())
             maxToneNum = data.count();
 
