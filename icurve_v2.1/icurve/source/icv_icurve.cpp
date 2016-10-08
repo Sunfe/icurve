@@ -2001,7 +2001,6 @@ void IcvICurve::setAxseEyeSpan()
     std::vector<qreal> curvesMaxRy;
     std::vector<qreal> curvesMinRx;
     std::vector<qreal> curvesMinRy;
-    qDebug()<<curves.count();
     for(qint16 row = 0; row < curves.count(); row++)
     {
         if(!curves.at(row)->isAttached())
