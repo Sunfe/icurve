@@ -340,6 +340,7 @@ void IcvICurve::plotBlockData(QString data)
             taskDelay(50);
     }
     plot->replot();
+    return;
 }
 
 
@@ -620,7 +621,6 @@ void IcvICurve::insertCurveName()
         legendItem->detach();
         ui.actionCurveName->setChecked(false);
     }
-
     plot->replot();
     return;
 }
@@ -697,7 +697,6 @@ void IcvICurve::insertIndicator()
 
         ui.actionIndicator->setChecked(false);
     }
-
     plot->replot();
     return;
 }
@@ -727,7 +726,6 @@ void IcvICurve::setCurveColor()
     {
         selectedCurve.at(cnt)->setColor(color);
     }
-
     plot->replot();
     return;
 }
@@ -811,10 +809,8 @@ void IcvICurve::setCurveStyle()
         {
             selectedCurve.at(cnt)->setStyle(style);
         }
-
-        plot->replot();
     }
-
+    plot->replot();
     delete curveStyleDlg;
     curveStyleDlg = NULL;
     return;
@@ -871,6 +867,7 @@ void IcvICurve::setCurveMarker()
 
 void IcvICurve::refreshPlot()
 {
+    setAxseEyeSpan();
     plot->replot();
     return;
 }
@@ -1011,7 +1008,6 @@ void IcvICurve::filterCurve()
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
         return;
     }
-
     plot->updateLegend();
     plot->replot();
 
@@ -1114,7 +1110,6 @@ void IcvICurve::recoverCurveVisible()
         QwtPlotCurve *curve = allCurves.at(cnt)->getCurve();
         curve->show();
     }
-
     plot->replot();
     return;
 }
@@ -1273,7 +1268,6 @@ void IcvICurve::removeCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
-
     plotCanvas->removeSelectCurves();
     plot->replot();
     return;
@@ -1322,7 +1316,6 @@ void IcvICurve::showCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
-
     plotCanvas->showSelectCurves();
     plot->replot();
     return;
@@ -1350,11 +1343,9 @@ void IcvICurve::showAllCurve()
         progress->setValue(pos);
         if( 0 == pos%50)
             taskDelay(50);
-
     }
     plot->replot();
     delete progress;
-
     return;
 }
 
@@ -1428,7 +1419,6 @@ void IcvICurve::expandCurve()
     {
         curve.at(cnt)->setGroupSize(groupSize);
     }
-
     plot->replot();
     return;
 }
@@ -1519,7 +1509,7 @@ void IcvICurve::showCurveInfo()
     layout->addWidget(tbl);
     layout->setAlignment(Qt::AlignTop);
     dlg->setLayout(layout);
-    dlg->resize(500,300);
+   // dlg->resize(500,300);
     dlg->show();
     return;
 }
@@ -1997,6 +1987,55 @@ void IcvICurve::setAxseRotation()
 
 void IcvICurve::setAxseProperties()
 {
+    return;
+}
+
+
+void IcvICurve::setAxseEyeSpan()
+{
+    QList<IcvPlotCurve *> curves = plotCanvas->getCurves(); 
+    if(curves.isEmpty())
+        return;
+
+    std::vector<qreal> curvesMaxRx;
+    std::vector<qreal> curvesMaxRy;
+    std::vector<qreal> curvesMinRx;
+    std::vector<qreal> curvesMinRy;
+    qDebug()<<curves.count();
+    for(qint16 row = 0; row < curves.count(); row++)
+    {
+        if(!curves.at(row)->isAttached())
+            continue;
+        IcvCommand cmd = curves.at(row)->getCommand();
+        QList<QPointF> data =  cmd.getData();
+        std::vector<qreal> crvRx;
+        std::vector<qreal> crvRy;
+        for(qint16 count = 0; count < data.count(); count++)
+        {
+            crvRx.push_back(data.value(count).rx());
+            crvRy.push_back(data.value(count).ry());
+        }
+        /* find maximum of one curve */
+        double maxRxCurve = *std::max_element(crvRx.begin(), crvRx.end());
+        double maxRyCurve = *std::max_element(crvRy.begin(), crvRy.end());
+        curvesMaxRx.push_back(maxRxCurve);
+        curvesMaxRy.push_back(maxRyCurve);
+        /* find minimum of one curve */
+        double minRxCurve = *std::min_element(crvRx.begin(), crvRx.end());
+        double minRyCurve = *std::min_element(crvRy.begin(), crvRy.end());
+        curvesMinRx.push_back(minRxCurve);
+        curvesMinRy.push_back(minRyCurve);
+    }
+
+    if(curvesMaxRx.size() == 0 || curvesMinRx.size() == 0 || 
+        curvesMinRx.size() == 0 || curvesMinRy.size() == 0)
+        return;
+    double maxRx = *std::max_element(curvesMaxRx.begin(), curvesMaxRx.end());
+    double maxRy = *std::max_element(curvesMaxRy.begin(), curvesMaxRy.end());
+    double minRx = *std::min_element(curvesMinRx.begin(), curvesMinRx.end());
+    double minRy = *std::min_element(curvesMinRy.begin(), curvesMinRy.end());
+    plot->setAxisScale(QwtPlot::xBottom, minRx, maxRx);
+    plot->setAxisScale(QwtPlot::yLeft, minRy, maxRy);
     return;
 }
 

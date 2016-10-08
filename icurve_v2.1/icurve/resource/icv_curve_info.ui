@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>550</height>
+    <width>501</width>
+    <height>435</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,8 +25,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>510</y>
+     <x>400</x>
+     <y>400</y>
      <width>81</width>
      <height>32</height>
     </rect>
@@ -46,11 +46,11 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>531</width>
-     <height>496</height>
+     <width>481</width>
+     <height>381</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,4" columnstretch="1,4,2">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,4" columnstretch="1,2,3">
     <property name="sizeConstraint">
      <enum>QLayout::SetMaximumSize</enum>
     </property>
@@ -152,16 +152,6 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" colspan="2">
-     <widget class="QPlainTextEdit" name="plainTextEditFilePos">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
@@ -171,6 +161,22 @@
     </item>
     <item row="5" column="1" colspan="2">
      <widget class="QPlainTextEdit" name="plainTextEditData"/>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QPlainTextEdit" name="plainTextEditFilePos">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>50</height>
+       </size>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

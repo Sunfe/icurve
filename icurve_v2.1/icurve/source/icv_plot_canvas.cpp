@@ -87,7 +87,6 @@ QList<IcvPlotCurve *> IcvPlotCanvas::getCurves()
 void IcvPlotCanvas::setCurves(QList<IcvPlotCurve *> crvs)
 {
     curves = crvs;
-
     return ;
 }
 

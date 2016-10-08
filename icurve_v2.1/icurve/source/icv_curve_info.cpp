@@ -6,8 +6,7 @@ IcvCurveInfoDialog::IcvCurveInfoDialog(QList<IcvPlotCurve*> curveList, QWidget* 
 QDialog(parent,flag)
 {
     setupUi(this);
-    setWindowTitle("show curve information");
-    setFixedSize(550,550);
+    setWindowTitle("curve information");
 
     if(curveList.isEmpty())
         return ;

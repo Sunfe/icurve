@@ -57,6 +57,7 @@ public:
     ICU_RET_STATUS analyzeTextStream(QTextStream &streamText, QString steamName);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
     ICU_RET_STATUS appendCommandData(IcvCommand *cmd, QStringList data);
+    void setAxseEyeSpan();
     QList <IcvCommand> *getPlotData();
     QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
