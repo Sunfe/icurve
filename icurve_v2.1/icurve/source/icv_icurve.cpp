@@ -55,14 +55,15 @@
 #include "icv_textedit.h"
 
 /*including tone index at head of the line*/
-#define ICV_MAX_NUM_DIGITS_PERLINE          (11)  
+#define ICV_MAX_NUM_DIGITS_PERLINE           (11)  
 
-#define ICV_PLOT_DATA_START_POS             (1)
-#define ICV_MAX_LINE_NUM_BACKGROUD_PROCESS  (200)
+#define ICV_PLOT_DATA_START_POS              (1)
+#define ICV_MAX_LINE_NUM_BACKGROUD_PROCESS   (2000)
+#define ICV_MAX_CURVE_NUM_BACKGROUND_PROCESS (50)
 
-#define ICV_MAX_RECENT_FILE_NUM             (5)
-#define ICV_MAX_ACCEPT_FILE_SIZE            (300000000)  /* 300M */
-#define ICV_EYESCAN_MARGIN                  (10)
+#define ICV_MAX_RECENT_FILE_NUM              (5)
+#define ICV_MAX_ACCEPT_FILE_SIZE             (300000000)  /* 300M */
+#define ICV_EYESCAN_MARGIN                   (10)
 
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
@@ -376,10 +377,15 @@ void IcvICurve::loadFile(QStringList fileNames)
         setCurrentFile(fileNames[fileCnt]);
     }
 
-    QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
-    QProgressDialog *plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
-        "plotting progress", labelText, QSize(300,100), true);
-    plotProgressDialog->show();
+    QProgressDialog *plotProgressDialog = NULL;
+    if(plotData.count() > ICV_MAX_CURVE_NUM_BACKGROUND_PROCESS)
+    {
+        QString labelText = "total " + QString::number(plotData.count()) + " curves foud, plotting...";
+        plotProgressDialog = createIcvProgressDiag(plot, posCurRepository, plotData.count(), 
+            "plotting progress", labelText, QSize(300,100), true);
+        plotProgressDialog->show();
+    }
+
     /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {           
@@ -402,18 +408,19 @@ void IcvICurve::loadFile(QStringList fileNames)
         plotCurve->setAttachedState(true);
         /* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
-
         /* plotting progress */
-        plotProgressDialog->setValue(pos + 1);
-        plotProgressDialog->repaint();  
-
+        if(plotProgressDialog != NULL)
+        {
+            plotProgressDialog->setValue(pos + 1);
+            plotProgressDialog->repaint();  
+        }
         /* 50 curves plotted, delay 50ms to handle the other events */
         if(0 == pos % 50)
             taskDelay(50);
     }
     plot->replot();
-    delete plotProgressDialog;
-
+    if(plotProgressDialog != NULL)
+        delete plotProgressDialog;
     return;
 }
 

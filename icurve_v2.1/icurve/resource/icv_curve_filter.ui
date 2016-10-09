@@ -98,12 +98,12 @@
      <rect>
       <x>120</x>
       <y>60</y>
-      <width>121</width>
+      <width>101</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Complete command</string>
+     <string>Complete cmd</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioPromt">
@@ -117,6 +117,19 @@
     </property>
     <property name="text">
      <string>Promt</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioPos">
+    <property name="geometry">
+     <rect>
+      <x>244</x>
+      <y>60</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Position</string>
     </property>
    </widget>
   </widget>
