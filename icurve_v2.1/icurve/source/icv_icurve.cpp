@@ -62,7 +62,7 @@
 
 #define ICV_MAX_RECENT_FILE_NUM             (5)
 #define ICV_MAX_ACCEPT_FILE_SIZE            (300000000)  /* 300M */
-
+#define ICV_EYESCAN_MARGIN                  (10)
 
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
@@ -1504,7 +1504,8 @@ void IcvICurve::showCurveInfo()
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
     QDialog *dlg = new QDialog(this);
-    dlg->setWindowTitle("curve brief information");
+    dlg->setWindowTitle("brief info");
+    dlg->resize(500,300);
     QHBoxLayout *layout = new QHBoxLayout(dlg);
     layout->addWidget(tbl);
     layout->setAlignment(Qt::AlignTop);
@@ -2029,12 +2030,13 @@ void IcvICurve::setAxseEyeSpan()
     if(curvesMaxRx.size() == 0 || curvesMinRx.size() == 0 || 
         curvesMinRx.size() == 0 || curvesMinRy.size() == 0)
         return;
+
     double maxRx = *std::max_element(curvesMaxRx.begin(), curvesMaxRx.end());
     double maxRy = *std::max_element(curvesMaxRy.begin(), curvesMaxRy.end());
     double minRx = *std::min_element(curvesMinRx.begin(), curvesMinRx.end());
     double minRy = *std::min_element(curvesMinRy.begin(), curvesMinRy.end());
-    plot->setAxisScale(QwtPlot::xBottom, minRx, maxRx);
-    plot->setAxisScale(QwtPlot::yLeft, minRy, maxRy);
+    plot->setAxisScale(QwtPlot::xBottom, minRx - ICV_EYESCAN_MARGIN, maxRx + ICV_EYESCAN_MARGIN);
+    plot->setAxisScale(QwtPlot::yLeft,   minRy - ICV_EYESCAN_MARGIN, maxRy + ICV_EYESCAN_MARGIN);
     return;
 }
 
