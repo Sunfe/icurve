@@ -10,7 +10,7 @@
 #define ICV_BY_LINEID         (3)
 #define ICV_BY_DIRECTION      (4)
 #define ICV_BY_PROMT          (5)
-
+#define ICV_BY_POS            (6)
 
 class IcvCurveFilterDialog : public QDialog, public Ui::IcvCurveFilterDialog
 {

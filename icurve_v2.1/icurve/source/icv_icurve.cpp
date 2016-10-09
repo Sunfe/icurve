@@ -937,14 +937,14 @@ void IcvICurve::filterCurve()
     delete filterDlg;
 
     /* parse keyword for lineId */
-    QStringList lineId;
+    QStringList keywordRange;
     if(keyword.contains(QRegExp("^[0-9]+$")))
     {
-        lineId.push_back(keyword);
+        keywordRange.push_back(keyword);
     }
     else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
     {
-        lineId =  keyword.split(",");
+        keywordRange =  keyword.split(",");
     }
     else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
     {
@@ -956,7 +956,7 @@ void IcvICurve::filterCurve()
         qint16  lineEnd   = line.at(1).toInt(&ok);
         for(qint16 i = lineStart; i < lineEnd; i++)
         {
-            lineId.push_back(QString::number(i));
+            keywordRange.push_back(QString::number(i));
         }
     }
   
@@ -971,32 +971,37 @@ void IcvICurve::filterCurve()
         qint16 dataPos = curves.at(cnt)->getDataPos();
         IcvCommand cmd = plotData[dataPos];
         bool   isMatch = false;
-
-        if(ICV_BY_COMPLETECOMAND == filterType)
+        switch(filterType)
         {
-            QString completeComand = cmd.getName() + " " + QString::number(cmd.getLineId()) +
-                " " + QString::number(cmd.getDirection());
-            isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)? true : false;
-        }
-        else if (ICV_BY_COMANDNAME == filterType)
-        {
+        case ICV_BY_COMPLETECOMAND:
+            {
+                QString completeComand = cmd.getName() + " " + QString::number(cmd.getLineId()) +
+                    " " + QString::number(cmd.getDirection());
+                isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)? true : false;
+            }
+            break;
+        case ICV_BY_COMANDNAME:
             isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
-        }
-        else if (ICV_BY_LINEID == filterType)
-        {
-            isMatch = (0 != lineId.count(QString::number(cmd.getLineId())))? true : false;
-        }
-        else if (ICV_BY_DIRECTION == filterType)
-        {
-            QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
-            isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
-        }
-        else if (ICV_BY_PROMT == filterType)
-        {
+            break;
+        case ICV_BY_LINEID:
+            isMatch = (0 != keywordRange.count(QString::number(cmd.getLineId())))? true : false;
+            break;
+        case ICV_BY_DIRECTION:
+            {
+                QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
+                isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
+            }
+            break;
+        case ICV_BY_PROMT:
             isMatch = (cmd.getPromt().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
+            break;
+        case ICV_BY_POS:
+            isMatch = (0 != keywordRange.count(QString::number(cmd.getDataPosInFile())))? true : false;
+            break;
+        default:
+            isMatch = false;
         }
-
-        if(true != isMatch)   
+        if(!isMatch)   
         {
              curves.at(cnt)->removeCurve();
              foundCnt++;
@@ -1009,7 +1014,6 @@ void IcvICurve::filterCurve()
     } 
     /*clear memory*/
     delete progress;
-
     if(0 == foundCnt) 
     {
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
@@ -1017,7 +1021,6 @@ void IcvICurve::filterCurve()
     }
     plot->updateLegend();
     plot->replot();
-
     return;
 }
 

@@ -119,7 +119,7 @@
      <string>Promt</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioPos">
+   <widget class="QRadioButton" name="radioPosition">
     <property name="geometry">
      <rect>
       <x>244</x>

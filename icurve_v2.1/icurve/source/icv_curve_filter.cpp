@@ -33,7 +33,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioDirection,      SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
-
+    connect(radioPosition,       SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     /* code below will cause SLOT(accept) executed twice*/
     //connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     //connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -62,9 +62,10 @@ void IcvCurveFilterDialog::prepareCommitAction()
         lookupType = ICV_BY_DIRECTION;
     else if(sender() == radioPromt)
         lookupType = ICV_BY_PROMT;
-
+    else if(sender() == radioPosition)
+        lookupType = ICV_BY_POS;    
     /*validation constraints*/
-    if(radioLineId->isChecked())
+    if(radioLineId->isChecked() || radioPosition->isChecked())
     {
         QRegExp constraint("^[0-9]+|^([0-9]+,){1,}[0-9]?|^[0-9]+:[0-9]+");   
         lineEdit->setValidator(new QRegExpValidator(constraint, lineEdit)); 
