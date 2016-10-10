@@ -66,6 +66,7 @@ public:
     void taskDelay(qint32 mseconds);
     QProgressDialog * createIcvProgressDiag(QWidget *parent, int rangeMin, int rangeMax, QString winTitle,
         QString LabelText, QSize size, bool isModal);
+    void updateStatusBar();
     ~IcvICurve();
 
 protected:
@@ -115,7 +116,7 @@ private slots:
         void removeCurves();
         void hideCurves();
         void showCurves();
-        void deleteCurve();
+        void deleteCurves();
         void findCurve();
         void showAllCurve();
         void selectAllCurves();

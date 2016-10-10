@@ -1,0 +1,12 @@
+icurve_v2.1/icurve/GeneratedFiles/*/*.*
+icurve_v2.1/icurve/GeneratedFiles/
+icurve_v2.1/icurve/GeneratedFiles/Debug/
+icurve_v2.1/Debug/
+icurve_v2.1/Release/*.*
+!icurve_v2.1/Release/*.exe
+icurve_v2.1/icurve/GeneratedFiles/Debug/*.*
+icurve_v2.1/icurve/GeneratedFiles/Release/*.*
+icurve_v2.1/icurve/GeneratedFiles/*.*
+icurve_v2.1/icurve/*.user
+Visual Studio 2008/
+icurve_v2.1/icurve/history.ini

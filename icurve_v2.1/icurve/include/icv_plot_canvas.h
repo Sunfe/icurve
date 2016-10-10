@@ -35,7 +35,6 @@ public:
 
     IcvICurve* retrieveParent();
     void setMainWin(IcvICurve *icurve);
-    //IcvICurve* getMainWin();
 
     QwtPlotCanvas *getCanvas();
     void setCanvas(QwtPlotCanvas *cvs);
@@ -54,7 +53,8 @@ public:
     void clearCurves(QList<IcvPlotCurve *> crvs);
     void clearAllCurves();
     QList<IcvPlotCurve*> getSelectedCurve();
-    void deleteCurve(QList<IcvPlotCurve*> crv);
+    QList<IcvPlotCurve*> getCanvasCurves();
+    void deleteCurves(QList<IcvPlotCurve*> crv);
     void removeCurves(QList<IcvPlotCurve *> crv);
     void highlightCurve(QList<IcvPlotCurve*> crv);
     void hideSelectCurves();
@@ -76,6 +76,7 @@ private:
     QwtPlotCanvas *canvas;
     IcvICurve     *mainWin;
     QList<IcvPlotCurve *> curves;
+    QList<IcvPlotCurve *> canvasCurves;
     QList<IcvPlotCurve *> curSelectedCurve;
     QList<IcvPlotCurve *> prevSelectedCurve;
 

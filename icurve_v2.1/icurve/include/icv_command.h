@@ -64,8 +64,15 @@ public:
 
     void setFileName(QString name);
     QString getFileName();
-
+    
     QString getTitle();
+    inline bool operator == (IcvCommand &cmd)
+    {
+        if((getFileName()     == cmd.getFileName())&&
+            (getDataPosInFile()== cmd.getDataPosInFile()))
+            return true;
+        return false;
+    }
 
 private:
     QString        name;

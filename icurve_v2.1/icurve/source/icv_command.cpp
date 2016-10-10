@@ -318,3 +318,13 @@ QString IcvCommand::getTitle()
 }
 
 
+#if 0
+inline bool IcvCommand::operator == (IcvCommand &cmd)
+{
+    if((getFileName()     == cmd.getFileName())&&
+       (getDataPosInFile()== cmd.getDataPosInFile()))
+       return true;
+    return false;
+}
+#endif
+

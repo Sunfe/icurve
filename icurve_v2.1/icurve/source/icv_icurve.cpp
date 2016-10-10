@@ -107,7 +107,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionRemove,         SIGNAL(triggered()),     this, SLOT(removeCurves()));
     connect(ui.actionHide,           SIGNAL(triggered()),     this, SLOT(hideCurves()));
     connect(ui.actionShow,           SIGNAL(triggered()),     this, SLOT(showCurves()));
-    connect(ui.actionDelete,         SIGNAL(triggered()),     this, SLOT(deleteCurve()));
+    connect(ui.actionDelete,         SIGNAL(triggered()),     this, SLOT(deleteCurves()));
     connect(ui.actionFind,           SIGNAL(triggered()),     this, SLOT(findCurve()));
     connect(ui.actionShowAll,        SIGNAL(triggered()),     this, SLOT(showAllCurve()));
     connect(ui.actionSelectAll,      SIGNAL(triggered()),     this, SLOT(selectAllCurves()));  
@@ -161,13 +161,12 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     self->setWindowTitle("iCurve");
     self->setWindowIcon(QIcon(":/icurve/images/icurve.png"));
     self->setContentsMargins(0,0,0,0);
+    self->statusBar()->showMessage("ready");
 
     IcvSkin skin;
     self->setStyleSheet(skin.GetSkinCss());
-
     QDesktopWidget* desktop = QApplication::desktop();
     move((desktop->width() - this->width())/2, (desktop->height() - this->height())/3);
-
     /* shortcuts */
     ui.actionOpen->setShortcut(QKeySequence::Open);
     ui.actionSaveAs->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
@@ -421,6 +420,8 @@ void IcvICurve::loadFile(QStringList fileNames)
     plot->replot();
     if(plotProgressDialog != NULL)
         delete plotProgressDialog;
+
+    updateStatusBar();
     return;
 }
 
@@ -876,6 +877,7 @@ void IcvICurve::refreshPlot()
 {
     setAxseEyeSpan();
     plot->replot();
+    updateStatusBar();
     return;
 }
 
@@ -1235,7 +1237,7 @@ void IcvICurve::findCurve()
 }
 
 
-void IcvICurve::deleteCurve()
+void IcvICurve::deleteCurves()
 {
     if(NULL == plotCanvas)
         return ;
@@ -1254,8 +1256,9 @@ void IcvICurve::deleteCurve()
         return ;
     }
     QList<IcvPlotCurve*> curves = plotCanvas->getSelectedCurve();
-    plotCanvas->deleteCurve(curves);
+    plotCanvas->deleteCurves(curves);
     plot->replot();
+    updateStatusBar();
     return;
 }
 
@@ -1280,6 +1283,7 @@ void IcvICurve::removeCurves()
     }
     plotCanvas->removeSelectCurves();
     plot->replot();
+    updateStatusBar();
     return;
 }
 
@@ -1302,9 +1306,9 @@ void IcvICurve::hideCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
-
     plotCanvas->hideSelectCurves();
     plot->replot();
+    updateStatusBar();
     return;
 }
 
@@ -1328,6 +1332,7 @@ void IcvICurve::showCurves()
     }
     plotCanvas->showSelectCurves();
     plot->replot();
+    updateStatusBar();
     return;
 }
 
@@ -1356,6 +1361,7 @@ void IcvICurve::showAllCurve()
     }
     plot->replot();
     delete progress;
+    updateStatusBar();
     return;
 }
 
@@ -2403,6 +2409,15 @@ QProgressDialog * IcvICurve::createIcvProgressDiag(QWidget *parent, int rangeMin
     prgDiag->setModal(isModal);
     
     return prgDiag;
+}
+
+void  IcvICurve::updateStatusBar()
+{
+    QString status;
+    status += QString::number(plotData.count()) + tr(" in repository, ");
+    status += QString::number(plotCanvas->getCanvasCurves().count()) + tr(" in canvas.");
+    statusBar()->showMessage(status);
+    return;
 }
 
 
