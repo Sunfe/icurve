@@ -1,5 +1,6 @@
 ﻿#include <qapplication.h>
 #include <qevent.h>
+#include <Qt>
 #include <QtGlobal>
 #include <QLine>
 #include <QPolygonF>
@@ -750,27 +751,28 @@ void IcvPlotCanvas::createCurvePopMenuAction()
 }
 
 
-void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
+void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event, bool isCtrlPress)
 {
     if(true == mainWin->isHandMoveChecked())
         return;
-
     /*release magnifier*/
     unlockMagnifier();
-    /*hide previous seleced curve marker*/
-    for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
+    if(!isCtrlPress)
     {
-        if(NULL == prevSelectedCurve[cnt])
-            continue;
-
-        prevSelectedCurve[cnt]->hideMarkers();
-        prevSelectedCurve[cnt]->boldTitle(false);
+        /*hide previous seleced curve marker*/
+        for(qint16 cnt = 0; cnt < prevSelectedCurve.count(); cnt++)
+        {
+            if(NULL == prevSelectedCurve[cnt])
+                continue;
+            prevSelectedCurve[cnt]->hideMarkers();
+            prevSelectedCurve[cnt]->boldTitle(false);
+        }
     }
-
     /*try to retrieve the closest curves*/
-    curSelectedCurve.clear();
-    const QPoint        pos = event->pos();
+    const QPoint pos = event->pos();
     qint16 cntCurveSelected = 0;
+    if(!isCtrlPress)
+        curSelectedCurve.clear();
     for(qint16 i = 0; i < curves.count(); i++)
     {
         if(!curves[i]->isAttached())
@@ -816,7 +818,8 @@ void IcvPlotCanvas::onMouseLeftButtonClick(const QMouseEvent *event)
         lockCursorMoveAction = true;
 
     /* update previously selected curves */
-    prevSelectedCurve.clear();
+    if(!isCtrlPress)
+        prevSelectedCurve.clear();
     for(qint16 cnt = 0; cnt < curSelectedCurve.count(); cnt++)
         prevSelectedCurve.append(curSelectedCurve[cnt]);
 
@@ -978,7 +981,7 @@ bool IcvPlotCanvas::eventFilter(QObject *object, QEvent *event)
             const QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
             if(mouseEvent->button() == Qt::LeftButton)
             {
-                onMouseLeftButtonClick(mouseEvent);
+                onMouseLeftButtonClick(mouseEvent, (QApplication::keyboardModifiers() == Qt::ControlModifier)? true:false);
             }
             else if(mouseEvent->button() == Qt::RightButton)
             {

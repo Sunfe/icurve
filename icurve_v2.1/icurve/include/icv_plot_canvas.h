@@ -68,7 +68,7 @@ public:
     virtual bool event( QEvent * );
 
 private:
-    void onMouseLeftButtonClick(const QMouseEvent *event);
+    void onMouseLeftButtonClick(const QMouseEvent *event, bool isCtrlPress);
     void onMouseRightButtonClick(const QMouseEvent *event);
     void onMouseMove(const QMouseEvent *event);
 

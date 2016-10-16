@@ -30,15 +30,17 @@
 #include <qwt_plot_panner.h>
 #include <qwt_picker_machine.h>
 #include <qwt_plot_zoomer.h>
-
 #include "ui_icurve.h"
 #include "ui_icv_curve_filter.h"
-
 #include "icurve_common.h"
 #include "icv_command.h"
 #include "icv_plot_canvas.h"
+#include "icv_curve_differ.h"
+
+#define ICV_EYESCAN_MARGIN                   (10)
 
 class IcvPlotCanvas;
+class IcvCurveDiffer;
 
 class IcvICurve : public QMainWindow
 {
@@ -62,11 +64,13 @@ public:
     QwtPlot* getPlot();
     QwtPlotMagnifier* getMagnifier();
     QwtPlotZoomer *getZoomer();
+    QwtPlotPicker *getPicker();
     bool isHandMoveChecked();
     void taskDelay(qint32 mseconds);
     QProgressDialog * createIcvProgressDiag(QWidget *parent, int rangeMin, int rangeMax, QString winTitle,
         QString LabelText, QSize size, bool isModal);
     void updateStatusBar();
+    void resetDifferTool();
     ~IcvICurve();
 
 protected:
@@ -94,7 +98,7 @@ private:
     QwtPlotPanner *panner;
     QwtPlotZoomer *zoomer;
     QwtSymbol *symbol;
-
+    IcvCurveDiffer *differTool;
     IcvPlotCanvas *plotCanvas;
     QList <IcvCommand> plotData;
     bool isDataAnalyCanceled;
@@ -117,6 +121,7 @@ private slots:
         void hideCurves();
         void showCurves();
         void deleteCurves();
+        void deleteCurvesAll();
         void findCurve();
         void showAllCurve();
         void selectAllCurves();
@@ -153,6 +158,7 @@ private slots:
         /*view menu slots*/
         void enableZoomer(bool checked);
         void zoomPlot(const QRectF &rect);
+        void diffCurves();
         /* tool menu slots*/
         void enableHandMove(bool checked);
         /* help menu slots */
@@ -165,6 +171,7 @@ private slots:
 signals:
         void analyDataProgress(qint32 progress);
         void displayCurveInfoSignal(QString name, QString position, QString lineInfo);
+        void sigDiffCurve(QList<IcvPlotCurve *>);
 
 };
 

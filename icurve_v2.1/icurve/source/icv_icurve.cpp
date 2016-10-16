@@ -56,14 +56,11 @@
 
 /*including tone index at head of the line*/
 #define ICV_MAX_NUM_DIGITS_PERLINE           (11)  
-
 #define ICV_PLOT_DATA_START_POS              (1)
 #define ICV_MAX_LINE_NUM_BACKGROUD_PROCESS   (2000)
 #define ICV_MAX_CURVE_NUM_BACKGROUND_PROCESS (50)
-
 #define ICV_MAX_RECENT_FILE_NUM              (5)
 #define ICV_MAX_ACCEPT_FILE_SIZE             (300000000)  /* 300M */
-#define ICV_EYESCAN_MARGIN                   (10)
 
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
@@ -90,6 +87,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     plotCanvas->createCurvePopMenu();
 
     analyProgressDialog  = NULL;
+    differTool           = NULL;
     isDataAnalyCanceled  = false;
 
     /*{{{signals and slots*/
@@ -108,6 +106,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionHide,           SIGNAL(triggered()),     this, SLOT(hideCurves()));
     connect(ui.actionShow,           SIGNAL(triggered()),     this, SLOT(showCurves()));
     connect(ui.actionDelete,         SIGNAL(triggered()),     this, SLOT(deleteCurves()));
+    connect(ui.actionDeleteAll,      SIGNAL(triggered()),     this, SLOT(deleteCurvesAll()));
     connect(ui.actionFind,           SIGNAL(triggered()),     this, SLOT(findCurve()));
     connect(ui.actionShowAll,        SIGNAL(triggered()),     this, SLOT(showAllCurve()));
     connect(ui.actionSelectAll,      SIGNAL(triggered()),     this, SLOT(selectAllCurves()));  
@@ -141,12 +140,13 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionZoom,           SIGNAL(triggered(bool)), this, SLOT(enableZoomer(bool)));
     /* tool menu */
     connect(ui.actionHandMove,       SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
+    connect(ui.actionDiffer,         SIGNAL(triggered()),     this, SLOT(diffCurves()));
     /* help menu */
     connect(ui.actionAbout,          SIGNAL(triggered()),     this, SLOT(aboutIcurve()));
     /* others */
-    connect(this, SIGNAL(analyDataProgress(qint32)),          this, SLOT(updateAnalyProgressBar(qint32)));
+    connect(this, SIGNAL(analyDataProgress(qint32)), this, SLOT(updateAnalyProgressBar(qint32)));
     /*}}}*/
-    //setStyleSheet("QMainWindow{image: url(bg.jpg)}");
+
 }
 
 
@@ -177,10 +177,12 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     ui.actionShowAll->setShortcut(Qt::CTRL + Qt::Key_K);
     ui.actionRemove->setShortcut(QKeySequence::Delete);
     ui.actionDelete->setShortcut(Qt::CTRL + Qt::Key_Delete);
+    ui.actionDeleteAll->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Delete);
     ui.actionRefresh->setShortcut(QKeySequence::Refresh);
     ui.actionExpand->setShortcut(Qt::CTRL + Qt::Key_G);
     ui.actionInfo->setShortcut(Qt::CTRL + Qt::Key_I);
     ui.actionCurveProperties->setShortcut(Qt::CTRL + Qt::Key_P);
+    ui.actionDiffer->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
 
     setAcceptDrops(true);
     return ;
@@ -239,8 +241,7 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     zoomer = new QwtPlotZoomer(plot->canvas());
     zoomer->setRubberBandPen( QColor( Qt::darkGreen ) );
     zoomer->setTrackerMode( QwtPlotPicker::AlwaysOn );
-    /* RightButton: zoom out by 1,Ctrl+RightButton:zoom 
-       out to full size */
+    /* RightButton: zoom out by 1,Ctrl+RightButton:zoom out to full size */
     zoomer->setMousePattern( QwtEventPattern::MouseSelect2,
         Qt::RightButton, Qt::ControlModifier );
     zoomer->setMousePattern( QwtEventPattern::MouseSelect3,
@@ -316,9 +317,9 @@ void IcvICurve::plotBlockData(QString data)
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {           
         QwtPlotCurve *qwtCurve = new QwtPlotCurve();
+        qwtCurve->setRenderHint( QwtPlotItem::RenderAntialiased );
         qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
         qwtCurve->setSamples(plotData[pos].getData().toVector());
-
         QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
             QPen(Qt::red, 2), QSize(2, 2));
         qwtCurve->setSymbol(symbol);
@@ -655,56 +656,60 @@ void IcvICurve::insertIndicator()
         return ;
     }
 
+    QList<IcvPlotCurve *>selectedCurves = plotCanvas->getSelectedCurve();
+    QList<IcvPlotCurve *>curves = !selectedCurves.isEmpty()? selectedCurves : allCurves;
     if(true == ui.actionIndicator->isChecked())
     {
-        for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+        for(qint16 cnt = 0; cnt < curves.count(); cnt++)
         {
-            if(!allCurves.at(cnt)->isAttached())
+            if(!curves.at(cnt)->isAttached())
                 continue;
 
-            QList<QwtPlotMarker *>indicators = allCurves.at(cnt)->getIndicators();
+            QList<QwtPlotMarker *>indicators = curves.at(cnt)->getIndicators();
             if(!indicators.isEmpty())
                 continue;
-
             /* if not indicator attached to the curve, create and attach*/
-            QwtPlotCurve *qwtCurve = allCurves.at(cnt)->getCurve();
-            QPointF pos;
-            for(qint16 posX = 0; posX < allCurves.at(cnt)->getCurve()->dataSize(); posX++)
+            QwtPlotCurve *qwtCurve = curves.at(cnt)->getCurve();
+            QList<QPointF> posList;
+            for(qint16 posX = 0; posX < curves.at(cnt)->getCurve()->dataSize(); posX++)
             {
-                if(qwtCurve->maxYValue() == qwtCurve->sample(posX).ry())
+                if(qwtCurve->sample(posX).ry() < qwtCurve->maxYValue()&&
+                   qwtCurve->sample(posX).ry() > qwtCurve->minYValue())
                 {
+                    QPointF pos;
                     pos.setX(posX);
-                    pos.setY(qwtCurve->maxYValue());
-                    break;   
+                    pos.setY(qwtCurve->sample(posX).ry());
+                    posList.append(pos);
                 }
             }
 
-            QString promt = allCurves.at(cnt)->getCommand().getPromt();
-            QString title = allCurves.at(cnt)->getCommand().getTitle();
+            QPointF randPos = posList.at(rand() % posList.count());
+            QString promt = curves.at(cnt)->getCommand().getPromt();
+            QString title = curves.at(cnt)->getCommand().getTitle();
             QwtPlotMarker *marker = new QwtPlotMarker();
             marker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
             marker->setItemAttribute( QwtPlotItem::Legend, false );
             marker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, qwtCurve->pen().color()));
-            marker->setValue(pos);
+            marker->setValue(randPos);
             marker->setLabel(promt + "." + title);
             marker->setLabelAlignment( Qt::AlignRight | Qt::AlignTop);
             marker->attach(plot);
 
             QList<QwtPlotMarker *>markers;
             markers.append(marker);
-            allCurves.at(cnt)->setIndicator(markers);
+            curves.at(cnt)->setIndicator(markers);
             ui.actionIndicator->setChecked(true);
         }
     }
     else
     {
-        for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+        for(qint16 cnt = 0; cnt < curves.count(); cnt++)
         {
-            allCurves.at(cnt)->deleteIndicator();
+            curves.at(cnt)->deleteIndicator();
         }
-
         ui.actionIndicator->setChecked(false);
     }
+
     plot->replot();
     return;
 }
@@ -1263,6 +1268,25 @@ void IcvICurve::deleteCurves()
 }
 
 
+void IcvICurve::deleteCurvesAll()
+{
+    if(NULL == plotCanvas)
+        return ;
+
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return ;
+    }
+
+    plotCanvas->deleteCurves(allCurves);
+    plot->replot();
+    updateStatusBar();
+    return;
+}
+
+
 void IcvICurve::removeCurves()
 {
     if(NULL == plotCanvas)
@@ -1426,10 +1450,7 @@ void IcvICurve::expandCurve()
     int groupSize = QInputDialog::getInt(this, tr("Input"),tr("Group size:"), 
                                          4, 1, 32, 2, &ok);
     if (!ok)
-    {
-        //QMessageBox::information(this,tr("Error"),tr("group size may not be correct."));
         return ;
-    }
 
     for(qint16 cnt = 0; cnt < curve.count(); cnt++)
     {
@@ -1521,12 +1542,11 @@ void IcvICurve::showCurveInfo()
     tbl->setModel(model);
     QDialog *dlg = new QDialog(this);
     dlg->setWindowTitle("brief info");
-    dlg->resize(500,300);
     QHBoxLayout *layout = new QHBoxLayout(dlg);
     layout->addWidget(tbl);
     layout->setAlignment(Qt::AlignTop);
     dlg->setLayout(layout);
-   // dlg->resize(500,300);
+    dlg->resize(500,300);
     dlg->show();
     return;
 }
@@ -1567,17 +1587,6 @@ void IcvICurve::jumpToFilePos()
 
 void IcvICurve::viewCurveData()
 {
-#if 0
-   QDialog *dlg = new QDialog(this);
-   QPlainTextEdit *editor = new QPlainTextEdit(dlg);
-   editor->setPlainText(plotData.value(0).getTitle());
-   QHBoxLayout *layout = new QHBoxLayout(dlg);
-   layout->addWidget(editor);
-   layout->setAlignment(Qt::AlignTop);
-   dlg->setLayout(layout);
-   dlg->resize(250,40);
-   dlg->show();
-#endif
    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
    if(allCurves.empty())
    {
@@ -1725,6 +1734,12 @@ QwtPlotZoomer* IcvICurve::getZoomer()
 }
 
 
+QwtPlotPicker* IcvICurve::getPicker()
+{
+    return picker;
+}
+
+
 void IcvICurve::enableZoomer( bool checked)
 {
     bool enable = checked;
@@ -1783,6 +1798,16 @@ bool IcvICurve::isHandMoveChecked()
 void IcvICurve::zoomPlot(const QRectF &rect)
 {
  //   plotCanvas->setZoomState(true);
+    return;
+}
+
+
+void IcvICurve::diffCurves()
+{
+    QList<IcvPlotCurve *> curves = plotCanvas->getSelectedCurve();
+    differTool = new IcvCurveDiffer(curves, this);
+    differTool->setDiffCurves(curves);
+    differTool->show();
     return;
 }
 
@@ -2341,6 +2366,13 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
 QList <IcvCommand>* IcvICurve::getPlotData()
 {
     return &plotData;
+}
+
+
+void IcvICurve::resetDifferTool()
+{
+    differTool = NULL;
+    return;
 }
 
 

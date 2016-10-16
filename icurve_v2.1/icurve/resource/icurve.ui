@@ -58,6 +58,7 @@
     <addaction name="separator"/>
     <addaction name="actionRemove"/>
     <addaction name="actionDelete"/>
+    <addaction name="actionDeleteAll"/>
     <addaction name="separator"/>
     <addaction name="actionHide"/>
     <addaction name="actionShow"/>
@@ -359,7 +360,7 @@
   </action>
   <action name="actionCalc">
    <property name="text">
-    <string>Estimator</string>
+    <string>Estimater</string>
    </property>
   </action>
   <action name="actionStyle">
@@ -531,12 +532,12 @@
   </action>
   <action name="actionData_picker">
    <property name="text">
-    <string>Data Picker</string>
+    <string>Picker</string>
    </property>
   </action>
   <action name="actionData_tracker">
    <property name="text">
-    <string>Curve Tracker</string>
+    <string>Tracker</string>
    </property>
   </action>
   <action name="actionAxseScale">
@@ -655,6 +656,11 @@
   <action name="actionStatiser">
    <property name="text">
     <string>Statisticser</string>
+   </property>
+  </action>
+  <action name="actionDeleteAll">
+   <property name="text">
+    <string>Delete All</string>
    </property>
   </action>
  </widget>
