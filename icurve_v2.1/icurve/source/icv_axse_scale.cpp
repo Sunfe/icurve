@@ -14,7 +14,6 @@ IcvAxseSCaleDialog::IcvAxseSCaleDialog(QWidget* parent)
 {
     if (NULL == parent)
         return ;
-
     setupUi(this);
     lineEditMinX->setFocus();
 
@@ -25,7 +24,6 @@ IcvAxseSCaleDialog::IcvAxseSCaleDialog(QWidget* parent)
     class QDoubleValidator *validatorY = new QDoubleValidator(\
                                              ICV_MIN_LIMIT_SCALE_Y,
                                              ICV_MAX_LIMIT_SCALE_Y,1,this);
-
     lineEditMinX->setValidator(validatorX);
     lineEditMaxX->setValidator(validatorX);
     lineEditMinY->setValidator(validatorY);
@@ -36,20 +34,16 @@ IcvAxseSCaleDialog::IcvAxseSCaleDialog(QWidget* parent)
     QWidget::setTabOrder(lineEditMinY, lineEditMaxY);
     QWidget::setTabOrder(lineEditMinY, lineEditMaxY);
     QWidget::setTabOrder(lineEditMaxY, buttonBox);
-
 }
-
 
 IcvAxseSCaleDialog::~IcvAxseSCaleDialog(void)
 {
 
 }
 
-
 void IcvAxseSCaleDialog::accept()
 {
     bool ok = false;
-
 	if(lineEditMinX->text().isEmpty() || lineEditMaxX->text().isEmpty() ||
 	   lineEditMinY->text().isEmpty() || lineEditMaxY->text().isEmpty())
 	{
@@ -61,10 +55,8 @@ void IcvAxseSCaleDialog::accept()
 
     double minX = lineEditMinX->text().toDouble(&ok);
     double maxX  = lineEditMaxX->text().toDouble(&ok);
-
     double minY  = lineEditMinY->text().toDouble(&ok);
     double maxY  = lineEditMaxY->text().toDouble(&ok);
-
     if(minX >= maxX)
     {
         QMessageBox::warning(this,tr("Warning"),\
@@ -72,7 +64,6 @@ void IcvAxseSCaleDialog::accept()
         lineEditMinX->setFocus();
         return;
     }
-
     if(minY >= maxY)
     {
         QMessageBox::warning(this,tr("Warning"),\
@@ -80,10 +71,8 @@ void IcvAxseSCaleDialog::accept()
         lineEditMinX->setFocus();
         return;
     }
-
     return QDialog::accept();
 }
-
 
 void IcvAxseSCaleDialog::reject()
 {

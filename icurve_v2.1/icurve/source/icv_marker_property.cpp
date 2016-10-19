@@ -5,7 +5,6 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QColor>
-
 #include "icv_marker_property.h"
 
 IcvMarkerPropertyDialog::IcvMarkerPropertyDialog(QWidget* parent)
@@ -13,7 +12,6 @@ IcvMarkerPropertyDialog::IcvMarkerPropertyDialog(QWidget* parent)
 {
     setupUi(this);
     sizeLineEdit->setFocus();
-    
     /*marker bush*/
     btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),
                             markerBrush.color()));
@@ -23,15 +21,12 @@ IcvMarkerPropertyDialog::IcvMarkerPropertyDialog(QWidget* parent)
     btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),
                           markerPen.color()));
     connect(btnMarkerPen,SIGNAL(clicked()), this, SLOT(setMarkerPen()));
-
 }
-
 
 IcvMarkerPropertyDialog::~IcvMarkerPropertyDialog()
 {
 
 }
-
 
 void IcvMarkerPropertyDialog::setMarkerBush()
 {
@@ -39,10 +34,8 @@ void IcvMarkerPropertyDialog::setMarkerBush()
     QColor      color = QColorDialog::getColor(colorUsing,this,tr("Select color"));
     markerBrush = QBrush(color);
     btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),color));
-
     return;
 }
-
 
 void IcvMarkerPropertyDialog::setMarkerPen()
 {
@@ -50,10 +43,8 @@ void IcvMarkerPropertyDialog::setMarkerPen()
     QColor      color = QColorDialog::getColor(colorUsing,this,tr("Select color"));
     markerPen = QPen(color);
     btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),color));
-
     return ;
 }
-
 
 QIcon IcvMarkerPropertyDialog::createColorToolButtonIcon(const QString imageFile, QColor color)
 {
@@ -64,25 +55,20 @@ QIcon IcvMarkerPropertyDialog::createColorToolButtonIcon(const QString imageFile
     QPixmap image(imageFile);
     QRect target(0,0,50,60);
     QRect source(0,0,42,42);
-
     painter.fillRect(QRect(0,60,50,80),color);
     painter.drawPixmap(target,image, source);
-
     return QIcon(pixmap);
 }
-
 
 QBrush IcvMarkerPropertyDialog::getMarkerBrush()
 {
     return markerBrush;
 }
 
-
 QPen IcvMarkerPropertyDialog::getMarkerPen()
 {
     return markerPen;
 }
-
 
 void IcvMarkerPropertyDialog::accept()
 {
@@ -92,7 +78,6 @@ void IcvMarkerPropertyDialog::accept()
         sizeLineEdit->setFocus();
         return ;
     }
-
     if(sizeLineEdit->text() != "")
     {
         bool ok = false;
@@ -104,10 +89,8 @@ void IcvMarkerPropertyDialog::accept()
             return ;
         }
     }
-
     return QDialog::accept ();
 }
-
 
 void IcvMarkerPropertyDialog::reject()
 {

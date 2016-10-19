@@ -15,11 +15,10 @@
 IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     : QDialog(parent)
 {
-    setMinimumSize(400,350);
+    setMinimumSize(550,400);
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
     toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    
     plotAction  = new QAction(QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
     clearAction = new QAction(QPixmap(":/icurve/images/clear.png"), "Clear", toolBar );
     saveAction  = new QAction(QPixmap(":/icurve/images/save_data.png"), "Save", toolBar );
@@ -42,22 +41,19 @@ IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
 
 }
 
-
 IcvDataPlotDialog::~IcvDataPlotDialog()
 {
 
 }
-
 
 QString IcvDataPlotDialog::getDataSting()
 {
     return plainTextEdit->toPlainText();
 } 
 
-
 void IcvDataPlotDialog::processClickEvent()
 {
- if(sender() == plotAction)
+    if(sender() == plotAction)
     {
         if(plainTextEdit->toPlainText() == "")
         {
@@ -80,33 +76,25 @@ void IcvDataPlotDialog::processClickEvent()
     {
         plainTextEdit->clear();
     }
-
     return;
 } 
-
 
 void IcvDataPlotDialog::saveBlockData()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save File"),
-        "unnamed.txt",
-        tr("text files(*.txt);"));
-
+        tr("Save File"),"unnamed.txt",tr("text files(*.txt);"));
     if (!fileName.isNull())
     {
-
         QFile file(fileName);  
         if (!file.open(QIODevice::WriteOnly|QIODevice::Text)) {    
             QMessageBox::critical(NULL, "error", "unable to create file!");  
             return;    
         }    
-
         QTextStream stream(&file);    
         stream << plainTextEdit->toPlainText() << endl;    
         stream.flush();    
         file.close();    
     }
-
     return;
 }
 

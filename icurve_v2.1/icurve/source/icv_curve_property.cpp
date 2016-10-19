@@ -10,11 +10,9 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
 {
     if(crv.count() == 0)
         return;
-
     curve = crv;
     if(NULL == curve[0]->getCurve())
         return ;
-
     /*if there are serveral curves, default is from the first curve*/
     curveStyle  = curve[0]->getCurve()->pen().style();
     curveWidth  = curve[0]->getCurve()->pen().width();
@@ -36,7 +34,6 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
         markerPen   = QPen(Qt::black);
         markerSize  = QSize(1,1);
     }
-
     /*disable all changes from the mainWindow*/
     setModal(true);
 
@@ -138,7 +135,6 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     connect(btnMarkerPen,SIGNAL(clicked()), this, SLOT(setMarkerPen()));
     /*}}}*/
 
-
     QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(btnBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(btnBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -146,7 +142,6 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     QHBoxLayout *btnLayout = new QHBoxLayout;
     btnLayout->addStretch();
     btnLayout->addWidget(btnBox);
-
     QGridLayout *layout = new QGridLayout;
     /*name*/
     layout->addWidget(nameLabel, 0, 0);
@@ -164,7 +159,6 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     layout->addWidget(btnMarkerPen, 2, 4);
     /* buttons */
     layout->addLayout(btnLayout, 3, 0, 1, 5);
-
     /*alignment*/
     layout->itemAtPosition(0,0)->setAlignment(Qt::AlignRight);
     layout->itemAtPosition(1,0)->setAlignment(Qt::AlignRight);
@@ -172,15 +166,12 @@ IcvCurvePropertyDialog::IcvCurvePropertyDialog(QList<IcvPlotCurve *>crv, QWidget
     layout->itemAtPosition(3,0)->setAlignment(Qt::AlignRight);
     layout->setAlignment(Qt::AlignTop);
     setLayout(layout);
-
 }
-
 
 IcvCurvePropertyDialog::~IcvCurvePropertyDialog()
 {
 
 }
-
 
 QList<QwtPlotCurve*> IcvCurvePropertyDialog::getCurve()
 {
@@ -188,10 +179,8 @@ QList<QwtPlotCurve*> IcvCurvePropertyDialog::getCurve()
     {
         qwtCurve.push_back(curve.at(cnt)->getCurve());
     }
-
     return qwtCurve;
 }
-
 
 QList<const QwtSymbol*> IcvCurvePropertyDialog::getSymbol()
 {
@@ -203,10 +192,8 @@ QList<const QwtSymbol*> IcvCurvePropertyDialog::getSymbol()
         else
             qwtSymbol.push_back(NULL);
     }
-
     return qwtSymbol;
 }
-
 
 void IcvCurvePropertyDialog::accept()
 {
@@ -218,7 +205,6 @@ void IcvCurvePropertyDialog::accept()
 
     if(0 == curve.count())
         return QDialog::accept();
-
     /*if multi-curves selected, curve name is forbidden to set,because 
       curves must not have the same title, but if is single one, free
       to change*/
@@ -229,13 +215,11 @@ void IcvCurvePropertyDialog::accept()
             curve.at(0)->getCurve()->setTitle(curveName);
         }
     }
-
     /*Change the selected curve style*/
     ok          = false;
     widthTarget = curveWidthCombox->lineEdit()->text().toInt(&ok);
     colorTarget = curveColor;
     styleTarget = curveStyle;
-
     for(qint16 cnt = 0; cnt < curve.count();cnt++)
     {
         QPen pen = curve.at(cnt)->getCurve()->pen();
@@ -244,13 +228,11 @@ void IcvCurvePropertyDialog::accept()
         pen.setStyle(styleTarget);
         curve.at(cnt)->getCurve()->setPen(pen);
     }
-
     /*Change marker attached to the selected curve */
     qint16 size = 0;
     ok          = false;
     size        = markerSizeCombox->currentText().toInt(&ok);
     markerSize  = QSize(size,size);
-
     for(qint16 cnt = 0; cnt < curve.count();cnt++)
     {
         QList<QwtPlotMarker *> markers = curve.at(cnt)->getMarkers();
@@ -260,27 +242,21 @@ void IcvCurvePropertyDialog::accept()
                                     markerPen, markerSize));
         }
     }
-
     if(NULL == curve.at(0)->getCanvas())
         return ;
-
     if(NULL == curve.at(0)->getCanvas()->getCanvas())
         return ;
-
     /*update curve*/
     QwtPlot *plot = curve.at(0)->getCanvas()->getCanvas()->plot();
     if(NULL != plot)
         plot->replot();
-
-    return QDialog::accept ();
+    return QDialog::accept();
 }
-
 
 void IcvCurvePropertyDialog::reject()
 {
     return QDialog::reject ();
 }
-
 
 QIcon IcvCurvePropertyDialog::createColorToolButtonIcon(const QString imageFile, QColor color)
 {
@@ -294,52 +270,41 @@ QIcon IcvCurvePropertyDialog::createColorToolButtonIcon(const QString imageFile,
 
     painter.fillRect(QRect(0,60,50,80),color);
     painter.drawPixmap(target,image, source);
-
     return QIcon(pixmap);
 }
-
 
 void IcvCurvePropertyDialog::setCurveStyle(int indexSel)
 {
     bool ok = false;
     int style = indexSel+1;
     curveStyle = static_cast<Qt::PenStyle>(style);
-
-    return ;
+    return;
 }
-
 
 void IcvCurvePropertyDialog::setCurveWidth(int indexSel)
 {
     bool ok = false;
     QString str = curveWidthCombox->itemText(indexSel);
     curveWidth = str.toInt(&ok);
-
-    return ;
+    return;
 }
-
 
 void IcvCurvePropertyDialog::setCurveColor()
 {
     if(curve.count() == 0)
         return;
-
     QColor curColor = getCurve().at(0)->pen().color();
     QColor color    = QColorDialog::getColor(curColor,this,tr("Select color"));
     btnLineColor->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),color));
     curveColor = color;
-
-    return ;
+    return;
 }
-
 
 void IcvCurvePropertyDialog::setMarkerStyle(int indexSel)
 {
     markerStyle =  static_cast<QwtSymbol::Style>(indexSel-1);
-
     return;
 }
-
 
 void IcvCurvePropertyDialog::setMarkerBush()
 {
@@ -347,10 +312,8 @@ void IcvCurvePropertyDialog::setMarkerBush()
     QColor    color = QColorDialog::getColor(curColor,this,tr("Select color"));
     markerBrush     = QBrush(color);
     btnMarkerBrush->setIcon(createColorToolButtonIcon(tr("images/floodfill.png"),color));
-
     return ;
 }
-
 
 void IcvCurvePropertyDialog::setMarkerPen()
 {
@@ -358,18 +321,14 @@ void IcvCurvePropertyDialog::setMarkerPen()
     QColor    color = QColorDialog::getColor(curColor,this,tr("Select color"));
     markerPen       = QPen(color);
     btnMarkerPen->setIcon(createColorToolButtonIcon(tr("images/linecolor.png"),color));
-
     return ;
 }
-
 
 void IcvCurvePropertyDialog::setMarkerSize(int indexSel)
 {
     markerSizeCombox->setCurrentIndex(indexSel);
-
     return ;
 }
-
 
 bool IcvCurvePropertyDialog::eventFilter ( QObject * obj, QEvent * event )
 {
@@ -378,7 +337,6 @@ bool IcvCurvePropertyDialog::eventFilter ( QObject * obj, QEvent * event )
     else
         return QDialog::eventFilter ( obj, event );
 }
-
 
 
 

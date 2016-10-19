@@ -5,14 +5,13 @@
 #include <QCompleter>
 #include "icv_curve_filter.h"
 
+
 IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 : QDialog(parent)
 {
     setupUi(this);
-
     radioComandName->setCheckable(true);
     radioComandName->setChecked(true);
-
     /* default completion */
     QStringList wordList;
     wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"\
@@ -27,28 +26,21 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     /* legally accept command name*/
     keywords << "getTxPsd" << "getSnr" << "getQln" << "getHlog" << "getNoiseMargin" << "getBitAlloc"\
         << "DS" << "US"<<"api"<<"rfc"<<"bcm"<<"fast";
-
     /* default actions */
     connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioDirection,      SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioPosition,       SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
-    /* code below will cause SLOT(accept) executed twice*/
-    //connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    //connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
     connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
     connect(this, SIGNAL(warningSignal(QString)), this, SLOT(displayWarning(QString)));
 }
 
-
 IcvCurveFilterDialog::~IcvCurveFilterDialog()
 {
 
 }
-
 
 void IcvCurveFilterDialog::prepareCommitAction()
 {
@@ -72,7 +64,6 @@ void IcvCurveFilterDialog::prepareCommitAction()
     }
     else
         lineEdit->setValidator(NULL);
-
     /* keywords completion */
     QStringList wordList;
     if (radioComandName->isChecked())
@@ -96,7 +87,6 @@ void IcvCurveFilterDialog::prepareCommitAction()
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     lineEdit->setCompleter(completer);
-
     /*preview action */
     if(previewCheckBox->checkState() == Qt::Checked )
     {
@@ -106,18 +96,15 @@ void IcvCurveFilterDialog::prepareCommitAction()
     return;
 }
 
-
 qint16 IcvCurveFilterDialog::getLookupType()
 {
     return lookupType;
 }
 
-
 QString IcvCurveFilterDialog::getKeyword()
 {
     return keyword;
 }
-
 
 void IcvCurveFilterDialog::accept()
 {
@@ -246,7 +233,6 @@ void IcvCurveFilterDialog::accept()
     }
 }
 
-
 void IcvCurveFilterDialog::reject()
 {
     if(previewCheckBox->checkState() == Qt::Checked )
@@ -256,9 +242,9 @@ void IcvCurveFilterDialog::reject()
     return QDialog::reject ();
 }
 
-
 void IcvCurveFilterDialog::displayWarning(QString info)
 {
     QMessageBox::warning(this,tr("Warning"), info, QMessageBox::Close);
     return ;
 }
+

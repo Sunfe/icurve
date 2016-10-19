@@ -1,22 +1,21 @@
 #ifndef ICV_COMMAND_H
 #define ICV_COMMAND_H
-
 #include <QtGlobal>
 #include <QString>
 #include <QStringList>
 #include <QList>
 #include <QPointF>
 
+
 #define CMD_TITLE_MATCHED            (1)
 #define CMD_GROUPSIZE_MATCHED        (2)
 #define CMD_PLOTDATA_MATCHED         (3)
 #define CMD_CLOSED                   (4)
+#define ICV_PROMT_RFC                (1)
+#define ICV_PROMT_BCM                (2)
+#define ICV_PROMT_API                (3)
+#define ICV_PROMT_FAST               (4)
 
-
-#define ICV_PROMT_RFC    (1)
-#define ICV_PROMT_BCM    (2)
-#define ICV_PROMT_API    (3)
-#define ICV_PROMT_FAST   (4)
 
 class IcvCommand
 {

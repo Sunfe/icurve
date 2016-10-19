@@ -13,7 +13,6 @@ void IcvPenStyleDelegate::paint(QPainter *painter,
     QString test = index.data(Qt::DisplayRole).toString();
     Qt::PenStyle penStyle = (Qt::PenStyle)index.data(Qt::UserRole).toInt();
     QRect r = option.rect;
-
     if(option.state & QStyle::State_Selected)
     {
         painter->save();
@@ -28,13 +27,10 @@ void IcvPenStyleDelegate::paint(QPainter *painter,
     }
 
     painter->drawLine(0,r.y()+r.height()/2,r.right(),r.y()+r.height()/2);
-
     if(option.state & QStyle::State_Selected)
         painter->restore();
-
     return;
 }
-
 
 QSize IcvPenStyleDelegate::sizeHint(const QStyleOptionViewItem &option,
                                     const QModelIndex &index) const

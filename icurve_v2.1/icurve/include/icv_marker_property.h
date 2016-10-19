@@ -1,6 +1,5 @@
 #ifndef ICV_MARKER_PROPERTY_H
 #define ICV_MARKER_PROPERTY_H
-
 #include <QDialog>
 #include <QString>
 #include <QBrush>

@@ -23,14 +23,12 @@ IcvPlotCurve::IcvPlotCurve(QwtPlotCurve *crv)
     showMarkerState = ICV_CURVE_HIDE_MARKER;
 }
 
-
 IcvPlotCurve::IcvPlotCurve()
 {
     curve  = NULL;
     canvas = NULL;
     activateState = ICV_CURVE_UNACTIVATED;
 }
-
 
 IcvPlotCurve::~IcvPlotCurve()
 {
@@ -39,7 +37,6 @@ IcvPlotCurve::~IcvPlotCurve()
         curve->detach();
         delete curve;
     }
-
     /* delete markers */
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
@@ -47,7 +44,6 @@ IcvPlotCurve::~IcvPlotCurve()
         delete markers.value(pos);
     }
     markers.clear();
-
     /* delete indicators */
     for(qint16 pos= 0; pos < indicator.count(); pos++)
     {
@@ -63,24 +59,21 @@ IcvPlotCurve::~IcvPlotCurve()
     attached = false;
 }
 
-
 IcvPlotCanvas* IcvPlotCurve::getCanvas()
 {
     return canvas;
 }
 
-
 void IcvPlotCurve::setCanvas(IcvPlotCanvas *cvs)
 {
     canvas = cvs;
+    return;
 }
-
 
 QwtPlotCurve* IcvPlotCurve::getCurve()
 {
     return curve;
 }
-
 
 void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
 {
@@ -90,12 +83,10 @@ void IcvPlotCurve::setCurve(QwtPlotCurve *crv)
     return ;
 }
 
-
 qint16 IcvPlotCurve::getDataPos()
 {
     return dataPosition;
 }
-
 
 void IcvPlotCurve::setDataPos(qint16 pos)
 {
@@ -103,19 +94,16 @@ void IcvPlotCurve::setDataPos(qint16 pos)
     return ;
 }
 
-
 qint16 IcvPlotCurve::getActivateState()
 {
     return activateState;
 }
-
 
 void IcvPlotCurve::setActivateState(qint16 state)
 {
     activateState = state;
     return ;
 }
-
 
 void IcvPlotCurve::showVividCurve()
 {
@@ -128,19 +116,16 @@ void IcvPlotCurve::showVividCurve()
     return;
 }
 
-
 bool IcvPlotCurve::isAttached()
 {
     return attached;
 }
-
 
 void IcvPlotCurve::setAttachedState(bool state)
 {
     attached = state;
     return;
 }
-
 
 void IcvPlotCurve::showCurve()
 {
@@ -155,7 +140,6 @@ void IcvPlotCurve::showCurve()
     return;
 }
 
-
 void IcvPlotCurve::hideCurve()
 {
     if(curve != NULL)
@@ -167,12 +151,10 @@ void IcvPlotCurve::hideCurve()
     return;
 }
 
-
 void IcvPlotCurve::removeCurve()
 {
     if(curve == NULL)
         return;
-
     curve->detach();
     /* remove markers */
     for(qint16 pos= 0; pos < markers.count(); pos++)
@@ -184,21 +166,17 @@ void IcvPlotCurve::removeCurve()
     {
         indicator[pos]->detach();
     }
-
     boldTitle(false);
     setAttachedState(false);
     return;
 }
 
-
 void IcvPlotCurve::deleteCurve()
 {
     if(curve == NULL)
         return;
-
     curve->detach();
     delete curve;
-
     for(qint16 pos= 0; pos < markers.count(); pos++)
     {
         markers[pos]->detach();
@@ -210,28 +188,23 @@ void IcvPlotCurve::deleteCurve()
         indicator[pos]->detach();
         delete indicator[pos];
     }
-
     markers.clear();
     attached = false;
     return;
 }
-
 
 QList<QwtPlotMarker *> IcvPlotCurve::getMarkers()
 {
     return markers;
 }
 
-
 void IcvPlotCurve::setMarkers()
 {
     if(NULL == curve)
         return ;
-
     qint16 sampleSize = curve->dataSize();
     qint16 step = 0;
     qint16 markerTotalCount = 0;
-
     if( sampleSize < ICV_CURVE_MAX_MARKER_NUM)
     {
         step = 1;
@@ -261,7 +234,6 @@ void IcvPlotCurve::setMarkers()
     return;
 }
 
-
 void IcvPlotCurve::showMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
@@ -273,7 +245,6 @@ void IcvPlotCurve::showMarkers()
     return;
 }
 
-
 void IcvPlotCurve::hideMarkers()
 {
     for(qint16 pos = 0; pos < markers.count(); pos++)
@@ -283,7 +254,6 @@ void IcvPlotCurve::hideMarkers()
     showMarkerState = ICV_CURVE_HIDE_MARKER;
     return;
 }
-
 
 void IcvPlotCurve::deleteMakers()
 {  
@@ -296,7 +266,6 @@ void IcvPlotCurve::deleteMakers()
     return;
 }
 
-
 void IcvPlotCurve::updateMakers()
 {
     deleteMakers();  /* delete previous markers */
@@ -304,18 +273,16 @@ void IcvPlotCurve::updateMakers()
     return;
 }
 
-
 void IcvPlotCurve::setIndicator(QList<QwtPlotMarker *>markers)
 {
     indicator = markers;
+    return;
 }
-
 
 QList<QwtPlotMarker *> IcvPlotCurve::getIndicators()
 {
     return indicator;
 }
-
 
 void IcvPlotCurve::removeIndicator()
 {
@@ -325,7 +292,6 @@ void IcvPlotCurve::removeIndicator()
     }
     return;
 }
-
 
 void IcvPlotCurve::deleteIndicator()
 {
@@ -338,19 +304,16 @@ void IcvPlotCurve::deleteIndicator()
     return;
 }
 
-
 qint16 IcvPlotCurve::getShowMarkerState()
 {
     return showMarkerState;
 }
-
 
 void IcvPlotCurve::setShowMarkerState(qint16 state)
 {
     showMarkerState = state;
     return;
 }
-
 
 void IcvPlotCurve::setColor(QColor color)
 {
@@ -369,7 +332,6 @@ void IcvPlotCurve::setColor(QColor color)
     return;
 }
 
-
 void IcvPlotCurve::setWidth(qint16 width)
 {
     QPen pen = curve->pen();
@@ -378,7 +340,6 @@ void IcvPlotCurve::setWidth(qint16 width)
     return;
 }
 
-
 void IcvPlotCurve::setStyle(Qt::PenStyle style)
 {
     QPen pen = curve->pen();
@@ -386,7 +347,6 @@ void IcvPlotCurve::setStyle(Qt::PenStyle style)
     curve->setPen(pen);
     return;
 }
-
 
 void IcvPlotCurve::setMarker(QwtSymbol::Style style)
 {
@@ -405,7 +365,6 @@ void IcvPlotCurve::setMarker(QwtSymbol::Style style)
     return;
 }
 
-
 void IcvPlotCurve::setMarkerSize(qint16 size)
 {
     for(qint16 cnt= 0; cnt < markers.count(); cnt++)
@@ -423,7 +382,6 @@ void IcvPlotCurve::setMarkerSize(qint16 size)
     return;
 }
 
-
 void IcvPlotCurve::setMarkerColor(QBrush brush, QPen pen)
 {
     for(qint16 cnt= 0; cnt < markers.count(); cnt++)
@@ -439,12 +397,10 @@ void IcvPlotCurve::setMarkerColor(QBrush brush, QPen pen)
     return;
 }
 
-
 void IcvPlotCurve::setGroupSize(qint16 size)
 {
     if(NULL == canvas)
         return;
-
     IcvCommand cmd = canvas->retrieveParent()->getPlotData()->at(dataPosition);
     QList<QPointF> dataExpand;
 
@@ -464,12 +420,10 @@ void IcvPlotCurve::setGroupSize(qint16 size)
     return;
 }
 
-
 void IcvPlotCurve::boldTitle(bool enable)
 {
     if(curve == NULL)
         return;
-
     QwtText titleCur = curve->title();
     QFont font = titleCur.font();
     if(enable)
@@ -488,7 +442,6 @@ void IcvPlotCurve::boldTitle(bool enable)
     curve->setTitle(titleCur);
     return;
 }
-
 
 void IcvPlotCurve::setCommand(IcvCommand cmd)
 {

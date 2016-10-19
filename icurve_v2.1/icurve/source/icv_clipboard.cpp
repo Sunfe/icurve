@@ -1,5 +1,6 @@
 #include "icv_clipboard.h"
 
+
 #if 0
 IcvClipBoard::IcvClipBoard(QList<QwtPlotCurve *>curve)
 {
@@ -7,9 +8,7 @@ IcvClipBoard::IcvClipBoard(QList<QwtPlotCurve *>curve)
     {
         data.insert(cnt, *(curve.at(cnt)));
     }
-
 }
-
 
 IcvClipBoard::~IcvClipBoard(void)
 {
@@ -17,8 +16,7 @@ IcvClipBoard::~IcvClipBoard(void)
 }
 
 void IcvClipBoard::setData(QwtPlotCurve *curve)
-{
-   
+{ 
     return;
 }
 #endif

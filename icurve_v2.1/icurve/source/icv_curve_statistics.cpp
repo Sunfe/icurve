@@ -8,7 +8,6 @@ IcvCurveStatistics::IcvCurveStatistics(QAbstractItemModel * model,QWidget * pare
     setModel(model);
     statTableView = new QTableView(this);
 
-   // init();
     connect(horizontalHeader(),SIGNAL(sectionResized(int,int,int)), this,
         SLOT(updateSectionWidth(int,int,int)));
     connect(verticalHeader(),SIGNAL(sectionResized(int,int,int)), this,
@@ -18,46 +17,26 @@ IcvCurveStatistics::IcvCurveStatistics(QAbstractItemModel * model,QWidget * pare
         verticalScrollBar(), SLOT(setValue(int)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
         verticalScrollBar(), SLOT(setValue(int)));
-
 }
-
 
 IcvCurveStatistics::~IcvCurveStatistics()
 {
     delete statTableView;
 }
 
-
 void IcvCurveStatistics::init()
 {
     setModel(model());
     setFocusPolicy(Qt::NoFocus);
-    //verticalHeader()->hide();
     horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-
-   // viewport()->stackUnder(statTableView);
-#if 0
-    setStyleSheet("QTableView { border: none;"
-        "background-color: #8EDE21;"
-        "selection-background-color: #999}"); 
-    setSelectionModel(selectionModel());
-#endif
-#if 0
-    for(int col=1; col<model()->columnCount(); col++)
-        setColumnHidden(col, true);
-#endif
-    //setColumnWidth(0, columnWidth(0) );
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //show();
-
     updateFrozenTableGeometry();
-
     setHorizontalScrollMode(ScrollPerPixel);
     setVerticalScrollMode(ScrollPerPixel);
     setVerticalScrollMode(ScrollPerPixel);
+    return;
 }
-
 
 void IcvCurveStatistics::updateSectionWidth(int logicalIndex, int, int newSize)
 {
@@ -65,20 +44,21 @@ void IcvCurveStatistics::updateSectionWidth(int logicalIndex, int, int newSize)
         setColumnWidth(0,newSize);
         updateFrozenTableGeometry();
     }
+    return;
 }
 
 void IcvCurveStatistics::updateSectionHeight(int logicalIndex, int, int newSize)
 {
     setRowHeight(logicalIndex, newSize);
+    return;
 }
-
 
 void IcvCurveStatistics::resizeEvent(QResizeEvent * event)
 {
     QTableView::resizeEvent(event);
     updateFrozenTableGeometry();
+    return;
 }
-
 
 QModelIndex IcvCurveStatistics::moveCursor(CursorAction cursorAction,
                                            Qt::KeyboardModifiers modifiers)
@@ -94,19 +74,20 @@ QModelIndex IcvCurveStatistics::moveCursor(CursorAction cursorAction,
     return current;
 }
 
-
-void IcvCurveStatistics::scrollTo (const QModelIndex & index, ScrollHint hint){
+void IcvCurveStatistics::scrollTo (const QModelIndex & index, ScrollHint hint)
+{
     if(index.column()>0)
         QTableView::scrollTo(index, hint);
+    return;
 }
-
 
 void IcvCurveStatistics::updateFrozenTableGeometry()
 {
-    setGeometry(verticalHeader()->width()+frameWidth(),
-        frameWidth(), columnWidth(0),
-        viewport()->height()+horizontalHeader()->height());
+    setGeometry(verticalHeader()->width()+frameWidth(), frameWidth(), columnWidth(0),
+                viewport()->height()+horizontalHeader()->height());
+    return;
 }
+
 
 
 

@@ -11,7 +11,6 @@ IcvSymbol::IcvSymbol(IcvSymbol::Style styleType, QColor color)
     {
         QPen pen(color);
         pen.setJoinStyle( Qt::MiterJoin );
-
         setPen(pen);
         setBrush(color);
 
@@ -29,7 +28,6 @@ IcvSymbol::IcvSymbol(IcvSymbol::Style styleType, QColor color)
 
         setPath( path );
         setPinPoint( QPointF( 0, 0 ) );
-
         setSize( 10, 14 );
     }
 }

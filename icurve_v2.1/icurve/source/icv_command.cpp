@@ -1,5 +1,5 @@
-
 #include "icv_command.h"
+
 
 IcvCommand::IcvCommand(void)
 {
@@ -9,7 +9,6 @@ IcvCommand::IcvCommand(void)
     groupSize = 1;
 }
 
-
 IcvCommand::IcvCommand(QString cmd)
 {
     initFamily();
@@ -18,7 +17,6 @@ IcvCommand::IcvCommand(QString cmd)
     groupSize = 1;
     name = cmd;
 }
-
 
 IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
 {
@@ -32,12 +30,10 @@ IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
     state     = CMD_CLOSED;
 }
 
-
 IcvCommand::~IcvCommand()
 {
 
 }
-
 
 void IcvCommand::initFamily()
 {
@@ -52,17 +48,14 @@ void IcvCommand::initFamily()
     return;
 }
 
-
 void IcvCommand::initPromtFamily()
 {
     promtFamily.push_back("rfc");
     promtFamily.push_back("bcm");
     promtFamily.push_back("api");
     promtFamily.push_back("fast");
-
     return;
 }
-
 
 void IcvCommand::initTitlePattern()
 {
@@ -90,10 +83,8 @@ void IcvCommand::initTitlePattern()
     }
     pattern += ")\\s+([0-9]|[1-9][0-9]+)\\s+([0-1])?";
     titlePattern = pattern;
-
     return;
 }
-
 
 void IcvCommand::reset()
 {
@@ -101,14 +92,12 @@ void IcvCommand::reset()
     setLineId(0xff);
     setDirection(0xff);
     setState(CMD_CLOSED);
-    data.erase(data.begin(),data.end());
 
+    data.erase(data.begin(),data.end());
     groupSize = 1;
     promt = "";
-
     return ;
 }
-
 
 void IcvCommand::setName(QString cmd)
 {
@@ -116,12 +105,10 @@ void IcvCommand::setName(QString cmd)
     return ;
 }
 
-
 QString IcvCommand::getName()
 {
     return name;
 }
-
 
 void IcvCommand::setLineId(qint16 id)
 {
@@ -129,12 +116,10 @@ void IcvCommand::setLineId(qint16 id)
     return ;
 }
 
-
 qint16 IcvCommand::getLineId()
 {
     return lineId;
 }
-
 
 void IcvCommand::setDirection(qint16 dir)
 {
@@ -142,12 +127,10 @@ void IcvCommand::setDirection(qint16 dir)
     return ;
 }
 
-
 qint16 IcvCommand::getDirection()
 {
     return direction;
 }
-
 
 void IcvCommand::setData(QList<QPointF> points,bool isappend)
 {
@@ -158,30 +141,25 @@ void IcvCommand::setData(QList<QPointF> points,bool isappend)
     return ;
 }
 
-
 QList<QPointF> IcvCommand::getData()
 {
     return data;
 }
-
 
 QStringList IcvCommand::getFamily()
 {
     return family;
 }
 
-
 QStringList IcvCommand::getPromtFamily()
 {
     return promtFamily;
 }
 
-
 QString IcvCommand::getTitlePattern()
 {
     return titlePattern;
 }
-
 
 bool IcvCommand::matchGroupSize(QString dataLine)
 {
@@ -197,16 +175,13 @@ bool IcvCommand::matchGroupSize(QString dataLine)
         groupSize = caps[1].toInt(&ok);
         return true;
     }
-
     return false;
 }
-
 
 qint16 IcvCommand::getGroupSize()
 {
     return groupSize;
 }
-
 
 QString IcvCommand::getDataPattern()
 {
@@ -232,10 +207,8 @@ QString IcvCommand::getDataPattern()
             pattern = "\\s+\\d{1,5}\\s+:(\\s+-{,1}\\d{1,}\\.\\d+\\s?){1,10}$";
         }
     }
-
     return pattern;
 }
-
 
 void IcvCommand::setFamily(QStringList cmdFamily)
 {
@@ -243,19 +216,16 @@ void IcvCommand::setFamily(QStringList cmdFamily)
     return ;
 }
 
-
 void IcvCommand::setPrompt(QString cmdPromt)
 {
     promt = cmdPromt;
     return ;
 }
 
-
 QString IcvCommand::getPromt()
 {
     return promt;
 }
-
 
 void IcvCommand::setDataPosInFile(qint32 pos)
 {
@@ -263,12 +233,10 @@ void IcvCommand::setDataPosInFile(qint32 pos)
     return;
 }
 
-
 qint32 IcvCommand::getDataPosInFile()
 {
    return dataPosInFile;
 }
-
 
 void IcvCommand::setBriefInfo(QString info)
 {
@@ -276,12 +244,10 @@ void IcvCommand::setBriefInfo(QString info)
     return ;
 }
 
-
 QString IcvCommand::getBriefInfo()
 {
      return briefInfo;
 }
-
 
 void IcvCommand::setState(qint16 cmdState)
 {
@@ -289,10 +255,10 @@ void IcvCommand::setState(qint16 cmdState)
     return;
 }
 
-
 void IcvCommand::setFileName(QString name)
 {
     fileName = name;
+    return;
 }
 
 QString IcvCommand::getFileName()
@@ -300,12 +266,10 @@ QString IcvCommand::getFileName()
     return fileName;
 }
 
-
 qint16 IcvCommand::getState()
 {
     return state;
 }
-
 
 QString IcvCommand::getTitle()
 {
@@ -316,15 +280,4 @@ QString IcvCommand::getTitle()
 
     return title;
 }
-
-
-#if 0
-inline bool IcvCommand::operator == (IcvCommand &cmd)
-{
-    if((getFileName()     == cmd.getFileName())&&
-       (getDataPosInFile()== cmd.getDataPosInFile()))
-       return true;
-    return false;
-}
-#endif
 

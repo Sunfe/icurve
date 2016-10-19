@@ -1,6 +1,5 @@
 #ifndef _CURVE_PROPERTY_DIALOG_H
 #define _CURVE_PROPERTY_DIALOG_H
-
 #include <Qt>
 #include <QDialog>
 #include <QLabel>
@@ -19,12 +18,11 @@
 #include <QIcon>
 #include <QVariant>
 #include <QSize>
-
 #include "qwt_plot_curve.h"
 #include "qwt_plot.h"
 #include "qwt_symbol.h"
-
 #include "icv_icurve.h"
+
 
 class IcvICurve;
 
@@ -85,7 +83,6 @@ private:
     QSize            markerSize;
 
 };
-
 
 #endif
 

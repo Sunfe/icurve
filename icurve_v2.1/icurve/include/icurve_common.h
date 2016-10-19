@@ -1,4 +1,3 @@
-
 #ifndef ICURVE_COMMON_H
 #define ICURVE_COMMON_H
 
@@ -10,7 +9,6 @@ typedef enum STATUS
   ICU_FILE_READ_ERROR         = 0X3,
   ICU_ERROR                   = 0xFF
 }ICU_RET_STATUS;
-
 
 #endif
 

@@ -7,7 +7,6 @@
 #include <QRectF>
 #include <QProgressDialog>
 #include <QFileInfo>
-
 #include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
@@ -25,7 +24,6 @@
 #include <qwt_plot_layout.h>
 #include <qwt_plot_legenditem.h>
 #include <qwt_plot_grid.h>
-
 #include "ui_icurve.h"
 #include "icurve_common.h"
 #include "icv_command.h"

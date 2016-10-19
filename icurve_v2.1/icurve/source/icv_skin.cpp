@@ -115,18 +115,15 @@ QString globalCss =
 "    width: 10px;                                                         "
 "}                                                                        ";
 
-
 IcvSkin::IcvSkin(void)
 {
     skinCss = globalCss;
 }
 
-
 IcvSkin::~IcvSkin(void)
 {
 
 }
-
 
 QString IcvSkin::GetSkinCss(void)
 {

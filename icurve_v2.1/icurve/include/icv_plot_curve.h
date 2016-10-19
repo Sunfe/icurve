@@ -1,11 +1,9 @@
 #ifndef ICV_CURVE_H
 #define ICV_CURVE_H
-
 #include <qobject.h>
 #include <QtGlobal>
 #include <QVector>
 #include <QColor>
-
 #include <qwhatsthis.h>
 #include <qpainter.h>
 #include <qwt_plot.h>
@@ -14,7 +12,6 @@
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
-
 #include "icv_plot_canvas.h"
 
 class QwtPlot;
@@ -27,9 +24,9 @@ class IcvPlotCanvas;
 #define ICV_CURVE_SHOW_MARKER       (1)
 #define ICV_CURVE_HIDE_MARKER       (2)
 
+
 class IcvPlotCurve  
 {
-
 public:
     IcvPlotCurve(QwtPlotCurve *crv);
     IcvPlotCurve();

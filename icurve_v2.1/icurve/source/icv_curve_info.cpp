@@ -7,7 +7,6 @@ QDialog(parent,flag)
 {
     setupUi(this);
     setWindowTitle("curve information");
-
     if(curveList.isEmpty())
         return ;
 
@@ -30,7 +29,6 @@ QDialog(parent,flag)
                         QString::number(curves.at(0)->getCommand().getDataPosInFile()) + 
                         " of file \"" + curves.at(0)->getCommand().getFileName() +"\"";
     plainTextEditFilePos->setPlainText(posInfo);
-
     plainEditFileBriefInfo->setReadOnly(true);
     plainEditFileBriefInfo->setText(curves.at(0)->getCommand().getBriefInfo());
 
@@ -42,21 +40,17 @@ QDialog(parent,flag)
         dataStr += QString::number(data.at(tone).y())+",";
     }
     plainTextEditData->setPlainText(dataStr);
-
 }
-
 
 IcvCurveInfoDialog::~IcvCurveInfoDialog(void)
 {
 
 }
 
-
 void IcvCurveInfoDialog::setCurveFileInfo(int index)
 {
     if(index > curves.count())
         return;
-
     IcvPlotCurve *curve   = curves.at(index);
     if(NULL == curve)
         return;
@@ -68,7 +62,6 @@ void IcvCurveInfoDialog::setCurveFileInfo(int index)
                        " of file \"" + curve->getCommand().getFileName() +"\"";
     plainTextEditFilePos->setPlainText(posInfo);
     plainEditFileBriefInfo->setText(curve->getCommand().getBriefInfo());
-
     return;
 }
 

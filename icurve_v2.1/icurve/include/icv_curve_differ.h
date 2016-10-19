@@ -6,6 +6,7 @@
 #include "icv_icurve.h"
 #include "icv_plot_curve.h"
 
+
 class IcvPlotCurve;
 class IcvCurveDiffer : public QDialog
 {
@@ -37,7 +38,6 @@ private:
     QwtPlotPicker *picker;
     QwtPlotPanner *panner;
     QwtPlotZoomer *zoomer;
-
 };
 
 #endif // ICV_CURVE_DIFFER_H

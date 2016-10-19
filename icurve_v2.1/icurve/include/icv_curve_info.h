@@ -1,6 +1,5 @@
 #ifndef ICV_CURVE_INFO_H
 #define ICV_CURVE_INFO_H
-
 #include <Qt>
 #include <QDialog>
 #include <QWidget>
@@ -9,6 +8,7 @@
 #include "icv_plot_curve.h"
 
 class IcvPlotCurve;
+
 class IcvCurveInfoDialog: public QDialog, public Ui::IcvCurveInfo
 {
     Q_OBJECT
@@ -24,8 +24,6 @@ private:
 
 signals:
   //  void setCurveInfoSignal(QString name, QString position, QString lineInfo);
-
-
 };
 
 #endif

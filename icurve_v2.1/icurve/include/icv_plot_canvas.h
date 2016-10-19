@@ -1,6 +1,5 @@
 #ifndef ICV_PLOT_CANVAS_H
 #define ICV_PLOT_CANVAS_H
-
 #include <qobject.h>
 #include <QtGlobal>
 #include <QMenu>
@@ -12,7 +11,6 @@
 #include <qwt_plot_canvas.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
-
 #include "icv_icurve.h"
 #include "icv_plot_curve.h"
 
@@ -79,7 +77,6 @@ private:
     QList<IcvPlotCurve *> canvasCurves;
     QList<IcvPlotCurve *> curSelectedCurve;
     QList<IcvPlotCurve *> prevSelectedCurve;
-
     /*menus*/
     QMenu *crvSelPopMenu;
     QMenu *subCrvSelWidthMenu;
@@ -87,7 +84,6 @@ private:
     QMenu *subCrvSelMarkeStyleMenu;
     QMenu *subCrvSelMarkerSizeMenu;
     QMenu *subCrvSelGroupSizeMenu;
-
     /*actions*/
     QAction *cutAction;
     QAction *copyAction;
@@ -95,7 +91,6 @@ private:
     QAction *rmvAction;
     QAction *colorSetAction;
     QAction *propertySetAction;
-
     /*action groups*/
     QActionGroup *widthActGrp;
     QActionGroup *styleActGrp;
