@@ -17,7 +17,6 @@
 
 #define ICV_TOLERENCE_DISTANCE              (5)
 
-
 IcvPlotCanvas::IcvPlotCanvas(IcvICurve *parent)
 {
     if(NULL == parent )
@@ -37,7 +36,6 @@ IcvPlotCanvas::~IcvPlotCanvas()
 {
 
 }
-
 
 IcvICurve* IcvPlotCanvas::retrieveParent()
 {

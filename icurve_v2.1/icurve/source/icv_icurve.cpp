@@ -149,12 +149,10 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
 
 }
 
-
 IcvICurve::~IcvICurve()
 {
 
 }
-
 
 void IcvICurve::initMainWinStyle(QMainWindow *self)
 {
@@ -188,45 +186,35 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     return ;
 }
 
-
 void IcvICurve::initMainPlotter(QWidget *plotWidget)
 {
     QwtPlot *plot = static_cast<QwtPlot*>(plotWidget);
-
     plot->setCanvasBackground( Qt::white );
     plot->setAxisScale( QwtPlot::yLeft, -150.0, 150.0 );
     plot->setAxisScale( QwtPlot::xBottom, 0, 3000 );
-
     plot->setAxisLabelAlignment(QwtPlot::xBottom,Qt::AlignLeft);
     plot->setAxisLabelAlignment(QwtPlot::yLeft,Qt::AlignTop);
-
     plot->plotLayout()->setAlignCanvasToScales( false );
     plot->plotLayout()->setCanvasMargin(0);
-
     /* legendItem, default curve title is displayed */
     legendItem = new QwtPlotLegendItem();  
     legendItem->attach(plot);
-
     /* legend */
     legend = new QwtLegend;
     legend->setDefaultItemMode( QwtLegendData::Checkable );
     connect(legend, SIGNAL(checked(const QVariant &, bool, int)), this,
         SLOT(legendChecked( const QVariant &, bool)));
-
     /* grid */
     grid = new QwtPlotGrid();
     grid->setMajorPen(QPen(Qt::DashLine));
     grid->setMinorPen(QPen(Qt::DashLine));  
     grid->attach( plot );
-
     /* magnifier */
     magnifier = new QwtPlotMagnifier(plot->canvas());
     magnifier->setEnabled(true);
-
     /* panner */
     panner = new QwtPlotPanner(plot->canvas());
     panner->setEnabled(true);
-
     /* picker */
     picker = new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
                                QwtPlotPicker::CrossRubberBand, 
@@ -236,17 +224,13 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     picker->setRubberBandPen( QColor( Qt::green ) );
     picker->setRubberBand( QwtPicker::CrossRubberBand );
     picker->setTrackerPen( QColor( Qt::black ) );
-
     /* zoomer */
     zoomer = new QwtPlotZoomer(plot->canvas());
     zoomer->setRubberBandPen( QColor( Qt::darkGreen ) );
     zoomer->setTrackerMode( QwtPlotPicker::AlwaysOn );
     /* RightButton: zoom out by 1,Ctrl+RightButton:zoom out to full size */
-    zoomer->setMousePattern( QwtEventPattern::MouseSelect2,
-        Qt::RightButton, Qt::ControlModifier );
-    zoomer->setMousePattern( QwtEventPattern::MouseSelect3,
-        Qt::RightButton );
-
+    zoomer->setMousePattern( QwtEventPattern::MouseSelect2, Qt::RightButton, Qt::ControlModifier );
+    zoomer->setMousePattern( QwtEventPattern::MouseSelect3, Qt::RightButton );
     zoomer->setRubberBand( QwtPicker::RectRubberBand );
     zoomer->setRubberBandPen( QColor( Qt::green ) );
     zoomer->setTrackerMode( QwtPicker::ActiveOnly );
@@ -254,10 +238,8 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     zoomer->setEnabled(false);
     zoomer->zoom(0);
     connect(zoomer, SIGNAL(zoomed(const QRectF&)), this, SLOT(zoomPlot(QRectF&)));
-
     return;
 }
-
 
 void IcvICurve::createExtraActions()
 {
@@ -272,7 +254,6 @@ void IcvICurve::createExtraActions()
     return;
 }
 
-
 void IcvICurve::createExtraMenus()
 {
     /* create extra menus*/
@@ -282,23 +263,19 @@ void IcvICurve::createExtraMenus()
     return;
 }
 
-
 void IcvICurve::openFile()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this,
             tr("Open file..."),
             fileInfo.absolutePath(),
             tr("Text files (*.txt *.log *.cap *.bak);;All Files (*)"));
-
     if(fileNames.isEmpty())
     {
         return; 
     }
-
     loadFile(fileNames);
     return;
 }
-
 
 void IcvICurve::newFile()
 {
@@ -307,7 +284,6 @@ void IcvICurve::newFile()
    dataPlotDlg->show();
    return;
 }
-
 
 void IcvICurve::plotBlockData(QString data)
 {
@@ -335,7 +311,6 @@ void IcvICurve::plotBlockData(QString data)
         plotCurve->setAttachedState(true);
         /* attach curves to plot canvas*/
         plotCanvas->appendCurves(plotCurve);
-
         /* 50 curves plotted, delay 50ms to handle the other events */
         if(0 == pos % 50)
             taskDelay(50);
@@ -343,7 +318,6 @@ void IcvICurve::plotBlockData(QString data)
     plot->replot();
     return;
 }
-
 
 void IcvICurve::openRecentFile()
 {
@@ -354,7 +328,7 @@ void IcvICurve::openRecentFile()
     QString fileName = action->data().toString();
     /* save file info */
     fileInfo.setFile(fileName);
-
+    /* load files */
     QStringList fileNames;
     fileNames.append(fileName);
     loadFile(fileNames);
@@ -362,7 +336,6 @@ void IcvICurve::openRecentFile()
     setCurrentFile(fileName);
     return;
 }
-
 
 void IcvICurve::loadFile(QStringList fileNames)
 {
@@ -376,7 +349,6 @@ void IcvICurve::loadFile(QStringList fileNames)
         /* append file to recent file list */
         setCurrentFile(fileNames[fileCnt]);
     }
-
     QProgressDialog *plotProgressDialog = NULL;
     if(plotData.count() > ICV_MAX_CURVE_NUM_BACKGROUND_PROCESS)
     {
@@ -385,7 +357,6 @@ void IcvICurve::loadFile(QStringList fileNames)
             "plotting progress", labelText, QSize(300,100), true);
         plotProgressDialog->show();
     }
-
     /* when a new file exported, should not start from scratch */
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {           
@@ -421,11 +392,9 @@ void IcvICurve::loadFile(QStringList fileNames)
     plot->replot();
     if(plotProgressDialog != NULL)
         delete plotProgressDialog;
-
     updateStatusBar();
     return;
 }
-
 
 void IcvICurve::setCurrentFile(const QString &fileName)
 {
@@ -448,36 +417,27 @@ void IcvICurve::setCurrentFile(const QString &fileName)
     return;
 }
 
-
 void IcvICurve::saveAs()
 {
     QwtPlotRenderer renderer;
     QString plotTitle;
-
     if(plot != NULL)
         plotTitle = plot->title().text();
     else
         plotTitle = "";
-
     renderer.exportTo(plot, plotTitle);
-
     return;
 }
-
 
 void IcvICurve::exportData()
 {
     QFile file;
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save File"),
-        "icurve",
-        tr("csv files(*.csv);;text files(*.txt);;excel(*.xsl *.xlsx)"));
-
+        tr("Save File"), "icurve", tr("csv files(*.csv);;text files(*.txt);;excel(*.xsl *.xlsx)"));
     if (fileName.isNull())
     {
         return;         
     }
-
     file.setFileName(fileName);  
     if (!file.open(QIODevice::WriteOnly|QIODevice::Text))
     {    
@@ -493,7 +453,7 @@ void IcvICurve::exportData()
     QString dataContent;
     QString dataTitle;
     dataTitle = tr("title,") + tr("file,") + tr("position,") + tr("brief,")+
-        tr("name,")+tr("lineId,")+tr("direction,") + tr("group size,");
+                tr("name,")+tr("lineId,")+tr("direction,") + tr("group size,");
     qint32 maxToneNum = 0;
     for(qint32 row = 0; row < plotData.count(); row++)
     {
@@ -513,10 +473,8 @@ void IcvICurve::exportData()
         /* find maximum tones in all curves */
         if(maxToneNum < data.count())
             maxToneNum = data.count();
-
         progress->setValue(row+1);
     }   
-
     for(qint32 i = 0; i < maxToneNum; i++)
     {
         dataTitle += "tone " + QString::number(i) + ",";
@@ -528,32 +486,26 @@ void IcvICurve::exportData()
     stream.flush();    
     file.close();    
     delete progress;
-
     return;
 }
-
 
 void IcvICurve::closePlot()
 {
     delete plot;
     plot = NULL;
-
     return;
 }
-
 
 void IcvICurve::insertTitle()
 {
     bool ok;
     QString origTitle = plot->title().text();
-    QString      text = QInputDialog::getText(this, tr("Input"),
-                        tr("Plot title:"), QLineEdit::Normal, origTitle, &ok);
+    QString      text = QInputDialog::getText(this, tr("Input"), tr("Plot title:"),
+                                              QLineEdit::Normal, origTitle, &ok);
     if (ok)
         plot->setTitle(text);
-
     return;
 }
-
 
 void IcvICurve::insertXLabel()
 {
@@ -566,18 +518,16 @@ void IcvICurve::insertXLabel()
     return;
 }
 
-
 void IcvICurve::insertYLabel()
 {
     bool ok;
     QString origLabel = plot->axisTitle(QwtPlot::yLeft).text();
-    QString      text = QInputDialog::getText(this, tr("Input"),
-        tr("Y label:"), QLineEdit::Normal, origLabel, &ok);
+    QString      text = QInputDialog::getText(this, tr("Input"), tr("Y label:"),
+                                              QLineEdit::Normal, origLabel, &ok);
     if (ok)
         plot->setAxisTitle(QwtPlot::yLeft,text);
     return ;
 }
-
 
 void IcvICurve::insertLegend()
 {
@@ -588,7 +538,6 @@ void IcvICurve::insertLegend()
         ui.actionLegend->setChecked(false);
         return ;
     }
-
     if(true == ui.actionLegend->isChecked())
     {
         legend = new QwtLegend(plot);
@@ -609,7 +558,6 @@ void IcvICurve::insertLegend()
     return;
 }
 
-
 void IcvICurve::insertCurveName()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -619,7 +567,6 @@ void IcvICurve::insertCurveName()
         ui.actionCurveName->setChecked(false);
         return ;
     }
-
     if(true == ui.actionCurveName->isChecked())
     {
         legendItem->attach(plot);
@@ -634,7 +581,6 @@ void IcvICurve::insertCurveName()
     return;
 }
 
-
 void IcvICurve::insertFooter()
 {
     bool ok;
@@ -645,7 +591,6 @@ void IcvICurve::insertFooter()
     return;
 }
 
-
 void IcvICurve::insertIndicator()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -655,7 +600,6 @@ void IcvICurve::insertIndicator()
         ui.actionIndicator->setChecked(false);
         return ;
     }
-
     QList<IcvPlotCurve *>selectedCurves = plotCanvas->getSelectedCurve();
     QList<IcvPlotCurve *>curves = !selectedCurves.isEmpty()? selectedCurves : allCurves;
     if(true == ui.actionIndicator->isChecked())
@@ -664,7 +608,6 @@ void IcvICurve::insertIndicator()
         {
             if(!curves.at(cnt)->isAttached())
                 continue;
-
             QList<QwtPlotMarker *>indicators = curves.at(cnt)->getIndicators();
             if(!indicators.isEmpty())
                 continue;
@@ -694,7 +637,6 @@ void IcvICurve::insertIndicator()
             marker->setLabel(promt + "." + title);
             marker->setLabelAlignment( Qt::AlignRight | Qt::AlignTop);
             marker->attach(plot);
-
             QList<QwtPlotMarker *>markers;
             markers.append(marker);
             curves.at(cnt)->setIndicator(markers);
@@ -709,11 +651,9 @@ void IcvICurve::insertIndicator()
         }
         ui.actionIndicator->setChecked(false);
     }
-
     plot->replot();
     return;
 }
-
 
 void IcvICurve::setCurveColor()
 {
@@ -723,14 +663,12 @@ void IcvICurve::setCurveColor()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *>selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return;
     }
-
     QColor color = QColorDialog::getColor(Qt::white,this);
     if(!color.isValid())
         return;
@@ -743,7 +681,6 @@ void IcvICurve::setCurveColor()
     return;
 }
 
-
 void IcvICurve::setCurveWidth()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -752,7 +689,6 @@ void IcvICurve::setCurveWidth()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
@@ -761,9 +697,7 @@ void IcvICurve::setCurveWidth()
     }
 
     bool ok;
-    qint16 width = QInputDialog::getInt(this, tr("Input"),tr("Group size:"), 
-        1, 1, 20, 1, &ok);
-
+    qint16 width = QInputDialog::getInt(this, tr("Input"),tr("Group size:"), 1, 1, 20, 1, &ok);
     for(qint16 cnt = 0; cnt < selectedCurve.count(); cnt++)
     {
         selectedCurve.at(cnt)->setWidth(width);
@@ -771,28 +705,24 @@ void IcvICurve::setCurveWidth()
     return;
 }
 
-
 void IcvICurve::setCurveStyle()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-        return ;
+        return;
     }
-
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
-        return ;
+        return;
     }
 
     QDialog *curveStyleDlg = new QDialog(this);
-
     QLabel *titleLabel = new QLabel(curveStyleDlg);
     titleLabel->setText("style:");
-
     QComboBox *styleComboBox = new QComboBox(curveStyleDlg);
     styleComboBox->setObjectName("styleComboBox");
     styleComboBox->setItemDelegate(new IcvPenStyleDelegate((QObject *)styleComboBox));
@@ -801,7 +731,6 @@ void IcvICurve::setCurveStyle()
     styleComboBox->addItem(tr("Dot"),       Qt::DotLine);
     styleComboBox->addItem(tr("DashDot"),   Qt::DashDotLine);
     styleComboBox->addItem(tr("DashDotDot"),Qt::DashDotDotLine);
-
     QDialogButtonBox *btnBox = new QDialogButtonBox(curveStyleDlg);
     btnBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
     connect(btnBox,SIGNAL(accepted()),curveStyleDlg,SLOT(accept()));
@@ -829,7 +758,6 @@ void IcvICurve::setCurveStyle()
     return;
 }
 
-
 void IcvICurve::setCurveMarker()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -838,21 +766,18 @@ void IcvICurve::setCurveMarker()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> selectedCurve = plotCanvas->getSelectedCurve();
     if(0 == selectedCurve.count())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
-
     IcvMarkerPropertyDialog *markrPropDlg = new IcvMarkerPropertyDialog(this);
     qint16 retcode = (qint16)markrPropDlg->exec();
     if(QDialog::Accepted == retcode)
     {
         QComboBox *childTypeComboBox = markrPropDlg->findChild<QComboBox *>("typeComboBox");
         QwtSymbol::Style style = static_cast<QwtSymbol::Style>(childTypeComboBox->currentIndex());
-
         for(qint16 cnt = 0; cnt < selectedCurve.count(); cnt++)
         {
             selectedCurve.at(cnt)->setMarker(style);
@@ -864,19 +789,15 @@ void IcvICurve::setCurveMarker()
                 bool ok = false;
                 selectedCurve.at(cnt)->setMarkerSize(size.toInt(&ok));
             }
-
             QBrush brush = markrPropDlg->getMarkerBrush();
             QPen   pen   = markrPropDlg->getMarkerPen();
             selectedCurve.at(cnt)->setMarkerColor(brush,pen);
         }
-
         plot->replot();
     }
-
     delete markrPropDlg;
     return;
 }
-
 
 void IcvICurve::refreshPlot()
 {
@@ -886,32 +807,25 @@ void IcvICurve::refreshPlot()
     return;
 }
 
-
 void IcvICurve::cutCurve()
 {
     return ;
 }
  
-
 void IcvICurve::copyCurve()
 {
     if(NULL == plotCanvas)
         return;
-
     QList<IcvPlotCurve*> curves = plotCanvas->getSelectedCurve();
     IcvClipBoard  clipBoard;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         clipBoard.data.append(plotData.at(curves.at(cnt)->getDataPos()));
     }
-
     QVariant data;
-
     QList<QPointF> plotdata = plotData[0].getData();
-
     return;
 }
-
 
 void IcvICurve::pasteCurve()
 {
@@ -921,7 +835,6 @@ void IcvICurve::pasteCurve()
     return;
 }
 
-
 void IcvICurve::filterCurve()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -930,7 +843,6 @@ void IcvICurve::filterCurve()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
     qint16 width  = filterDlg->geometry().width();
@@ -942,7 +854,6 @@ void IcvICurve::filterCurve()
     QString    keyword = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
     delete filterDlg;
-
     /* parse keyword for lineId */
     QStringList keywordRange;
     if(keyword.contains(QRegExp("^[0-9]+$")))
@@ -966,7 +877,6 @@ void IcvICurve::filterCurve()
             keywordRange.push_back(QString::number(i));
         }
     }
-  
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
     QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
         "filter progress", "filtering...", QSize(300,100), true);
@@ -1013,7 +923,6 @@ void IcvICurve::filterCurve()
              curves.at(cnt)->removeCurve();
              foundCnt++;
         }
-
         progress->setValue(cnt);
         /* every 50 curves processed, delay 50ms to handle the other events */
         if(0 == cnt % 50)
@@ -1030,7 +939,6 @@ void IcvICurve::filterCurve()
     plot->replot();
     return;
 }
-
 
 void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
 {
@@ -1060,7 +968,6 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
 
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
     QList<IcvPlotCurve *> curvesFound;  
-
     QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
         "filter progress", "filtering...", QSize(300,100), true);
     progress->show();
@@ -1094,13 +1001,11 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
             isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? 
                 true : false;
         }
-
         if(true != isMatch)   
         {
             curves.at(cnt)->removeCurve();;
             foundCnt++;
         }
-
         /* every 50 curves processed, delay 50ms to handle the other events */
         if(0 == cnt % 50)
             taskDelay(50);
@@ -1112,12 +1017,10 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
         return;
     }
-
     plot->updateLegend();
     plot->replot();
     return;
 }
-
 
 void IcvICurve::recoverCurveVisible()
 {
@@ -1130,7 +1033,6 @@ void IcvICurve::recoverCurveVisible()
     plot->replot();
     return;
 }
-
 
 void IcvICurve::findCurve()
 {
@@ -1153,7 +1055,6 @@ void IcvICurve::findCurve()
     qint16  filterType = filterDlg->getLookupType();
     delete filterDlg;
     filterDlg = NULL;
-
     /* parse keyword for lineId */
     QStringList lineId;
     if(keyword.contains(QRegExp("^[0-9]+$")))
@@ -1188,7 +1089,6 @@ void IcvICurve::findCurve()
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
         IcvCommand cmd = plotData[dataPos];
-
         bool isMatch  = false;
         if(ICV_BY_COMPLETECOMAND == filterType)
         {
@@ -1197,7 +1097,6 @@ void IcvICurve::findCurve()
             isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)?
                 true : false;
         }
-
         else if (ICV_BY_COMANDNAME == filterType)
         {
             isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)?
@@ -1213,31 +1112,26 @@ void IcvICurve::findCurve()
             isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? 
                 true : false;
         }
-
         if(isMatch)   
         {
             crvMatch.push_back(curves.at(cnt));
             matchCnt++;
         }
-
         /* every 50 curves processed, delay 50ms to handle the other events */
         if(0 == cnt % 50)
             taskDelay(50);
     } 
     /*clear memory*/
     delete progress;
-
     if(0 == matchCnt) 
     {
         QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
         return;
     }
-
     plotCanvas->highlightCurve(crvMatch);
     plotCanvas->setCurSelectCurves(crvMatch);
     plot->updateLegend();
     plot->replot();
-
     return;
 }
 
@@ -1246,20 +1140,19 @@ void IcvICurve::deleteCurves()
 {
     if(NULL == plotCanvas)
         return ;
-
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
     if(selCurve.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
+
     QList<IcvPlotCurve*> curves = plotCanvas->getSelectedCurve();
     plotCanvas->deleteCurves(curves);
     plot->replot();
@@ -1267,12 +1160,10 @@ void IcvICurve::deleteCurves()
     return;
 }
 
-
 void IcvICurve::deleteCurvesAll()
 {
     if(NULL == plotCanvas)
         return ;
-
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
@@ -1286,62 +1177,56 @@ void IcvICurve::deleteCurvesAll()
     return;
 }
 
-
 void IcvICurve::removeCurves()
 {
     if(NULL == plotCanvas)
         return ;
-
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
     if(selCurve.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
+
     plotCanvas->removeSelectCurves();
     plot->replot();
     updateStatusBar();
     return;
 }
 
-
 void IcvICurve::hideCurves()
 {
     if(NULL == plotCanvas)
         return ;
-
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> selCurve = plotCanvas->getSelectedCurve();
     if(selCurve.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
+
     plotCanvas->hideSelectCurves();
     plot->replot();
     updateStatusBar();
     return;
 }
 
-
 void IcvICurve::showCurves()
 {
     if(NULL == plotCanvas)
         return ;
-
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
@@ -1354,6 +1239,7 @@ void IcvICurve::showCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
+
     plotCanvas->showSelectCurves();
     plot->replot();
     updateStatusBar();
@@ -1365,7 +1251,6 @@ void IcvICurve::showAllCurve()
 {
     if(NULL == plotCanvas)
         return;
-
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
@@ -1389,7 +1274,6 @@ void IcvICurve::showAllCurve()
     return;
 }
 
-
 void IcvICurve::selectAllCurves()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -1398,7 +1282,6 @@ void IcvICurve::selectAllCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return;
     }
-
     plotCanvas->highlightCurve(allCurves);
     plotCanvas->setCurSelectCurves(allCurves);
     plot->replot();
@@ -1414,14 +1297,12 @@ void IcvICurve::selectInvertCurves()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     for(qint16 cnt = 0; cnt < curve.count(); cnt++)
     {
         curve.at(cnt)->hideMarkers();
         allCurves.removeAll(curve.at(cnt));
     }
-
     QList<IcvPlotCurve *> reversedCurves = allCurves;
     plotCanvas->highlightCurve(reversedCurves);
     plotCanvas->setCurSelectCurves(reversedCurves);
@@ -1429,23 +1310,20 @@ void IcvICurve::selectInvertCurves()
     return;
 }
 
-
 void IcvICurve::expandCurve()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
-        return ;
+        return;
     }
-
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(curve.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
-        return ;
+        return;
     }
-
     bool ok;
     int groupSize = QInputDialog::getInt(this, tr("Input"),tr("Group size:"), 
                                          4, 1, 32, 2, &ok);
@@ -1472,17 +1350,13 @@ void IcvICurve::legendChecked( const QVariant &itemInfo, bool on)
     QList<QWidget *> legendWidgets = lgd->legendWidgets(plot->itemToInfo(plotItem));
     if (legendWidgets.size() == 1)
     {
-        QwtLegendLabel *legendLabel =
-            dynamic_cast<QwtLegendLabel *>(legendWidgets[0]);
-
+        QwtLegendLabel *legendLabel = dynamic_cast<QwtLegendLabel *>(legendWidgets[0]);
         if (legendLabel)
             legendLabel->setChecked( on );
     }
-
     plot->replot();
     return ;
 }
-
 
 void IcvICurve::showCurveInfo()
 {
@@ -1492,14 +1366,12 @@ void IcvICurve::showCurveInfo()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(curve.isEmpty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
-
     if(curve.count() < 2)
     {
         IcvCurveInfoDialog *dlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
@@ -1551,7 +1423,6 @@ void IcvICurve::showCurveInfo()
     return;
 }
 
-
 void IcvICurve::setCurveProperties()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -1560,7 +1431,6 @@ void IcvICurve::setCurveProperties()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(curve.isEmpty())
     {
@@ -1570,10 +1440,8 @@ void IcvICurve::setCurveProperties()
 
     IcvCurvePropertyDialog *propDiag = new IcvCurvePropertyDialog(curve, this, Qt::Dialog);
     propDiag->exec();
-
     return;
 }
-
 
 void IcvICurve::jumpToFilePos()
 {
@@ -1584,7 +1452,6 @@ void IcvICurve::jumpToFilePos()
     return;
 }
 
-
 void IcvICurve::viewCurveData()
 {
    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -1593,7 +1460,6 @@ void IcvICurve::viewCurveData()
        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
        return ;
    }
-
    QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
    if(curve.isEmpty())
    {
@@ -1612,7 +1478,6 @@ void IcvICurve::viewCurveData()
    for(qint16 row = 0; row < curve.count(); row++)
    {
        vertiHeader << QString::number(row);
-
        IcvCommand cmd = curve.at(row)->getCommand();
        newItem = new QStandardItem(cmd.getTitle());
        model->setItem(row ,0, newItem);
@@ -1647,7 +1512,6 @@ void IcvICurve::viewCurveData()
    return;
 }
 
-
 void IcvICurve:: viewCurveStat()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -1656,7 +1520,6 @@ void IcvICurve:: viewCurveStat()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
-
     QList<IcvPlotCurve *> curve = plotCanvas->getSelectedCurve();
     if(curve.isEmpty())
     {
@@ -1668,13 +1531,11 @@ void IcvICurve:: viewCurveStat()
     QStringList horizonHeader;
     horizonHeader<<"name"<<"file"<<"position"<<"brief"<<"maximum"<<"minimum"<<"average"<<"variance";
     model->setHorizontalHeaderLabels(horizonHeader);
-
     QStringList vertiHeader;
     QStandardItem *newItem = NULL;
     for(qint16 row = 0; row < curve.count(); row++)
     {
         vertiHeader << QString::number(row);
-
         IcvCommand cmd = curve.at(row)->getCommand();
         newItem = new QStandardItem(cmd.getTitle());
         model->setItem(row ,0, newItem);
@@ -1727,18 +1588,15 @@ void IcvICurve:: viewCurveStat()
     return;
 }
 
-
 QwtPlotZoomer* IcvICurve::getZoomer()
 {
     return zoomer;
 }
 
-
 QwtPlotPicker* IcvICurve::getPicker()
 {
     return picker;
 }
-
 
 void IcvICurve::enableZoomer( bool checked)
 {
@@ -1748,25 +1606,21 @@ void IcvICurve::enableZoomer( bool checked)
     /* disable magnifier and panner */
     magnifier->setEnabled(!enable);
     panner->setEnabled(!enable);
-
     if(checked)
         plotCanvas->getCanvas()->setCursor(Qt::CrossCursor);
     else if(ui.actionHandMove->isChecked())
         plotCanvas->getCanvas()->setCursor(Qt::OpenHandCursor);
     else
         plotCanvas->getCanvas()->setCursor(Qt::ArrowCursor);
-
     ui.actionZoom->setCheckable(true);
     ui.actionZoom->setChecked(checked);
     plot->replot();
     return;
 }
 
-
 void IcvICurve::enableHandMove( bool checked)
 {
-    /* magnifier and panner are compliant with 
-       hand-move */
+    /* magnifier and panner are compliant with hand-move */
     magnifier->setEnabled(checked);
     panner->setEnabled(checked);
     /* zoomer is only enabled*/
@@ -1784,7 +1638,6 @@ void IcvICurve::enableHandMove( bool checked)
 
     ui.actionHandMove->setCheckable(true);
     ui.actionHandMove->setChecked(checked);
-
     plot->replot();
     return;
 }
@@ -1794,13 +1647,11 @@ bool IcvICurve::isHandMoveChecked()
     return ui.actionHandMove->isChecked();
 }
 
-
 void IcvICurve::zoomPlot(const QRectF &rect)
 {
  //   plotCanvas->setZoomState(true);
     return;
 }
-
 
 void IcvICurve::diffCurves()
 {
@@ -1810,7 +1661,6 @@ void IcvICurve::diffCurves()
     differTool->show();
     return;
 }
-
 
 void IcvICurve::setAxseScale()
 {
@@ -1825,19 +1675,16 @@ void IcvICurve::setAxseScale()
     double maxX  = axseScaleDlg->lineEditMaxX->text().toDouble(&ok);
     double minY  = axseScaleDlg->lineEditMinY->text().toDouble(&ok);
     double maxY  = axseScaleDlg->lineEditMaxY->text().toDouble(&ok);
-
     plot->setAxisScale(QwtPlot::xBottom, minX, maxX, 0);
     plot->setAxisScale(QwtPlot::yLeft, minY, maxY, 0);
     plot->replot();
     return;
 }
 
-
 void IcvICurve::setAxseTitle()
 {
    /* the same as insert x/y label */
     QDialog *axseTitleDlg = new QDialog(this);
-
     QLabel *labelX = new QLabel("Axse X:");
     QLineEdit *textEditX = new QLineEdit(axseTitleDlg);
     textEditX->setObjectName(QString(tr("textEditX")));
@@ -1865,7 +1712,6 @@ void IcvICurve::setAxseTitle()
     layout->setRowStretch(0,1);
     layout->setRowStretch(1,1);
     layout->setRowMinimumHeight(1,20);
-
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
     axseTitleDlg->setLayout(layout);
@@ -1883,13 +1729,10 @@ void IcvICurve::setAxseTitle()
         child = axseTitleDlg->findChild<QLineEdit *>("textEditY");
         QString titleY = child->text();
         plot->setAxisTitle(QwtPlot::yLeft,titleY);
-
     }
-
     delete axseTitleDlg;
     return;
 }
-
 
 void IcvICurve::setAxseAlignment()
 {
@@ -1940,7 +1783,7 @@ void IcvICurve::setAxseAlignment()
     layout->addWidget(labelY,       2, 0, 1, 1);
     layout->addWidget(alignComboHY, 2, 1, 1, 1);
     layout->addWidget(alignComboVY, 2, 2, 1, 1);
- /* ok and cancel button span 2 column */
+    /* ok and cancel button span 2 column */
     layout->addWidget(buttonBox,    3, 1, 1, 2); 
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
@@ -1953,7 +1796,6 @@ void IcvICurve::setAxseAlignment()
         QComboBox *childH = NULL;
         QComboBox *childV = NULL;
         bool ok;
-
         childH = axseAlignDlg->findChild<QComboBox *>("alignComboHX");
         childV = axseAlignDlg->findChild<QComboBox *>("alignComboVX");
         Qt::Alignment alignX = childH->currentText().toInt(&ok) |
@@ -1967,11 +1809,9 @@ void IcvICurve::setAxseAlignment()
         plot->setAxisLabelAlignment(QwtPlot::yLeft,alignY);
 
     }
-
     delete axseAlignDlg;
     return;
 }
-
 
 void IcvICurve::setAxseRotation()
 {
@@ -2002,7 +1842,6 @@ void IcvICurve::setAxseRotation()
     layout->setRowStretch(0,1);
     layout->setRowStretch(1,2);
     layout->setRowMinimumHeight(1,20);
-
     /*alignment*/
     layout->setAlignment(Qt::AlignTop|Qt::AlignRight);
     axseRotationDlg->setLayout(layout);
@@ -2021,24 +1860,20 @@ void IcvICurve::setAxseRotation()
         double angleY = child->text().toDouble(&ok);
         plot->setAxisLabelRotation(QwtPlot::yLeft,angleY);
     }
-
     delete axseRotationDlg;
     return;
 }
-
 
 void IcvICurve::setAxseProperties()
 {
     return;
 }
 
-
 void IcvICurve::setAxseEyeSpan()
 {
     QList<IcvPlotCurve *> curves = plotCanvas->getCurves(); 
     if(curves.isEmpty())
         return;
-
     std::vector<qreal> curvesMaxRx;
     std::vector<qreal> curvesMaxRy;
     std::vector<qreal> curvesMinRx;
@@ -2071,7 +1906,6 @@ void IcvICurve::setAxseEyeSpan()
     if(curvesMaxRx.size() == 0 || curvesMinRx.size() == 0 || 
         curvesMinRx.size() == 0 || curvesMinRy.size() == 0)
         return;
-
     double maxRx = *std::max_element(curvesMaxRx.begin(), curvesMaxRx.end());
     double maxRy = *std::max_element(curvesMaxRy.begin(), curvesMaxRy.end());
     double minRx = *std::min_element(curvesMinRx.begin(), curvesMinRx.end());
@@ -2081,14 +1915,12 @@ void IcvICurve::setAxseEyeSpan()
     return;
 }
 
-
 void IcvICurve::aboutIcurve()
 {
     IcvAboutDialog *dlg = new IcvAboutDialog(this);
     dlg->show();
     return;
 }
-
 
 ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
 {
@@ -2097,19 +1929,17 @@ ICU_RET_STATUS IcvICurve::loadData(const QString &filename)
     {
         return ICU_FILE_NOT_EXIST;
     }
-
     if(!file.open(QFile::ReadOnly ))
     {
         return ICU_FILE_READ_ERROR;
     }
-
     if(ICU_OK != analyzeFile(file))
     {
         return ICU_PLOT_DATA_FORMAT_ERROR;
     }
+
     return ICU_OK;
 }
-
 
 ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
 {
@@ -2124,7 +1954,6 @@ ICU_RET_STATUS IcvICurve::analyzeFile(QFile &file)
 
     return analyzeTextStream(dataTextStream, fileInfo.fileName());
 }
-
 
 ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString textName)
 {
@@ -2222,7 +2051,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
             /* set cmd matched state */
             cmd.setState(CMD_TITLE_MATCHED);
         }
-
         /* some case like: >rfc getqln 0 0  Line  3 DS QLN (dBm/Hz, grouped by 8 tones),
         so continue to parsing the left characters in the same line */
         if(CMD_GROUPSIZE_MATCHED != cmd.getState() || CMD_PLOTDATA_MATCHED != cmd.getState())
@@ -2234,7 +2062,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
                 continue;
             }
         }
-
         /* {{{command already started, try to parse data */
         if(prevCmd.getData().count() > 0)              
         {
@@ -2253,10 +2080,8 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
             return ICU_PLOT_DATA_FORMAT_ERROR; 
         }
         /* }}} */
-
         if((NULL != analyProgressDialog) && (line%100 == 0))
             emit analyDataProgress(line);
-
         /* delay 500ms to handle other event,preventing high cpu usage */
         if(0 == (line % 2000))
         {
@@ -2274,20 +2099,16 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
         cmd.setState(CMD_CLOSED);
         plotData.push_back(cmd);   
     }
-
     /* importing data action halted, data should also be cleared */
     if(isDataAnalyCanceled)
         plotData.clear();
-
     if((NULL != analyProgressDialog))
     {
         delete analyProgressDialog;
         analyProgressDialog = NULL;
     }
-
     return ICU_OK;
 }
-
 
 ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 {
@@ -2309,7 +2130,6 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
     {
         return ICU_OK;
     }
-
     /* plot data collection start */
     cmd->setState(CMD_PLOTDATA_MATCHED);
     /* begin to parse data */
@@ -2329,10 +2149,8 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
         cmd->setState(CMD_CLOSED);
         return ICU_OK;
     }
-
     return ICU_OK;
 }
-
 
 ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
 {
@@ -2345,7 +2163,6 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
         tone = data.at(0).toInt(&ok);  
     else
         tone = cmd->getData().count();
-
     for(qint16 i = ICV_PLOT_DATA_START_POS; i < data.count(); i++)
     {
         qreal dataItem = data.at(i).toFloat(&ok);
@@ -2357,24 +2174,20 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
         point.setY(dataItem);
         points.append(point);
     }
-
     cmd->setData(points,true);
     return ICU_OK;
 }
-
 
 QList <IcvCommand>* IcvICurve::getPlotData()
 {
     return &plotData;
 }
 
-
 void IcvICurve::resetDifferTool()
 {
     differTool = NULL;
     return;
 }
-
 
 void IcvICurve::updateAnalyProgressBar(qint32 progress)
 {
@@ -2387,13 +2200,11 @@ void IcvICurve::updateAnalyProgressBar(qint32 progress)
     return ;
 }
 
-
 void IcvICurve::cancelAnalyProgressBar()
 {
     isDataAnalyCanceled = true;
     return;
 }
-
 
 void IcvICurve::updateRecentFileActions()
 {
@@ -2412,7 +2223,6 @@ void IcvICurve::updateRecentFileActions()
     {
         recentFileActs[j]->setVisible(false);
     }
-
     return;
 }
 
@@ -2425,7 +2235,6 @@ void IcvICurve::taskDelay(qint32 mseconds)
     {
         QCoreApplication::processEvents();  
     }
-
     return;
 }
 
@@ -2439,7 +2248,6 @@ QProgressDialog * IcvICurve::createIcvProgressDiag(QWidget *parent, int rangeMin
     prgDiag->setLabelText(LabelText);
     prgDiag->setFixedSize(size);
     prgDiag->setModal(isModal);
-    
     return prgDiag;
 }
 
@@ -2452,30 +2260,25 @@ void  IcvICurve::updateStatusBar()
     return;
 }
 
-
 QwtPlot* IcvICurve::getPlot()
 {
     return plot;
 }
-
 
 QwtPlotMagnifier* IcvICurve::getMagnifier()
 {
     return magnifier;
 }
 
-
 void IcvICurve::paintEvent ( QPaintEvent * event )
 {
     return QWidget::paintEvent(event);
 }
 
-
 void IcvICurve::mouseMoveEvent ( QMouseEvent * event )
 {
     return QWidget::mouseMoveEvent(event);
 }
-
 
 void IcvICurve::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -2483,20 +2286,16 @@ void IcvICurve::dragEnterEvent(QDragEnterEvent *event)
         event->acceptProposedAction();
 }
 
-
 void IcvICurve::dropEvent(QDropEvent *event)
 {
     QList<QUrl> urls= event->mimeData()->urls();
     if(urls.isEmpty())
         return;
-
     foreach(QUrl url, urls)
     {
         QStringList fileNames;
         fileNames.append(url.toLocalFile());
         loadFile(fileNames);
     }
-
     return ;
 }
-
