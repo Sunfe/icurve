@@ -36,6 +36,7 @@
 #include "icv_command.h"
 #include "icv_plot_canvas.h"
 #include "icv_curve_differ.h"
+#include "icv_cliparser.h"
 
 #define ICV_EYESCAN_MARGIN                   (10)
 
@@ -155,13 +156,13 @@ private slots:
         void insertCurveName();
         void insertFooter();
         void insertIndicator();
-        /*view menu slots*/
+        /*view tool slots*/
         void enableZoomer(bool checked);
         void zoomPlot(const QRectF &rect);
         void diffCurves();
-        /* tool menu slots*/
+        void parseCliData();
         void enableHandMove(bool checked);
-        /* help menu slots */
+        /* help help slots */
         void aboutIcurve();
 
         void legendChecked( const QVariant &itemInfo, bool on );

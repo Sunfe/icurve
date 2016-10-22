@@ -141,6 +141,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     /* tool menu */
     connect(ui.actionHandMove,       SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
     connect(ui.actionDiffer,         SIGNAL(triggered()),     this, SLOT(diffCurves()));
+    connect(ui.actionCliParser,      SIGNAL(triggered()),     this, SLOT(parseCliData()));
     /* help menu */
     connect(ui.actionAbout,          SIGNAL(triggered()),     this, SLOT(aboutIcurve()));
     /* others */
@@ -181,7 +182,7 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     ui.actionInfo->setShortcut(Qt::CTRL + Qt::Key_I);
     ui.actionCurveProperties->setShortcut(Qt::CTRL + Qt::Key_P);
     ui.actionDiffer->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
-
+    ui.actionCliParser->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     setAcceptDrops(true);
     return ;
 }
@@ -1649,7 +1650,7 @@ bool IcvICurve::isHandMoveChecked()
 
 void IcvICurve::zoomPlot(const QRectF &rect)
 {
- //   plotCanvas->setZoomState(true);
+    //plotCanvas->setZoomState(true);
     return;
 }
 
@@ -1659,6 +1660,13 @@ void IcvICurve::diffCurves()
     differTool = new IcvCurveDiffer(curves, this);
     differTool->setDiffCurves(curves);
     differTool->show();
+    return;
+}
+
+void IcvICurve::parseCliData()
+{
+    IcvCliParserDialog *cliParser =  new IcvCliParserDialog(this);
+    cliParser->show();
     return;
 }
 

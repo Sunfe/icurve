@@ -29,5 +29,6 @@
     <file>../images/draw.png</file>
     <file>../images/clear.png</file>
     <file>../images/save_data.png</file>
+    <file>../images/export_data.png</file>
   </qresource>
 </RCC>

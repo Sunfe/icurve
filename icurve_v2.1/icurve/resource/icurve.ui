@@ -96,6 +96,7 @@
     <addaction name="actionHandMove"/>
     <addaction name="actionConverter"/>
     <addaction name="actionStatiser"/>
+    <addaction name="actionCliParser"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="enabled">
@@ -661,6 +662,11 @@
   <action name="actionDeleteAll">
    <property name="text">
     <string>Delete All</string>
+   </property>
+  </action>
+  <action name="actionCliParser">
+   <property name="text">
+    <string>Cli Parser</string>
    </property>
   </action>
  </widget>
