@@ -1384,7 +1384,7 @@ void IcvICurve::showCurveInfo()
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
     QStandardItemModel *model=new QStandardItemModel();
     QStringList horizonHeader;
-    horizonHeader<<"name"<<"file"<<"position"<<"brief"<<"direction"<<"group Size"<<"shell"<<"data";
+    horizonHeader<<"name"<<"file"<<"position"<<"brief"<<"direction"<<"group Size"<<"shell";
     model->setHorizontalHeaderLabels(horizonHeader);
 
     QStringList vertiHeader;
@@ -1879,9 +1879,16 @@ void IcvICurve::setAxseProperties()
 
 void IcvICurve::setAxseEyeSpan()
 {
-    QList<IcvPlotCurve *> curves = plotCanvas->getCurves(); 
-    if(curves.isEmpty())
-        return;
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    if(allCurves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        ui.actionIndicator->setChecked(false);
+        return ;
+    }
+    QList<IcvPlotCurve *>selectedCurves = plotCanvas->getSelectedCurve();
+    QList<IcvPlotCurve *>curves = !selectedCurves.isEmpty()? selectedCurves : allCurves;
+
     std::vector<qreal> curvesMaxRx;
     std::vector<qreal> curvesMaxRy;
     std::vector<qreal> curvesMinRx;
