@@ -15,7 +15,8 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     /* default completion */
     QStringList wordList;
     wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"\
-        << "psd" <<"snr" << "margin" << "hlog" << "bitalloc" << "rmcbitalloc";
+             << "psd" <<"snr" << "margin" << "hlog" << "bitalloc" << "rmcbitalloc"\
+             << "bitload"<< "qln"<< "snr"<<"gainalloc"<<"hlog"<<"linimg"<<"linreal";
     completer = new QCompleter(wordList);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -68,7 +69,8 @@ void IcvCurveFilterDialog::prepareCommitAction()
     QStringList wordList;
     if (radioComandName->isChecked())
     {
-        wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"<<"getrmcbitalloc";
+        wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"<<"getrmcbitalloc"
+                 << "bitload"<< "qln"<< "snr"<<"gainalloc"<<"hlog"<<"linimg"<<"linreal";
     }
     else if(radioDirection->isChecked())
     {
@@ -112,7 +114,7 @@ void IcvCurveFilterDialog::accept()
     if (radioComandName->isChecked())
     {
         QRegExp  expr;
-        expr.setPattern("psd|snr|margin|qln|hlog|bit");
+        expr.setPattern("psd|snr|margin|qln|hlog|bit|linimg|linreal");
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {
@@ -179,7 +181,7 @@ void IcvCurveFilterDialog::accept()
     }
     else if(radioComandName->isChecked())
     {
-        QRegExp expr("psd|gettxpsd|snr|getsnr|margin|getnoisemargin|qln|getqln|hlog|gethlog|bit|getbitalloc|getrmcbitalloc");
+        QRegExp expr("psd|gettxpsd|snr|getsnr|margin|getnoisemargin|qln|getqln|hlog|gethlog|bit|getbitalloc|getrmcbitalloc|linimg|linreal");
         if(lineEdit->text().contains(expr))
         {
             QString word = expr.cap(0);

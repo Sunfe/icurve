@@ -1,5 +1,5 @@
 #include "icv_command.h"
-
+#include "icurve_common.h"
 
 IcvCommand::IcvCommand(void)
 {
@@ -7,6 +7,7 @@ IcvCommand::IcvCommand(void)
     initPromtFamily();
     initTitlePattern();
     groupSize = 1;
+    dataScopeMode = ICV_DATA_SCOPE_BCM;
 }
 
 IcvCommand::IcvCommand(QString cmd)
@@ -16,6 +17,7 @@ IcvCommand::IcvCommand(QString cmd)
     initTitlePattern();
     groupSize = 1;
     name = cmd;
+    dataScopeMode = ICV_DATA_SCOPE_BCM;
 }
 
 IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
@@ -28,6 +30,7 @@ IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
     lineId    = line;
     direction = dir;
     state     = CMD_CLOSED;
+    dataScopeMode = ICV_DATA_SCOPE_BCM;
 }
 
 IcvCommand::~IcvCommand()
@@ -59,12 +62,17 @@ void IcvCommand::initPromtFamily()
 
 void IcvCommand::initTitlePattern()
 {
-    if(promtFamily.isEmpty() || family.isEmpty())
+    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
     {
-        titlePattern = "";
+        titlePattern = "xdsl scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) vdsl_\\d+/\\d+/(\\d+)\\s?$";
         return;
     }
 
+    if(promtFamily.isEmpty() || family.isEmpty())
+    {
+        titlePattern = "icurve";
+        return;
+    }
     QString pattern;
     pattern += "(";
     for(qint16 i = 0; i < promtFamily.count(); i++)
@@ -146,6 +154,12 @@ QList<QPointF> IcvCommand::getData()
     return data;
 }
 
+void IcvCommand::clearData()
+{
+    data.clear();
+    return;
+}
+
 QStringList IcvCommand::getFamily()
 {
     return family;
@@ -163,7 +177,12 @@ QString IcvCommand::getTitlePattern()
 
 bool IcvCommand::matchGroupSize(QString dataLine)
 {
-    QString pattern="grouped by ([1-9]+) tones";
+    QString pattern;
+    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
+        pattern = "LogScGroupSize\\s+:(\\d+)\\s?$";
+    else
+        pattern="grouped by ([1-9]+) tones";
+
     QRegExp cmdRegExp;
     cmdRegExp.setPattern(pattern);
     cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
@@ -172,7 +191,8 @@ bool IcvCommand::matchGroupSize(QString dataLine)
     {
         QStringList caps = cmdRegExp.capturedTexts();
         bool ok = false;
-        groupSize = caps[1].toInt(&ok);
+        if(caps.count() > 2)
+            groupSize = caps[1].toInt(&ok);
         return true;
     }
     return false;
@@ -183,8 +203,23 @@ qint16 IcvCommand::getGroupSize()
     return groupSize;
 }
 
+void IcvCommand::setDataScopeMode(qint16 scope)
+{
+    dataScopeMode = scope;
+}
+
+qint16 IcvCommand::getDataScopeMode()
+{
+    return dataScopeMode;
+}
+
 QString IcvCommand::getDataPattern()
 {
+    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
+    {
+        return "^\\s+(\\s+[\\dA-F]{2}){16}";
+    }
+    /* bcm data pattern */
     QString pattern;
     if("fast" == promt)
     {

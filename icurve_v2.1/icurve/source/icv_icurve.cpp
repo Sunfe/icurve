@@ -169,7 +169,7 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     /* shortcuts */
     ui.actionOpen->setShortcut(QKeySequence::Open);
     ui.actionSaveAs->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-    ui.actionPaste->setShortcut(QKeySequence::Paste);
+    ui.actionPaste->setShortcut(QKeySequence::Paste); 
     ui.actionFilter->setShortcut(QKeySequence::Find);
     ui.actionSelectAll->setShortcut(QKeySequence::SelectAll);
     ui.actionSelectInvert->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
@@ -1976,11 +1976,16 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     dialogInfo->setModal(true);
     dialogInfo->show();
 
-    QString totalCharPerTime;
     qint32 nLine = 0;
+    qint16 dataScopeMode = ICV_DATA_SCOPE_BCM;
     while(!textStream.atEnd())
     {
-        totalCharPerTime = textStream.readLine();
+        QString dataLine = textStream.readLine();
+        QRegExp reg(QString("xdsl scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) vdsl_\\d+/\\d+/\\d+\\s?$"));
+        reg.setCaseSensitivity(Qt::CaseInsensitive);
+        if(dataLine.contains(reg) && (dataScopeMode == ICV_DATA_SCOPE_BCM))
+            dataScopeMode = ICV_DATA_SCOPE_CLI;
+
         nLine++;
         /* delay 50ms to handle other event,preventing high cpu usage */
         if(0 == (nLine % 20000))  
@@ -1996,10 +2001,15 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     qint32  totalLineNum = nLine;
     delete dialogInfo;
 
+    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
+    {
+        analyzeCliTextStream(textStream, textName, totalLineNum);
+        return ICU_OK;
+    }
+
     if(totalLineNum > ICV_MAX_LINE_NUM_BACKGROUD_PROCESS)
     {
-        analyProgressDialog = createIcvProgressDiag(this, 0, totalLineNum, 
-                                                    QString("analyzing "+ textName + " ..."), 
+        analyProgressDialog = createIcvProgressDiag(this, 0, totalLineNum, QString("analyzing "+ textName + " ..."), 
                                                     tr(""), QSize(300, 100),true);
         analyProgressDialog->show();
         analyProgressDialog->repaint();
@@ -2012,7 +2022,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     prevCmd.reset();
     textStream.seek(0);
     isDataAnalyCanceled = false;
-    qint32 cntPlotDataBeforeLoad = plotData.count();
     qint32 line = 0;
     while(!textStream.atEnd() && !isDataAnalyCanceled)
     {
@@ -2025,7 +2034,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
         QString direction("NULL");
 
         QRegExp cmdRegExp;
-        QString str = cmd.getTitlePattern();
         cmdRegExp.setPattern(cmd.getTitlePattern());
         cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
         bool isMatch = dataLine.contains(cmdRegExp);
@@ -2118,6 +2126,139 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     return ICU_OK;
 }
 
+ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString textName, qint32 totalLine)
+{
+    if(totalLine > ICV_MAX_LINE_NUM_BACKGROUD_PROCESS)
+    {
+        analyProgressDialog = createIcvProgressDiag(this, 0, totalLine, QString("analyzing "+ textName + " ..."), 
+                                                    tr(""), QSize(300, 100),true);
+        analyProgressDialog->show();
+        analyProgressDialog->repaint();
+        connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
+    }
+
+    IcvCommand cmd;
+    IcvCommand prevCmd;
+    cmd.reset();
+    cmd.setDataScopeMode(ICV_DATA_SCOPE_CLI);
+    prevCmd.reset();
+    prevCmd.setDataScopeMode(ICV_DATA_SCOPE_CLI);
+    textStream.seek(0);
+    isDataAnalyCanceled = false;
+    qint32 line = 0;
+    while(!textStream.atEnd() && !isDataAnalyCanceled)
+    {
+        line++;
+        QString dataLine = textStream.readLine();
+        qint16       pos = 0;
+        QString curCmdName("NULL");
+        QString   curPromt("NULL");
+        QString     lineId("NULL");
+        QString  direction("NULL");
+
+        QRegExp cmdRegExp;
+        cmd.initTitlePattern();
+        cmdRegExp.setPattern(cmd.getTitlePattern());
+        cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+        bool isMatch = dataLine.contains(cmdRegExp);
+        if(isMatch)
+        {
+            /* if new command found but data of the last command is not empty, 
+               terminate it */
+            prevCmd = cmd;
+            /* begin to set new command */
+            QStringList caps = cmdRegExp.capturedTexts();
+            QString name  = caps[1];
+            bool       ok = false;
+            qint16 port  = caps[2].toInt(&ok);; 
+            /* preparing the new command */
+            cmd.reset();
+            cmd.setPrompt("ZXCLI");
+            cmd.setName(name);
+            cmd.setLineId(port);
+            cmd.setDataPosInFile(line);
+            cmd.setBriefInfo(dataLine);
+            cmd.setFileName(textName);
+            /* set cmd matched state */
+            cmd.setState(CMD_TITLE_MATCHED);
+            continue;
+        }
+
+        if(cmd.getState() >= CMD_TITLE_MATCHED && cmd.getState() < CMD_GROUPSIZE_MATCHED)
+        {
+            /* math groupsize, if found, loop continue */
+            if(cmd.matchGroupSize(dataLine))
+            {
+                cmd.setState(CMD_GROUPSIZE_MATCHED);
+                continue;
+            }
+        }
+
+        if(dataLine.contains(QRegExp("upstream|downstream")))
+        {
+            if(dataLine.contains("upstream"))
+                cmd.setDirection(0);
+            else
+            {
+                /* if the last command is not empty, terminate it */
+                prevCmd = cmd;
+                plotData.push_back(prevCmd);
+                /* set downstream as copy of upstream except the plotting. */
+                cmd.setDirection(1);
+                cmd.clearData();
+            }
+            continue;
+        }
+
+        /* is data pattern matched? */
+        QRegExp regExpr(cmd.getDataPattern());
+        regExpr.setCaseSensitivity(Qt::CaseInsensitive);
+        if(!dataLine.contains(regExpr))
+            continue;
+
+        /* data pattern matched, try to collect */
+        cmd.setState(CMD_PLOTDATA_MATCHED);
+        qint16 ret = assembleCliData(&cmd, dataLine);
+        if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
+        {
+            QString error = textName + " at line " + QString::number(line) \
+                + ":data format incorrect.";
+            QMessageBox::critical(this,"ERROR",error);
+
+            return ICU_PLOT_DATA_FORMAT_ERROR; 
+        }
+
+        if((NULL != analyProgressDialog) && (line%100 == 0))
+            emit analyDataProgress(line);
+
+        /* delay 500ms to handle other event,preventing high cpu usage */
+        if(0 == (line % 2000))
+        {
+            QElapsedTimer timer;
+            timer.start();  
+            while(timer.elapsed() < 50)  
+            {
+                QCoreApplication::processEvents();  
+            }
+        }
+    }
+    /* no more new command found when at file end, save the current data */
+    if(cmd.getData().count() > 0)     
+    {
+        cmd.setState(CMD_CLOSED);
+        plotData.push_back(cmd);   
+    }
+    /* importing data action halted, data should also be cleared */
+    if(isDataAnalyCanceled)
+        plotData.clear();
+    if((NULL != analyProgressDialog))
+    {
+        delete analyProgressDialog;
+        analyProgressDialog = NULL;
+    }
+    return ICU_OK;
+}
+
 ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 {
     /* spectial format pre-processing */
@@ -2160,6 +2301,53 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
     return ICU_OK;
 }
 
+ICU_RET_STATUS IcvICurve::assembleCliData(IcvCommand *cmd, QString dataLine)
+{
+    QStringList digList = parzeCliHex(cmd, dataLine);
+    return appendCommandData(cmd, digList);
+}
+
+QStringList IcvICurve::parzeCliHex(IcvCommand *cmd, QString dataLine)
+{
+    QStringList hexs;
+    QStringList dataList;
+    bool ok = false;
+
+    hexs = dataLine.split(" ", QString::SkipEmptyParts);
+    if(cmd->getName().contains(QRegExp("GainAlloc|Hlog|LinImg|LinReal")))
+    {
+        /* segment 2-2  */
+        for(qint16 i = 0; i < hexs.count(); i+=2)
+        {
+            QString str = QString::number((hexs.at(i) + hexs.at(i + 1)).toInt(&ok, 16));
+            dataList.append(str);
+        }
+    }
+    else if(cmd->getName().contains(QRegExp("Qln|SNR")))  
+    {
+        /* segment 1-1  */
+        for(qint16 i = 0; i < hexs.count(); i++)
+        {
+            QString str = QString::number(hexs.at(i).toInt(&ok, 16));
+            dataList.append(str);
+        }
+    }
+    else if(cmd->getName().contains(QRegExp("Bitload")))
+    {
+        /* segment 0.5-0.5  */
+        for(qint16 i = 0; i < hexs.count(); i++)
+        {
+            QString strf;
+            QString strs;
+            strf.sprintf("%2d", (hexs.at(i).left(1).toInt(&ok,16)));
+            strs.sprintf("%2d", (hexs.at(i).right(1).toInt(&ok,16)));
+            dataList.append(strf);
+            dataList.append(strs);
+        }
+    }
+    return dataList;
+}
+
 ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
 {
     bool ok = false;
@@ -2177,6 +2365,26 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
         if(false == ok)
             return ICU_PLOT_DATA_FORMAT_ERROR;
 
+        tone++;
+        point.setX(tone);
+        point.setY(dataItem);
+        points.append(point);
+    }
+    cmd->setData(points,true);
+    return ICU_OK;
+}
+
+ICU_RET_STATUS IcvICurve::appendCliCommandData(IcvCommand *cmd, QStringList data)
+{
+    bool ok = false;
+    QList<QPointF> points; 
+    QPointF        point;
+    qint16         tone = 0;
+    for(qint16 i = 0; i < data.count(); i++)
+    {
+        qreal dataItem = data.at(i).toFloat(&ok);
+        if(false == ok)
+            return ICU_PLOT_DATA_FORMAT_ERROR;
         tone++;
         point.setX(tone);
         point.setY(dataItem);

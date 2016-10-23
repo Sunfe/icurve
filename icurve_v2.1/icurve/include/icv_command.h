@@ -6,7 +6,6 @@
 #include <QList>
 #include <QPointF>
 
-
 #define CMD_TITLE_MATCHED            (1)
 #define CMD_GROUPSIZE_MATCHED        (2)
 #define CMD_PLOTDATA_MATCHED         (3)
@@ -15,7 +14,6 @@
 #define ICV_PROMT_BCM                (2)
 #define ICV_PROMT_API                (3)
 #define ICV_PROMT_FAST               (4)
-
 
 class IcvCommand
 {
@@ -40,6 +38,9 @@ public:
     QString getDataPattern();
     qint16  getGroupSize();
 
+    void setDataScopeMode(qint16 scope);
+    qint16 getDataScopeMode();
+
     void setName(QString cmd);	
     QString getName();
 
@@ -51,6 +52,7 @@ public:
 
     void setData(QList<QPointF> points, bool isappend);
     QList<QPointF> getData();
+    void clearData();
 
     void setState(qint16 cmdState);
     qint16 getState();
@@ -78,6 +80,7 @@ private:
     QString        promt;
     QList<QPointF> data;
     qint16         groupSize;
+    qint16         dataScopeMode;
     QStringList    family;
     QStringList    promtFamily;
     QString        titlePattern;

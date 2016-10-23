@@ -58,8 +58,12 @@ public:
     ICU_RET_STATUS loadData(const QString &filename);
     ICU_RET_STATUS analyzeFile(QFile &file);
     ICU_RET_STATUS analyzeTextStream(QTextStream &streamText, QString steamName);
+    ICU_RET_STATUS analyzeCliTextStream(QTextStream &textStream, QString textName, qint32 totalLine);
     ICU_RET_STATUS assembleData(QString dataLine, IcvCommand *cmd);
+    ICU_RET_STATUS assembleCliData(IcvCommand *cmd, QString dataLine);
     ICU_RET_STATUS appendCommandData(IcvCommand *cmd, QStringList data);
+    ICU_RET_STATUS appendCliCommandData(IcvCommand *cmd, QStringList data);
+    QStringList parzeCliHex(IcvCommand *cmd, QString dataLine);
     void setAxseEyeSpan();
     QList <IcvCommand> *getPlotData();
     QwtPlot* getPlot();

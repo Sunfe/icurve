@@ -18,7 +18,6 @@
 #define ICV_DATA_SET_MODE_2_1         (4)
 #define ICV_DATA_SET_MODE_2_2         (5)
 
-
 IcvCliParserDialog::IcvCliParserDialog(QWidget *parent)
     : QDialog(parent)
 {
@@ -93,7 +92,7 @@ void IcvCliParserDialog::parzeHex(bool)
             continue;
         }
 
-        reg.setPattern(QString("^\\s+(\\s+[\\dA-F]{2}){16}"));
+        reg.setPattern(QString("^\\s+(\\s+[\\dA-F]{2}){,16}"));
         reg.setCaseSensitivity(Qt::CaseInsensitive);
         if(!dataLine.contains(reg))
         {

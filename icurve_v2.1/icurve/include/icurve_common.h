@@ -10,5 +10,8 @@ typedef enum STATUS
   ICU_ERROR                   = 0xFF
 }ICU_RET_STATUS;
 
+#define ICV_DATA_SCOPE_BCM    (0)
+#define ICV_DATA_SCOPE_CLI    (1)
+
 #endif
 
