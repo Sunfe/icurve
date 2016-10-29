@@ -50,8 +50,10 @@ IcvCliParserDialog::IcvCliParserDialog(QWidget *parent)
     target->setReadOnly(true);
     /* slots */
     connect(ui.pushButtonConvert, SIGNAL(clicked(bool)), this, SLOT(parzeHex(bool)));
-    connect(clearAction, SIGNAL(triggered()), this, SLOT(clear()));
-    connect(saveAction,  SIGNAL(triggered()), this, SLOT(save()));
+    connect(ui.comboBoxSeg,       SIGNAL(activated(int)),this, SLOT(activateSegMode(int)));
+    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportData()));
+    connect(clearAction,  SIGNAL(triggered()), this, SLOT(clear()));
+    connect(saveAction,   SIGNAL(triggered()), this, SLOT(save()));
 }
 
 IcvCliParserDialog::~IcvCliParserDialog()
@@ -70,7 +72,6 @@ void IcvCliParserDialog::parzeHex(bool)
     qint16 delectedCmd = 0;
 
     curIndex = ui.comboBoxSeg->currentIndex();
-    ui.checkBoxRfc->setEnabled(true);
     delectedCmd = 0xff;
     QRegExp reg;
     reg.setCaseSensitivity(Qt::CaseInsensitive);
@@ -153,6 +154,21 @@ void IcvCliParserDialog::parzeHex(bool)
     return;
 }
 
+void IcvCliParserDialog::activateSegMode(int index)
+{
+    if(index != ICV_DATA_SET_MODE_AUTO)
+    {
+        ui.checkBoxRfc->setCheckState(Qt::Unchecked);
+        ui.checkBoxRfc->setEnabled(false);
+    }
+    else
+    {
+        ui.checkBoxRfc->setEnabled(true);
+        ui.checkBoxRfc->setCheckState(Qt::Checked);
+    }
+    return;
+}
+
 void IcvCliParserDialog::clear()
 {
     orig->clear();
@@ -177,6 +193,48 @@ void IcvCliParserDialog::save()
         stream.flush();    
         file.close();    
     }
+    return;
+}
+
+void IcvCliParserDialog::exportData()
+{
+    if(target->toPlainText() == "")
+    {
+        QMessageBox::warning(this,tr("Warning"), tr("No content!"), QMessageBox::Close);
+        return ;
+    }
+
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save File"),"icurve.csv",tr("text files(*.csv);"));
+    if (fileName.isNull())
+        return;
+
+    QFile file(fileName);  
+    if (!file.open(QIODevice::WriteOnly|QIODevice::Text)) 
+    {    
+        QMessageBox::critical(NULL, "error", "unable to create file!");  
+        return;    
+    }
+
+    QString text = target->toPlainText();
+    QTextStream stream(&text);
+    QString outTxt;
+    while(!stream.atEnd())
+    {
+        QString dataLine = stream.readLine();
+        QStringList dlist = dataLine.split(" ", QString::SkipEmptyParts);
+        for(qint16 i = 0; i < dlist.count(); i++)
+        {
+            outTxt += dlist[i] + ",";
+        }
+        outTxt += "\n";
+    }
+
+    QTextStream out(&file);    
+    out << outTxt << endl;    
+    out.flush();    
+    file.close();   
+    QMessageBox::information(NULL, "info", "done!");  
     return;
 }
 
