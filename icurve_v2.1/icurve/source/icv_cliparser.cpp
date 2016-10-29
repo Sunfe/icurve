@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "icv_cliparser.h"
+#include "icurve_common.h"
 
 #define ICV_DATA_SET_MODE_AUTO        (0)
 #define ICV_DATA_SET_MODE_HALF_HALF   (1)
@@ -65,109 +66,87 @@ void IcvCliParserDialog::parzeHex(bool)
     QString output;
     bool ok;
     qint16 segMode = 0;
+    qint16 curIndex = 0;
+    qint16 delectedCmd = 0;
+
+    curIndex = ui.comboBoxSeg->currentIndex();
+    ui.checkBoxRfc->setEnabled(true);
+    delectedCmd = 0xff;
+    QRegExp reg;
+    reg.setCaseSensitivity(Qt::CaseInsensitive);
     while(!stream.atEnd())
     {
         QString dataLine = stream.readLine();
-        QRegExp reg;
         reg.setPattern(QString("Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal"));
-        reg.setCaseSensitivity(Qt::CaseInsensitive);
         if(dataLine.contains(reg))
         {
-            if(ICV_DATA_SET_MODE_AUTO == ui.comboBoxSeg->currentIndex())
-            {
-                if(dataLine.contains(tr("Bitload")))
-                    segMode = ICV_DATA_SET_MODE_HALF_HALF;
-                else if(dataLine.contains(QRegExp("Qln|SNR")))
-                    segMode = ICV_DATA_SET_MODE_1_1;
-                else if(dataLine.contains(QRegExp("GainAlloc|Hlog|LinImg|LinReal")))
-                    segMode = ICV_DATA_SET_MODE_2_2;
-                else
-                    segMode = ICV_DATA_SET_MODE_1_1;
-            }
-            else
-            {
-                segMode = ui.comboBoxSeg->currentIndex();
-            }
-            output += dataLine + "\n";
-            continue;
-        }
+            if(ICV_DATA_SET_MODE_AUTO != curIndex)
+                continue;         
 
-        reg.setPattern(QString("^\\s+(\\s+[\\dA-F]{2}){,16}"));
-        reg.setCaseSensitivity(Qt::CaseInsensitive);
-        if(!dataLine.contains(reg))
-        {
+            if(dataLine.contains(tr("Qln")))
+            {
+                segMode = ICV_DATA_SET_MODE_1_1;
+                delectedCmd = ICV_CLI_QLN;
+            }
+            else if(dataLine.contains(tr("SNR")))
+            {
+                segMode = ICV_DATA_SET_MODE_1_1;
+                delectedCmd = ICV_CLI_SNR;
+            }
+            else if(dataLine.contains(tr("Hlog")))
+            {
+                segMode = ICV_DATA_SET_MODE_2_2;
+                delectedCmd = ICV_CLI_HLOG;
+            }
+            else if(dataLine.contains(tr("LinImg")))
+            {
+                segMode = ICV_DATA_SET_MODE_2_2;
+                delectedCmd = ICV_CLI_LINIMG;
+            }
+            else if(dataLine.contains(tr("LinReal")))
+            {
+                segMode = ICV_DATA_SET_MODE_2_2;
+                delectedCmd = ICV_CLI_LINREAL;
+            }
+            else if(dataLine.contains(tr("Bitload")))
+            {
+                segMode = ICV_DATA_SET_MODE_HALF_HALF;
+                delectedCmd = ICV_CLI_BITLOAD;
+            }
+            else if(dataLine.contains(tr("GainAlloc")))
+            {
+                segMode = ICV_DATA_SET_MODE_2_2;
+                delectedCmd = ICV_CLI_GAINALLOC;
+            }
             output += dataLine + "\n";
-            continue;
         }
- 
-        QStringList hexs = dataLine.split(" ", QString::SkipEmptyParts);
-        for(qint16 i = 0; i < hexs.count(); i++)
+        else if(dataLine.contains(QRegExp("^\\s?(\\s+[\\dA-F]{2}){1,16}\\s?$")))
         {
-            QString str;
             switch(segMode)
             {
             case ICV_DATA_SET_MODE_1_1:
-                {
-                    str.sprintf("%3d", hexs.at(i).toInt(&ok,16));
-                    break;
-                }
+                output += rfcSeg(fetchHexSegment(dataLine, "1-1"), delectedCmd);
+                break;
             case ICV_DATA_SET_MODE_1_2:
-                {
-                    QString strf;
-                    QString strs;
-                    strf.sprintf("%3d", hexs.at(i).toInt(&ok,16));
-                    i++;
-                    if(i >= hexs.count() || i + 1 >= hexs.count())
-                        continue;
-                    strs.sprintf("%6d", (hexs.at(i) + hexs.at(i + 1)).toInt(&ok,16));
-                    str = strf +" " + strs;
-                    i++;
-                    break;
-                }
+                output += fetchHexSegment(dataLine, "1-2");
+                break;
             case ICV_DATA_SET_MODE_2_1:
-                {
-                    QString strf;
-                    QString strs;
-                    if(i >= hexs.count() || i + 1 >= hexs.count())
-                        continue;
-                    strf.sprintf("%6d", (hexs.at(i) + hexs.at(i + 1)).toInt(&ok,16));
-                    i+=2;
-                    if(i >= hexs.count())
-                        continue;
-                    strs.sprintf("%3d", hexs.at(i).toInt(&ok,16));
-                    str = strf + " " + strs;
-                    break;
-                }
+                output += fetchHexSegment(dataLine, "2-1");
+                break;
             case ICV_DATA_SET_MODE_2_2:
-                {
-                    QString strf;
-                    QString strs;
-                    if(i >= hexs.count() || i + 1 >= hexs.count())
-                        continue;
-                    strf.sprintf("%6d", (hexs.at(i) + hexs.at(i + 1)).toInt(&ok,16));
-                    i+=2;
-                    if(i >= hexs.count() || i + 1 >= hexs.count())
-                        continue;
-                    strs.sprintf("%6d", (hexs.at(i) + hexs.at(i + 1)).toInt(&ok,16));
-                    str = strf + " " + strs;
-                    i++;
-                    break;
-                }
+                output +=  rfcSeg(fetchHexSegment(dataLine, "2-2"), delectedCmd);
+                break;
             case ICV_DATA_SET_MODE_HALF_HALF:
-                {
-                    QString strf;
-                    QString strs;
-                    strf.sprintf("%2d", (hexs.at(i).left(1).toInt(&ok,16)));
-                    strs.sprintf("%2d", (hexs.at(i).right(1).toInt(&ok,16)));
-                    str = strf + " " + strs;
-                    break;
-                }
+                output += rfcSeg(fetchHexSegment(dataLine, "0.5-0.5"),delectedCmd);
+                break;
             default:
                 break;
             }
-            output += str + " ";
         }
-        output += "\n";
+        else
+        {
+            output += dataLine + "\n";
+        }
     }
 
     target->setPlainText(output);
@@ -199,5 +178,99 @@ void IcvCliParserDialog::save()
         file.close();    
     }
     return;
+}
+
+QString IcvCliParserDialog::fetchHexSegment(QString dataLineHex, QString segMode)
+{
+    QString     out;
+    QStringList hexs;
+    QStringList seg;
+    QString     decim;
+    qint16      i  = 0;
+    bool        ok = false;
+    qint16      firstSegLen  = 0;
+    qint16      secondSegLen = 0;
+
+    hexs = dataLineHex.split(" ", QString::SkipEmptyParts);
+    seg  = segMode.split(QRegExp("\\s+|,|-"));
+    if(seg.count() < 2)
+        return "NULL";
+    /*half segment */
+    if(seg[0] == "0.5" && seg[1] == "0.5")  
+    {
+        i = 0;
+        while(i < hexs.count())
+        {
+            QString decim_f;
+            QString decim_s;
+            decim_f.sprintf("%2d", (hexs.at(i).left(1).toInt(&ok,16)));
+            decim_s.sprintf("%2d", (hexs.at(i).right(1).toInt(&ok,16)));
+            decim = decim_f + " " + decim_s;
+            out += decim + " ";
+            i++;
+        }
+        out += "\n";
+        return out;
+    }
+ 
+    firstSegLen  = seg[0].toInt(&ok,10);
+    secondSegLen = seg[1].toInt(&ok,10);
+    while(i < hexs.count())
+    {
+        QString seg;
+
+        qint16  j  = 0;
+        while(j < firstSegLen)
+        {
+            seg += hexs.at(i + j);
+            j++;
+        }
+        decim.sprintf("%6d", seg.toInt(&ok,16));
+        out += decim;
+
+        seg = "";
+        j   = 0;
+        while(j < secondSegLen)
+        {
+            seg += hexs.at(i + j + firstSegLen);
+            j++;
+        }
+        decim.sprintf("%6d", seg.toInt(&ok,16));
+        out += decim;
+        i += firstSegLen + secondSegLen;
+    }
+    out += "\n";
+    return out;
+}
+
+QString IcvCliParserDialog::rfcSeg(QString dataLine, qint16 cmd)
+{
+    if(Qt::Unchecked == ui.checkBoxRfc->checkState())
+        return dataLine;
+
+    QStringList seg;
+    seg = dataLine.split(" ", QString::SkipEmptyParts);
+    if(seg.isEmpty())
+        return dataLine;
+
+    QString output;
+    for(qint16 i = 0; i < seg.count(); i++)
+    {
+        bool ok = false;
+        float dseg = seg[i].toFloat(&ok);
+        if(ICV_CLI_HLOG == cmd)
+            dseg = RFC_HLOG_CONV(dseg);
+        else if(ICV_CLI_QLN == cmd)
+            dseg = RFC_QLN_CONV(dseg);
+        else if(ICV_CLI_SNR == cmd)
+            dseg = RFC_SNR_CONV(dseg);
+        else if(ICV_CLI_GAINALLOC == cmd)
+            dseg = RFC_GAIN_CONV(dseg);
+        QString str;
+        str.sprintf("%6.1f",dseg);
+        output.append(str + " ");
+    }
+    output += "\n";
+    return output;
 }
 

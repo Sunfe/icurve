@@ -15,6 +15,8 @@ public:
 
 public slots:
     void parzeHex(bool);
+    QString fetchHexSegment(QString dataHex, QString segMode);
+    QString rfcSeg(QString dataLine, qint16 cmd);
     void clear();
     void save();
 
