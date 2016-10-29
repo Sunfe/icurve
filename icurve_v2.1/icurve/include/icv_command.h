@@ -32,7 +32,6 @@ public:
     void setPrompt(QString promt);
     QString getPromt();
     QStringList getPromtFamily();
-
     bool matchGroupSize(QString dataLine);
     QString getTitlePattern();
     QString getDataPattern();

@@ -626,7 +626,8 @@ void IcvICurve::insertIndicator()
                     posList.append(pos);
                 }
             }
-
+            if(posList.isEmpty())
+                continue;
             QPointF randPos = posList.at(rand() % posList.count());
             QString promt = curves.at(cnt)->getCommand().getPromt();
             QString title = curves.at(cnt)->getCommand().getTitle();
@@ -1988,11 +1989,10 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     while(!textStream.atEnd())
     {
         QString dataLine = textStream.readLine();
-        QRegExp reg(QString("xdsl scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) vdsl_\\d+/\\d+/\\d+\\s?$"));
+        QRegExp reg(QString("scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) vdsl_\\d+/\\d+/\\d+\\s?$"));
         reg.setCaseSensitivity(Qt::CaseInsensitive);
         if(dataLine.contains(reg) && (dataScopeMode == ICV_DATA_SCOPE_BCM))
             dataScopeMode = ICV_DATA_SCOPE_CLI;
-
         nLine++;
         /* delay 50ms to handle other event,preventing high cpu usage */
         if(0 == (nLine % 20000))  
@@ -2204,15 +2204,21 @@ ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString 
         if(dataLine.contains(QRegExp("upstream|downstream")))
         {
             if(dataLine.contains("upstream"))
+            {
                 cmd.setDirection(0);
+            }
             else
             {
-                /* if the last command is not empty, terminate it */
-                prevCmd = cmd;
-                plotData.push_back(prevCmd);
-                /* set downstream as copy of upstream except the plotting. */
-                cmd.setDirection(1);
-                cmd.clearData();
+                if(!cmd.getData().isEmpty())
+                {
+                    /* if the last command is not empty, terminate it */
+                    prevCmd = cmd;
+                    plotData.push_back(prevCmd);
+                    prevCmd.reset();
+                    /* set downstream as copy of upstream except the data. */
+                    cmd.setDirection(1);
+                    cmd.clearData();
+                }
             }
             continue;
         }
@@ -2223,7 +2229,13 @@ ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString 
         if(!dataLine.contains(regExpr))
             continue;
 
-        /* data pattern matched, try to collect */
+        /* {{{command already started, try to parse data */
+        if(prevCmd.getData().count() > 0)              
+        {
+            /* reset previous command first*/
+            plotData.push_back(prevCmd);   
+            prevCmd.reset();
+        }
         cmd.setState(CMD_PLOTDATA_MATCHED);
         qint16 ret = assembleCliData(&cmd, dataLine);
         if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
@@ -2253,7 +2265,7 @@ ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString 
     if(cmd.getData().count() > 0)     
     {
         cmd.setState(CMD_CLOSED);
-        plotData.push_back(cmd);   
+        plotData.push_back(cmd); 
     }
     /* importing data action halted, data should also be cleared */
     if(isDataAnalyCanceled)
@@ -2311,7 +2323,7 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 ICU_RET_STATUS IcvICurve::assembleCliData(IcvCommand *cmd, QString dataLine)
 {
     QStringList digList = parzeCliHex(cmd, dataLine);
-    return appendCommandData(cmd, digList);
+    return appendCliCommandData(cmd, digList);
 }
 
 QStringList IcvICurve::parzeCliHex(IcvCommand *cmd, QString dataLine)
@@ -2327,7 +2339,14 @@ QStringList IcvICurve::parzeCliHex(IcvCommand *cmd, QString dataLine)
         for(qint16 i = 0; i < hexs.count(); i+=2)
         {
             QString str = QString::number((hexs.at(i) + hexs.at(i + 1)).toInt(&ok, 16));
-            dataList.append(str);
+            float df = str.toFloat(&ok);
+            QString strDf;
+            if(cmd->getName().contains(QRegExp("GainAlloc")))
+                df = RFC_GAIN_CONV(df);
+            else
+                df = RFC_HLOG_CONV(df);
+            strDf.sprintf("%6.1f",df);
+            dataList.append(strDf);
         }
     }
     else if(cmd->getName().contains(QRegExp("Qln|SNR")))  
@@ -2336,7 +2355,14 @@ QStringList IcvICurve::parzeCliHex(IcvCommand *cmd, QString dataLine)
         for(qint16 i = 0; i < hexs.count(); i++)
         {
             QString str = QString::number(hexs.at(i).toInt(&ok, 16));
-            dataList.append(str);
+            float df = str.toFloat(&ok);
+            QString strDf;
+            if(cmd->getName().contains(QRegExp("Qln")))
+                df = RFC_QLN_CONV(df);
+            else
+                df = RFC_SNR_CONV(df);
+            strDf.sprintf("%6.1f",df);
+            dataList.append(strDf);
         }
     }
     else if(cmd->getName().contains(QRegExp("Bitload")))
@@ -2371,7 +2397,6 @@ ICU_RET_STATUS IcvICurve::appendCommandData(IcvCommand *cmd, QStringList data)
         qreal dataItem = data.at(i).toFloat(&ok);
         if(false == ok)
             return ICU_PLOT_DATA_FORMAT_ERROR;
-
         tone++;
         point.setX(tone);
         point.setY(dataItem);
@@ -2386,7 +2411,7 @@ ICU_RET_STATUS IcvICurve::appendCliCommandData(IcvCommand *cmd, QStringList data
     bool ok = false;
     QList<QPointF> points; 
     QPointF        point;
-    qint16         tone = 0;
+    qint16         tone = cmd->getData().count();
     for(qint16 i = 0; i < data.count(); i++)
     {
         qreal dataItem = data.at(i).toFloat(&ok);
