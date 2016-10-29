@@ -257,17 +257,40 @@ QString IcvCliParserDialog::rfcSeg(QString dataLine, qint16 cmd)
     for(qint16 i = 0; i < seg.count(); i++)
     {
         bool ok = false;
-        float dseg = seg[i].toFloat(&ok);
+        float dsegf = 0.0;
+        int   dsegi = 0;
         if(ICV_CLI_HLOG == cmd)
-            dseg = RFC_HLOG_CONV(dseg);
+        {
+            dsegf = seg[i].toFloat(&ok);
+            dsegf = RFC_HLOG_CONV(dsegf);
+        }
         else if(ICV_CLI_QLN == cmd)
-            dseg = RFC_QLN_CONV(dseg);
+        {
+            dsegf = seg[i].toFloat(&ok);
+            dsegf = RFC_QLN_CONV(dsegf);
+        }
         else if(ICV_CLI_SNR == cmd)
-            dseg = RFC_SNR_CONV(dseg);
+        {
+            dsegf = seg[i].toFloat(&ok);
+            dsegf = RFC_SNR_CONV(dsegf);
+        }
         else if(ICV_CLI_GAINALLOC == cmd)
-            dseg = RFC_GAIN_CONV(dseg);
+        {
+            dsegf = seg[i].toFloat(&ok);
+            dsegf = RFC_GAIN_CONV(dsegf);
+        }
+        else
+        {
+            dsegi = seg[i].toInt(&ok);
+        }
+
         QString str;
-        str.sprintf("%6.1f",dseg);
+        if((ICV_CLI_HLOG == cmd)||(ICV_CLI_QLN == cmd)||(ICV_CLI_SNR == cmd)||(ICV_CLI_GAINALLOC == cmd))
+            str.sprintf("%6.1f",dsegf);
+        else if(ICV_CLI_BITLOAD == cmd)
+            str.sprintf("%2d",dsegi);
+        else if((ICV_CLI_LINIMG == cmd)||(ICV_CLI_LINREAL == cmd))
+            str.sprintf("%6d",dsegi);
         output.append(str + " ");
     }
     output += "\n";
