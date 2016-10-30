@@ -264,7 +264,7 @@ void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
     if(0 == crv.count())
         return ;
 
-    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"), "Really to proceeding?", 0, mainWin);
+    QMessageBox msgBox(QMessageBox::Information, tr("info"), "Really to remove?", 0, mainWin);
     msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
     msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
     if (msgBox.exec() != QMessageBox::AcceptRole)
