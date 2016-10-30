@@ -63,6 +63,12 @@ IcvCliParserDialog::~IcvCliParserDialog()
 
 void IcvCliParserDialog::parzeHex(bool)
 {
+    if(orig->toPlainText() == "")
+    {
+        QMessageBox::warning(this,tr("Warning"), tr("No content!"), QMessageBox::Close);
+        return;
+    }
+
     QString text = orig->toPlainText();
     QTextStream stream(&text);
     QString output;
@@ -82,7 +88,10 @@ void IcvCliParserDialog::parzeHex(bool)
         if(dataLine.contains(reg))
         {
             if(ICV_DATA_SET_MODE_AUTO != curIndex)
+            {
+                segMode = ui.comboBoxSeg->currentIndex();
                 continue;         
+            }
 
             if(dataLine.contains(tr("Qln")))
             {
@@ -179,6 +188,12 @@ void IcvCliParserDialog::clear()
 
 void IcvCliParserDialog::save()
 {
+    if(target->toPlainText() == "")
+    {
+        QMessageBox::warning(this,tr("Warning"), tr("No content!"), QMessageBox::Close);
+        return ;
+    }
+
     QString fileName = QFileDialog::getSaveFileName(this,
         tr("Save File"),"icurve.txt",tr("text files(*.txt);"));
     if (!fileName.isNull())
@@ -273,12 +288,12 @@ QString IcvCliParserDialog::fetchHexSegment(QString dataLineHex, QString segMode
  
     firstSegLen  = seg[0].toInt(&ok,10);
     secondSegLen = seg[1].toInt(&ok,10);
+    qDebug()<<firstSegLen<<","<<secondSegLen;
     while(i < hexs.count())
     {
         QString seg;
-
         qint16  j  = 0;
-        while(j < firstSegLen)
+        while(j < firstSegLen && (i + j < hexs.count()))
         {
             seg += hexs.at(i + j);
             j++;
@@ -288,7 +303,7 @@ QString IcvCliParserDialog::fetchHexSegment(QString dataLineHex, QString segMode
 
         seg = "";
         j   = 0;
-        while(j < secondSegLen)
+        while(j < secondSegLen && (i + j + firstSegLen < hexs.count()))
         {
             seg += hexs.at(i + j + firstSegLen);
             j++;
