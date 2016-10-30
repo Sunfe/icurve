@@ -51,9 +51,11 @@ IcvCliParserDialog::IcvCliParserDialog(QWidget *parent)
     /* slots */
     connect(ui.pushButtonConvert, SIGNAL(clicked(bool)), this, SLOT(parzeHex(bool)));
     connect(ui.comboBoxSeg,       SIGNAL(activated(int)),this, SLOT(activateSegMode(int)));
+    connect(plotAction,   SIGNAL(triggered()), this, SLOT(plotData()));
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportData()));
     connect(clearAction,  SIGNAL(triggered()), this, SLOT(clear()));
     connect(saveAction,   SIGNAL(triggered()), this, SLOT(save()));
+    connect(this,         SIGNAL(sigPlotBlockData(QString)), parent, SLOT(plotBlockData(QString)));
 }
 
 IcvCliParserDialog::~IcvCliParserDialog()
@@ -208,6 +210,17 @@ void IcvCliParserDialog::save()
         stream.flush();    
         file.close();    
     }
+    return;
+}
+
+void IcvCliParserDialog::plotData()
+{
+    if(orig->toPlainText() == "")
+    {
+        QMessageBox::warning(this,tr("Warning"), tr("No content!"), QMessageBox::Close);
+        return ;
+    }
+    emit sigPlotBlockData(orig->toPlainText());
     return;
 }
 

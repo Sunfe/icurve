@@ -845,6 +845,7 @@ void IcvICurve::filterCurve()
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return ;
     }
+
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
     qint16 width  = filterDlg->geometry().width();
