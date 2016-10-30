@@ -1995,10 +1995,11 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     while(!textStream.atEnd())
     {
         QString dataLine = textStream.readLine();
-        QRegExp reg(QString("scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) vdsl_\\d+/\\d+/\\d+\\s?$"));
+        QRegExp reg(QString("show xdsl scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) (adsl|vdsl)_\\d+/\\d+/\\d+\\s?$"));
         reg.setCaseSensitivity(Qt::CaseInsensitive);
         if(dataLine.contains(reg) && (dataScopeMode == ICV_DATA_SCOPE_BCM))
             dataScopeMode = ICV_DATA_SCOPE_CLI;
+
         nLine++;
         /* delay 50ms to handle other event,preventing high cpu usage */
         if(0 == (nLine % 20000))  

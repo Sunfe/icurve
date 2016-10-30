@@ -288,7 +288,6 @@ QString IcvCliParserDialog::fetchHexSegment(QString dataLineHex, QString segMode
  
     firstSegLen  = seg[0].toInt(&ok,10);
     secondSegLen = seg[1].toInt(&ok,10);
-    qDebug()<<firstSegLen<<","<<secondSegLen;
     while(i < hexs.count())
     {
         QString seg;

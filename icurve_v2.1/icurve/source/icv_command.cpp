@@ -64,7 +64,7 @@ void IcvCommand::initTitlePattern()
 {
     if(ICV_DATA_SCOPE_CLI == dataScopeMode)
     {
-        titlePattern = "xdsl scstatus-segment (Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal) vdsl_\\d+/\\d+/(\\d+)\\s?$";
+        titlePattern = "scstatus-segment\\s+(Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal)\\s+(vdsl|adsl)_\\d+/\\d+/(\\d+)\\s?$";
         return;
     }
 
