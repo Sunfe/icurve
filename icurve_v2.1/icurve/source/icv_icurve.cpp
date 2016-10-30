@@ -161,7 +161,6 @@ void IcvICurve::initMainWinStyle(QMainWindow *self)
     self->setWindowIcon(QIcon(":/icurve/images/icurve.png"));
     self->setContentsMargins(0,0,0,0);
     self->statusBar()->showMessage("ready");
-
     IcvSkin skin;
     self->setStyleSheet(skin.GetSkinCss());
     QDesktopWidget* desktop = QApplication::desktop();
@@ -1253,12 +1252,19 @@ void IcvICurve::showAllCurve()
 {
     if(NULL == plotCanvas)
         return;
+
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curves plotted, maybe file not opened."));
         return ;
     }
+
+    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"), "Really to proceeding?", 0, this);
+    msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
+    if (msgBox.exec() != QMessageBox::AcceptRole)
+        return;
 
     qint16 maxCnt = allCurves.count();
     QProgressDialog *progress = createIcvProgressDiag(plot, 0, maxCnt, "progress", "displaying...", QSize(300,100), true);

@@ -263,6 +263,13 @@ void IcvPlotCanvas::removeCurves(QList<IcvPlotCurve *> crv)
 {
     if(0 == crv.count())
         return ;
+
+    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"), "Really to proceeding?", 0, this);
+    msgBox.addButton(tr("Yes"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("No"),  QMessageBox::RejectRole);
+    if (msgBox.exec() != QMessageBox::AcceptRole)
+        return;
+
     qint16 maxCnt = crv.count();
     QProgressDialog *progress =  retrieveParent()->createIcvProgressDiag(canvas->plot(), 0, maxCnt, 
         "progress", "removing...", QSize(300,100), true);
