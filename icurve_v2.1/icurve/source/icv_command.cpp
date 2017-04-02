@@ -223,23 +223,23 @@ QString IcvCommand::getDataPattern()
     QString pattern;
     if("fast" == promt)
     {
-        pattern = "([ ]+-{,1}\\d{1,}\.\\d\,){1,10}";
+        pattern = "([ ]+-{,1}\\d{1,}\.\\d\,){1,10}\\s*$";
     }
     else /* rfc, api,bcm, .. */
     {
         if("getBitAlloc" == name)
         {
             /* pattern like: 360 : 11 11 11 12 12 12 13 13 */
-            pattern = "\\s+\\d{1,5}\\s+:(\\s+\\d+){1,20}$";
+            pattern = "\\s+\\d{1,5}\\s*:(\\s+\\d+){1,20}\\s*$";
         }
         else if("getRmcBitAlloc" == name)
         {
             /*pattern like: 43:  x  x  x  x  x  x */
-            pattern = "\\s+\\d+:(\\s+\\d+){1,20}$";
+            pattern = "\\s+\\d+\\s*:(\\s+\\d+){1,20}\\s*$$";
         }
         else
         {
-            pattern = "\\s+\\d{1,5}\\s+:(\\s+-{,1}\\d{1,}\\.\\d+\\s?){1,10}$";
+            pattern = "\\s+\\d{1,5}\\s*:(\\s+-{,1}\\d{1,}\\.\\d+\\s?){1,10}\\s*$$";
         }
     }
     return pattern;

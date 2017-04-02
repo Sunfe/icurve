@@ -27,7 +27,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -67,7 +67,6 @@
     <addaction name="actionShow"/>
     <addaction name="actionShowAll"/>
     <addaction name="separator"/>
-    <addaction name="actionFilter"/>
     <addaction name="actionFind"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
@@ -190,35 +189,22 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="actionNew"/>
    <addaction name="actionSaveAs"/>
    <addaction name="separator"/>
-   <addaction name="actionFind"/>
    <addaction name="actionFilter"/>
    <addaction name="separator"/>
    <addaction name="actionColor"/>
    <addaction name="actionStyle"/>
    <addaction name="actionWidth"/>
-   <addaction name="actionMarker"/>
    <addaction name="separator"/>
-   <addaction name="actionTitle"/>
-   <addaction name="actionAxseScale"/>
-   <addaction name="actionLegend"/>
-   <addaction name="actionExpand"/>
-   <addaction name="separator"/>
-   <addaction name="actionZoom"/>
-   <addaction name="actionHandMove"/>
-   <addaction name="separator"/>
-   <addaction name="actionIndicator"/>
    <addaction name="actionInfo"/>
    <addaction name="actionShowAll"/>
    <addaction name="separator"/>
-   <addaction name="actionRemove"/>
    <addaction name="actionDelete"/>
-   <addaction name="separator"/>
    <addaction name="actionRefresh"/>
   </widget>
   <action name="actionOpen">
