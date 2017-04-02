@@ -61,6 +61,33 @@
 #define ICV_MAX_CURVE_NUM_BACKGROUND_PROCESS (50)
 #define ICV_MAX_RECENT_FILE_NUM              (5)
 #define ICV_MAX_ACCEPT_FILE_SIZE             (300000000)  /* 300M */
+#define ICV_MAX_VIVID_COLOR_NUM              (20)
+
+static  QString icvRgbColors[ICV_MAX_VIVID_COLOR_NUM]=  //rgb colorname: #FF0000:red
+{
+    "#FF0000",
+    "#008000",
+    "#0000FF",
+    "#FF4500",
+    "#D2691E",
+    "#556B2F",
+    "#9400D3",
+    "#912CEE",
+    "#68228B",
+    "#4876FF",
+    "#00BFFF",
+    "#008B8B",
+    "#7FFFAA",
+    "#2E8B57",
+    "#00FF00",
+    "#FFD700",
+    "#A52A2A",
+    "#DAA520",
+    "#2F4F4F",
+    "#B03060"
+};
+
+
 
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
 {
@@ -294,7 +321,10 @@ void IcvICurve::plotBlockData(QString data)
     {           
         QwtPlotCurve *qwtCurve = new QwtPlotCurve();
         qwtCurve->setRenderHint( QwtPlotItem::RenderAntialiased );
-        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
+        if(pos < ICV_MAX_VIVID_COLOR_NUM)
+            qwtCurve->setPen(QColor(icvRgbColors[pos]), 1.0, Qt::SolidLine);
+        else
+            qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%100), 1.0, Qt::SolidLine);
         qwtCurve->setSamples(plotData[pos].getData().toVector());
         QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
             QPen(Qt::red, 2), QSize(2, 2));
@@ -361,7 +391,10 @@ void IcvICurve::loadFile(QStringList fileNames)
     for(qint16 pos = posCurRepository; pos < plotData.count(); pos++)
     {           
         QwtPlotCurve *qwtCurve = new QwtPlotCurve();
-        qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%200), 1.0, Qt::SolidLine);
+        if(pos < ICV_MAX_VIVID_COLOR_NUM)
+            qwtCurve->setPen(QColor(icvRgbColors[pos]), 1.0, Qt::SolidLine);
+        else
+            qwtCurve->setPen(QColor::fromHsl(rand()%360,rand()%256,rand()%150), 1.0, Qt::SolidLine);
         qwtCurve->setSamples(plotData[pos].getData().toVector());
 
         QwtSymbol *symbol = new QwtSymbol(QwtSymbol::NoSymbol, QBrush(Qt::yellow),
