@@ -307,7 +307,7 @@ void IcvICurve::openFile()
 void IcvICurve::newFile()
 {
    IcvDataPlotDialog *dataPlotDlg = new IcvDataPlotDialog(this);
-   dataPlotDlg->setWindowTitle("new");
+   dataPlotDlg->setWindowTitle("new data plot");
    dataPlotDlg->show();
    return;
 }
@@ -886,6 +886,7 @@ void IcvICurve::filterCurve()
 
     QString keyword    = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
+    Qt::CheckState inAllState = filterDlg->getInAllCheckState();
     delete  filterDlg;
     /* parse keyword for lineId */
     QStringList keywordRange;
@@ -916,6 +917,7 @@ void IcvICurve::filterCurve()
     progress->show();
 
     qint16 foundCnt = 0;
+    int c = curves.count();
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         qint16 dataPos = curves.at(cnt)->getDataPos();
@@ -956,6 +958,11 @@ void IcvICurve::filterCurve()
              curves.at(cnt)->removeCurve();
              foundCnt++;
         }
+        else
+        {
+            if(Qt::Checked == inAllState)
+             curves.at(cnt)->showCurve();
+        }
         progress->setValue(cnt);
         /* every 50 curves processed, delay 50ms to handle the other events */
         if(0 == cnt % 50)
@@ -973,7 +980,7 @@ void IcvICurve::filterCurve()
     return;
 }
 
-void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
+void IcvICurve::filterCurvePreview(qint16 type, QString keyword,qint16 inAllState)
 {
     qint16  filterType = type;
     /* parse keyword for lineId */
@@ -1047,6 +1054,8 @@ void IcvICurve::filterCurvePreview(qint16 type, QString keyword)
         }
         else
         {
+            if(Qt::Checked == inAllState)
+                curves.at(cnt)->showCurve();
             curves.at(cnt)->boldTitle(true);
         }
         progress->setValue(cnt);

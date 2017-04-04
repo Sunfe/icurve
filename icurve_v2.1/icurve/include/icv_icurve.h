@@ -141,7 +141,7 @@ private slots:
         void setCurveMarker();
         void expandCurve();
         void filterCurve();
-        void filterCurvePreview(qint16 type, QString keyword);
+        void filterCurvePreview(qint16 type, QString keyword,qint16 inAllState);
         void recoverCurveVisible();
         void showCurveInfo();
         void setCurveProperties();

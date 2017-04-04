@@ -44,12 +44,15 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     keywords << "getTxPsd" << "getSnr" << "getQln" << "getHlog" << "getNoiseMargin" << "getBitAlloc"\
         << "DS" << "US"<<"api"<<"rfc"<<"bcm"<<"fast";
     /* default actions */
-    connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+
     connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioLineId,         SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioDirection,      SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+    connect(radioCompleteComand, SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
+    connect(radioPromt,          SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
     connect(radioPosition,       SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
-    connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
+
+    connect(this, SIGNAL(previewSignal(qint16, QString, qint16)), parent, SLOT(filterCurvePreview(qint16, QString, qint16)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
     connect(this, SIGNAL(warningSignal(QString)), this, SLOT(displayWarning(QString)));
     connect(moreButton, SIGNAL(toggled(bool)), this, SLOT(toggleMoreSelect(bool)));
@@ -109,7 +112,7 @@ void IcvCurveFilterDialog::prepareCommitAction()
     /*preview action */
     if(previewCheckBox->checkState() == Qt::Checked )
     {
-        emit previewSignal(lookupType, keyword);
+        emit previewSignal(lookupType, keyword, getInAllCheckState());
         return;
     }
     return;
@@ -123,6 +126,11 @@ qint16 IcvCurveFilterDialog::getLookupType()
 QString IcvCurveFilterDialog::getKeyword()
 {
     return keyword;
+}
+
+Qt::CheckState IcvCurveFilterDialog::getInAllCheckState()
+{
+    return inAllCheckBox->checkState();
 }
 
 void IcvCurveFilterDialog::accept()
@@ -243,8 +251,8 @@ void IcvCurveFilterDialog::accept()
 
     if(previewCheckBox->checkState() == Qt::Checked )
     {
-        emit previewSignal(lookupType, lineEdit->text());
-        return;
+        emit previewSignal(lookupType, lineEdit->text(), getInAllCheckState());
+        return ;
     }
     else
     {
@@ -257,6 +265,7 @@ void IcvCurveFilterDialog::reject()
     if(previewCheckBox->checkState() == Qt::Checked )
     {
         emit recoverPreviewSignal();
+        return;
     }
     return QDialog::reject ();
 }
@@ -264,7 +273,7 @@ void IcvCurveFilterDialog::reject()
 void IcvCurveFilterDialog::displayWarning(QString info)
 {
     QMessageBox::warning(this,tr("Warning"), info, QMessageBox::Close);
-    return ;
+    return QDialog::reject () ;
 }
 
 void IcvCurveFilterDialog::showMoreSelect()

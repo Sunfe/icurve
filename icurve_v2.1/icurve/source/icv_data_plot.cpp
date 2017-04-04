@@ -15,7 +15,7 @@
 IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     : QDialog(parent)
 {
-    setMinimumSize(550,400);
+    setMinimumSize(900,600);
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
     toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );

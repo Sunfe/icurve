@@ -22,6 +22,7 @@ public:
 
     qint16 getLookupType();
     QString getKeyword();
+    Qt::CheckState getInAllCheckState();
     void showMoreSelect();
     void hideMoreSelect();
 
@@ -39,7 +40,7 @@ private:
     QString keyword;
 
 signals:
-    void previewSignal(qint16 filterType, QString keyword);
+    void previewSignal(qint16 filterType, QString keyword, qint16);
     void recoverPreviewSignal();
 	void warningSignal(QString info);
 };
