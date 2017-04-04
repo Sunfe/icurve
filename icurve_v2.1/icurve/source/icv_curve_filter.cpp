@@ -3,20 +3,36 @@
 #include <QLineEdit>
 #include <QWidget>
 #include <QCompleter>
+#include <QSize>
 #include "icv_curve_filter.h"
+
+#define ICV_HEIGHT_MORE_SELECT_AREA    (30)
 
 
 IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 : QDialog(parent)
 {
     setupUi(this);
+    resize(410, 225 - ICV_HEIGHT_MORE_SELECT_AREA);
     radioComandName->setCheckable(true);
     radioComandName->setChecked(true);
+    radioPromt->setVisible(false);
+    radioCompleteComand->setVisible(false);
+    radioPosition->setVisible(false);
+    QSize sz = groupBox->size();
+    groupBox->resize(sz.width(), sz.height()-30);
+
+    QRect rect = widget->geometry();
+    QPoint pnt = rect.topLeft();
+    rect.moveTopLeft(QPoint(pnt.x(), pnt.y()-30));
+    widget->setGeometry(rect);
+
     /* default completion */
     QStringList wordList;
     wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"\
              << "psd" <<"snr" << "margin" << "hlog" << "bitalloc" << "rmcbitalloc"\
-             << "bitload"<< "qln"<< "snr"<<"gainalloc"<<"hlog"<<"linimg"<<"linreal";
+             << "bitload"<< "qln"<< "snr"<<"gainalloc"<<"hlog"<<"linimg"<<"linreal"\
+             << "bcm" <<"rfc"<< "api" <<"fast";
     completer = new QCompleter(wordList);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -36,6 +52,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     connect(this, SIGNAL(previewSignal(qint16, QString)), parent, SLOT(filterCurvePreview(qint16, QString)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
     connect(this, SIGNAL(warningSignal(QString)), this, SLOT(displayWarning(QString)));
+    connect(moreButton, SIGNAL(toggled(bool)), this, SLOT(toggleMoreSelect(bool)));
 }
 
 IcvCurveFilterDialog::~IcvCurveFilterDialog()
@@ -250,3 +267,45 @@ void IcvCurveFilterDialog::displayWarning(QString info)
     return ;
 }
 
+void IcvCurveFilterDialog::showMoreSelect()
+{
+    radioPromt->setVisible(true);
+    radioCompleteComand->setVisible(true);
+    radioPosition->setVisible(true);
+
+    QSize sz = groupBox->size();
+    groupBox->resize(sz.width(), sz.height() + ICV_HEIGHT_MORE_SELECT_AREA);
+
+    QRect rectWgt = widget->geometry();
+    QPoint pnt = rectWgt.topLeft(); 
+    rectWgt.moveTopLeft(QPoint(pnt.x(), pnt.y() + ICV_HEIGHT_MORE_SELECT_AREA));
+    widget->setGeometry(rectWgt);
+
+    QRect rectMe = geometry();
+    resize(rectMe.width(), rectMe.height() + ICV_HEIGHT_MORE_SELECT_AREA);
+    return;
+}
+
+void IcvCurveFilterDialog::hideMoreSelect()
+{
+    QRect rect = widget->geometry();
+    QPoint pnt = rect.topLeft(); 
+
+    radioPromt->setVisible(false);
+    radioCompleteComand->setVisible(false);
+    radioPosition->setVisible(false);
+
+    QSize sz = groupBox->size();
+    groupBox->resize(sz.width(), sz.height() - ICV_HEIGHT_MORE_SELECT_AREA);
+    rect.moveTopLeft(QPoint(pnt.x(), pnt.y() - ICV_HEIGHT_MORE_SELECT_AREA));
+    widget->setGeometry(rect);
+
+    QRect rectMe = geometry();
+    resize(rectMe.width(), rectMe.height() - ICV_HEIGHT_MORE_SELECT_AREA);
+    return;
+}
+
+void IcvCurveFilterDialog::toggleMoreSelect(bool needMore)
+{
+    return needMore? showMoreSelect(): hideMoreSelect();
+}

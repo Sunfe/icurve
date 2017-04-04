@@ -6,49 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>407</width>
-    <height>230</height>
+    <width>410</width>
+    <height>225</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>184</y>
-     <width>171</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="locale">
-    <locale language="English" country="UnitedStates"/>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>87</x>
-     <y>117</y>
-     <width>291</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>361</width>
-     <height>91</height>
+     <x>21</x>
+     <y>11</y>
+     <width>379</width>
+     <height>88</height>
     </rect>
    </property>
    <property name="title">
@@ -59,7 +30,7 @@
      <rect>
       <x>24</x>
       <y>23</y>
-      <width>51</width>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -70,9 +41,9 @@
    <widget class="QRadioButton" name="radioLineId">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>139</x>
       <y>21</y>
-      <width>61</width>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -83,9 +54,9 @@
    <widget class="QRadioButton" name="radioDirection">
     <property name="geometry">
      <rect>
-      <x>244</x>
+      <x>261</x>
       <y>20</y>
-      <width>81</width>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -96,9 +67,9 @@
    <widget class="QRadioButton" name="radioCompleteComand">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>60</y>
-      <width>101</width>
+      <x>139</x>
+      <y>52</y>
+      <width>121</width>
       <height>20</height>
      </rect>
     </property>
@@ -110,8 +81,8 @@
     <property name="geometry">
      <rect>
       <x>24</x>
-      <y>60</y>
-      <width>61</width>
+      <y>52</y>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -122,9 +93,9 @@
    <widget class="QRadioButton" name="radioPosition">
     <property name="geometry">
      <rect>
-      <x>244</x>
-      <y>60</y>
-      <width>71</width>
+      <x>261</x>
+      <y>52</y>
+      <width>111</width>
       <height>20</height>
      </rect>
     </property>
@@ -133,44 +104,102 @@
     </property>
    </widget>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>27</x>
-     <y>120</y>
-     <width>54</width>
-     <height>12</height>
+     <x>20</x>
+     <y>100</y>
+     <width>381</width>
+     <height>120</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Keywords:</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="previewCheckBox">
-   <property name="geometry">
-    <rect>
-     <x>223</x>
-     <y>149</y>
-     <width>71</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Preview</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox">
-   <property name="geometry">
-    <rect>
-     <x>143</x>
-     <y>150</y>
-     <width>72</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>In All</string>
-   </property>
+   <widget class="QPushButton" name="moreButton">
+    <property name="geometry">
+     <rect>
+      <x>302</x>
+      <y>2</y>
+      <width>77</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>More...</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="autoRepeat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>38</y>
+      <width>54</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Keywords:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>38</y>
+      <width>271</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>113</x>
+      <y>68</y>
+      <width>60</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>In All</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="previewCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>203</x>
+      <y>68</y>
+      <width>66</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Preview</string>
+    </property>
+   </widget>
+   <widget class="QDialogButtonBox" name="buttonBox">
+    <property name="geometry">
+     <rect>
+      <x>112</x>
+      <y>92</y>
+      <width>160</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="locale">
+     <locale language="English" country="UnitedStates"/>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="standardButtons">
+     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
     IcvICurve mainWin;
-    mainWin.resize(800,600);
+    mainWin.resize(1200,800);
     mainWin.show();   
     return application.exec();
 }

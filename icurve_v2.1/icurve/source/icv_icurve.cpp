@@ -63,7 +63,7 @@
 #define ICV_MAX_ACCEPT_FILE_SIZE             (300000000)  /* 300M */
 #define ICV_MAX_VIVID_COLOR_NUM              (20)
 
-static  QString icvRgbColors[ICV_MAX_VIVID_COLOR_NUM]=  //rgb colorname: #FF0000:red
+static  QString icvRgbColors[ICV_MAX_VIVID_COLOR_NUM]=  //rgb colorname.eg:#FF0000:red
 {
     "#FF0000",
     "#008000",
@@ -86,7 +86,6 @@ static  QString icvRgbColors[ICV_MAX_VIVID_COLOR_NUM]=  //rgb colorname: #FF0000
     "#2F4F4F",
     "#B03060"
 };
-
 
 
 IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags)
@@ -264,6 +263,7 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     zoomer->setTrackerPen( QColor( Qt::white ) );
     zoomer->setEnabled(false);
     zoomer->zoom(0);
+
     connect(zoomer, SIGNAL(zoomed(const QRectF&)), this, SLOT(zoomPlot(QRectF&)));
     return;
 }
@@ -881,9 +881,6 @@ void IcvICurve::filterCurve()
 
     IcvCurveFilterDialog *filterDlg = new IcvCurveFilterDialog(this);
     filterDlg->setWindowTitle("Filter curves");
-    qint16 width  = filterDlg->geometry().width();
-    qint16 height = filterDlg->geometry().height();
-    filterDlg->setFixedSize(width,height);
     if(filterDlg->exec() != QDialog::Accepted)
         return;
 
@@ -1476,7 +1473,7 @@ void IcvICurve::showCurveInfo()
     layout->addWidget(tbl);
     layout->setAlignment(Qt::AlignTop);
     dlg->setLayout(layout);
-    dlg->resize(500,300);
+    dlg->resize(900,600);
     dlg->show();
     return;
 }
@@ -1568,7 +1565,7 @@ void IcvICurve::viewCurveData()
    layout->addWidget(tbl);
    layout->setAlignment(Qt::AlignTop);
    dlg->setLayout(layout);
-   dlg->resize(500,300);
+   dlg->resize(900,600);
    dlg->show();
    return;
 }
@@ -1647,7 +1644,7 @@ void IcvICurve:: viewCurveStat()
     layout->addWidget(tbl);
     layout->setAlignment(Qt::AlignTop);
     dlg->setLayout(layout);
-    dlg->resize(500,300);
+    dlg->resize(900,600);
     dlg->show();
     return;
 }

@@ -83,6 +83,7 @@ private:
     QStringList    family;
     QStringList    promtFamily;
     QString        titlePattern;
+    QString        dataPattern;
 
     qint16 lineId;
     qint16 direction;

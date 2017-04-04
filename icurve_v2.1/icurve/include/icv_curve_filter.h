@@ -22,13 +22,16 @@ public:
 
     qint16 getLookupType();
     QString getKeyword();
+    void showMoreSelect();
+    void hideMoreSelect();
 
 private slots:
     void accept();
     void reject();
     void prepareCommitAction();
 	void displayWarning(QString info);
-
+    void toggleMoreSelect(bool needMore);
+    
 private:
     qint16 lookupType;
     QCompleter *completer;
