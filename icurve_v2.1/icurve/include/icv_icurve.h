@@ -167,6 +167,7 @@ private slots:
         void diffCurves();
         void parseCliData();
         void enableHandMove(bool checked);
+        void oneKeySetPlot();
         /* help help slots */
         void aboutIcurve();
 

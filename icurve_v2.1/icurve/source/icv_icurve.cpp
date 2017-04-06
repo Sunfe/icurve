@@ -63,11 +63,11 @@
 #define ICV_MAX_ACCEPT_FILE_SIZE             (300000000)  /* 300M */
 #define ICV_MAX_VIVID_COLOR_NUM              (20)
 
-static  QString icvRgbColors[ICV_MAX_VIVID_COLOR_NUM]=  //rgb colorname.eg:#FF0000:red
+static  QString icvRgbColors[ICV_MAX_VIVID_COLOR_NUM]=
 {
-    "#FF0000",
-    "#008000",
-    "#0000FF",
+    "#FF0000", //red
+    "#0000FF", //blue
+    "#008000", //gree
     "#FF4500",
     "#D2691E",
     "#556B2F",
@@ -169,6 +169,8 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionHandMove,       SIGNAL(triggered(bool)), this, SLOT(enableHandMove(bool)));
     connect(ui.actionDiffer,         SIGNAL(triggered()),     this, SLOT(diffCurves()));
     connect(ui.actionCliParser,      SIGNAL(triggered()),     this, SLOT(parseCliData()));
+    connect(ui.actionOneKeySetter,   SIGNAL(triggered()),     this, SLOT(oneKeySetPlot()));
+    
     /* help menu */
     connect(ui.actionAbout,          SIGNAL(triggered()),     this, SLOT(aboutIcurve()));
     /* others */
@@ -432,7 +434,7 @@ void IcvICurve::loadFile(QStringList fileNames)
 
 void IcvICurve::setCurrentFile(const QString &fileName)
 {
-    QSettings settings("history.ini",QSettings::IniFormat);;
+    QSettings settings("icv_history.ini",QSettings::IniFormat);;
     QStringList files = settings.value("recentFileList").toStringList();
     files.removeAll(fileName);
     files.prepend(fileName);
@@ -1673,6 +1675,69 @@ void IcvICurve::parseCliData()
 {
     IcvCliParserDialog *cliParser =  new IcvCliParserDialog(this);
     cliParser->show();
+    return;
+}
+
+void IcvICurve::oneKeySetPlot()
+{
+    QList<IcvPlotCurve *> curves = plotCanvas->getCanvasCurves();
+    if(curves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return;
+    }
+
+    QStringList crvsTitle;
+    crvsTitle.push_back(curves.at(0)->getCommand().getName());
+    for(qint16 cnt = 1; cnt < curves.count(); cnt++)
+    {
+        qint16 tn = 0;
+        for(tn = 0; tn < crvsTitle.count(); tn++)
+        {
+            if(crvsTitle.at(tn) == curves.at(cnt)->getCommand().getName())
+                break;
+        }
+        if(tn == crvsTitle.count())
+            crvsTitle.push_back(curves.at(cnt)->getCommand().getName());
+    }
+    QString title;
+    if(1 == crvsTitle.count())
+        title = crvsTitle.at(0);
+    else
+    {
+        for(qint16 tn = 0; tn < crvsTitle.count() - 1; tn++)
+            title += crvsTitle.at(tn) + ",";
+        title += crvsTitle.at(crvsTitle.count() - 1);
+    }
+    plot->setTitle(title);
+
+    QString labelY;
+    if(crvsTitle.count() > 1)
+        labelY = "Y(unit)";
+    else
+    {
+        if(crvsTitle.at(0) == "getTxPsd")
+            labelY = "txPsd(dbm/hz)";
+        else if(crvsTitle.at(0) == "getSnr")
+            labelY = "SNR(db)";
+        else if(crvsTitle.at(0) == "getQln")
+            labelY = "Qln(dbm/hz)";
+        else if(crvsTitle.at(0) == "getHlog")
+            labelY = "Hlog(db)";
+        else if(crvsTitle.at(0) == "getNoiseMargin")
+            labelY = "Noise margin(db)";
+        else if(crvsTitle.at(0) == "getBitAlloc")
+            labelY = "BitAlloc(bit)";
+        else if(crvsTitle.at(0) == "getAln")
+            labelY = "Aln(dbm/hz)";
+        else if(crvsTitle.at(0) == "getRmcBitAlloc")
+            labelY = "RmcBitAlloc(bit)";
+    }
+    plot->setAxisTitle(QwtPlot::yLeft,labelY);
+
+    QString labelX = "tone";
+    plot->setAxisTitle(QwtPlot::xBottom,labelX);
+    plot->replot();
     return;
 }
 

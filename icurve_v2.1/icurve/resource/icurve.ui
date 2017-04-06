@@ -98,6 +98,7 @@
     <addaction name="actionConverter"/>
     <addaction name="actionStatiser"/>
     <addaction name="actionCliParser"/>
+    <addaction name="actionOneKeySetter"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="enabled">
@@ -206,7 +207,9 @@
    <addaction name="actionShowAll"/>
    <addaction name="separator"/>
    <addaction name="actionDelete"/>
+   <addaction name="separator"/>
    <addaction name="actionRepaint"/>
+   <addaction name="actionOneKeySetter"/>
    <addaction name="actionRefresh"/>
   </widget>
   <action name="actionOpen">
@@ -679,6 +682,15 @@
    </property>
    <property name="text">
     <string>Repaint</string>
+   </property>
+  </action>
+  <action name="actionOneKeySetter">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/magic_key.png</normaloff>:/icurve/images/magic_key.png</iconset>
+   </property>
+   <property name="text">
+    <string>One Key Setter</string>
    </property>
   </action>
  </widget>

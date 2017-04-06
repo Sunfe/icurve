@@ -29,9 +29,10 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 
     /* default completion */
     QStringList wordList;
-    wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getbitalloc"\
+    wordList << "gettxpsd" << "getsnr" << "getnoisemargin" << "gethlog"<<"getqln"<<"getaln"\
+             <<"getbitalloc" << "getRmcBitAlloc"\
              << "psd" <<"snr" << "margin" << "hlog" << "bitalloc" << "rmcbitalloc"\
-             << "bitload"<< "qln"<< "snr"<<"gainalloc"<<"hlog"<<"linimg"<<"linreal"\
+             << "bitload"<< "qln"<< "aln"<<"snr"<<"gainalloc"<<"hlog"<<"linimg"<<"linreal"\
              << "bcm" <<"rfc"<< "api" <<"fast";
     completer = new QCompleter(wordList);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -42,7 +43,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     lookupType = ICV_BY_COMANDNAME;
     /* legally accept command name*/
     keywords << "getTxPsd" << "getSnr" << "getQln" << "getHlog" << "getNoiseMargin" << "getBitAlloc"\
-        << "DS" << "US"<<"api"<<"rfc"<<"bcm"<<"fast";
+             << "getAln" << "getRmcBitAlloc" << "DS" << "US"<<"api"<<"rfc"<<"bcm"<<"fast";
     /* default actions */
 
     connect(radioComandName,     SIGNAL(clicked()), this, SLOT(prepareCommitAction())); 
