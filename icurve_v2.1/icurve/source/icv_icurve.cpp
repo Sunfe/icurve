@@ -2462,7 +2462,7 @@ void IcvICurve::cancelAnalyProgressBar()
 
 void IcvICurve::updateRecentFileActions()
 {
-    QSettings settings("history.ini",QSettings::IniFormat);;
+    QSettings settings("icv_history.ini",QSettings::IniFormat);;
     QStringList files = settings.value("recentFileList").toStringList();
     qint16 numRecentFiles = qMin(files.size(), (int)ICV_MAX_RECENT_FILE_NUM);
 
