@@ -122,6 +122,7 @@
     <addaction name="actionStyle"/>
     <addaction name="actionMarker"/>
     <addaction name="actionExpand"/>
+    <addaction name="actionRepaint"/>
     <addaction name="actionViewData"/>
     <addaction name="actionViewStat"/>
     <addaction name="actionJumpToFile"/>
@@ -205,6 +206,7 @@
    <addaction name="actionShowAll"/>
    <addaction name="separator"/>
    <addaction name="actionDelete"/>
+   <addaction name="actionRepaint"/>
    <addaction name="actionRefresh"/>
   </widget>
   <action name="actionOpen">
@@ -668,6 +670,15 @@
   <action name="actionCliParser">
    <property name="text">
     <string>Cli Parser</string>
+   </property>
+  </action>
+  <action name="actionRepaint">
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/repaint.png</normaloff>:/icurve/images/repaint.png</iconset>
+   </property>
+   <property name="text">
+    <string>Repaint</string>
    </property>
   </action>
  </widget>

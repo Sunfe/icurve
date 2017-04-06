@@ -143,6 +143,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionStyle,          SIGNAL(triggered()),     this, SLOT(setCurveStyle()));
     connect(ui.actionMarker,         SIGNAL(triggered()),     this, SLOT(setCurveMarker()));
     connect(ui.actionExpand,         SIGNAL(triggered()),     this, SLOT(expandCurve()));
+    connect(ui.actionRepaint,        SIGNAL(triggered()),     this, SLOT(repaintCurve()));
     connect(ui.actionFilter,         SIGNAL(triggered()),     this, SLOT(filterCurve()));
     connect(ui.actionViewData,       SIGNAL(triggered()),     this, SLOT(viewCurveData()));
     connect(ui.actionViewStat,       SIGNAL(triggered()),     this, SLOT(viewCurveStat()));
@@ -1308,6 +1309,26 @@ void IcvICurve::expandCurve()
     for(qint16 cnt = 0; cnt < curve.count(); cnt++)
     {
         curve.at(cnt)->setGroupSize(groupSize);
+    }
+    plot->replot();
+    return;
+}
+
+void IcvICurve::repaintCurve()
+{
+    QList<IcvPlotCurve *> curves = plotCanvas->getCanvasCurves();
+    if(curves.empty())
+    {
+        QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
+        return;
+    }
+
+    for(qint16 cnt = 0; cnt < curves.count(); cnt++)
+    {
+        if(cnt < ICV_MAX_VIVID_COLOR_NUM)
+             curves.at(cnt)->setColor(QColor(icvRgbColors[cnt]));
+        else
+            curves.at(cnt)->setColor(QColor::fromHsl(rand()%360,rand()%256,rand()%100));
     }
     plot->replot();
     return;
