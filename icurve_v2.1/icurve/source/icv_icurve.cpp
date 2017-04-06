@@ -870,6 +870,98 @@ void IcvICurve::pasteCurve()
     return;
 }
 
+void IcvICurve::performCurveFiltering(qint16 filterType, QString keyword, qint16 inAllState)
+{
+    /* parse keyword for lineId */
+    QStringList keywordRange;
+    if(keyword.contains(QRegExp("^[0-9]+$")))
+    {
+        keywordRange.push_back(keyword);
+    }
+    else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
+    {
+        keywordRange =  keyword.split(",");
+    }
+    else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
+    {
+        QStringList line = keyword.split(":");
+        if(line.count() < 2)
+            return;
+        bool ok = false;
+        qint16  lineStart = line.at(0).toInt(&ok);
+        qint16  lineEnd   = line.at(1).toInt(&ok);
+        for(qint16 i = lineStart; i < lineEnd; i++)
+        {
+            keywordRange.push_back(QString::number(i));
+        }
+    }
+    QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
+    QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
+        "filter progress", "filtering...", QSize(300,100), true);
+    progress->show();
+
+    qint16 foundCnt = 0;
+    for(qint16 cnt = 0; cnt < curves.count(); cnt++)
+    {
+        qint16 dataPos = curves.at(cnt)->getDataPos();
+        IcvCommand cmd = plotData[dataPos];
+        bool   isMatch = false;
+        switch(filterType)
+        {
+        case ICV_BY_COMPLETECOMAND:
+            {
+                QString completeComand = cmd.getName() + " " + QString::number(cmd.getLineId()) +
+                    " " + QString::number(cmd.getDirection());
+                isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)? true : false;
+            }
+            break;
+        case ICV_BY_COMANDNAME:
+            isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
+            break;
+        case ICV_BY_LINEID:
+            isMatch = (0 != keywordRange.count(QString::number(cmd.getLineId())))? true : false;
+            break;
+        case ICV_BY_DIRECTION:
+            {
+                QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
+                isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
+            }
+            break;
+        case ICV_BY_PROMT:
+            isMatch = (cmd.getPromt().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
+            break;
+        case ICV_BY_POS:
+            isMatch = (0 != keywordRange.count(QString::number(cmd.getDataPosInFile())))? true : false;
+            break;
+        default:
+            isMatch = false;
+        }
+        if(!isMatch)   
+        {
+            curves.at(cnt)->removeCurve();
+            foundCnt++;
+        }
+        else
+        {
+            if(Qt::Checked == inAllState)
+                curves.at(cnt)->showCurve();
+        }
+        progress->setValue(cnt);
+        /* every 50 curves processed, delay 50ms to handle the other events */
+        if(0 == cnt % 50)
+            taskDelay(50);
+    } 
+    /*clear memory*/
+    delete progress;
+    if(0 == foundCnt) 
+    {
+        QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
+        return;
+    }
+    plot->replot();
+    return;
+}
+
 void IcvICurve::filterCurve()
 {
     QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
@@ -884,203 +976,27 @@ void IcvICurve::filterCurve()
     if(filterDlg->exec() != QDialog::Accepted)
         return;
 
-    QString keyword    = filterDlg->getKeyword();
     qint16  filterType = filterDlg->getLookupType();
-    Qt::CheckState inAllState = filterDlg->getInAllCheckState();
+    QString keyword    = filterDlg->getKeyword();
+    qint16 inAllState = (Qt::CheckState)filterDlg->getInAllCheckState();
     delete  filterDlg;
-    /* parse keyword for lineId */
-    QStringList keywordRange;
-    if(keyword.contains(QRegExp("^[0-9]+$")))
-    {
-        keywordRange.push_back(keyword);
-    }
-    else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
-    {
-        keywordRange =  keyword.split(",");
-    }
-    else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
-    {
-        QStringList line = keyword.split(":");
-        if(line.count() < 2)
-            return;
-        bool ok = false;
-        qint16  lineStart = line.at(0).toInt(&ok);
-        qint16  lineEnd   = line.at(1).toInt(&ok);
-        for(qint16 i = lineStart; i < lineEnd; i++)
-        {
-            keywordRange.push_back(QString::number(i));
-        }
-    }
-    QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
-        "filter progress", "filtering...", QSize(300,100), true);
-    progress->show();
 
-    qint16 foundCnt = 0;
-    int c = curves.count();
-    for(qint16 cnt = 0; cnt < curves.count(); cnt++)
-    {
-        qint16 dataPos = curves.at(cnt)->getDataPos();
-        IcvCommand cmd = plotData[dataPos];
-        bool   isMatch = false;
-        switch(filterType)
-        {
-        case ICV_BY_COMPLETECOMAND:
-            {
-                QString completeComand = cmd.getName() + " " + QString::number(cmd.getLineId()) +
-                    " " + QString::number(cmd.getDirection());
-                isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)? true : false;
-            }
-            break;
-        case ICV_BY_COMANDNAME:
-            isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
-            break;
-        case ICV_BY_LINEID:
-            isMatch = (0 != keywordRange.count(QString::number(cmd.getLineId())))? true : false;
-            break;
-        case ICV_BY_DIRECTION:
-            {
-                QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
-                isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
-            }
-            break;
-        case ICV_BY_PROMT:
-            isMatch = (cmd.getPromt().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
-            break;
-        case ICV_BY_POS:
-            isMatch = (0 != keywordRange.count(QString::number(cmd.getDataPosInFile())))? true : false;
-            break;
-        default:
-            isMatch = false;
-        }
-        if(!isMatch)   
-        {
-             curves.at(cnt)->removeCurve();
-             foundCnt++;
-        }
-        else
-        {
-            if(Qt::Checked == inAllState)
-             curves.at(cnt)->showCurve();
-        }
-        progress->setValue(cnt);
-        /* every 50 curves processed, delay 50ms to handle the other events */
-        if(0 == cnt % 50)
-            taskDelay(50);
-    } 
-    /*clear memory*/
-    delete progress;
-    if(0 == foundCnt) 
-    {
-        QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
-        return;
-    }
-    plot->updateLegend();
-    plot->replot();
-    return;
+    performCurveFiltering(filterType, keyword, inAllState);
+    return; 
 }
 
 void IcvICurve::filterCurvePreview(qint16 type, QString keyword,qint16 inAllState)
 {
-    qint16  filterType = type;
-    /* parse keyword for lineId */
-    QStringList keywordRange;
-    if(keyword.contains(QRegExp("^[0-9]+$")))
-    {
-        keywordRange.push_back(keyword);
-    }
-    else if(keyword.contains(QRegExp("([0-9]+,){1,}[0-9]?")))
-    {
-        keywordRange =  keyword.split(",");
-    }
-    else if(keyword.contains(QRegExp("^[0-9]+:[0-9]+$")))
-    {
-        QStringList line = keyword.split(":");
-        if(line.count() < 2)
-            return;
-        bool ok = false;
-        qint16  lineStart = line.at(0).toInt(&ok);
-        qint16  lineEnd   = line.at(1).toInt(&ok);
-        for(qint16 i = lineStart; i < lineEnd; i++)
-        {
-            keywordRange.push_back(QString::number(i));
-        }
-    }
-    QList<IcvPlotCurve *> curves = plotCanvas->getCurves();
-    QProgressDialog *progress = createIcvProgressDiag(plot, 0, curves.count(),
-        "filter progress", "filtering...", QSize(300,100), true);
-    progress->show();
-
-    qint16 foundCnt = 0;
-    for(qint16 cnt = 0; cnt < curves.count(); cnt++)
-    {
-        qint16 dataPos = curves.at(cnt)->getDataPos();
-        IcvCommand cmd = plotData[dataPos];
-        bool   isMatch = false;
-        switch(filterType)
-        {
-        case ICV_BY_COMPLETECOMAND:
-            {
-                QString completeComand = cmd.getName() + " " + QString::number(cmd.getLineId()) +
-                    " " + QString::number(cmd.getDirection());
-                isMatch = (completeComand.compare(keyword, Qt::CaseInsensitive) == 0)? true : false;
-            }
-            break;
-        case ICV_BY_COMANDNAME:
-            isMatch = (cmd.getName().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
-            break;
-        case ICV_BY_LINEID:
-            isMatch = (0 != keywordRange.count(QString::number(cmd.getLineId())))? true : false;
-            break;
-        case ICV_BY_DIRECTION:
-            {
-                QString strDir = (cmd.getDirection() == 1) ? "DS":"US";
-                isMatch = (keyword.compare(strDir, Qt::CaseInsensitive) == 0)? true : false;
-            }
-            break;
-        case ICV_BY_PROMT:
-            isMatch = (cmd.getPromt().compare(keyword, Qt::CaseInsensitive)== 0)? true : false;
-            break;
-        case ICV_BY_POS:
-            isMatch = (0 != keywordRange.count(QString::number(cmd.getDataPosInFile())))? true : false;
-            break;
-        default:
-            isMatch = false;
-        }
-        if(!isMatch)   
-        {
-            curves.at(cnt)->hideCurve();
-            foundCnt++;
-        }
-        else
-        {
-            if(Qt::Checked == inAllState)
-                curves.at(cnt)->showCurve();
-            curves.at(cnt)->boldTitle(true);
-        }
-        progress->setValue(cnt);
-        /* every 50 curves processed, delay 50ms to handle the other events */
-        if(0 == cnt % 50)
-            taskDelay(50);
-    } 
-    /*clear memory*/
-    delete progress;
-    if(0 == foundCnt) 
-    {
-        QMessageBox::information(this,tr("Info"), tr("No curves filtered!"));
-        return;
-    }
-    refreshPlot();
+    performCurveFiltering(type, keyword, inAllState);
     return;
 }
 
 void IcvICurve::recoverCurveVisible()
 {
-    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
-    for(qint16 cnt = 0; cnt < allCurves.count(); cnt++)
+    QList<IcvPlotCurve*> curves = plotCanvas->getCurves();
+    for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
-        QwtPlotCurve *curve = allCurves.at(cnt)->getCurve();
-        curve->show();
+        curves.at(cnt)->showCurve();
     }
     plot->replot();
     return;

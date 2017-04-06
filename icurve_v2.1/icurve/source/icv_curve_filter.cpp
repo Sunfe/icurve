@@ -13,18 +13,18 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 : QDialog(parent)
 {
     setupUi(this);
-    resize(410, 225 - ICV_HEIGHT_MORE_SELECT_AREA);
+    setFixedSize(400, 200 - ICV_HEIGHT_MORE_SELECT_AREA);
     radioComandName->setCheckable(true);
     radioComandName->setChecked(true);
     radioPromt->setVisible(false);
     radioCompleteComand->setVisible(false);
     radioPosition->setVisible(false);
     QSize sz = groupBox->size();
-    groupBox->resize(sz.width(), sz.height()-30);
+    groupBox->resize(sz.width(), sz.height() - ICV_HEIGHT_MORE_SELECT_AREA);
 
     QRect rect = widget->geometry();
     QPoint pnt = rect.topLeft();
-    rect.moveTopLeft(QPoint(pnt.x(), pnt.y()-30));
+    rect.moveTopLeft(QPoint(pnt.x(), pnt.y() - ICV_HEIGHT_MORE_SELECT_AREA));
     widget->setGeometry(rect);
 
     /* default completion */
@@ -54,8 +54,8 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 
     connect(this, SIGNAL(previewSignal(qint16, QString, qint16)), parent, SLOT(filterCurvePreview(qint16, QString, qint16)));
     connect(this, SIGNAL(recoverPreviewSignal()), parent, SLOT(recoverCurveVisible()));
-    connect(this, SIGNAL(warningSignal(QString)), this, SLOT(displayWarning(QString)));
-    connect(moreButton, SIGNAL(toggled(bool)), this, SLOT(toggleMoreSelect(bool)));
+    connect(moreButton,    SIGNAL(toggled(bool)), this, SLOT(toggleMoreSelect(bool)));
+    connect(previewButton, SIGNAL(toggled(bool)), this, SLOT(togglePreview(bool)));
 }
 
 IcvCurveFilterDialog::~IcvCurveFilterDialog()
@@ -109,12 +109,6 @@ void IcvCurveFilterDialog::prepareCommitAction()
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     lineEdit->setCompleter(completer);
-    /*preview action */
-    if(previewCheckBox->checkState() == Qt::Checked )
-    {
-        emit previewSignal(lookupType, keyword, getInAllCheckState());
-        return;
-    }
     return;
 }
 
@@ -128,66 +122,8 @@ QString IcvCurveFilterDialog::getKeyword()
     return keyword;
 }
 
-Qt::CheckState IcvCurveFilterDialog::getInAllCheckState()
+void IcvCurveFilterDialog::setKeyword()
 {
-    return inAllCheckBox->checkState();
-}
-
-void IcvCurveFilterDialog::accept()
-{
-    QString userInput = lineEdit->text();
-    if (radioComandName->isChecked())
-    {
-        QRegExp  expr;
-        expr.setPattern("psd|snr|margin|qln|hlog|bit|linimg|linreal");
-        expr.setCaseSensitivity(Qt::CaseInsensitive);
-        if(!userInput.contains(expr))
-        {
-            emit warningSignal("command name invalid!");
-            lineEdit->setFocus();
-            return;
-        }
-    }
-    else if(radioDirection->isChecked())
-    {
-        if(!userInput.contains(QRegExp("us|ds|0|1",Qt::CaseInsensitive)))
-        {
-            emit warningSignal("direction invalid!");
-            lineEdit->setFocus();
-            return;
-        }
-    }
-    else if(radioCompleteComand->isChecked())
-    {
-        QRegExp  expr;
-        expr.setPattern("(gettxpsd|getsnr|getnoisemargin|gethlog|getqln|getbitalloc|getrmcbitalloc)[ ]+[0-9]+[ ]+[0|1]");
-        expr.setCaseSensitivity(Qt::CaseInsensitive);
-        if(!userInput.contains(expr))
-        {
-            emit warningSignal("complete command name invalid!");
-            lineEdit->setFocus();
-            return;
-        }
-    }
-    else if(radioLineId->isChecked())
-    {
-        if(!userInput.contains(QRegExp("[0-9]|([1-9][0-9]+)",Qt::CaseInsensitive)))
-        {
-            emit warningSignal("lineid invalid!");
-            lineEdit->setFocus();
-            return;   
-        }
-    }
-    else if(radioPromt->isChecked())
-    {
-        if(!userInput.contains(QRegExp("rfc|bcm|api|fast",Qt::CaseInsensitive)))
-        {
-            emit warningSignal("promt invalid!");
-            lineEdit->setFocus();
-            return;
-        }
-    }
-
     keyword = lineEdit->text();
     if(radioDirection->isChecked())
     {
@@ -248,32 +184,82 @@ void IcvCurveFilterDialog::accept()
             }
         }
     }
+    return;
+}
 
-    if(previewCheckBox->checkState() == Qt::Checked )
+bool IcvCurveFilterDialog::checkValidKeyword()
+{
+    QString userInput = lineEdit->text();
+    if (radioComandName->isChecked())
     {
-        emit previewSignal(lookupType, lineEdit->text(), getInAllCheckState());
-        return ;
+        QRegExp  expr;
+        expr.setPattern("psd|snr|margin|qln|hlog|bit|linimg|linreal");
+        expr.setCaseSensitivity(Qt::CaseInsensitive);
+        if(!userInput.contains(expr))
+        {
+            QMessageBox::warning(this,tr("Warning"), "command name invalid!", QMessageBox::Close);
+            lineEdit->setFocus();
+            return false;
+        }
     }
-    else
+    else if(radioDirection->isChecked())
     {
-        return QDialog::accept();
+        if(!userInput.contains(QRegExp("us|ds|0|1",Qt::CaseInsensitive)))
+        {
+            QMessageBox::warning(this,tr("Warning"), "direction invalid!", QMessageBox::Close);
+            lineEdit->setFocus();
+            return false;
+        }
     }
+    else if(radioCompleteComand->isChecked())
+    {
+        QRegExp  expr;
+        expr.setPattern("(gettxpsd|getsnr|getnoisemargin|gethlog|getqln|getbitalloc|getrmcbitalloc)[ ]+[0-9]+[ ]+[0|1]");
+        expr.setCaseSensitivity(Qt::CaseInsensitive);
+        if(!userInput.contains(expr))
+        {
+            QMessageBox::warning(this,tr("Warning"), "complete command name invalid!", QMessageBox::Close);
+            lineEdit->setFocus();
+            return false;
+        }
+    }
+    else if(radioLineId->isChecked())
+    {
+        if(!userInput.contains(QRegExp("[0-9]|([1-9][0-9]+)",Qt::CaseInsensitive)))
+        {
+            QMessageBox::warning(this,tr("Warning"), "lineid invalid!", QMessageBox::Close);
+            lineEdit->setFocus();
+            return false; 
+        }
+    }
+    else if(radioPromt->isChecked())
+    {
+        if(!userInput.contains(QRegExp("rfc|bcm|api|fast",Qt::CaseInsensitive)))
+        {
+            QMessageBox::warning(this,tr("Warning"), "promt invalid!", QMessageBox::Close);
+            lineEdit->setFocus();
+            return false;
+        }
+    }
+    return true;
+}
+
+Qt::CheckState IcvCurveFilterDialog::getInAllCheckState()
+{
+    return inAllCheckBox->checkState();
+}
+
+void IcvCurveFilterDialog::accept()
+{
+    if(!checkValidKeyword())
+        return;
+    setKeyword();
+    return QDialog::accept();
 }
 
 void IcvCurveFilterDialog::reject()
 {
-    if(previewCheckBox->checkState() == Qt::Checked )
-    {
-        emit recoverPreviewSignal();
-        return;
-    }
     return QDialog::reject ();
-}
-
-void IcvCurveFilterDialog::displayWarning(QString info)
-{
-    QMessageBox::warning(this,tr("Warning"), info, QMessageBox::Close);
-    return QDialog::reject () ;
 }
 
 void IcvCurveFilterDialog::showMoreSelect()
@@ -317,4 +303,24 @@ void IcvCurveFilterDialog::hideMoreSelect()
 void IcvCurveFilterDialog::toggleMoreSelect(bool needMore)
 {
     return needMore? showMoreSelect(): hideMoreSelect();
+}
+
+
+void IcvCurveFilterDialog::togglePreview(bool isPreview)
+{
+    if(isPreview)
+    {
+        if(!checkValidKeyword())
+        {
+            previewButton->setChecked(false);
+            return;
+        }
+        setKeyword();
+        emit previewSignal(lookupType, keyword, getInAllCheckState());
+    }
+    else
+    {
+        emit recoverPreviewSignal();
+    }
+    return;
 }

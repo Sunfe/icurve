@@ -22,6 +22,8 @@ public:
 
     qint16 getLookupType();
     QString getKeyword();
+    void setKeyword();
+    bool checkValidKeyword();
     Qt::CheckState getInAllCheckState();
     void showMoreSelect();
     void hideMoreSelect();
@@ -30,8 +32,8 @@ private slots:
     void accept();
     void reject();
     void prepareCommitAction();
-	void displayWarning(QString info);
     void toggleMoreSelect(bool needMore);
+    void togglePreview(bool isPreview);
     
 private:
     qint16 lookupType;
@@ -42,7 +44,6 @@ private:
 signals:
     void previewSignal(qint16 filterType, QString keyword, qint16);
     void recoverPreviewSignal();
-	void warningSignal(QString info);
 };
 
 #endif
