@@ -1254,7 +1254,7 @@ void IcvICurve::showAllCurve()
 
 void IcvICurve::selectAllCurves()
 {
-    QList<IcvPlotCurve*> allCurves = plotCanvas->getCurves();
+    QList<IcvPlotCurve*> allCurves = plotCanvas->getCanvasCurves();
     if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
@@ -1318,13 +1318,15 @@ void IcvICurve::expandCurve()
 
 void IcvICurve::repaintCurve()
 {
-    QList<IcvPlotCurve *> curves = plotCanvas->getCanvasCurves();
-    if(curves.empty())
+    QList<IcvPlotCurve *> allCurves = plotCanvas->getCanvasCurves();
+    if(allCurves.empty())
     {
         QMessageBox::information(this,tr("Info"),tr("No curve in canvas."));
         return;
     }
 
+    QList<IcvPlotCurve *>selectedCurves = plotCanvas->getSelectedCurve();
+    QList<IcvPlotCurve *>curves = !selectedCurves.isEmpty()? selectedCurves : allCurves;
     for(qint16 cnt = 0; cnt < curves.count(); cnt++)
     {
         if(cnt < ICV_MAX_VIVID_COLOR_NUM)

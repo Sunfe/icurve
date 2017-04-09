@@ -13,7 +13,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
 : QDialog(parent)
 {
     setupUi(this);
-    setFixedSize(400, 200 - ICV_HEIGHT_MORE_SELECT_AREA);
+    resize(400, 200 - ICV_HEIGHT_MORE_SELECT_AREA);
     radioComandName->setCheckable(true);
     radioComandName->setChecked(true);
     radioPromt->setVisible(false);
@@ -23,6 +23,8 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     groupBox->resize(sz.width(), sz.height() - ICV_HEIGHT_MORE_SELECT_AREA);
 
     QRect rect = widget->geometry();
+
+
     QPoint pnt = rect.topLeft();
     rect.moveTopLeft(QPoint(pnt.x(), pnt.y() - ICV_HEIGHT_MORE_SELECT_AREA));
     widget->setGeometry(rect);
