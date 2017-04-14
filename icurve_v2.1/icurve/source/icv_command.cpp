@@ -1,11 +1,15 @@
+#include <QDebug>
 #include "icv_command.h"
 #include "icurve_common.h"
+#include "icv_pattern_table.h"
+
 
 IcvCommand::IcvCommand(void)
 {
     initFamily();
     initPromtFamily();
     initTitlePattern();
+    initDataPattern();
     groupSize = 1;
     dataScopeMode = ICV_DATA_SCOPE_BCM;
 }
@@ -15,6 +19,7 @@ IcvCommand::IcvCommand(QString cmd)
     initFamily();
     initPromtFamily();
     initTitlePattern();
+    initDataPattern();
     groupSize = 1;
     name = cmd;
     dataScopeMode = ICV_DATA_SCOPE_BCM;
@@ -25,6 +30,7 @@ IcvCommand::IcvCommand(QString cmd,qint16 line, qint16 dir)
     initFamily();
     initPromtFamily();
     initTitlePattern();
+    initDataPattern();
     groupSize = 1;
     name      = cmd;
     lineId    = line;
@@ -43,7 +49,7 @@ void IcvCommand::initFamily()
     family.push_back("getTxPsd");
     family.push_back("getSnr");
     family.push_back("getQln");
-    family.push_back("getHlog");
+    family.push_back("getHlog"); 
     family.push_back("getNoiseMargin");
     family.push_back("getBitAlloc");
     family.push_back("getRmcBitAlloc");
@@ -62,7 +68,8 @@ void IcvCommand::initPromtFamily()
 
 void IcvCommand::initTitlePattern()
 {
-    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
+   #if 0
+ if(ICV_DATA_SCOPE_CLI == dataScopeMode)
     {
         titlePattern = "scstatus-segment\\s+(Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal)\\s+(vdsl|adsl)_\\d+/\\d+/(\\d+)\\s?$";
         return;
@@ -73,6 +80,7 @@ void IcvCommand::initTitlePattern()
         titlePattern = "icurve";
         return;
     }
+    
     QString pattern;
     pattern += "(";
     for(qint16 i = 0; i < promtFamily.count(); i++)
@@ -92,6 +100,26 @@ void IcvCommand::initTitlePattern()
     pattern += ")\\s+([0-9]|[1-9][0-9]+)\\s+([0-1])?";
     titlePattern = pattern;
     return;
+#endif
+
+    bool isEnd = false;
+    for(qint16 i = 0; (i < ICV_MAX_TITLE_PATTERN_NUM) && !isEnd; i++)
+    {
+        titlePatternRepo.append(icvCmdTitlePatternTbl[i]);
+        isEnd = icvCmdTitlePatternTbl[i].isEmpty();
+    }
+    return;
+}
+
+void IcvCommand::initDataPattern()
+{
+    bool isEnd = false;
+    for(qint16 i = 0; (i < ICV_MAX_DATA_PATTERN_NUM) && !isEnd; i++)
+    {
+        dataPatternRepo.append(qMakePair(icvCmdDataPatternTbl[i][0], icvCmdDataPatternTbl[i][1]));
+        isEnd = icvCmdDataPatternTbl[i][0].isEmpty();
+    }
+    return;
 }
 
 void IcvCommand::reset()
@@ -99,7 +127,7 @@ void IcvCommand::reset()
     setName("NULL");
     setLineId(0xff);
     setDirection(0xff);
-    setState(CMD_CLOSED);
+    setState(CMD_NOT_FOUND);
 
     data.erase(data.begin(),data.end());
     groupSize = 1;
@@ -170,9 +198,33 @@ QStringList IcvCommand::getPromtFamily()
     return promtFamily;
 }
 
+
 QString IcvCommand::getTitlePattern()
 {
-    return titlePattern;
+#if 0
+    for(qint16 i = 0; i < titlePatternRepo.count(); i++)
+    {
+        qDebug() << titlePatternRepo.at(i);
+        if(titlePatternRepo.at(i) == promt)
+            return titlePatternRepo.at(i).second;
+    }
+#endif
+    return titlePatternRepo.at(0);
+}
+
+QString IcvCommand::getDataPattern()
+{
+    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
+    {
+        return "^\\s+(\\s+[\\dA-F]{2}){16}";
+    }
+
+    for(qint16 i = 0; i < dataPatternRepo.count(); i++)
+    {
+        if(dataPatternRepo.at(i).first == (promt + " " + name))
+            return dataPatternRepo.at(i).second;
+    }
+    return "";
 }
 
 bool IcvCommand::matchGroupSize(QString dataLine)
@@ -211,38 +263,6 @@ void IcvCommand::setDataScopeMode(qint16 scope)
 qint16 IcvCommand::getDataScopeMode()
 {
     return dataScopeMode;
-}
-
-QString IcvCommand::getDataPattern()
-{
-    if(ICV_DATA_SCOPE_CLI == dataScopeMode)
-    {
-        return "^\\s+(\\s+[\\dA-F]{2}){16}";
-    }
-    /* bcm data pattern */
-    QString pattern;
-    if("fast" == promt)
-    {
-        pattern = "([ ]+-{,1}\\d{1,}\.\\d\,){1,10}\\s*$";
-    }
-    else /* rfc, api,bcm, .. */
-    {
-        if("getBitAlloc" == name)
-        {
-            /* pattern like: 360 : 11 11 11 12 12 12 13 13 */
-            pattern = "\\s+\\d{1,5}\\s*:(\\s+\\d+){1,20}\\s*$";
-        }
-        else if("getRmcBitAlloc" == name)
-        {
-            /*pattern like: 43:  x  x  x  x  x  x */
-            pattern = "\\s+\\d+\\s*:(\\s+\\d+){1,20}\\s*$$";
-        }
-        else
-        {
-            pattern = "\\s+\\d{1,5}\\s*:(\\s+-{,1}\\d{1,}\\.\\d+\\s?){1,10}\\s*$$";
-        }
-    }
-    return pattern;
 }
 
 void IcvCommand::setFamily(QStringList cmdFamily)

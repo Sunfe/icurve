@@ -21,10 +21,7 @@ IcvCurveFilterDialog::IcvCurveFilterDialog(QWidget* parent)
     radioPosition->setVisible(false);
     QSize sz = groupBox->size();
     groupBox->resize(sz.width(), sz.height() - ICV_HEIGHT_MORE_SELECT_AREA);
-
     QRect rect = widget->geometry();
-
-
     QPoint pnt = rect.topLeft();
     rect.moveTopLeft(QPoint(pnt.x(), pnt.y() - ICV_HEIGHT_MORE_SELECT_AREA));
     widget->setGeometry(rect);
@@ -196,7 +193,7 @@ bool IcvCurveFilterDialog::checkValidKeyword()
     if (radioComandName->isChecked())
     {
         QRegExp  expr;
-        expr.setPattern("psd|snr|margin|qln|hlog|bit|linimg|linreal");
+        expr.setPattern("psd|snr|margin|qln|hlog|bit|linimg|linreal|aln");
         expr.setCaseSensitivity(Qt::CaseInsensitive);
         if(!userInput.contains(expr))
         {

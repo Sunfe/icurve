@@ -5,7 +5,9 @@
 #include <QStringList>
 #include <QList>
 #include <QPointF>
+#include <QPair>
 
+#define CMD_NOT_FOUND                (0)
 #define CMD_TITLE_MATCHED            (1)
 #define CMD_GROUPSIZE_MATCHED        (2)
 #define CMD_PLOTDATA_MATCHED         (3)
@@ -27,6 +29,7 @@ public:
     void initFamily();
     void initPromtFamily();
     void initTitlePattern();
+    void initDataPattern();
     void setFamily(QStringList cmdFamily);
     QStringList getFamily();
     void setPrompt(QString promt);
@@ -83,7 +86,8 @@ private:
     QStringList    family;
     QStringList    promtFamily;
     QString        titlePattern;
-    QString        dataPattern;
+    QList< QString> titlePatternRepo;
+    QList<QPair<QString, QString>> dataPatternRepo;
 
     qint16 lineId;
     qint16 direction;

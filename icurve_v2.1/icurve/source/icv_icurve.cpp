@@ -620,8 +620,9 @@ void IcvICurve::insertCurveName()
 void IcvICurve::insertFooter()
 {
     bool ok;
+    QString origTitle = plot->footer().text();
     QString text = QInputDialog::getText(this, tr("Input"),
-        tr("Footer"), QLineEdit::Normal, "", &ok);
+        tr("Footer"), QLineEdit::Normal, origTitle, &ok);
     if (ok)
         plot->setFooter(text);
     return;
@@ -666,12 +667,16 @@ void IcvICurve::insertIndicator()
             QPointF randPos = posList.at(rand() % posList.count());
             QString promt = curves.at(cnt)->getCommand().getPromt();
             QString title = curves.at(cnt)->getCommand().getTitle();
+            QString file  = curves.at(cnt)->getCommand().getFileName();
             QwtPlotMarker *marker = new QwtPlotMarker();
             marker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
             marker->setItemAttribute( QwtPlotItem::Legend, false );
             marker->setSymbol(new IcvSymbol(IcvSymbol::Arrow, qwtCurve->pen().color()));
             marker->setValue(randPos);
-            marker->setLabel(promt + "." + title);
+            QwtText label = QwtText(promt + "." + title + "@" + (file.length() > 10 ? file.left(10) + "..." : file));
+            label.setFont(QFont("Times", 10, QFont::Bold));
+            label.setColor(qwtCurve->pen().color());
+            marker->setLabel(label);
             marker->setLabelAlignment( Qt::AlignRight | Qt::AlignTop);
             marker->attach(plot);
             QList<QwtPlotMarker *>markers;
@@ -2097,9 +2102,7 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     }
 
     IcvCommand cmd;
-    IcvCommand prevCmd;
     cmd.reset();
-    prevCmd.reset();
     textStream.seek(0);
     isDataAnalyCanceled = false;
     qint32 line = 0;
@@ -2108,11 +2111,6 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
         line++;
         QString dataLine = textStream.readLine();
         qint16       pos = 0;
-        QString curCmdName("NULL");
-        QString curPromt("NULL");
-        QString lineId("NULL");
-        QString direction("NULL");
-
         QRegExp cmdRegExp;
         cmdRegExp.setPattern(cmd.getTitlePattern());
         cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
@@ -2120,7 +2118,8 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
         if(isMatch)
         {
             /* if the last command is not empty, terminate it */
-            prevCmd = cmd;
+            if(cmd.getData().count() > 0)              
+                plotData.push_back(cmd);   
             /* begin to set new command */
             QStringList caps = cmdRegExp.capturedTexts();
             QString promt    = caps[1];
@@ -2146,10 +2145,14 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
             cmd.setFileName(textName);
             /* set cmd matched state */
             cmd.setState(CMD_TITLE_MATCHED);
+            continue;
         }
+
+        if(cmd.getState() < CMD_TITLE_MATCHED)
+            continue;
         /* some case like: >rfc getqln 0 0  Line  3 DS QLN (dBm/Hz, grouped by 8 tones),
-        so continue to parsing the left characters in the same line */
-        if(CMD_GROUPSIZE_MATCHED != cmd.getState() || CMD_PLOTDATA_MATCHED != cmd.getState())
+           so continue to parsing the left characters in the same line */
+        if(cmd.getState() < CMD_GROUPSIZE_MATCHED)
         {
             /* math groupsize, if found, loop continue */
             if(cmd.matchGroupSize(dataLine))
@@ -2158,24 +2161,36 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
                 continue;
             }
         }
-        /* {{{command already started, try to parse data */
-        if(prevCmd.getData().count() > 0)              
-        {
-            /* reset previous command first*/
-            plotData.push_back(prevCmd);   
-            prevCmd.reset();
-        }
 
-        qint16 ret = assembleData(dataLine,&cmd);
-        if(ret == ICU_PLOT_DATA_FORMAT_ERROR)
+        if(cmd.getState() <= CMD_PLOTDATA_MATCHED)
         {
-            QString error = textName + " at line " + QString::number(line) \
-                + ":data format incorrect.";
-            QMessageBox::critical(this,"ERROR",error);
+            /* spectial format pre-processing */
+            if((cmd.getName() == "getTxPsd") && dataLine.contains("---"))
+            {
+                dataLine = dataLine.replace("---","-150.0");
+            }
+            else if((cmd.getName() == "getRmcBitAlloc"))
+            {
+                if(dataLine.contains(QRegExp("\\s+x\\s+")))
+                    dataLine = dataLine.replace("x","0");
+            }
 
-            return ICU_PLOT_DATA_FORMAT_ERROR; 
+            QRegExp regExpr;
+            regExpr.setCaseSensitivity(Qt::CaseInsensitive);
+            regExpr.setPattern(cmd.getDataPattern());
+            if(-1 == regExpr.indexIn(dataLine))
+            {
+                continue;
+            }
+            qint16 ret = assembleData(dataLine,&cmd);
+            if(ret != ICU_OK)
+            {
+                QString error = textName + " at line " + QString::number(line) + ":data format incorrect.";
+                QMessageBox::critical(this,"ERROR",error);
+                continue; 
+            }
         }
-        /* }}} */
+ 
         if((NULL != analyProgressDialog) && (line%100 == 0))
             emit analyDataProgress(line);
         /* delay 500ms to handle other event,preventing high cpu usage */
@@ -2353,27 +2368,6 @@ ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString 
 
 ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 {
-    /* spectial format pre-processing */
-    if((cmd->getName() == "getTxPsd") && dataLine.contains("---"))
-    {
-        dataLine = dataLine.replace("---","-150.0");
-    }
-    else if((cmd->getName() == "getRmcBitAlloc"))
-    {
-        if(dataLine.contains(QRegExp("\\s+x\\s+")))
-            dataLine = dataLine.replace("x","0");
-    }
-
-    QRegExp regExpr;
-    regExpr.setCaseSensitivity(Qt::CaseInsensitive);
-    regExpr.setPattern(cmd->getDataPattern());
-    if(-1 == regExpr.indexIn(dataLine))
-    {
-        return ICU_OK;
-    }
-    /* plot data collection start */
-    cmd->setState(CMD_PLOTDATA_MATCHED);
-    /* begin to parse data */
     QStringList splitList;
     splitList = dataLine.split(QRegExp("\\s+|\\,"),QString::SkipEmptyParts);
     /* filter some type of date like: 11, -11, -11.1 */

@@ -195,6 +195,7 @@
    <addaction name="actionOpen"/>
    <addaction name="actionNew"/>
    <addaction name="actionSaveAs"/>
+   <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionFilter"/>
    <addaction name="separator"/>
@@ -202,14 +203,13 @@
    <addaction name="actionStyle"/>
    <addaction name="actionWidth"/>
    <addaction name="separator"/>
+   <addaction name="actionRepaint"/>
+   <addaction name="actionOneKeySetter"/>
+   <addaction name="separator"/>
    <addaction name="actionIndicator"/>
    <addaction name="actionInfo"/>
    <addaction name="actionShowAll"/>
    <addaction name="separator"/>
-   <addaction name="actionDelete"/>
-   <addaction name="separator"/>
-   <addaction name="actionRepaint"/>
-   <addaction name="actionOneKeySetter"/>
    <addaction name="actionRefresh"/>
   </widget>
   <action name="actionOpen">
