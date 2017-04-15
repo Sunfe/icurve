@@ -666,7 +666,7 @@ void IcvICurve::insertIndicator()
                 continue;
             QPointF randPos = posList.at(rand() % posList.count());
             QString promt = curves.at(cnt)->getCommand().getPromt();
-            QString title = curves.at(cnt)->getCommand().getTitle();
+            QString title = curves.at(cnt)->getCurve()->title().text();
             QString file  = curves.at(cnt)->getCommand().getFileName();
             QwtPlotMarker *marker = new QwtPlotMarker();
             marker->setRenderHint( QwtPlotItem::RenderAntialiased, true );
