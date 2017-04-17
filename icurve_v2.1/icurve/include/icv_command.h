@@ -36,8 +36,9 @@ public:
     QString getPromt();
     QStringList getPromtFamily();
     bool matchGroupSize(QString dataLine);
-    QString getTitlePattern();
+    QList< QString> getTitlePattern();
     QString getDataPattern();
+    QPair<QString, QString> getSpecReplace();
     qint16  getGroupSize();
 
     void setDataScopeMode(qint16 scope);
@@ -85,9 +86,8 @@ private:
     qint16         dataScopeMode;
     QStringList    family;
     QStringList    promtFamily;
-    QString        titlePattern;
-    QList< QString> titlePatternRepo;
-    QList<QPair<QString, QString>> dataPatternRepo;
+    QList< QString> titlePattern;
+    QList<QPair<QString, QString>> dataPattern;
 
     qint16 lineId;
     qint16 direction;

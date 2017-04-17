@@ -36,6 +36,7 @@
 #include "icv_plot_canvas.h"
 #include "icv_curve_differ.h"
 #include "icv_cliparser.h"
+#include "icv_regexp.h"
 
 #define ICV_EYESCAN_MARGIN                   (10)
 
@@ -168,6 +169,7 @@ private slots:
         void parseCliData();
         void enableHandMove(bool checked);
         void oneKeySetPlot();
+        void setRegularExp();
         /* help help slots */
         void aboutIcurve();
 

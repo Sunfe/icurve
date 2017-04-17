@@ -99,6 +99,7 @@
     <addaction name="actionStatiser"/>
     <addaction name="actionCliParser"/>
     <addaction name="actionOneKeySetter"/>
+    <addaction name="actionRegularExp"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="enabled">
@@ -691,6 +692,11 @@
    </property>
    <property name="text">
     <string>One Key Setter</string>
+   </property>
+  </action>
+  <action name="actionRegularExp">
+   <property name="text">
+    <string>Regular Exp</string>
    </property>
   </action>
  </widget>

@@ -23,6 +23,7 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QTableWidget>
+#include <QHeaderView>
 #include <QPixmap>
 #include <QtDebug>
 #include <iostream>     // std::cout  
@@ -170,6 +171,7 @@ IcvICurve::IcvICurve(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, fl
     connect(ui.actionDiffer,         SIGNAL(triggered()),     this, SLOT(diffCurves()));
     connect(ui.actionCliParser,      SIGNAL(triggered()),     this, SLOT(parseCliData()));
     connect(ui.actionOneKeySetter,   SIGNAL(triggered()),     this, SLOT(oneKeySetPlot()));
+    connect(ui.actionRegularExp,     SIGNAL(triggered()),     this, SLOT(setRegularExp()));
     
     /* help menu */
     connect(ui.actionAbout,          SIGNAL(triggered()),     this, SLOT(aboutIcurve()));
@@ -1422,6 +1424,29 @@ void IcvICurve::showCurveInfo()
     /* display */
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
+    tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+    tbl->setFocusPolicy(Qt::NoFocus);
+    tbl->verticalHeader()->setVisible(false);
+    tbl->setAlternatingRowColors(true);
+    tbl->setStyleSheet("selection-background-color:#63B8FF;selection-color:black;"
+        "alternate-background-color: rgb(245, 245, 245);"
+        "QHeaderView::section, QTableCornerButton::section {"
+        "padding: 1px;"
+        "border: none;"
+        "border-bottom: 1px solid rgb(160, 160, 160);"
+        "border-right: 1px solid rgb(160, 160, 160);"
+        "border-bottom: 1px solid gray;"
+        "background-color: qlineargradient(spread:reflect, "
+        "x1:0, y1:0, x2:0, y2:1, "
+        "stop:0 rgba(255, 255, 255, 255)," 
+        "stop:1 rgba(164, 164, 164, 255));"
+        "}");
+    tbl->setFont(QFont("Helvetica"));
     QDialog *dlg = new QDialog(this);
     dlg->setWindowTitle("brief info");
     QHBoxLayout *layout = new QHBoxLayout(dlg);
@@ -1511,9 +1536,29 @@ void IcvICurve::viewCurveData()
        model->setItem(row ,4, newItem);
    }
    model->setVerticalHeaderLabels(vertiHeader);
+   /* display */
    QTableView *tbl = new QTableView();
    tbl->setModel(model);
-   /* display */
+   tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+   tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+   tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+   tbl->setFocusPolicy(Qt::NoFocus);
+   tbl->verticalHeader()->setVisible(false);
+   tbl->setAlternatingRowColors(true);
+   tbl->setStyleSheet("selection-background-color:#63B8FF;selection-color:black;"
+       "alternate-background-color: rgb(245, 245, 245);"
+       "QHeaderView::section, QTableCornerButton::section {"
+       "padding: 1px;"
+       "border: none;"
+       "border-bottom: 1px solid rgb(160, 160, 160);"
+       "border-right: 1px solid rgb(160, 160, 160);"
+       "border-bottom: 1px solid gray;"
+       "background-color: qlineargradient(spread:reflect, "
+       "x1:0, y1:0, x2:0, y2:1, "
+       "stop:0 rgba(255, 255, 255, 255)," 
+       "stop:1 rgba(164, 164, 164, 255));"
+       "}");
+   tbl->setFont(QFont("Helvetica"));
    QDialog *dlg = new QDialog(this);
    dlg->setWindowTitle("curve data");
    QHBoxLayout *layout = new QHBoxLayout(dlg);
@@ -1593,6 +1638,30 @@ void IcvICurve:: viewCurveStat()
     /* display */
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
+    tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+    tbl->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+    tbl->setFocusPolicy(Qt::NoFocus);
+    tbl->verticalHeader()->setVisible(false);
+    tbl->setAlternatingRowColors(true);
+    tbl->setStyleSheet("selection-background-color:#63B8FF;selection-color:black;"
+        "alternate-background-color: rgb(245, 245, 245);"
+        "QHeaderView::section, QTableCornerButton::section {"
+        "padding: 1px;"
+        "border: none;"
+        "border-bottom: 1px solid rgb(160, 160, 160);"
+        "border-right: 1px solid rgb(160, 160, 160);"
+        "border-bottom: 1px solid gray;"
+        "background-color: qlineargradient(spread:reflect, "
+        "x1:0, y1:0, x2:0, y2:1, "
+        "stop:0 rgba(255, 255, 255, 255)," 
+        "stop:1 rgba(164, 164, 164, 255));"
+        "}");
+    tbl->setFont(QFont("Helvetica"));
     QDialog *dlg = new QDialog(this);
     dlg->setWindowTitle("curve statistics");
     QHBoxLayout *layout = new QHBoxLayout(dlg);
@@ -1741,11 +1810,17 @@ void IcvICurve::oneKeySetPlot()
             labelY = "RmcBitAlloc(bit)";
     }
     plot->setAxisTitle(QwtPlot::yLeft,labelY);
-
-    QString labelX = "tone";
-    plot->setAxisTitle(QwtPlot::xBottom,labelX);
+    plot->setAxisTitle(QwtPlot::xBottom,"tone");
+    plot->setFooter("tone:4.3125hz/per");
     plot->replot();
     return;
+}
+
+void IcvICurve::setRegularExp()
+{
+     IcvRegExp *regExp = new IcvRegExp(this, Qt::Dialog);
+     regExp->show();
+     return;
 }
 
 void IcvICurve::setAxseScale()
@@ -2110,11 +2185,21 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
     {
         line++;
         QString dataLine = textStream.readLine();
-        qint16       pos = 0;
+        bool isMatch     = false;
         QRegExp cmdRegExp;
-        cmdRegExp.setPattern(cmd.getTitlePattern());
-        cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
-        bool isMatch = dataLine.contains(cmdRegExp);
+        QList< QString> tp = cmd.getTitlePattern();
+        for(qint16 i = 0; i < tp.count(); i++)
+        {
+            if(!tp.isEmpty())
+            {
+                cmdRegExp.setPattern(tp.at(i));
+                cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+                isMatch = dataLine.contains(cmdRegExp);
+                if(isMatch)
+                    break;
+            }
+        }
+
         if(isMatch)
         {
             /* if the last command is not empty, terminate it */
@@ -2123,14 +2208,7 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
             /* begin to set new command */
             QStringList caps = cmdRegExp.capturedTexts();
             QString promt    = caps[1];
-            QString nameCap  = caps[2];
-            QString name;
-            for(qint16 i = 0; i < cmd.getFamily().count(); i++)
-            {
-                if(!cmd.getFamily().value(i).compare(nameCap, Qt::CaseInsensitive))
-                    name = cmd.getFamily().value(i);
-            }
-
+            QString name     = caps[2];
             bool ok = false;
             qint16 lineId    = caps[3].toInt(&ok);
             qint16 direction = caps[4].toInt(&ok);
@@ -2165,23 +2243,15 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
         if(cmd.getState() <= CMD_PLOTDATA_MATCHED)
         {
             /* spectial format pre-processing */
-            if((cmd.getName() == "getTxPsd") && dataLine.contains("---"))
-            {
-                dataLine = dataLine.replace("---","-150.0");
-            }
-            else if((cmd.getName() == "getRmcBitAlloc"))
-            {
-                if(dataLine.contains(QRegExp("\\s+x\\s+")))
-                    dataLine = dataLine.replace("x","0");
-            }
+            if(dataLine.contains(cmd.getSpecReplace().first))
+                dataLine = dataLine.replace(cmd.getSpecReplace().first,cmd.getSpecReplace().second);
 
             QRegExp regExpr;
             regExpr.setCaseSensitivity(Qt::CaseInsensitive);
             regExpr.setPattern(cmd.getDataPattern());
             if(-1 == regExpr.indexIn(dataLine))
-            {
                 continue;
-            }
+
             qint16 ret = assembleData(dataLine,&cmd);
             if(ret != ICU_OK)
             {
@@ -2223,7 +2293,8 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
 
 ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString textName, qint32 totalLine)
 {
-    if(totalLine > ICV_MAX_LINE_NUM_BACKGROUD_PROCESS)
+ #if 0
+   if(totalLine > ICV_MAX_LINE_NUM_BACKGROUD_PROCESS)
     {
         analyProgressDialog = createIcvProgressDiag(this, 0, totalLine, QString("analyzing "+ textName + " ..."), 
                                                     tr(""), QSize(300, 100),true);
@@ -2363,6 +2434,7 @@ ICU_RET_STATUS IcvICurve::analyzeCliTextStream(QTextStream &textStream, QString 
         delete analyProgressDialog;
         analyProgressDialog = NULL;
     }
+#endif
     return ICU_OK;
 }
 

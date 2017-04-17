@@ -1,8 +1,12 @@
+#include <QObject>
 #include <QDebug>
 #include "icv_command.h"
 #include "icurve_common.h"
 #include "icv_pattern_table.h"
 
+extern QString icvCmdTitlePatternTbl[ICV_MAX_TITLE_PATTERN_NUM];
+extern QString icvCmdDataPatternTbl[ICV_MAX_DATA_PATTERN_NUM][2];
+extern QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3];
 
 IcvCommand::IcvCommand(void)
 {
@@ -68,56 +72,22 @@ void IcvCommand::initPromtFamily()
 
 void IcvCommand::initTitlePattern()
 {
-   #if 0
- if(ICV_DATA_SCOPE_CLI == dataScopeMode)
+    for(qint16 i = 0; i < ICV_MAX_TITLE_PATTERN_NUM; i++)
     {
-        titlePattern = "scstatus-segment\\s+(Bitload|Qln|SNR|GainAlloc|Hlog|LinImg|LinReal)\\s+(vdsl|adsl)_\\d+/\\d+/(\\d+)\\s?$";
-        return;
-    }
-
-    if(promtFamily.isEmpty() || family.isEmpty())
-    {
-        titlePattern = "icurve";
-        return;
-    }
-    
-    QString pattern;
-    pattern += "(";
-    for(qint16 i = 0; i < promtFamily.count(); i++)
-    {
-        pattern += promtFamily.value(i);
-        if(i < promtFamily.count() - 1)
-            pattern += "|";
-    }
-    pattern += ").+(";
-
-    for(qint16 i = 0; i < family.count(); i++)
-    {
-        pattern += family.value(i);
-        if(i < family.count() - 1)
-            pattern += "|";
-    }
-    pattern += ")\\s+([0-9]|[1-9][0-9]+)\\s+([0-1])?";
-    titlePattern = pattern;
-    return;
-#endif
-
-    bool isEnd = false;
-    for(qint16 i = 0; (i < ICV_MAX_TITLE_PATTERN_NUM) && !isEnd; i++)
-    {
-        titlePatternRepo.append(icvCmdTitlePatternTbl[i]);
-        isEnd = icvCmdTitlePatternTbl[i].isEmpty();
+        if(icvCmdTitlePatternTbl[i].isEmpty())
+            break;
+        titlePattern.append(icvCmdTitlePatternTbl[i]);
     }
     return;
 }
 
 void IcvCommand::initDataPattern()
 {
-    bool isEnd = false;
-    for(qint16 i = 0; (i < ICV_MAX_DATA_PATTERN_NUM) && !isEnd; i++)
+    for(qint16 i = 0; i < ICV_MAX_DATA_PATTERN_NUM; i++)
     {
-        dataPatternRepo.append(qMakePair(icvCmdDataPatternTbl[i][0], icvCmdDataPatternTbl[i][1]));
-        isEnd = icvCmdDataPatternTbl[i][0].isEmpty();
+        if(icvCmdDataPatternTbl[i][0].isEmpty())
+            break;
+        dataPattern.append(qMakePair(icvCmdDataPatternTbl[i][0], icvCmdDataPatternTbl[i][1]));
     }
     return;
 }
@@ -198,18 +168,9 @@ QStringList IcvCommand::getPromtFamily()
     return promtFamily;
 }
 
-
-QString IcvCommand::getTitlePattern()
+QList< QString> IcvCommand::getTitlePattern()
 {
-#if 0
-    for(qint16 i = 0; i < titlePatternRepo.count(); i++)
-    {
-        qDebug() << titlePatternRepo.at(i);
-        if(titlePatternRepo.at(i) == promt)
-            return titlePatternRepo.at(i).second;
-    }
-#endif
-    return titlePatternRepo.at(0);
+    return titlePattern;
 }
 
 QString IcvCommand::getDataPattern()
@@ -219,12 +180,24 @@ QString IcvCommand::getDataPattern()
         return "^\\s+(\\s+[\\dA-F]{2}){16}";
     }
 
-    for(qint16 i = 0; i < dataPatternRepo.count(); i++)
+    for(qint16 i = 0; i < dataPattern.count(); i++)
     {
-        if(dataPatternRepo.at(i).first == (promt + " " + name))
-            return dataPatternRepo.at(i).second;
+        if(dataPattern.at(i).first == (promt + " " + name))
+            return dataPattern.at(i).second;
     }
     return "";
+}
+
+QPair<QString, QString> IcvCommand::getSpecReplace()
+{
+    bool isEnd = false;
+    for(qint16 i = 0; (i < ICV_MAX_DATA_PATTERN_NUM) && !isEnd; i++)
+    {
+        if (icvCmdSpecCharTbl[i][0] == (promt + " " + name))
+            return qMakePair(icvCmdSpecCharTbl[i][1], icvCmdSpecCharTbl[i][2]);
+        isEnd = icvCmdSpecCharTbl[i][0].isEmpty();
+    }
+    return qMakePair(QString("NA"), QString("NA"));
 }
 
 bool IcvCommand::matchGroupSize(QString dataLine)

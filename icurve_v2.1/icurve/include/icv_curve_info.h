@@ -23,7 +23,7 @@ private:
     QList<IcvPlotCurve*> curves;
 
 signals:
-  //  void setCurveInfoSignal(QString name, QString position, QString lineInfo);
+
 };
 
 #endif
