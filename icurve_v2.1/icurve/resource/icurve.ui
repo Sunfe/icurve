@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="icurve.qrc">
-    <normaloff>:/icurve/images/icurve.ico</normaloff>:/icurve/images/icurve.ico</iconset>
+    <normaloff>:/icurve/images/icurve.png</normaloff>:/icurve/images/icurve.png</iconset>
   </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
@@ -90,13 +90,10 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionCalc"/>
     <addaction name="actionDiffer"/>
     <addaction name="actionData_picker"/>
-    <addaction name="actionData_tracker"/>
     <addaction name="actionHandMove"/>
     <addaction name="actionConverter"/>
-    <addaction name="actionStatiser"/>
     <addaction name="actionCliParser"/>
     <addaction name="actionOneKeySetter"/>
     <addaction name="actionRegularExp"/>
@@ -152,9 +149,6 @@
     </property>
     <addaction name="actionZoom"/>
     <addaction name="actionTree"/>
-    <addaction name="actionResize"/>
-    <addaction name="actionReset_2"/>
-    <addaction name="actionSelect_mode"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -195,7 +189,6 @@
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="actionNew"/>
-   <addaction name="actionSaveAs"/>
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionFilter"/>
@@ -223,8 +216,9 @@
    </property>
   </action>
   <action name="actionSave">
-   <property name="enabled">
-    <bool>false</bool>
+   <property name="icon">
+    <iconset resource="icurve.qrc">
+     <normaloff>:/icurve/images/save.png</normaloff>:/icurve/images/save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -232,8 +226,8 @@
   </action>
   <action name="actionSaveAs">
    <property name="icon">
-    <iconset resource="icurve.qrc">
-     <normaloff>:/icurve/images/save.png</normaloff>:/icurve/images/save.png</iconset>
+    <iconset>
+     <normaloff>:/icurve/images/save_data.png</normaloff>:/icurve/images/save_data.png</iconset>
    </property>
    <property name="text">
     <string>Save as</string>
@@ -433,7 +427,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>View data</string>
+    <string>Data</string>
    </property>
   </action>
   <action name="actionJumpToFile">
@@ -653,7 +647,7 @@
   </action>
   <action name="actionViewStat">
    <property name="text">
-    <string>View Statistics</string>
+    <string>Statistics</string>
    </property>
   </action>
   <action name="actionConverter">
@@ -691,7 +685,7 @@
      <normaloff>:/icurve/images/magic_key.png</normaloff>:/icurve/images/magic_key.png</iconset>
    </property>
    <property name="text">
-    <string>One Key Setter</string>
+    <string>One Key Set</string>
    </property>
   </action>
   <action name="actionRegularExp">

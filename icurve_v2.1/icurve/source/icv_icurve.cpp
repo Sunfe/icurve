@@ -247,28 +247,12 @@ void IcvICurve::initMainPlotter(QWidget *plotWidget)
     panner = new QwtPlotPanner(plot->canvas());
     panner->setEnabled(true);
     /* picker */
-    picker = new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
+    picker = new IcvPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
                                QwtPlotPicker::CrossRubberBand, 
                                QwtPicker::AlwaysOn,
                                plot->canvas());
-    picker->setStateMachine( new QwtPickerDragPointMachine() );
-    picker->setRubberBandPen( QColor( Qt::green ) );
-    picker->setRubberBand( QwtPicker::CrossRubberBand );
-    picker->setTrackerPen( QColor( Qt::black ) );
     /* zoomer */
-    zoomer = new QwtPlotZoomer(plot->canvas());
-    zoomer->setRubberBandPen( QColor( Qt::darkGreen ) );
-    zoomer->setTrackerMode( QwtPlotPicker::AlwaysOn );
-    /* RightButton: zoom out by 1,Ctrl+RightButton:zoom out to full size */
-    zoomer->setMousePattern( QwtEventPattern::MouseSelect2, Qt::RightButton, Qt::ControlModifier );
-    zoomer->setMousePattern( QwtEventPattern::MouseSelect3, Qt::RightButton );
-    zoomer->setRubberBand( QwtPicker::RectRubberBand );
-    zoomer->setRubberBandPen( QColor( Qt::green ) );
-    zoomer->setTrackerMode( QwtPicker::ActiveOnly );
-    zoomer->setTrackerPen( QColor( Qt::white ) );
-    zoomer->setEnabled(false);
-    zoomer->zoom(0);
-
+    zoomer = new IcvPlotZoomer(plot->canvas());
     connect(zoomer, SIGNAL(zoomed(const QRectF&)), this, SLOT(zoomPlot(QRectF&)));
     return;
 }
@@ -1785,33 +1769,33 @@ void IcvICurve::oneKeySetPlot()
             title += crvsTitle.at(tn) + ",";
         title += crvsTitle.at(crvsTitle.count() - 1);
     }
-    plot->setTitle(title);
+    plot->setTitle(title.remove("get"));
 
     QString labelY;
     if(crvsTitle.count() > 1)
         labelY = "Y(unit)";
     else
     {
-        if(crvsTitle.at(0) == "getTxPsd")
+        if(!crvsTitle.at(0).compare("getTxPsd", Qt::CaseInsensitive))
             labelY = "txPsd(dbm/hz)";
-        else if(crvsTitle.at(0) == "getSnr")
+        else if(!crvsTitle.at(0).compare("getSnr", Qt::CaseInsensitive))
             labelY = "SNR(db)";
-        else if(crvsTitle.at(0) == "getQln")
+        else if(!crvsTitle.at(0).compare("getQln", Qt::CaseInsensitive))
             labelY = "Qln(dbm/hz)";
-        else if(crvsTitle.at(0) == "getHlog")
+        else if(!crvsTitle.at(0).compare("getHlog", Qt::CaseInsensitive))
             labelY = "Hlog(db)";
-        else if(crvsTitle.at(0) == "getNoiseMargin")
+        else if(!crvsTitle.at(0).compare("getNoiseMargin", Qt::CaseInsensitive))
             labelY = "Noise margin(db)";
-        else if(crvsTitle.at(0) == "getBitAlloc")
+        else if(!crvsTitle.at(0).compare("getBitAlloc", Qt::CaseInsensitive))
             labelY = "BitAlloc(bit)";
-        else if(crvsTitle.at(0) == "getAln")
+        else if(!crvsTitle.at(0).compare("getAln", Qt::CaseInsensitive))
             labelY = "Aln(dbm/hz)";
-        else if(crvsTitle.at(0) == "getRmcBitAlloc")
+        else if(!crvsTitle.at(0).compare("getRmcBitAlloc", Qt::CaseInsensitive))
             labelY = "RmcBitAlloc(bit)";
     }
     plot->setAxisTitle(QwtPlot::yLeft,labelY);
     plot->setAxisTitle(QwtPlot::xBottom,"tone");
-    plot->setFooter("tone:4.3125hz/per");
+    plot->setFooter("4.3125 kHz/tone");
     plot->replot();
     return;
 }
@@ -2176,30 +2160,30 @@ ICU_RET_STATUS IcvICurve::analyzeTextStream(QTextStream &textStream, QString tex
         connect(analyProgressDialog, SIGNAL(canceled()), this, SLOT(cancelAnalyProgressBar()));
     }
 
-    IcvCommand cmd;
+    IcvCommand          cmd;
+    QList< QString>     titlePattern;
+    QRegExp             cmdRegExp;
+    isDataAnalyCanceled = false;
+    qint32 line         = 0;
     cmd.reset();
     textStream.seek(0);
-    isDataAnalyCanceled = false;
-    qint32 line = 0;
+    titlePattern = cmd.getTitlePattern();
     while(!textStream.atEnd() && !isDataAnalyCanceled)
     {
         line++;
         QString dataLine = textStream.readLine();
         bool isMatch     = false;
-        QRegExp cmdRegExp;
-        QList< QString> tp = cmd.getTitlePattern();
-        for(qint16 i = 0; i < tp.count(); i++)
+        for(qint16 i = 0; i < titlePattern.count(); i++)
         {
-            if(!tp.isEmpty())
+            if(!titlePattern.isEmpty())
             {
-                cmdRegExp.setPattern(tp.at(i));
+                cmdRegExp.setPattern(titlePattern.at(i));
                 cmdRegExp.setCaseSensitivity(Qt::CaseInsensitive);
                 isMatch = dataLine.contains(cmdRegExp);
                 if(isMatch)
                     break;
             }
         }
-
         if(isMatch)
         {
             /* if the last command is not empty, terminate it */

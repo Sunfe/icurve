@@ -29,7 +29,6 @@
     <file>../images/bg.png</file>
     <file>../images/draw.png</file>
     <file>../images/clear.png</file>
-    <file>../images/save_data.png</file>
     <file>../images/export_data.png</file>
     <file>../images/magic_key.png</file>
   </qresource>

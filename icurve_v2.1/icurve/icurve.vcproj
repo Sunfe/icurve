@@ -244,6 +244,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\icv_plot_picker.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\icv_plot_zoomer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\source\icv_regexp.cpp"
 				>
 			</File>
@@ -673,6 +681,14 @@
 			</File>
 			<File
 				RelativePath=".\include\icv_plot_curve.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\icv_plot_picker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\icv_plot_zoomer.h"
 				>
 			</File>
 			<File

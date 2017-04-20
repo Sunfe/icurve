@@ -29,6 +29,7 @@
 #include <qwt_plot_panner.h>
 #include <qwt_picker_machine.h>
 #include <qwt_plot_zoomer.h>
+#include <qwt_text.h>
 #include "ui_icurve.h"
 #include "ui_icv_curve_filter.h"
 #include "icurve_common.h"
@@ -37,6 +38,8 @@
 #include "icv_curve_differ.h"
 #include "icv_cliparser.h"
 #include "icv_regexp.h"
+#include "icv_plot_picker.h"
+#include "icv_plot_zoomer.h"
 
 #define ICV_EYESCAN_MARGIN                   (10)
 
@@ -99,9 +102,9 @@ private:
     QwtPlotLegendItem *legendItem;
     QwtPlotGrid *grid;
     QwtPlotMagnifier *magnifier;
-    QwtPlotPicker *picker;
+    IcvPlotPicker *picker;
     QwtPlotPanner *panner;
-    QwtPlotZoomer *zoomer;
+    IcvPlotZoomer *zoomer;
     QwtSymbol *symbol;
     IcvCurveDiffer *differTool;
     IcvPlotCanvas *plotCanvas;
@@ -183,6 +186,4 @@ signals:
         void sigDiffCurve(QList<IcvPlotCurve *>);
 
 };
-
-
 #endif // ICURVE_H

@@ -21,7 +21,7 @@ IcvDataPlotDialog::IcvDataPlotDialog(QWidget *parent)
     toolBar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
     plotAction  = new QAction(QPixmap(":/icurve/images/draw.png"), "Plot", toolBar );
     clearAction = new QAction(QPixmap(":/icurve/images/clear.png"), "Clear", toolBar );
-    saveAction  = new QAction(QPixmap(":/icurve/images/save_data.png"), "Save", toolBar );
+    saveAction  = new QAction(QPixmap(":/icurve/images/save.png"), "Save", toolBar );
     toolBar->addAction( plotAction );
     toolBar->addAction( clearAction );
     toolBar->addAction( saveAction );

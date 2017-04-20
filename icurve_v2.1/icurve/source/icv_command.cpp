@@ -180,9 +180,10 @@ QString IcvCommand::getDataPattern()
         return "^\\s+(\\s+[\\dA-F]{2}){16}";
     }
 
+    QString title = (promt + " " + name);
     for(qint16 i = 0; i < dataPattern.count(); i++)
     {
-        if(dataPattern.at(i).first == (promt + " " + name))
+        if(!title.compare(dataPattern.at(i).first, Qt::CaseInsensitive))
             return dataPattern.at(i).second;
     }
     return "";
@@ -193,7 +194,8 @@ QPair<QString, QString> IcvCommand::getSpecReplace()
     bool isEnd = false;
     for(qint16 i = 0; (i < ICV_MAX_DATA_PATTERN_NUM) && !isEnd; i++)
     {
-        if (icvCmdSpecCharTbl[i][0] == (promt + " " + name))
+        QString title = (promt + " " + name);
+        if (title.compare(icvCmdSpecCharTbl[i][0], Qt::CaseInsensitive))
             return qMakePair(icvCmdSpecCharTbl[i][1], icvCmdSpecCharTbl[i][2]);
         isEnd = icvCmdSpecCharTbl[i][0].isEmpty();
     }
