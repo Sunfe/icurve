@@ -1363,12 +1363,14 @@ void IcvICurve::showCurveInfo()
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
+#if 0
     if(curve.count() < 2)
     {
         IcvCurveInfoDialog *dlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
         dlg->exec();
         return;
     }
+#endif
 
     /* more than one curves selected, dispayed as tableview */
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
@@ -1412,6 +1414,7 @@ void IcvICurve::showCurveInfo()
     tbl->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
     tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
     tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    tbl->setColumnWidth(4, 200);
     tbl->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
     tbl->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
     tbl->setFocusPolicy(Qt::NoFocus);
@@ -1489,18 +1492,22 @@ void IcvICurve::viewCurveData()
    IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
    QStandardItemModel *model=new QStandardItemModel();
    QStringList horizonHeader;
-   horizonHeader<<"name"<<"data"<<"file"<<"position"<<"brief";
+   horizonHeader<<"number"<<"curve"<<"data";
    model->setHorizontalHeaderLabels(horizonHeader);
 
    QStringList vertiHeader;
    QStandardItem *newItem = NULL;
    for(qint16 row = 0; row < curve.count(); row++)
    {
-       vertiHeader << QString::number(row);
-       IcvCommand cmd = curve.at(row)->getCommand();
-       /* name */
-       newItem = new QStandardItem(cmd.getTitle());
+       newItem = new QStandardItem(QString::number(row));
        model->setItem(row ,0, newItem);
+
+       IcvCommand cmd = curve.at(row)->getCommand();
+       QString curveIdentity;
+       curveIdentity = cmd.getTitle() + " at line " +  QString::number(cmd.getDataPosInFile()) +
+           " of " + cmd.getFileName();
+       newItem = new QStandardItem(curveIdentity);
+       model->setItem(row ,1, newItem);
        /* plotting data */
        qint16 posInRepo = curve.at(row)->getDataPos();
        QList<QPointF> data = plotData.value(posInRepo).getData();
@@ -1509,23 +1516,16 @@ void IcvICurve::viewCurveData()
        {
            dataStr += QString::number(data.at(tone).y())+",";
        }
+       dataStr.remove(QRegExp(",$"));
        newItem = new QStandardItem(dataStr);
-       model->setItem(row ,1, newItem);
-       /* the other basic curve info */
-       newItem = new QStandardItem(cmd.getFileName());
        model->setItem(row ,2, newItem);
-       newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
-       model->setItem(row ,3, newItem);
-       newItem = new QStandardItem(cmd.getBriefInfo());
-       model->setItem(row ,4, newItem);
    }
-   model->setVerticalHeaderLabels(vertiHeader);
    /* display */
    QTableView *tbl = new QTableView();
    tbl->setModel(model);
    tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-   tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-   tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+   tbl->setColumnWidth(1, 200);
+   tbl->setColumnWidth(2, 300);  
    tbl->setFocusPolicy(Qt::NoFocus);
    tbl->verticalHeader()->setVisible(false);
    tbl->setAlternatingRowColors(true);
@@ -1571,17 +1571,22 @@ void IcvICurve:: viewCurveStat()
 
     QStandardItemModel *model=new QStandardItemModel();
     QStringList horizonHeader;
-    horizonHeader<<"name"<<"maximum"<<"minimum"<<"average"<<"variance"<<"file"<<"position"<<"brief";
+    horizonHeader<<"number"<<"curve"<<"maximum"<<"minimum"<<"average"<<"variance";
     model->setHorizontalHeaderLabels(horizonHeader);
     QStringList vertiHeader;
     QStandardItem *newItem = NULL;
     for(qint16 row = 0; row < curve.count(); row++)
     {
-        vertiHeader << QString::number(row);
-        IcvCommand cmd = curve.at(row)->getCommand();
-        /* name */
-        newItem = new QStandardItem(cmd.getTitle());
+        newItem = new QStandardItem(QString::number(row));
         model->setItem(row ,0, newItem);
+
+        IcvCommand cmd = curve.at(row)->getCommand();
+        QString curveIdentity;
+        curveIdentity = cmd.getTitle() + " at line " +  QString::number(cmd.getDataPosInFile()) +
+            " of " + cmd.getFileName();
+        newItem = new QStandardItem(curveIdentity);
+        model->setItem(row, 1, newItem);
+
         /* statistics of plotting data */
         QList<QPointF> data =  cmd.getData();
         std::vector<qreal> crvRy;
@@ -1589,41 +1594,38 @@ void IcvICurve:: viewCurveStat()
         {
             crvRy.push_back(data.value(count).ry());
         }
+        /* max in plot data */
         double maxRy = *std::max_element(crvRy.begin(), crvRy.end());
         newItem = new QStandardItem(QString::number(maxRy));
-        model->setItem(row ,1, newItem);
-
+        model->setItem(row, 2, newItem);
+        /* min in plot data */
         double minRy = *std::min_element(crvRy.begin(), crvRy.end());
         newItem = new QStandardItem(QString::number(minRy));
-        model->setItem(row ,2, newItem);
-
+        model->setItem(row, 3, newItem);
+        /* mean of plot data */
         double sum = std::accumulate(crvRy.begin(), crvRy.end(), 0.0);  
         double mean =  sum/crvRy.size(); 
-        newItem = new QStandardItem(QString::number(mean));
-        model->setItem(row ,3, newItem);
-
+        QString meanStr;
+        meanStr.sprintf("%.2f", mean);
+        newItem = new QStandardItem(meanStr);
+        model->setItem(row, 4, newItem);
+        /* variance of plot data */
         double accum  = 0.0;  
         for(qint32 i = 0; i < crvRy.size();i++)
         {  
             accum  += (crvRy[i]-mean)*(crvRy[i]-mean);  
         }
         double stdev = sqrt(accum/(crvRy.size()-1)); 
-        newItem = new QStandardItem(QString::number(stdev));
-        model->setItem(row ,4, newItem);
-        /* basic curve info */
-        newItem = new QStandardItem(cmd.getFileName());
-        model->setItem(row ,5, newItem);
-        newItem = new QStandardItem(QString::number(cmd.getDataPosInFile()));
-        model->setItem(row ,6, newItem);
-        newItem = new QStandardItem(cmd.getBriefInfo());
-        model->setItem(row ,7, newItem);
+        QString stdDevStr;
+        stdDevStr.sprintf("%.2f", stdev);
+        newItem = new QStandardItem(stdDevStr);
+        model->setItem(row, 5, newItem);
     }
-    model->setVerticalHeaderLabels(vertiHeader);
     /* display */
     QTableView *tbl = new QTableView();
     tbl->setModel(model);
     tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    tbl->setColumnWidth(1, 200);
     tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
     tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
     tbl->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);

@@ -29,46 +29,16 @@
     <attribute name="title">
      <string>Title Patterns</string>
     </attribute>
-    <widget class="QTableWidget" name="tableTitlePattern">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>740</width>
-       <height>430</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="tabDataPattern">
     <attribute name="title">
      <string>Data Patterns</string>
     </attribute>
-    <widget class="QTableWidget" name="tableDataPattern">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>740</width>
-       <height>430</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="tabSpecChar">
     <attribute name="title">
      <string>Spectial Characters </string>
     </attribute>
-    <widget class="QTableWidget" name="tableSpecChar">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>740</width>
-       <height>430</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">

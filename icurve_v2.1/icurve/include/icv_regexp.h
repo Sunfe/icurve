@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "ui_icv_regexp.h"
+#include "icv_table_widget.h"
 
 class IcvRegExp : public QDialog, public Ui::IcvRegExp
 {
@@ -17,9 +18,9 @@ private slots:
         void reject();
         
 private:
-    QTableWidget *tableWidgetTitle;
-    QTableWidget *tableWidgetData;
-    QTableWidget *tableWidgetSpec;
+    IcvTableWidget *tableWidgetTitle;
+    IcvTableWidget *tableWidgetData;
+    IcvTableWidget *tableWidgetSpec;
 };
 
 #endif // ICV_REGEXP_H
