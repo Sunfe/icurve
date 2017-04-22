@@ -16,11 +16,10 @@ IcvRegExp::IcvRegExp(QWidget *parent,Qt::WindowFlags flag)
 {
     setupUi(this);    
     /* title patterns */
-    tableWidgetTitle = new IcvTableWidget(tabTitlePattern);
+    tableWidgetTitle = new IcvTableWidget(ICV_MAX_TITLE_PATTERN_NUM, 1, tabTitlePattern);
     tableWidgetTitle->setGeometry(QRect(10, 10, 740, 430));
-    tableWidgetTitle->setTableSize(ICV_MAX_TITLE_PATTERN_NUM, 1);
     tableWidgetTitle->setHorizontalHeaderLabels(QStringList("patterns"));  
-    tableWidgetTitle->setResizeMode(0, QHeaderView::Stretch);
+    tableWidgetTitle->setResizeMode(0, QHeaderView::ResizeToContents);
     tableWidgetTitle->setHeaderVisible(false, false);
     for(qint16 nr = 0; nr < ICV_MAX_TITLE_PATTERN_NUM; nr++)
     {
@@ -28,10 +27,10 @@ IcvRegExp::IcvRegExp(QWidget *parent,Qt::WindowFlags flag)
     }
 
     /* data patterns */
-    tableWidgetData = new IcvTableWidget(tabDataPattern);
+    tableWidgetData = new IcvTableWidget(ICV_MAX_DATA_PATTERN_NUM, 2, tabDataPattern);
     tableWidgetData->setGeometry(QRect(10, 10, 740, 430));
-    tableWidgetData->setTableSize(ICV_MAX_DATA_PATTERN_NUM, 2);
     tableWidgetData->setHorizontalHeaderLabels(QStringList("patterns"));  
+    tableWidgetData->setResizeMode(0, QHeaderView::Stretch);
     tableWidgetData->setResizeMode(1, QHeaderView::Stretch);
     tableWidgetData->setHeaderVisible(false, false);
     for(qint16 nr = 0; nr < ICV_MAX_DATA_PATTERN_NUM; nr++)
@@ -41,12 +40,11 @@ IcvRegExp::IcvRegExp(QWidget *parent,Qt::WindowFlags flag)
     }
 
     /* spectial character replacement */
-    tableWidgetSpec = new IcvTableWidget(tabSpecChar);
+    tableWidgetSpec = new IcvTableWidget(ICV_MAX_DATA_PATTERN_NUM, 3, tabSpecChar);
     tableWidgetSpec->setGeometry(QRect(10, 10, 740, 430));
-    tableWidgetSpec->setTableSize(ICV_MAX_DATA_PATTERN_NUM, 3);
     tableWidgetSpec->setHorizontalHeaderLabels(QStringList("patterns"));  
     tableWidgetSpec->setResizeMode(0, QHeaderView::Stretch);
-    tableWidgetSpec->setResizeMode(1, QHeaderView::Stretch);
+    tableWidgetSpec->setColumnWidth(1, 100);
     tableWidgetSpec->setResizeMode(2, QHeaderView::Stretch);
     tableWidgetSpec->setHeaderVisible(false, false);
 
