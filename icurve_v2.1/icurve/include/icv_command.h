@@ -72,8 +72,8 @@ public:
     QString getTitle();
     inline bool operator == (IcvCommand &cmd)
     {
-        if((getFileName()     == cmd.getFileName())&&
-            (getDataPosInFile()== cmd.getDataPosInFile()))
+        if((getFileName() == cmd.getFileName())&&
+            (getDataPosInFile() == cmd.getDataPosInFile()))
             return true;
         return false;
     }

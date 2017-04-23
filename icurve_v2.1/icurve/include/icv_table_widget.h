@@ -9,7 +9,7 @@
 #include <QContextMenuEvent>
 
 #define ICV_MAX_TBLWGT_ROW     (100)
-#define ICV_MAX_TBLWGT_COL     (100)
+#define ICV_MAX_TBLWGT_COL     (20)
 
 class IcvTableWidget : public QTableWidget
 {
@@ -31,9 +31,6 @@ private slots:
 private:
     QMenu   *popMenu;
     QAction *copyAct;
-    QString cellText[ICV_MAX_TBLWGT_ROW][ICV_MAX_TBLWGT_COL];
-    QList<int>  selectRow;
-    QList<int>  selectCol;
 };
 
 

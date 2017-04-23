@@ -27,7 +27,6 @@ IcvTableWidget::IcvTableWidget(QWidget *parent)
     popMenu->addAction(copyAct);
     connect(copyAct, SIGNAL(triggered()), this, SLOT(copyToExcel()));
     connect(this, SIGNAL(cellEntered(int row, int column)), this, SLOT(appendCellText(int row, int column)));
-
 }
 
  IcvTableWidget::IcvTableWidget(int rows, int columns, QWidget * parent)
@@ -86,9 +85,12 @@ void IcvTableWidget::appendCellText(int row, int column)
 
 void IcvTableWidget::copyToExcel()
 {
-    QString excelFormText;
-    int row    = 0;
-    int column = 0;
+    QString cellText[ICV_MAX_TBLWGT_ROW][ICV_MAX_TBLWGT_COL];
+    bool    cellSelect[ICV_MAX_TBLWGT_ROW][ICV_MAX_TBLWGT_COL];
+    int row     = 0;
+    int column  = 0;
+
+    memset(cellSelect, 0, sizeof cellSelect);
     QList<QTableWidgetItem *> cellItems = selectedItems();
     for(qint16 cnt = 0; cnt < cellItems.count(); cnt++)
     {
@@ -96,25 +98,33 @@ void IcvTableWidget::copyToExcel()
         column = cellItems.at(cnt)->column();
         if(-1 == row || -1 == column)
             continue;
-        cellText[row][column] = cellItems.at(cnt)->text();
-
-        selectRow.push_back(row);
-        selectCol.push_back(column);
+        cellText[row][column]   = cellItems.at(cnt)->text();
+        cellSelect[row][column] = true;
     }
 
+    QString excelFormText;
     excelFormText += "<table border='1'>";
-    qint16 maxSelRow = *std::max_element(selectRow.begin(), selectRow.end());
-    qint16 maxSelCol = *std::max_element(selectCol.begin(), selectCol.end());
-    for(qint16 rn = 0; rn < maxSelRow + 1; rn++)
+    for(qint16 rn = 0; rn < ICV_MAX_TBLWGT_ROW; rn++)
     {
-        excelFormText += "<tr>";
-        for(qint16 cn = 0; cn < maxSelCol + 1; cn++)
+        bool isNewRowFond = false;
+        for(qint16 cn = 0; cn < ICV_MAX_TBLWGT_COL; cn++)
+        {
+            if(cellSelect[rn][cn]) /* find a new row */
+            {
+                isNewRowFond = true;
+                excelFormText += "<tr>";
+                break;
+            }
+        }
+        /* get data in the new row */
+        for(qint16 cn = 0; cn < ICV_MAX_TBLWGT_COL && (cellSelect[rn][cn]); cn++)
         {
             excelFormText += "<td style='vnd.ms-excel.numberformat:@'>";
             excelFormText += cellText[rn][cn];
             excelFormText += "</td>";
         }
-        excelFormText += "</tr>";
+        if(isNewRowFond)
+            excelFormText += "</tr>";
     }
     excelFormText += "</table> ";
 
