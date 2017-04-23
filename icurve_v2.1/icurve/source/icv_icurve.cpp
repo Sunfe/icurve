@@ -54,6 +54,7 @@
 #include "icv_data_plot.h"
 #include "icv_curve_statistics.h"
 #include "icv_textedit.h"
+#include "icv_table_view.h"
 
 /*including tone index at head of the line*/
 #define ICV_MAX_NUM_DIGITS_PERLINE           (11)  
@@ -1363,15 +1364,6 @@ void IcvICurve::showCurveInfo()
         QMessageBox::information(this,tr("Info"),tr("No curve selected."));
         return ;
     }
-#if 0
-    if(curve.count() < 2)
-    {
-        IcvCurveInfoDialog *dlg = new IcvCurveInfoDialog(curve, this, Qt::Dialog);
-        dlg->exec();
-        return;
-    }
-#endif
-
     /* more than one curves selected, dispayed as tableview */
     IcvCommand  cmd =  plotData.at(curve.at(0)->getDataPos());
     QStandardItemModel *model=new QStandardItemModel();
@@ -1408,32 +1400,16 @@ void IcvICurve::showCurveInfo()
     }
     model->setVerticalHeaderLabels(vertiHeader);
     /* display */
-    QTableView *tbl = new QTableView();
+    IcvTableView *tbl = new IcvTableView();
     tbl->setModel(model);
-    tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(0, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(1, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(2, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(3, QHeaderView::ResizeToContents);
     tbl->setColumnWidth(4, 200);
-    tbl->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
-    tbl->setFocusPolicy(Qt::NoFocus);
-    tbl->verticalHeader()->setVisible(false);
-    tbl->setAlternatingRowColors(true);
-    tbl->setStyleSheet("selection-background-color:#63B8FF;selection-color:black;"
-        "alternate-background-color: rgb(245, 245, 245);"
-        "QHeaderView::section, QTableCornerButton::section {"
-        "padding: 1px;"
-        "border: none;"
-        "border-bottom: 1px solid rgb(160, 160, 160);"
-        "border-right: 1px solid rgb(160, 160, 160);"
-        "border-bottom: 1px solid gray;"
-        "background-color: qlineargradient(spread:reflect, "
-        "x1:0, y1:0, x2:0, y2:1, "
-        "stop:0 rgba(255, 255, 255, 255)," 
-        "stop:1 rgba(164, 164, 164, 255));"
-        "}");
-    tbl->setFont(QFont("Helvetica"));
+    tbl->setResizeMode(5, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(6, QHeaderView::ResizeToContents);
+
     QDialog *dlg = new QDialog(this);
     dlg->setWindowTitle("brief info");
     QHBoxLayout *layout = new QHBoxLayout(dlg);
@@ -1521,28 +1497,11 @@ void IcvICurve::viewCurveData()
        model->setItem(row ,2, newItem);
    }
    /* display */
-   QTableView *tbl = new QTableView();
+   IcvTableView *tbl = new IcvTableView();
    tbl->setModel(model);
-   tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+   tbl->setResizeMode(0, QHeaderView::ResizeToContents);
    tbl->setColumnWidth(1, 200);
    tbl->setColumnWidth(2, 300);  
-   tbl->setFocusPolicy(Qt::NoFocus);
-   tbl->verticalHeader()->setVisible(false);
-   tbl->setAlternatingRowColors(true);
-   tbl->setStyleSheet("selection-background-color:#63B8FF;selection-color:black;"
-       "alternate-background-color: rgb(245, 245, 245);"
-       "QHeaderView::section, QTableCornerButton::section {"
-       "padding: 1px;"
-       "border: none;"
-       "border-bottom: 1px solid rgb(160, 160, 160);"
-       "border-right: 1px solid rgb(160, 160, 160);"
-       "border-bottom: 1px solid gray;"
-       "background-color: qlineargradient(spread:reflect, "
-       "x1:0, y1:0, x2:0, y2:1, "
-       "stop:0 rgba(255, 255, 255, 255)," 
-       "stop:1 rgba(164, 164, 164, 255));"
-       "}");
-   tbl->setFont(QFont("Helvetica"));
    QDialog *dlg = new QDialog(this);
    dlg->setWindowTitle("curve data");
    QHBoxLayout *layout = new QHBoxLayout(dlg);
@@ -1622,32 +1581,15 @@ void IcvICurve:: viewCurveStat()
         model->setItem(row, 5, newItem);
     }
     /* display */
-    QTableView *tbl = new QTableView();
+    IcvTableView *tbl = new IcvTableView();
     tbl->setModel(model);
-    tbl->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(0, QHeaderView::ResizeToContents);
     tbl->setColumnWidth(1, 200);
-    tbl->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-    tbl->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
-    tbl->setFocusPolicy(Qt::NoFocus);
-    tbl->verticalHeader()->setVisible(false);
-    tbl->setAlternatingRowColors(true);
-    tbl->setStyleSheet("selection-background-color:#63B8FF;selection-color:black;"
-        "alternate-background-color: rgb(245, 245, 245);"
-        "QHeaderView::section, QTableCornerButton::section {"
-        "padding: 1px;"
-        "border: none;"
-        "border-bottom: 1px solid rgb(160, 160, 160);"
-        "border-right: 1px solid rgb(160, 160, 160);"
-        "border-bottom: 1px solid gray;"
-        "background-color: qlineargradient(spread:reflect, "
-        "x1:0, y1:0, x2:0, y2:1, "
-        "stop:0 rgba(255, 255, 255, 255)," 
-        "stop:1 rgba(164, 164, 164, 255));"
-        "}");
-    tbl->setFont(QFont("Helvetica"));
+    tbl->setResizeMode(2, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(3, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(4, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(5, QHeaderView::ResizeToContents);
+    tbl->setResizeMode(6, QHeaderView::ResizeToContents);
     QDialog *dlg = new QDialog(this);
     dlg->setWindowTitle("curve statistics");
     QHBoxLayout *layout = new QHBoxLayout(dlg);
