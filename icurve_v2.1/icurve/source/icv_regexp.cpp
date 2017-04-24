@@ -16,43 +16,52 @@ IcvRegExp::IcvRegExp(QWidget *parent,Qt::WindowFlags flag)
 {
     setupUi(this);    
     /* title patterns */
-    tableWidgetTitle = new IcvTableWidget(ICV_MAX_TITLE_PATTERN_NUM, 1, tabTitlePattern);
+    tableWidgetTitle = new IcvTableWidget(ICV_MAX_TITLE_PATTERN_NUM, 2, tabTitlePattern);
     tableWidgetTitle->setGeometry(QRect(10, 10, 740, 430));
-    tableWidgetTitle->setHorizontalHeaderLabels(QStringList("patterns"));  
-    tableWidgetTitle->setResizeMode(0, QHeaderView::ResizeToContents);
+    tableWidgetTitle->setHorizontalHeaderLabels(QStringList("patterns"));
+    tableWidgetTitle->setColumnWidth(0, 50);
+    tableWidgetTitle->setResizeMode(1, QHeaderView::Stretch);
     tableWidgetTitle->setHeaderVisible(false, false);
     for(qint16 nr = 0; nr < ICV_MAX_TITLE_PATTERN_NUM; nr++)
     {
-        tableWidgetTitle->setItem(nr, 0, new QTableWidgetItem(icvCmdTitlePatternTbl[nr]));  
+        if(!icvCmdTitlePatternTbl[nr].isEmpty())
+            tableWidgetTitle->setItem(nr, 0, new QTableWidgetItem(QString::number(nr))); 
+        tableWidgetTitle->setItem(nr, 1, new QTableWidgetItem(icvCmdTitlePatternTbl[nr]));  
     }
 
     /* data patterns */
-    tableWidgetData = new IcvTableWidget(ICV_MAX_DATA_PATTERN_NUM, 2, tabDataPattern);
+    tableWidgetData = new IcvTableWidget(ICV_MAX_DATA_PATTERN_NUM, 3, tabDataPattern);
     tableWidgetData->setGeometry(QRect(10, 10, 740, 430));
     tableWidgetData->setHorizontalHeaderLabels(QStringList("patterns"));  
-    tableWidgetData->setResizeMode(0, QHeaderView::Stretch);
-    tableWidgetData->setResizeMode(1, QHeaderView::Stretch);
+    tableWidgetData->setColumnWidth(0, 50);
+    tableWidgetData->setResizeMode(1, QHeaderView::ResizeToContents);
+    tableWidgetData->setResizeMode(2, QHeaderView::ResizeToContents);
     tableWidgetData->setHeaderVisible(false, false);
     for(qint16 nr = 0; nr < ICV_MAX_DATA_PATTERN_NUM; nr++)
     {
-        tableWidgetData->setItem(nr,0,new QTableWidgetItem(icvCmdDataPatternTbl[nr][0]));  
-        tableWidgetData->setItem(nr,1,new QTableWidgetItem(icvCmdDataPatternTbl[nr][1]));  
+        if(!icvCmdDataPatternTbl[nr][0].isEmpty())
+            tableWidgetData->setItem(nr, 0, new QTableWidgetItem(QString::number(nr))); 
+        tableWidgetData->setItem(nr,1,new QTableWidgetItem(icvCmdDataPatternTbl[nr][0]));  
+        tableWidgetData->setItem(nr,2,new QTableWidgetItem(icvCmdDataPatternTbl[nr][1]));  
     }
 
     /* spectial character replacement */
-    tableWidgetSpec = new IcvTableWidget(ICV_MAX_DATA_PATTERN_NUM, 3, tabSpecChar);
+    tableWidgetSpec = new IcvTableWidget(ICV_MAX_DATA_PATTERN_NUM, 4, tabSpecChar);
     tableWidgetSpec->setGeometry(QRect(10, 10, 740, 430));
     tableWidgetSpec->setHorizontalHeaderLabels(QStringList("patterns"));  
-    tableWidgetSpec->setResizeMode(0, QHeaderView::Stretch);
-    tableWidgetSpec->setColumnWidth(1, 100);
-    tableWidgetSpec->setResizeMode(2, QHeaderView::Stretch);
+    tableWidgetSpec->setColumnWidth(0, 50);
+    tableWidgetSpec->setResizeMode(1, QHeaderView::ResizeToContents);
+    tableWidgetSpec->setColumnWidth(2, 100);
+    tableWidgetSpec->setColumnWidth(3, 100);
     tableWidgetSpec->setHeaderVisible(false, false);
 
     for(qint16 nr = 0; nr < ICV_MAX_DATA_PATTERN_NUM; nr++)
     {
-        tableWidgetSpec->setItem(nr,0,new QTableWidgetItem(icvCmdSpecCharTbl[nr][0]));  
-        tableWidgetSpec->setItem(nr,1,new QTableWidgetItem(icvCmdSpecCharTbl[nr][1]));  
-        tableWidgetSpec->setItem(nr,2,new QTableWidgetItem(icvCmdSpecCharTbl[nr][2]));  
+        if(!icvCmdSpecCharTbl[nr][0].isEmpty())
+            tableWidgetSpec->setItem(nr, 0, new QTableWidgetItem(QString::number(nr))); 
+        tableWidgetSpec->setItem(nr,1,new QTableWidgetItem(icvCmdSpecCharTbl[nr][0]));  
+        tableWidgetSpec->setItem(nr,2,new QTableWidgetItem(icvCmdSpecCharTbl[nr][1]));  
+        tableWidgetSpec->setItem(nr,3,new QTableWidgetItem(icvCmdSpecCharTbl[nr][2]));  
     }
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
