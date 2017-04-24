@@ -56,7 +56,7 @@ QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
     {"rfc getRmcBitAlloc"   , "x"  , "0"      },
     {"rfc getAln"           , "NA" , "NA"     },
     //api
-    {"api getTxPsd"         , "NA" , "NA"     },
+    {"api getTxPsd"         , "---", "-150.0" },
     {"api getSnr"           , "NA" , "NA"     },
     {"api getQln"           , "NA" , "NA"     },
     {"api getHlog"          , "NA" , "NA"     },
@@ -65,7 +65,7 @@ QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
     {"api getRmcBitAlloc"   , "x"  , "0"      },
     {"api getAln"           , "NA" , "NA"     },
     //fast
-    {"fast getTxPsd"        , "NA" , "NA"     },
+    {"fast getTxPsd"        , "---", "-150.0" },
     {"fast getSnr"          , "NA" , "NA"     },
     {"fast getQln"          , "NA" , "NA"     },
     {"fast getHlog"         , "NA" , "NA"     },
@@ -74,7 +74,7 @@ QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
     {"fast getRmcBitAlloc"  , "NA" , "NA"     },
     {"fast getAln"          , "NA" , "NA"     },
     //bcm
-    {"bcm getTxPsd"         , "NA" , "NA"     },
+    {"bcm getTxPsd"         , "---", "-150.0" },
     {"bcm getSnr"           , "NA" , "NA"     },
     {"bcm getQln"           , "NA" , "NA"     },
     {"bcm getHlog"          , "NA" , "NA"     },

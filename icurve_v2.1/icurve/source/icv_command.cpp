@@ -195,7 +195,7 @@ QPair<QString, QString> IcvCommand::getSpecReplace()
     for(qint16 i = 0; (i < ICV_MAX_DATA_PATTERN_NUM) && !isEnd; i++)
     {
         QString title = (promt + " " + name);
-        if (title.compare(icvCmdSpecCharTbl[i][0], Qt::CaseInsensitive))
+        if (!title.compare(icvCmdSpecCharTbl[i][0], Qt::CaseInsensitive))
             return qMakePair(icvCmdSpecCharTbl[i][1], icvCmdSpecCharTbl[i][2]);
         isEnd = icvCmdSpecCharTbl[i][0].isEmpty();
     }
