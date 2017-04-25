@@ -123,7 +123,6 @@ void IcvTableWidget::copyToExcel()
                 continue;
             excelFormText += "<td style='vnd.ms-excel.numberformat:@'>";
             excelFormText += cellText[rn][cn];
-            qDebug()<<cellText[rn][cn];
             excelFormText += "</td>";
         }
         if(isNewRowFond)

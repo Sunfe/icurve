@@ -1,6 +1,8 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QTableWidgetItem>
+#include <QPushButton>
+#include <QMessageBox>
 #include <QPair>
 #include <QDebug>
 #include "icv_regexp.h"
@@ -15,6 +17,7 @@ IcvRegExp::IcvRegExp(QWidget *parent,Qt::WindowFlags flag)
     : QDialog(parent,flag)
 {
     setupUi(this);    
+    buttonBox->button(QDialogButtonBox::Ok)->setText(tr("update"));
     /* title patterns */
     tableWidgetTitle = new IcvTableWidget(ICV_MAX_TITLE_PATTERN_NUM, 2, tabTitlePattern);
     tableWidgetTitle->setGeometry(QRect(10, 10, 740, 430));
@@ -91,6 +94,13 @@ void IcvRegExp::accept()
         icvCmdSpecCharTbl[nr][1] = tableWidgetSpec->item(nr,2)->text();
         icvCmdSpecCharTbl[nr][2] = tableWidgetSpec->item(nr,3)->text();
     }
+
+    QMessageBox msgBox(this);
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setText("Comfirm to change the pattern list?");
+    qint16 retcode = msgBox.exec();
+    if(QDialog::Rejected == retcode)
+        return;
     return QDialog::accept ();
 }
 
