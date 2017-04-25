@@ -52,7 +52,6 @@
 #include "icv_about.h"
 #include "icv_skin.h"
 #include "icv_data_plot.h"
-#include "icv_curve_statistics.h"
 #include "icv_textedit.h"
 #include "icv_table_view.h"
 #include "icv_table_model.h"
@@ -1583,8 +1582,7 @@ void IcvICurve:: viewCurveStat()
     }
     /* display */
     IcvTableView *tbl = new IcvTableView();
-    IcvTableModel *m = new IcvTableModel();
-    tbl->setModel(m);
+    tbl->setModel(model);
     tbl->setResizeMode(0, QHeaderView::ResizeToContents);
     tbl->setColumnWidth(1, 200);
     tbl->setResizeMode(2, QHeaderView::ResizeToContents);

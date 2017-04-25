@@ -16,7 +16,7 @@ class IcvTableWidget : public QTableWidget
     Q_OBJECT
 
 public:
-    IcvTableWidget(QWidget *parent);
+    IcvTableWidget(QWidget *parent = 0);
     IcvTableWidget(int rows, int columns, QWidget *parent = 0);
     ~IcvTableWidget();
     void setTableSize(int rows, int columns);
