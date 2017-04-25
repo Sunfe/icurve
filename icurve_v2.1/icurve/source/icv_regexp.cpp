@@ -76,20 +76,20 @@ void IcvRegExp::accept()
 {
     for(qint16 nr = 0; nr < tableWidgetTitle->rowCount(); nr++)
     {
-        icvCmdTitlePatternTbl[nr] = tableWidgetTitle->item(nr,0)->text();
+        icvCmdTitlePatternTbl[nr] = tableWidgetTitle->item(nr,1)->text();
     }
 
     for(qint16 nr = 0; nr < tableWidgetData->rowCount(); nr++)
     {
-        icvCmdDataPatternTbl[nr][0] = tableWidgetData->item(nr,0)->text();
-        icvCmdDataPatternTbl[nr][1] = tableWidgetData->item(nr,1)->text();
+        icvCmdDataPatternTbl[nr][0] = tableWidgetData->item(nr,1)->text();
+        icvCmdDataPatternTbl[nr][1] = tableWidgetData->item(nr,2)->text();
     }
 
     for(qint16 nr = 0; nr < tableWidgetSpec->rowCount(); nr++)
     {
-        icvCmdSpecCharTbl[nr][0] = tableWidgetSpec->item(nr,0)->text();
-        icvCmdSpecCharTbl[nr][1] = tableWidgetSpec->item(nr,1)->text();
-        icvCmdSpecCharTbl[nr][2] = tableWidgetSpec->item(nr,2)->text();
+        icvCmdSpecCharTbl[nr][0] = tableWidgetSpec->item(nr,1)->text();
+        icvCmdSpecCharTbl[nr][1] = tableWidgetSpec->item(nr,2)->text();
+        icvCmdSpecCharTbl[nr][2] = tableWidgetSpec->item(nr,3)->text();
     }
     return QDialog::accept ();
 }

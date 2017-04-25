@@ -117,10 +117,13 @@ void IcvTableWidget::copyToExcel()
             }
         }
         /* get data in the new row */
-        for(qint16 cn = 0; cn < ICV_MAX_TBLWGT_COL && (cellSelect[rn][cn]); cn++)
+        for(qint16 cn = 0; cn < ICV_MAX_TBLWGT_COL; cn++)
         {
+            if(!cellSelect[rn][cn])
+                continue;
             excelFormText += "<td style='vnd.ms-excel.numberformat:@'>";
             excelFormText += cellText[rn][cn];
+            qDebug()<<cellText[rn][cn];
             excelFormText += "</td>";
         }
         if(isNewRowFond)

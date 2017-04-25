@@ -55,6 +55,7 @@
 #include "icv_curve_statistics.h"
 #include "icv_textedit.h"
 #include "icv_table_view.h"
+#include "icv_table_model.h"
 
 /*including tone index at head of the line*/
 #define ICV_MAX_NUM_DIGITS_PERLINE           (11)  
@@ -1582,7 +1583,8 @@ void IcvICurve:: viewCurveStat()
     }
     /* display */
     IcvTableView *tbl = new IcvTableView();
-    tbl->setModel(model);
+    IcvTableModel *m = new IcvTableModel();
+    tbl->setModel(m);
     tbl->setResizeMode(0, QHeaderView::ResizeToContents);
     tbl->setColumnWidth(1, 200);
     tbl->setResizeMode(2, QHeaderView::ResizeToContents);
