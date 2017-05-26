@@ -2378,12 +2378,6 @@ ICU_RET_STATUS IcvICurve::assembleData(QString dataLine, IcvCommand *cmd)
 
     if(ICU_OK != appendCommandData(cmd, digList))
         return ICU_ERROR;
-
-    if(digList.count() < ICV_MAX_NUM_DIGITS_PERLINE)
-    {
-        cmd->setState(CMD_CLOSED);
-        return ICU_OK;
-    }
     return ICU_OK;
 }
 
