@@ -48,7 +48,7 @@ QString icvCmdDataPatternTbl[ICV_MAX_DATA_PATTERN_NUM][2]=
 QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
 {
     {"rfc getTxPsd"         , "---", "-150.0" },
-    {"rfc getSnr"           , "NA" , "NA"     },
+    {"rfc getSnr"           , "---", "0.0"    },
     {"rfc getQln"           , "NA" , "NA"     },
     {"rfc getHlog"          , "NA" , "NA"     },
     {"rfc getNoiseMargin"   , "NA" , "NA"     },
@@ -57,7 +57,7 @@ QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
     {"rfc getAln"           , "NA" , "NA"     },
     //api
     {"api getTxPsd"         , "---", "-150.0" },
-    {"api getSnr"           , "NA" , "NA"     },
+    {"api getSnr"           , "---", "0.0"    },
     {"api getQln"           , "NA" , "NA"     },
     {"api getHlog"          , "NA" , "NA"     },
     {"api getNoiseMargin"   , "NA" , "NA"     },
@@ -66,7 +66,7 @@ QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
     {"api getAln"           , "NA" , "NA"     },
     //fast
     {"fast getTxPsd"        , "---", "-150.0" },
-    {"fast getSnr"          , "NA" , "NA"     },
+    {"fast getSnr"          , "---", "0.0"    },
     {"fast getQln"          , "NA" , "NA"     },
     {"fast getHlog"         , "NA" , "NA"     },
     {"fast getNoiseMargin"  , "NA" , "NA"     },
@@ -75,7 +75,7 @@ QString icvCmdSpecCharTbl[ICV_MAX_DATA_PATTERN_NUM][3]=
     {"fast getAln"          , "NA" , "NA"     },
     //bcm
     {"bcm getTxPsd"         , "---", "-150.0" },
-    {"bcm getSnr"           , "NA" , "NA"     },
+    {"bcm getSnr"           , "---", "0.0"    },
     {"bcm getQln"           , "NA" , "NA"     },
     {"bcm getHlog"          , "NA" , "NA"     },
     {"bcm getNoiseMargin"   , "NA" , "NA"     },
