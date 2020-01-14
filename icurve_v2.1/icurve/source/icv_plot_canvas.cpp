@@ -238,8 +238,10 @@ void IcvPlotCanvas::deleteCurves(QList<IcvPlotCurve *> crv)
         IcvCommand cmd = crv[cnt]->getCommand();
         for(QList<IcvCommand>::iterator iter = plotData->begin(); iter != plotData->end(); iter++)
         {
-            if(*iter == cmd)
+            if(*iter == cmd) {
               plotData->erase(iter);
+                break;
+            }
         }
         /*remove from list of curves in the IcvCanvas  */
         curves.removeAll(crv[cnt]);  
