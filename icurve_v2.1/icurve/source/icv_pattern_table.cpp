@@ -3,7 +3,8 @@
 
 QString icvCmdTitlePatternTbl[ICV_MAX_TITLE_PATTERN_NUM]=
 {
-    "(rfc|bcm|api|fast).+(getTxPsd|getSnr|getQln|getHlog|getNoiseMargin|getBitAlloc|getRmcBitAlloc|getAln)\\s+([0-9]+)\\s+([0-1])\\s*.*$"
+    "(rfc|bcm|api).+(getTxPsd|getSnr|getQln|getHlog|getNoiseMargin|getBitAlloc|getRmcBitAlloc|getAln)\\s+([0-9]+)\\s+([0-1])\\s*.*$",
+	"(fast).+(getQln|getHlog|getXlogDs)\\s+[0-9]+\\s+([0-9]+)\\s+([0-1])\\s*.*$"
 };
 
 QString icvCmdDataPatternTbl[ICV_MAX_DATA_PATTERN_NUM][2]=
